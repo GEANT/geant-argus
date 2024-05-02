@@ -1,0 +1,52 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=64.0", "wheel"]
+
+[project]
+authors = [{name = "Geant", email = "swd@geant.org"}]
+dependencies = [
+  "Django>=4.2.11,<5.1",
+  "argus-htmx@ git+https://github.com/Uninett/argus-htmx-frontend",
+  "argus-server @ git+https://github.com/Uninett/Argus.git"
+]
+description = "Geant flavored Argus"
+license = {text = "GPL-3.0-or-later"}
+name = "geant-argus"
+readme = "README.md"
+requires-python = ">=3.8"
+version = "0.1"
+
+[project.urls]
+"Homepage" = "https://github.com/GEANT/geant-argus"
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "coverage",
+  "python-dotenv",
+  "django-extensions",
+  "flake8",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+exclude = ["tests*"]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = [
+  "templates/",
+]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["tests/"]
+
+[tool.black]
+exclude = '''
+/(
+    src/.*/migrations
+)/
+'''
+line-length = 99

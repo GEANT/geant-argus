@@ -1,0 +1,13 @@
+{
+  "coalesce": 3,
+  "events": [
+    {
+      "source": "infinera",
+      "description": "some description"
+    },
+    {
+      "source": "juniper",
+      "description": "some other description"
+    }
+  ]
+}
