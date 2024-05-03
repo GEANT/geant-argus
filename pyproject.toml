@@ -6,8 +6,9 @@ requires = ["setuptools>=64.0", "wheel"]
 authors = [{name = "Geant", email = "swd@geant.org"}]
 dependencies = [
   "Django>=4.2.11,<5.1",
-  "argus-htmx@ git+https://github.com/Uninett/argus-htmx-frontend",
-  "argus-server @ git+https://github.com/Uninett/Argus.git"
+  # dependencies not available (for the right version on pypi yet)
+    # "argus-htmx@ git+https://github.com/Uninett/argus-htmx-frontend",
+    # "argus-server @ git+https://github.com/Uninett/Argus.git"
 ]
 description = "Geant flavored Argus"
 license = {text = "GPL-3.0-or-later"}
@@ -44,7 +45,7 @@ where = ["src"]
 "*" = ["tests/"]
 
 [tool.black]
-exclude = '''
+extend-exclude = '''
 /(
     src/.*/migrations
 )/

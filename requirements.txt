@@ -1,0 +1,3 @@
+# dependencies are not (yet) available on pypi. Install separately
+argus-htmx @ git+https://github.com/Uninett/argus-htmx-frontend.git
+argus-server @ git+https://github.com/Uninett/Argus.git
