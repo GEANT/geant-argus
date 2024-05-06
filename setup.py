@@ -11,15 +11,21 @@ setup(
     packages=find_packages(where="src", exclude=("tests",)),
     install_requires=[
         "Django>=4.2.11,<5.1",
+        "argus-server",
+        "argus-htmx-frontend",
     ],
     extras_require={
+        "prod": [
+            "gunicorn",
+            "uvicorn",
+        ],
         "dev": [
             "black",
             "coverage",
             "python-dotenv",
             "django-extensions",
             "flake8",
-        ]
+        ],
     },
     include_package_data=True,
     license="MIT",

@@ -1,3 +1,8 @@
-# dependencies are not (yet) available on pypi. Install separately
-argus-htmx @ git+https://github.com/Uninett/argus-htmx-frontend.git
-argus-server @ git+https://github.com/Uninett/Argus.git
+Django>=4.2.11,<5.1
+argus-server
+argus-htmx-frontend
+black
+coverage
+python-dotenv
+django-extensions
+flake8
