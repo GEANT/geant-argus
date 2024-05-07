@@ -1,15 +1,13 @@
-from argus.site.settings.base import *
-
-SECRET_KEY = get_str_env("ARGUS_SECRET_KEY")
+from argus.site.settings.base import *  # noqa: F401, F403
 
 INSTALLED_APPS = [
     "geant_argus.geant_argus",
-    *INSTALLED_APPS,
+    *INSTALLED_APPS,  # noqa: F405
     "django_htmx",
     "argus_htmx",
 ]
 ROOT_URLCONF = "geant_argus.urls"
-MIDDLEWARE += ["django_htmx.middleware.HtmxMiddleware"]
+MIDDLEWARE += ["django_htmx.middleware.HtmxMiddleware"]  # noqa: F405
 
 
 MEDIA_PLUGINS = [
