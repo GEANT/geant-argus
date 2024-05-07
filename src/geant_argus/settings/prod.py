@@ -5,3 +5,4 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 DEBUG = False
 ALLOWED_HOSTS = ["*"]
 COOKIE_DOMAIN = None
+CORS_ALLOW_ALL_ORIGINS = True
