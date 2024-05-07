@@ -6,6 +6,17 @@ DEBUG = False
 ALLOWED_HOSTS = ["*"]
 COOKIE_DOMAIN = None
 CORS_ALLOW_ALL_ORIGINS = True
+
+_REDIS_HOSTS = get_str_env("GEANT_REDIS_URLS").split(" ")  # noqa: F405
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": _REDIS_HOSTS,
+        },
+    },
+}
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
