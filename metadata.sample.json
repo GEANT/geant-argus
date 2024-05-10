@@ -1,0 +1,35 @@
+{
+  "version": "v0a1",
+  "endpoints": [
+    {
+      "name": "rt1.fra.de.geant.net::62.40.96.22",
+      "events": [
+        {
+          "alarm_id": 16358107,
+          "bgp_peer": "83.97.88.170",
+          "init_time": "2024-05-09T07:47:19",
+          "source_ip": "62.40.96.22",
+          "alarm_type": "BGP",
+          "bgp_status": "established",
+          "alarm_status": null,
+          "alarm_up_time": null,
+          "bgp_idle_time": "2024-05-09T07:47:19",
+          "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+          "equipment_name": "rt1.fra.de.geant.net",
+          "bgp_connect_time": "2024-05-09T07:47:36",
+          "link_oper_status": null,
+          "should_correlate": "no",
+          "link_admin_status": null,
+          "link_oper_up_time": null,
+          "bgp_establish_time": "2024-05-09T07:52:08",
+          "dashboard_alarm_id": 86396089,
+          "link_admin_up_time": null,
+          "link_interface_name": null,
+          "link_oper_down_time": null,
+          "link_admin_down_time": null,
+          "sys_up_time_instance": 27875320
+        }
+      ]
+    }
+  ]
+}
