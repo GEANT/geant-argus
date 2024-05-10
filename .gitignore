@@ -63,3 +63,5 @@ venv.bak/
 
 # Argus / repo stuff
 cmd.sh
+cmd*.sh
+staticfiles/
