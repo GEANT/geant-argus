@@ -13,3 +13,4 @@ MIDDLEWARE += ["django_htmx.middleware.HtmxMiddleware"]  # noqa: F405
 MEDIA_PLUGINS = [
     "argus.notificationprofile.media.email.EmailNotification",
 ]
+INDELIBLE_INCIDENTS = False
