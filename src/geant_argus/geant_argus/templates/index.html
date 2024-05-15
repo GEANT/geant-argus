@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% block main %}
+    {{ block.super }}
+    <ul>
+        <li>
+            Incidents
+            <ul>
+                <li>
+                    <a href="{% url 'htmx:htmx_incidents' %}" title="Incident list view">Incident list view</a>
+                </li>
+                {% url 'htmx:htmx_incidents_table' as htmx_incident_table_url %}
+                {% if htmx_incident_table_url %}
+                    <li>
+                        <a href="{{ htmx_incident_table_url }}" title="Incident table view">Incident table view</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+{% endblock main %}
