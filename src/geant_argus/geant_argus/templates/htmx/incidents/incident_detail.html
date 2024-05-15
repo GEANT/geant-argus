@@ -1,7 +1,8 @@
 {% extends "htmx/incidents/incident_detail.html" %}
 {% block incident_detail %}
+    <p>{{ incident.metadata }}</p>
+    {% comment %} <p>{{ incident.metadata }}</p> {% endcomment %}
     {% if incident.metadata and incident.metadata.version == "v0a1" %}
-        <p>{{ incident.metadata }}</p>
         <section id="endpoints">
             <h3>Endpoints</h3>
             {% for ep in incident.metadata.endpoints %}
@@ -11,7 +12,7 @@
                         <tr>
                             <th>Type</th>
                             <th>Equipment Name</th>
-                        q</tr>
+                        </tr>
                         {% for event in ep.events %}
                             <tr>
                                 <td>{{ event.alarm_type }}</td>
