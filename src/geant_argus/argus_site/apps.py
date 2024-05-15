@@ -10,7 +10,7 @@ class ArgusSiteConfig(AppConfig):
     app templates/ directories. Now, in order to find the `argus.site` templates we want to add
     `argus.site` as an installed app. However `argus.site` does not have an `apps.py` which may
     result in unforseen behaviour if including the app directly. Instead we provide an AppConfig
-    here and point to the `geant.site` package. We then include this app (geant_argus.argue_site)
+    here and point to the `geant.site` package. We then include this app (geant_argus.argus_site)
     in the INSTALLED_APPS setting
     """
 
