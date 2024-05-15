@@ -16,6 +16,6 @@ MEDIA_PLUGINS = [
 ]
 INDELIBLE_INCIDENTS = False
 
-# Remove default temaple dirs to allow overriding argus.site templates. See also
+# Remove default template dirs to allow overriding argus.site templates. See also
 # geant_argus/argus_site/apps.py
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
