@@ -1,25 +1,31 @@
-METADATA_V0A1_SCHEMA = {
+METADATA_V0A2_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "definitions": {
-        "endpoint": {
-            "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "events": {
-                    "type": "array",
-                    "items": {"type": "object"},
-                },
-            },
-            "required": ["name", "events"],
-        },
-    },
     "type": "object",
     "properties": {
-        "version": {"const": "v0a1"},
+        "version": {"const": "v0a2"},
+        "phase": {"type": "string"},
+        "services": {"type": "object"},
+        "severity": {"type": "string"},
         "endpoints": {
-            "type": "array",
-            "items": {"$ref": "#/definitions/endpoint"},
+            "type": "object",
+            "properties": {
+                "juniper": {"type": "array", "items": {"type": "object"}},
+                "coriant": {"type": "array", "items": {"type": "object"}},
+                "infinera": {"type": "array", "items": {"type": "object"}},
+            },
         },
+        "description": {"type": "string"},
+        "coalesce-count": {"type": "integer"},
+        "endpoint-count": {"type": "integer "},
     },
-    "required": ["version", "endpoints"],
+    "required": [
+        "phase",
+        "version",
+        "services",
+        "severity",
+        "endpoints",
+        "description",
+        "coalesce-count",
+        "endpoint-count",
+    ],
 }

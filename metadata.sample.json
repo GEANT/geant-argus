@@ -1,35 +1,40 @@
 {
-  "version": "v0a1",
-  "endpoints": [
-    {
-      "name": "rt1.fra.de.geant.net::62.40.96.22",
-      "events": [
-        {
-          "alarm_id": 16358107,
-          "bgp_peer": "83.97.88.170",
-          "init_time": "2024-05-09T07:47:19",
-          "source_ip": "62.40.96.22",
-          "alarm_type": "BGP",
-          "bgp_status": "established",
-          "alarm_status": null,
-          "alarm_up_time": null,
-          "bgp_idle_time": "2024-05-09T07:47:19",
-          "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
-          "equipment_name": "rt1.fra.de.geant.net",
-          "bgp_connect_time": "2024-05-09T07:47:36",
-          "link_oper_status": null,
-          "should_correlate": "no",
-          "link_admin_status": null,
-          "link_oper_up_time": null,
-          "bgp_establish_time": "2024-05-09T07:52:08",
-          "dashboard_alarm_id": 86396089,
-          "link_admin_up_time": null,
-          "link_interface_name": null,
-          "link_oper_down_time": null,
-          "link_admin_down_time": null,
-          "sys_up_time_instance": 27875320
-        }
-      ]
-    }
-  ]
+  "phase": "FINALIZED",
+  "version": "v0a2",
+  "services": [],
+  "severity": "WARNING",
+  "endpoints": {
+    "coriant": [],
+    "juniper": [
+      {
+        "alarm_id": 16367131,
+        "bgp_peer": null,
+        "init_time": "2024-05-11T04:52:40",
+        "source_ip": "62.40.119.3",
+        "alarm_type": "Link",
+        "bgp_status": null,
+        "alarm_status": null,
+        "alarm_up_time": null,
+        "bgp_idle_time": null,
+        "snmp_trap_oid": "IF-MIB::linkDown",
+        "equipment_name": "rt1.bil.es.lab.office.geant.net",
+        "bgp_connect_time": null,
+        "link_oper_status": "down",
+        "should_correlate": "no",
+        "link_admin_status": "down",
+        "link_oper_up_time": null,
+        "bgp_establish_time": null,
+        "dashboard_alarm_id": 86400325,
+        "link_admin_up_time": null,
+        "link_interface_name": "lsi.1049296",
+        "link_oper_down_time": "2024-05-11T04:52:40",
+        "link_admin_down_time": "2024-05-11T04:52:40",
+        "sys_up_time_instance": 4024416
+      }
+    ],
+    "infinera": []
+  },
+  "description": "Interface lsi.1049296 Incident",
+  "coalesce-count": 1,
+  "endpoint-count": 1
 }
