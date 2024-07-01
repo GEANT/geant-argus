@@ -3,18 +3,7 @@
     {{ block.super }}
     <ul>
         <li>
-            Incidents
-            <ul>
-                <li>
-                    <a href="{% url 'htmx:incidents' %}" title="Incident list view">Incident list view</a>
-                </li>
-                {% url 'htmx:incidents-table' as htmx_incident_table_url %}
-                {% if htmx_incident_table_url %}
-                    <li>
-                        <a href="{{ htmx_incident_table_url }}" title="Incident table view">Incident table view</a>
-                    </li>
-                {% endif %}
-            </ul>
+            <a href="{% url 'htmx:incident-list' %}" title="Incident list view">Incidents</a>
         </li>
     </ul>
 {% endblock main %}
