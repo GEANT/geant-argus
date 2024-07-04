@@ -1,40 +1,46 @@
 {
   "phase": "FINALIZED",
-  "version": "v0a2",
+  "version": "v0a3",
   "services": [],
   "severity": "WARNING",
   "endpoints": {
-    "coriant": [],
-    "juniper": [
+    "rt0.ams.nl.geant.net::1.1.1.1": [
       {
-        "alarm_id": 16367131,
-        "bgp_peer": null,
-        "init_time": "2024-05-11T04:52:40",
-        "source_ip": "62.40.119.3",
-        "alarm_type": "Link",
-        "bgp_status": null,
-        "alarm_status": null,
-        "alarm_up_time": null,
-        "bgp_idle_time": null,
-        "snmp_trap_oid": "IF-MIB::linkDown",
-        "equipment_name": "rt1.bil.es.lab.office.geant.net",
-        "bgp_connect_time": null,
-        "link_oper_status": "down",
-        "should_correlate": "no",
-        "link_admin_status": "down",
-        "link_oper_up_time": null,
-        "bgp_establish_time": null,
-        "dashboard_alarm_id": 86400325,
-        "link_admin_up_time": null,
-        "link_interface_name": "lsi.1049296",
-        "link_oper_down_time": "2024-05-11T04:52:40",
-        "link_admin_down_time": "2024-05-11T04:52:40",
-        "sys_up_time_instance": 4024416
+        "type": "BGP",
+        "id": 1,
+        "init_time": "2024-07-04T12:57:18",
+        "clear_time": null,
+        "is_up": false,
+        "properties": {
+          "equipment_name": "rt0.ams.nl.geant.net",
+          "source_ip": "1.1.1.1",
+          "snmp_trap_oid": "oid",
+          "peer": "bgp_peer",
+          "status": "idle",
+          "idle_time": "2024-07-04T11:57:18",
+          "connect_time": "2024-07-04T11:57:18",
+          "establish_time": "2024-07-04T11:57:18"
+        }
+      },
+      {
+        "type": "BGP",
+        "id": 1,
+        "init_time": "2024-07-04T11:57:18",
+        "clear_time": "2024-07-04T11:59:18",
+        "is_up": true,
+        "properties": {
+          "equipment_name": "rt0.ams.nl.geant.net",
+          "source_ip": "1.1.1.1",
+          "snmp_trap_oid": "oid",
+          "peer": "bgp_peer",
+          "status": "established",
+          "idle_time": "2024-07-04T11:57:18",
+          "connect_time": "2024-07-04T11:58:18",
+          "establish_time": "2024-07-04T11:59:18"
+        }
       }
-    ],
-    "infinera": []
+    ]
   },
   "description": "Interface lsi.1049296 Incident",
-  "coalesce-count": 1,
-  "endpoint-count": 1
+  "coalesce-count": 1
 }
