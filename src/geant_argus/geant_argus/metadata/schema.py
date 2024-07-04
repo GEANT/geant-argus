@@ -34,31 +34,39 @@ METADATA_V0A3_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "definitions": {
+        "alarm-type": {
+            "type": "string",
+            "enum": ["BGP", "Link", "Optical (Coriant)", "Optical (Infinera)"],
+        },
         "endpoint-alarm": {
             "type": "object",
             "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": ["BGP", "Link", "Optical (Coriant)", "Optical (Infinera)"],
-                },
                 "id": {"type": "integer"},
                 "init_time": {"type": "string"},
-                "clear_time": {"type": ["string", "null"]},
+                "clear_time": {"type": "string"},
                 "is_up": {"type": "boolean"},
                 "properties": {"type": "object"},
             },
-            "required": ["type", "id", "init_time", "clear_time", "is_up"],
-        }
+        },
     },
     "properties": {
         "version": {"const": "v0a3"},
         "phase": {"type": "string"},
         "severity": {"type": "string"},
         "endpoints": {
-            "type": "object",
-            "additionalProperties": {
-                "type": "array",
-                "items": {"$ref": "#/definitions/endpoint-alarm"},
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"},
+                    "type": {"$ref": "#/definitions/alarm-type"},
+                    "alarm": {
+                        {
+                            "type": "array",
+                            "items": {"$ref": "#/definitions/endpoint-alarm"},
+                        }
+                    },
+                },
             },
         },
         "description": {"type": "string"},
@@ -72,5 +80,4 @@ METADATA_V0A3_SCHEMA = {
         "description",
         "coalesce-count",
     ],
-    "additionalProperties": False,
 }

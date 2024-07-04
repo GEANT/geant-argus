@@ -3,44 +3,46 @@
   "version": "v0a3",
   "services": [],
   "severity": "WARNING",
-  "endpoints": {
-    "rt0.ams.nl.geant.net::1.1.1.1": [
-      {
-        "type": "BGP",
-        "id": 1,
-        "init_time": "2024-07-04T12:57:18",
-        "clear_time": null,
-        "is_up": false,
-        "properties": {
-          "equipment_name": "rt0.ams.nl.geant.net",
-          "source_ip": "1.1.1.1",
-          "snmp_trap_oid": "oid",
-          "peer": "bgp_peer",
-          "status": "idle",
-          "idle_time": "2024-07-04T11:57:18",
-          "connect_time": "2024-07-04T11:57:18",
-          "establish_time": "2024-07-04T11:57:18"
+  "endpoints": [
+    {
+      "name": "rt0.ams.nl.geant.net::1.1.1.1",
+      "type": "BGP",
+      "alarms": [
+        {
+          "id": 1,
+          "init_time": "2024-07-04T12:57:18",
+          "clear_time": null,
+          "is_up": false,
+          "properties": {
+            "equipment_name": "rt0.ams.nl.geant.net",
+            "source_ip": "1.1.1.1",
+            "snmp_trap_oid": "oid",
+            "peer": "bgp_peer",
+            "status": "idle",
+            "idle_time": "2024-07-04T11:57:18",
+            "connect_time": "2024-07-04T11:57:18",
+            "establish_time": "2024-07-04T11:57:18"
+          }
+        },
+        {
+          "id": 2,
+          "init_time": "2024-07-04T11:57:18",
+          "clear_time": "2024-07-04T11:59:18",
+          "is_up": true,
+          "properties": {
+            "equipment_name": "rt0.ams.nl.geant.net",
+            "source_ip": "1.1.1.1",
+            "snmp_trap_oid": "oid",
+            "peer": "bgp_peer",
+            "status": "established",
+            "idle_time": "2024-07-04T11:57:18",
+            "connect_time": "2024-07-04T11:58:18",
+            "establish_time": "2024-07-04T11:59:18"
+          }
         }
-      },
-      {
-        "type": "BGP",
-        "id": 1,
-        "init_time": "2024-07-04T11:57:18",
-        "clear_time": "2024-07-04T11:59:18",
-        "is_up": true,
-        "properties": {
-          "equipment_name": "rt0.ams.nl.geant.net",
-          "source_ip": "1.1.1.1",
-          "snmp_trap_oid": "oid",
-          "peer": "bgp_peer",
-          "status": "established",
-          "idle_time": "2024-07-04T11:57:18",
-          "connect_time": "2024-07-04T11:58:18",
-          "establish_time": "2024-07-04T11:59:18"
-        }
-      }
-    ]
-  },
+      ]
+    }
+  ],
   "description": "Interface lsi.1049296 Incident",
   "coalesce-count": 1
 }
