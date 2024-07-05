@@ -8,7 +8,10 @@ INSTALLED_APPS = [
     "argus_htmx",
 ]
 ROOT_URLCONF = "geant_argus.urls"
-MIDDLEWARE += ["django_htmx.middleware.HtmxMiddleware"]  # noqa: F405
+MIDDLEWARE += [  # noqa: F405
+    "django_htmx.middleware.HtmxMiddleware",
+    "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
+]
 
 
 MEDIA_PLUGINS = [
