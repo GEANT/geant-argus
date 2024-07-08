@@ -60,11 +60,9 @@ METADATA_V0A3_SCHEMA = {
                 "properties": {
                     "name": {"type": "string"},
                     "type": {"$ref": "#/definitions/alarm-type"},
-                    "alarm": {
-                        {
-                            "type": "array",
-                            "items": {"$ref": "#/definitions/endpoint-alarm"},
-                        }
+                    "alarms": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/endpoint-alarm"},
                     },
                 },
             },
