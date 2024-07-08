@@ -43,7 +43,7 @@ METADATA_V0A3_SCHEMA = {
             "properties": {
                 "id": {"type": "integer"},
                 "init_time": {"type": "string"},
-                "clear_time": {"type": "string"},
+                "clear_time": {"type": ["string", "null"]},
                 "is_up": {"type": "boolean"},
                 "properties": {"type": "object"},
             },
