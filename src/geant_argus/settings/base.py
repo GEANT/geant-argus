@@ -1,3 +1,4 @@
+import os
 from argus.site.settings.base import *  # noqa: F401, F403
 
 INSTALLED_APPS = [
@@ -22,3 +23,5 @@ INDELIBLE_INCIDENTS = False
 # Remove default template dirs to allow overriding argus.site templates. See also
 # geant_argus/argus_site/apps.py
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
+
+AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS", 14))
