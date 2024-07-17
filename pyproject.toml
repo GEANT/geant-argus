@@ -1,0 +1,7 @@
+[tool.black]
+extend-exclude = '''
+/(
+    src/.*/migrations
+)/
+'''
+line-length = 99

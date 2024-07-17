@@ -1,0 +1,15 @@
+{% extends "htmx/incidents/incident_detail.html" %}
+{% load incident_extras %}
+{% block main %}
+    <h1>[{{ incident.pk }}] - [{{ incident.source_incident_id }}]</h1>
+    {% if incident.metadata %}
+        <h2>{{ incident.metadata.description }}</h2>
+    {% else %}
+        <h2>{{ incident.description }}</h2>
+    {% endif %}
+    {% if incident.metadata %}
+        <section id="metadata">
+            <pre>{{ incident.metadata | json_pp }}</pre>
+        </section>
+    {% endif %}
+{% endblock main %}

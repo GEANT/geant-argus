@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# This script runs the manage.py Django management commands with the environment variables set below.
+# This script is intended to be run inside a virtualenv.
+#
+# For a full overview of environment variables, see the section "Site-specific settings" of the documentation.
+#
+# Run the script without arguments to get a list of all available commands.
+
+export DEBUG=1
+export EMAIL_HOST=localhost
+export EMAIL_PORT=25
+# Run `python manage.py gen_secret_key` to create a SECRET_KEY
+export SECRET_KEY=
+
+# Use argus.site.settings.dev for defaults, or a local settings.py file (see docs)
+export DJANGO_SETTINGS_MODULE=
+# Syntax: postgresql://argus:<LOCAL DB PASSWORD>@localhost:5432/argus
+export DATABASE_URL=
+
+python manage.py "$@"
