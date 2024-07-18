@@ -1,5 +1,6 @@
-{% if item.type == "rule" %}
-    {% include "geant/filters/filter_rule.html" with rule=item is_top=is_top is_bottom=is_bottom %}
+{% if item.type == "rule" or not item.type %}
+    {% include "geant/filters/filter_rule.html" with prefix=prefix rule=item is_top=is_top is_bottom=is_bottom is_root=is_root can_delete=can_delete %}
 {% elif item.type == "group" %}
-    {% include "geant/filters/filter_group.html" with rule=item is_top=is_top is_bottom=is_bottom %}
+    {% include "geant/filters/filter_group.html" with prefix=prefix rule=item is_top=is_top is_bottom=is_bottom is_root=is_root can_delete=can_delete %}
+{% else %}
 {% endif %}

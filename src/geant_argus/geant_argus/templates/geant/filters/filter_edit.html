@@ -1,87 +1,99 @@
 {% extends "htmx/base.html" %}
 {% block head %}
-    {{ block.super }}
-    <style>
-      h3 {
-        color: #303030;
-        font-family: Courier, serif;
-      }
+  {{ block.super }}
+  <style>
+    h3 {
+      color: #303030;
+      font-family: Courier, serif;
+    }
 
-      .rule-rule {
-        color: #505050;
-        font-size: 13px;
-        font-family: Verdana, sans-serif;
-      }
+    .rule-rule {
+      color: #505050;
+      font-size: 13px;
+      font-family: Verdana, sans-serif;
+    }
 
-      .rule-rule input,
-      .rule-rule select {
-        color: #303030;
-        font-size: 13px;
-        font-family: Verdana, sans-serif;
-      }
+    .rule-rule input,
+    .rule-rule select {
+      color: #303030;
+      font-size: 13px;
+      font-family: Verdana, sans-serif;
+    }
 
-      .rule-rule input,
-      .rule-rule select {
-        padding-left: 5px;
-        box-sizing: border-box;
-        height: 22px;
-        max-height: 22px;
-      }
+    .rule-rule input,
+    .rule-rule select {
+      padding-left: 5px;
+      box-sizing: border-box;
+      height: 22px;
+      max-height: 22px;
+    }
 
-      .rule-atom {
-        margin-top: 15px;
-      }
+    .rule-atom {
+      margin-top: 15px;
+    }
 
-      .rule-list .rule-list {
-        margin-top: 15px;
-      }
+    .rule-list .rule-list {
+      margin-top: 15px;
+    }
 
-      .rule-list,
-      .rule-atom {
-        padding: 5px;
-        border-radius: 3px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        background: hsl(0, 0%, 97%);
-      }
+    .rule-list,
+    .rule-atom {
+      padding: 5px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: hsl(0, 0%, 97%);
+    }
 
-      .rule-list .rule-list,
-      .rule-list .rule-atom {
-        background: hsl(0, 0%, 95%);
-      }
+    .rule-list .rule-list,
+    .rule-list .rule-atom {
+      background: hsl(0, 0%, 95%);
+    }
 
-      .rule-list .rule-list .rule-list,
-      .rule-list .rule-list .rule-atom {
-        background: hsl(0, 0%, 92%);
-      }
+    .rule-list .rule-list .rule-list,
+    .rule-list .rule-list .rule-atom {
+      background: hsl(0, 0%, 92%);
+    }
 
-      .rule-list .rule-list .rule-list .rule-list,
-      .rule-list .rule-list .rule-list .rule-atom {
-        background: hsl(0, 0%, 89%);
-      }
+    .rule-list .rule-list .rule-list .rule-list,
+    .rule-list .rule-list .rule-list .rule-atom {
+      background: hsl(0, 0%, 89%);
+    }
 
-      .rule-operands {
-        margin: 15px 5px 5px 15px;
-      }
+    .rule-operands {
+      margin: 15px 5px 5px 15px;
+    }
 
-      .rule-buttons button {
-        cursor: pointer;
-      }
+    .rule-buttons button {
+      cursor: pointer;
+    }
 
-      .rule-buttons button:not(:hover),
-      .rule-buttons button[disabled] {
-        opacity: 0.50;
-      }
+    .rule-buttons button:not(:hover),
+    .rule-buttons button[disabled] {
+      opacity: 0.50;
+    }
 
-      .rule-buttons {
-        visibility: hidden;
-      }
+    .rule-buttons {
+      visibility: hidden;
+    }
 
-      .rule-atom:hover .rule-buttons,
-      .rule-group:hover .rule-buttons {
-        visibility: visible;
-      }
-    </style>
+    .rule-atom:hover .rule-buttons,
+    .rule-group:hover .rule-buttons {
+      visibility: visible;
+    }
+  </style>
 {% endblock head %}
 {% block main %}
-{% include "geant/filters/filter_item.html" with item=filter is_top=True is_bottom=True %}
-{% endblock main %}
+  <div>
+    <form>
+      <div id=filter_edit_root>
+        {% include "geant/filters/filter_item.html" with item=filter is_root=True %}
+      </div>
+      <div>
+        <button type="submit"
+                hx-post="{% url 'geant:save-filter' 1 %}"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                hx-target="#response">Save</button>
+      </form>
+    </div>
+    <div id=response></div>
+  {% endblock main %}

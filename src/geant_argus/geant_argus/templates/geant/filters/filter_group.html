@@ -1,15 +1,15 @@
+{% load filter_extras %}
 <div class="rule-list rule-rule">
     <div class="rule-group">
-        <select autocomplete=off>
-            <option value=and {% if rule.operator == "and" %}selected{% endif %}>All</option>
-            <option value=or {% if rule.operator == "or" %}selected{% endif %}>Any</option>
-            {% for field in fields %}<option value="{{ field }}">{{ field }}</option>{% endfor %}
-        </select>
+        {% include "geant/filters/filter_selector.html" with key="op" selected=rule.operator %}
         &nbsp;&nbsp;of the following are true<span class="rule-buttons"> &nbsp;
-        {% include "geant/filters/filter_buttons.html" with is_top=is_top is_bottom=is_bottom %}
+        {% if not is_root %}
+            {% include "geant/filters/filter_buttons.html" with can_delete=can_delete can_delete=can_delete is_top=is_top is_bottom=is_bottom prefix=prefix %}
+        {% endif %}
     </span>
     <div class="rule-operands">
         {% for item in rule.items %}
-            {% include "geant/filters/filter_rule.html" with rule=item is_top=forloop.first is_bottom=forloop.last %}
+            {% include "geant/filters/filter_item.html" with rule=item is_root=False is_top=forloop.first is_bottom=forloop.last prefix=prefix|concat_underscore:forloop.counter0 can_delete=rule.items|is_multiple %}
         {% endfor %}
     </div>
+</div>
