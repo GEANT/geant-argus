@@ -5,3 +5,8 @@ extend-exclude = '''
 )/
 '''
 line-length = 99
+
+[tool.djlint.css]
+indent_size = 2
+[tool.djlint.js]
+indent_size = 2

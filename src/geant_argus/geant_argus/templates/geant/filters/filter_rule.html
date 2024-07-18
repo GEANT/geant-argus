@@ -1,0 +1,16 @@
+<div class="rule-atom rule-rule">
+    <select autocomplete="off" class="rule-field">
+        <option value="and">All</option>
+        <option value="or">Any</option>
+        {% for field in fields %}
+            <option value="{{ field }}" {% if rule.field == field %}selected{% endif %}>{{ field }}</option>
+        {% endfor %}
+    </select>
+    <select class="rule-operator" autocomplete="off" value={{ rule.operator }}>
+        {% for op in operators %}
+            <option value="{{ op }}" {% if rule.operator == op %}selected{% endif %}>{{ op }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" value="{{ rule.value }}" class="rule-parameter">
+    {% include "geant/filters/filter_buttons.html" with is_top=is_top is_bottom=is_bottom %}
+</div>

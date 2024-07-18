@@ -1,0 +1,15 @@
+<div class="rule-list rule-rule">
+    <div class="rule-group">
+        <select autocomplete=off>
+            <option value=and {% if rule.operator == "and" %}selected{% endif %}>All</option>
+            <option value=or {% if rule.operator == "or" %}selected{% endif %}>Any</option>
+            {% for field in fields %}<option value="{{ field }}">{{ field }}</option>{% endfor %}
+        </select>
+        &nbsp;&nbsp;of the following are true<span class="rule-buttons"> &nbsp;
+        {% include "geant/filters/filter_buttons.html" with is_top=is_top is_bottom=is_bottom %}
+    </span>
+    <div class="rule-operands">
+        {% for item in rule.items %}
+            {% include "geant/filters/filter_rule.html" with rule=item is_top=forloop.first is_bottom=forloop.last %}
+        {% endfor %}
+    </div>

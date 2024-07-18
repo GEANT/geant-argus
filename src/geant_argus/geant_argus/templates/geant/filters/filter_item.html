@@ -1,0 +1,5 @@
+{% if item.type == "rule" %}
+    {% include "geant/filters/filter_rule.html" with rule=item is_top=is_top is_bottom=is_bottom %}
+{% elif item.type == "group" %}
+    {% include "geant/filters/filter_group.html" with rule=item is_top=is_top is_bottom=is_bottom %}
+{% endif %}
