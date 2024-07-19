@@ -26,6 +26,17 @@ def edit_filter(request, pk: Optional[int] = None):
     return render(request, "geant/filters/filter_edit.html", context=context)
 
 
+@require_POST
+def save_filter(request, pk: Optional[int] = None):
+    if pk is None:
+        print("creating filter")
+    else:
+        print(f"updating filter for {pk}")
+
+    result = parse_filter_form_data(request.POST)
+    return HttpResponse(json.dumps(result), content_type="text/plain")
+
+
 def update_filter(form_data, commands):
     filter_dict = parse_filter_form_data(form_data)
 
@@ -50,17 +61,6 @@ def update_filter(form_data, commands):
             item = items.pop(idx)
             items.insert(idx + 1, item)
     return filter_dict
-
-
-@require_POST
-def save_filter(request, pk: Optional[int] = None):
-    if pk is None:
-        print("creating filter")
-    else:
-        print(f"updating filter for {pk}")
-
-    result = parse_filter_form_data(request.POST)
-    return HttpResponse(json.dumps(result), content_type="text/plain")
 
 
 def default_filter():
