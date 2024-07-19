@@ -10,6 +10,16 @@
             hx-include="#filter_edit_root"
             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
             hx-target="#filter_edit_root">+</button>
-    <button type=button {% if is_top %}disabled{% endif %}>↑</button>
-    <button type=button {% if is_bottom %}disabled{% endif %}>↓</button>
+    <button type="button"
+            {% if is_top %}disabled{% endif %}
+            hx-post="{% url 'geant:create-filter' %}?move_up={{ prefix }}"
+            hx-include="#filter_edit_root"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            hx-target="#filter_edit_root">↑</button>
+    <button type="button"
+            {% if is_bottom %}disabled{% endif %}
+            hx-post="{% url 'geant:create-filter' %}?move_down={{ prefix }}"
+            hx-include="#filter_edit_root"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            hx-target="#filter_edit_root">↓</button>
 </span>
