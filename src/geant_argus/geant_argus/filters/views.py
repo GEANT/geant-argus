@@ -21,7 +21,8 @@ def edit_filter(request, pk: Optional[int] = None):
             "filter": filter_dict,
             "is_root": True,
         }
-        return render(request, "geant/filters/filter_item.html", context=context)
+        return render(request, "geant/filters/_filter_item.html", context=context)
+
     context = {"fields": FIELDS, "operators": OPERATORS, "filter": default_filter()}
     return render(request, "geant/filters/filter_edit.html", context=context)
 

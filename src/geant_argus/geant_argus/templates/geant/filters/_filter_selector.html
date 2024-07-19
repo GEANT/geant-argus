@@ -1,7 +1,7 @@
 <select name="{{ prefix }}{{ key }}"
         autocomplete="off"
         class="rule-field"
-        hx-post="{% url 'geant:create-filter' %}"
+        hx-post="."
         hx-include="#filter_edit_root"
         hx-trigger="change"
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

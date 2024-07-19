@@ -1,5 +1,5 @@
 <div class="rule-atom rule-rule">
-    {% include "geant/filters/filter_selector.html" with key="field" selected=rule.field %}
+    {% include "geant/filters/_filter_selector.html" with key="field" selected=rule.field %}
     <select name="{{ prefix }}op" class="rule-operator" autocomplete="off" value={{ rule.operator }}>
         {% for op in operators %}
             <option value="{{ op }}" {% if rule.operator == op %}selected{% endif %}>{{ op }}</option>
@@ -10,6 +10,6 @@
            value="{{ rule.value }}"
            class="rule-parameter">
     {% if not is_root %}
-        {% include "geant/filters/filter_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
+        {% include "geant/filters/_filter_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
     {% endif %}
 </div>

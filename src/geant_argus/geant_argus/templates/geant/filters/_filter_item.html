@@ -1,0 +1,9 @@
+{% if filter.type == "rule" %}
+    {% include "geant/filters/_filter_rule.html" with prefix=prefix rule=filter is_top=is_top is_bottom=is_bottom is_root=is_root can_delete=can_delete %}
+{% elif filter.type == "group" %}
+    {% include "geant/filters/_filter_group.html" with prefix=prefix group=filter is_top=is_top is_bottom=is_bottom is_root=is_root can_delete=can_delete %}
+{% else %}
+    <div>
+        <p>invalid data</p>
+    </div>
+{% endif %}

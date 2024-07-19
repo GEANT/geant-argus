@@ -1,0 +1,20 @@
+{% extends base %}
+
+{% block main %}
+    <section>
+        {% block table %}
+            {% include "htmx/incidents/_incident_table.html" %}
+        {% endblock table %}
+    </section>
+
+    <section>
+        <p>
+            Total, all time: {{ count }}
+        </p>
+
+        {% block refresh_info %}
+            {% include "htmx/incidents/_incidents_refresh_info.html" %}
+        {% endblock refresh_info %}
+    </section>
+
+{% endblock main %}
