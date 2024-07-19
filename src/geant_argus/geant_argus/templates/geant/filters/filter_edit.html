@@ -84,12 +84,21 @@
 {% endblock head %}
 {% block main %}
   <div>
-    <form>
-      <div id="filter_edit_root">{% include "geant/filters/_filter_item.html" with is_root=True %}</div>
-      <button type="submit"
-              hx-post="{% url 'geant:save-filter' 1 %}"
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-              hx-target="#response">Save</button>
+    <form action="{% if pk is None %}{% url 'geant:save-new-filter' %} {% else %} {% url 'geant:save-filter' pk %} {% endif %}"
+          method="post">
+      <label>
+        Name:
+        <input type="text" name="name" value="{{ filter.name }}" />
+      </label>
+      <div id="filter_edit_root">{% include "./_filter_item.html" with is_root=True %}</div>
+      {% csrf_token %}
+      <input type="submit" value="Save">
+      <a href="{% url 'geant:filter-list' %}">
+        <button type="button">Cancel</button>
+      </a>
+      <button type="button"
+              hx-delete="."
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>
     </form>
   </div>
   <div id="response"></div>

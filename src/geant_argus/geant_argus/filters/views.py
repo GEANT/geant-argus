@@ -1,16 +1,64 @@
 import itertools
-import json
 from typing import Optional
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render
-from django.views.decorators.http import require_POST, require_http_methods
+
+from argus.incident.models import Filter, User
+from django.core.paginator import Paginator
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseRedirect,
+    HttpResponseNotAllowed,
+)
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 FIELDS = ["field_1", "field_2"]
 OPERATORS = ["equals", "not_equals", "contains"]
 
 
-@require_http_methods(["HEAD", "GET", "POST"])
+def get_all_filters():
+    return Filter.objects.select_related("user")
+
+
+@require_GET
+def list_filters(request):
+    # Load incidents
+    qs = get_all_filters().order_by("name")
+
+    # Standard Django pagination
+    page_num = request.GET.get("page", "1")
+    page = Paginator(object_list=qs, per_page=10).get_page(page_num)
+
+    # The htmx magic - use a different, minimal base template for htmx
+    # requests, allowing us to skip rendering the unchanging parts of the
+    # template.
+    if request.htmx:
+        base_template = "geant/filters/_filter_table.html"
+    else:
+        base_template = "geant/filters/filter_list.html"
+
+    context = {
+        "column_count": 3,
+        "count": qs.count(),
+        "page_title": "Filters",
+        "page": page,
+    }
+
+    return render(request, base_template, context=context)
+
+
+@require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
+    if request.method == "DELETE":
+        if not pk:
+            return HttpResponseNotAllowed(permitted_methods=["HEAD", "GET", "POST"])
+        filter = get_object_or_404(Filter, pk=pk)
+        filter.delete()
+        resp = HttpResponse()
+        resp["HX-Redirect"] = reverse("geant:filter-list")
+        return resp
+
     if request.method == "POST":
         if not request.htmx:
             return HttpResponseBadRequest("only htmx supported")
@@ -18,24 +66,48 @@ def edit_filter(request, pk: Optional[int] = None):
         context = {
             "fields": FIELDS,
             "operators": OPERATORS,
-            "filter": filter_dict,
+            "filter_dict": filter_dict,
             "is_root": True,
         }
         return render(request, "geant/filters/_filter_item.html", context=context)
 
-    context = {"fields": FIELDS, "operators": OPERATORS, "filter": default_filter()}
+    if pk:
+        filter = get_object_or_404(Filter, pk=pk)
+        filter_dict = filter.filter
+    else:
+        filter = None
+        filter_dict = default_filter()
+    context = {
+        "fields": FIELDS,
+        "operators": OPERATORS,
+        "filter_dict": filter_dict,
+        "filter": filter,
+        "pk": pk,
+    }
     return render(request, "geant/filters/filter_edit.html", context=context)
 
 
 @require_POST
 def save_filter(request, pk: Optional[int] = None):
-    if pk is None:
-        print("creating filter")
-    else:
-        print(f"updating filter for {pk}")
-
     result = parse_filter_form_data(request.POST)
-    return HttpResponse(json.dumps(result), content_type="text/plain")
+    name = request.POST.get("name")
+
+    user = request.user
+
+    # WARNING: COMPLETE HACK FOR DEMO PURPOSES
+    # TODO: Remove
+    if not user.is_authenticated:
+        user = User.objects.first()
+
+    if pk is None:
+        Filter(name=name, user=user, filter=result).save()
+    else:
+        filter = Filter.objects.get(pk=pk)
+        filter.name = name
+        filter.filter = result
+        filter.save()
+
+    return HttpResponseRedirect(reverse("geant:filter-list"))
 
 
 def update_filter(form_data, commands):
@@ -73,10 +145,10 @@ def _get_items_list(filter_dict: dict, location: str) -> tuple[list, int]:
     return _get_items_list_helper(filter_dict, path)
 
 
-def _get_items_list_helper(filter_item: dict, location: list[int]):
-    if len(location) == 1:
-        return filter_item["items"], location[0]
-    return _get_items_list_helper(filter_item["items"][location[0]], location[1:])
+def _get_items_list_helper(filter_item: dict, path: list[int]):
+    if len(path) == 1:
+        return filter_item["items"], path[0]
+    return _get_items_list_helper(filter_item["items"][path[0]], path[1:])
 
 
 def parse_filter_form_data(form_data, prefix=""):
