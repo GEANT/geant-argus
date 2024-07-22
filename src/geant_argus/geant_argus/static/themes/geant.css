@@ -1,4 +1,7 @@
-#modal {
+.modal:not(.open){
+    display: none;
+}
+.modal.open {
     /* Underlay covers entire screen. */
     position: fixed;
     top: 0px;
@@ -19,7 +22,7 @@
     animation-timing-function: ease;
 }
 
-#modal>.modal-underlay {
+.modal>.modal-underlay {
     /* underlay takes up the entire viewport. This is only
 	required if you want to click to dismiss the popup */
     position: absolute;
@@ -30,7 +33,7 @@
     right: 0px;
 }
 
-#modal>.modal-content {
+.modal>.modal-content {
     /* Position visible dialog near the top of the window */
     margin-top: 10vh;
 
@@ -51,14 +54,14 @@
     animation-timing-function: ease;
 }
 
-#modal.closing {
+.modal.closing {
     /* Animate when closing */
     animation-name: fadeOut;
     animation-duration: 150ms;
     animation-timing-function: ease;
 }
 
-#modal.closing>.modal-content {
+.modal.closing>.modal-content {
     /* Animate when closing */
     animation-name: zoomOut;
     animation-duration: 150ms;

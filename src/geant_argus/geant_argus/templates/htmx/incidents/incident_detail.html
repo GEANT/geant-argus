@@ -1,103 +1,65 @@
 {% extends "htmx/incidents/incident_detail.html" %}
-
 {% load incident_extras %}
+{% block head %}
+    {{ block.super }}
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+{% endblock head %}
 {% block main %}
-<h1>[{{ incident.pk }}] - [{{ incident.source_incident_id }}]</h1>
-{% if incident.metadata %}
-<h2>{{ incident.metadata.description }}</h2>
-{% else %}
-<h2>{{ incident.description }}</h2>
-{% endif %}
+    <h1>[{{ incident.pk }}] - [{{ incident.source_incident_id }}]</h1>
+    {% if incident.metadata %}
+        <h2>{{ incident.metadata.description }}</h2>
+    {% else %}
+        <h2>{{ incident.description }}</h2>
+    {% endif %}
+    {% block incident_detail %}
+        {% if incident.metadata and incident.metadata.version == "v0a3" %}
+            <section id="endpoints">
+                <h3>Endpoints</h3>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Endpoint Name</th>
+                            <th>Endpoint Type</th>
+                            <th>Alarm ID</th>
+                            <th>Status</th>
+                            <th>Init Time</th>
+                            <th>Clear Time</th>
+                            <th>Properties</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for endpoint in incident.metadata.endpoints %}
+                        {% with forloop.counter as outer_counter %}
+                            <tr>
+                                <td rowspan="{{ endpoint.alarms|length }}">{{ endpoint.name }}</td>
+                                <td rowspan="{{ endpoint.alarms|length }}">{{ endpoint.type }}</td>
+                                {% for alarm in endpoint.alarms %}
+                                    {% if not forloop.first %}<tr>{% endif %}
+                                        <td>{{ alarm.id }}</td>
+                                        <td>{{ alarm.is_up|yesno:"Up,Down" }}</td>
+                                        <td>{{ alarm.init_time }}</td>
+                                        <td>{{ alarm.clear_time }}</td>
+                                        <td>
+                                            <button type="button" _="on click add .open to #modal_{{ outer_counter }}_{{ forloop.counter }}">See more</button>
+                                        </td>
+                                        {% if not forloop.last %}</tr>{% endif %}
+                                {% endfor %}
+                            </tr>
+                {% endwith %}
 
-{% block incident_detail %}
-<!-- <p>{{ incident.metadata }}</p> -->
-{% comment %} <p>{{ incident.metadata }}</p> {% endcomment %}
-
-
-{% if incident.metadata and incident.metadata.version == "v0a3" %}
-<section id="endpoints">
-    <h3>Endpoints</h3>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Endpoint Name</th>
-                <th>Endpoint Type</th>
-                <th>Alarm ID</th>
-                <th>Status</th>
-                <th>Init Time</th>
-                <th>Clear Time</th>
-                <th>Properties</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for endpoint in incident.metadata.endpoints %}
-            <tr>
-                <td rowspan="{{ endpoint.alarms|length }}">{{ endpoint.name }}</td>
-                <td rowspan="{{ endpoint.alarms|length }}">{{ endpoint.type }}</td>
-                {% for alarm in endpoint.alarms %}
-                {% if not forloop.first %}
-            <tr>
-                {% endif %}
-                <td>{{ alarm.id }}</td>
-                <td>{{ alarm.is_up|yesno:"Up,Down" }}</td>
-                <td>{{ alarm.init_time }}</td>
-                <td>{{ alarm.clear_time }}</td>
-                <td>
-                    <ul>
-                        {% for key, value in alarm.properties.items %}
-                        <li>{{ key }}: {{ value }}</li>
                         {% endfor %}
-                    </ul>
-                </td>
-                {% if not forloop.last %}
-            </tr>
-            {% endif %}
+                    </tbody>
+                </table>
+            </section>
+            {% for endpoint in incident.metadata.endpoints %}
+                {% with forloop.counter as outer_counter %}
+                    {% for event in endpoint.alarms %}
+                        {% include "htmx/incidents/_incident_event_properties_modal.html" with endpoint=endpoint event=event ept_idx=outer_counter evt_idx=forloop.counter %}
+                    {% endfor %}
+                {% endwith %}
             {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-</section>
-{% endif %}
-
-
-<div id="modals-here"></div>
-{% block scripts %}
-{{ block.super }}
-<script src="https://unpkg.com/htmx.org"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/js/uikit.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/js/uikit-icons.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log('DOM fully loaded and parsed');
-        document.body.addEventListener('htmx:afterOnLoad', function (evt) {
-            console.log('htmx:afterOnLoad event fired');
-            console.log('Event details:', evt.detail);
-            if (evt.detail.elt.id === 'modals-here') {
-                console.log('Open');
-                UIkit.modal('#modal').show();
-            }
-        });
-
-
-        document.body.addEventListener('click', function (evt) {
-            if (evt.target.matches('#cancelButton')) {
-                var modal = document.getElementById('modal');
-                if (modal) {
-                    UIkit.modal('#modal').hide();
-                    setTimeout(function () {
-                        document.getElementById('modals-here').innerHTML = '';
-                    }, 200);
-                    console.log('Close');
-                }
-            }
-        });
-    });  
-</script>
-<script src="https://unpkg.com/hyperscript.org@0.9.4"></script>
-
-{% endblock scripts %}
-{% endblock incident_detail %}
+        {% else %}
+            <p>Cannot show additional information (mismatched metadata version)</p>
+        {% endif %}
+    {% endblock incident_detail %}
 {% endblock main %}
