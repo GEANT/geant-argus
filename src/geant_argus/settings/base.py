@@ -25,7 +25,7 @@ INDELIBLE_INCIDENTS = False
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
 # Theming
-ARGUS_DEFAULT_THEME = "geant"
+DEFAULT_THEME = "geant"
 # context processor for theming
 TEMPLATES[0]["OPTIONS"]["context_processors"].append(
     "geant_argus.geant_argus.context_processors.geant_theme"
