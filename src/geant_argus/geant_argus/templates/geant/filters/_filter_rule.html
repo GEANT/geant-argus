@@ -1,0 +1,17 @@
+{% load filter_extras %}
+
+<div class="rule-atom rule-rule">
+    {% include "./_filter_selector.html" with key="field" selected=rule.field %}
+    <select name="{{ prefix }}op" class="rule-operator" autocomplete="off" value={{ rule.operator }}>
+        {% for op in fields_operators|get_item:rule.field %}
+            <option value="{{ op }}" {% if rule.operator == op %}selected{% endif %}>{{ op|display_text }}</option>
+        {% endfor %}
+    </select>
+    <input name="{{ prefix }}val"
+           type="text"
+           value="{{ rule.value }}"
+           class="rule-parameter">
+    {% if not is_root %}
+        {% include "./_filter_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
+    {% endif %}
+</div>
