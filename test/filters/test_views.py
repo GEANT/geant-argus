@@ -1,4 +1,6 @@
+import jsonschema
 import pytest
+from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.filters.views import parse_filter_form_data
 
 
@@ -8,6 +10,7 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
         (
             {"field": "description", "op": "equals", "val": "some value"},
             {
+                "version": "v1",
                 "type": "rule",
                 "field": "description",
                 "operator": "contains",
@@ -25,6 +28,7 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                 "1_val": "other value",
             },
             {
+                "version": "v1",
                 "type": "group",
                 "operator": "and",
                 "items": [
@@ -55,6 +59,7 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                 "1_val": "other value",
             },
             {
+                "version": "v1",
                 "type": "group",
                 "operator": "and",
                 "items": [
@@ -86,6 +91,7 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                 "val": "equals",
             },
             {
+                "version": "v1",
                 "type": "group",
                 "operator": "and",
                 "items": [
@@ -101,4 +107,6 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
     ],
 )
 def test_parse_filter_form_data(form_data, expected):
-    assert parse_filter_form_data(form_data) == expected
+    parsed = parse_filter_form_data(form_data)
+    assert parsed == expected
+    jsonschema.validate(parsed, FILTER_SCHEMA_V1)

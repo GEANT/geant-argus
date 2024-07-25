@@ -162,7 +162,14 @@ def _get_items_list_helper(filter_item: dict, path: list[int]):
     return _get_items_list_helper(filter_item["items"][path[0]], path[1:])
 
 
-def parse_filter_form_data(form_data, prefix=""):
+def parse_filter_form_data(form_data):
+    return {
+        "version": "v1",
+        **_parse_filter_form_data_helper(form_data, prefix=""),
+    }
+
+
+def _parse_filter_form_data_helper(form_data, prefix):
     if value := form_data.get(prefix + "field"):
         if value in ("or", "and"):
             return {"type": "group", "operator": value, "items": [default_filter()]}
@@ -191,7 +198,7 @@ def parse_filter_form_data(form_data, prefix=""):
         result = {"type": "group", "operator": value, "items": []}
         for idx in itertools.count():
             new_prefix = f"{prefix}{idx}_"
-            parsed = parse_filter_form_data(form_data, prefix=new_prefix)
+            parsed = _parse_filter_form_data_helper(form_data, prefix=new_prefix)
             if parsed is None:
                 break
             result["items"].append(parsed)
