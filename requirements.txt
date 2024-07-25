@@ -6,3 +6,4 @@ coverage
 python-dotenv
 django-extensions
 flake8
+pytest-django
