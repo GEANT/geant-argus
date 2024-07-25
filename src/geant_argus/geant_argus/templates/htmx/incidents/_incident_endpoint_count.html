@@ -1,0 +1,5 @@
+{% if incident.metadata.endpoints %}
+    {{ incident.metadata.endpoints|length }}
+{% else %}
+    -
+{% endif %}

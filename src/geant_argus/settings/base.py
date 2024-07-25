@@ -1,5 +1,8 @@
 import os
+
 from argus.site.settings.base import *  # noqa: F401, F403
+from argus_htmx.incidents.customization import IncidentTableColumn
+from argus_htmx.settings import *  # noqa: F403
 
 INSTALLED_APPS = [
     "geant_argus.geant_argus",
@@ -32,3 +35,22 @@ TEMPLATES[0]["OPTIONS"]["context_processors"].append(
 )
 
 AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS", 14))
+
+INCIDENT_TABLE_COLUMNS = [
+    "row_select",
+    "id",
+    "start_time",
+    "status",
+    "level",
+    "description",
+    IncidentTableColumn(
+        "endpoint_count",
+        label="Endpoints",
+        cell_template="htmx/incidents/_incident_endpoint_count.html",
+    ),
+    IncidentTableColumn(
+        "alarm_group_size",
+        label="Alarm group",
+        cell_template="htmx/incidents/_incident_coalesce_count.html",
+    ),
+]
