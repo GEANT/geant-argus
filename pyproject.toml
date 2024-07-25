@@ -6,6 +6,5 @@ extend-exclude = '''
 '''
 line-length = 99
 
-
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "test.settings"
