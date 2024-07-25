@@ -17,7 +17,7 @@ from django.views.decorators.http import require_GET, require_http_methods, requ
 FIELDS_AND_OPERATORS = {
     "description": ["contains"],
     "comment": ["contains"],
-    "location": ["contains"],
+    "location": ["equals", "contains"],
     "service_deck_ack": ["is"],
     "ncc_ack": ["is"],
     "start_time": ["before_abs", "after_abs", "after_rel", "before_rel"],
@@ -174,7 +174,7 @@ def parse_filter_form_data(form_data, prefix=""):
         return {
             "type": "rule",
             "field": value,
-            "operator": form_data.get(prefix + "op", FIELDS_AND_OPERATORS[value][0]),
+            "operator": op,
             "value": form_data.get(prefix + "val", ""),
         }
 

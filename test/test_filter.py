@@ -6,21 +6,21 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
     "form_data, expected",
     [
         (
-            {"field": "some field", "op": "equals", "val": "some value"},
+            {"field": "description", "op": "equals", "val": "some value"},
             {
                 "type": "rule",
-                "field": "some field",
-                "operator": "equals",
+                "field": "description",
+                "operator": "contains",
                 "value": "some value",
             },
         ),
         (
             {
                 "op": "and",
-                "0_field": "some field",
+                "0_field": "description",
                 "0_op": "equals",
                 "0_val": "some value",
-                "1_field": "other field",
+                "1_field": "location",
                 "1_op": "equals",
                 "1_val": "other value",
             },
@@ -30,13 +30,13 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                 "items": [
                     {
                         "type": "rule",
-                        "field": "some field",
-                        "operator": "equals",
+                        "field": "description",
+                        "operator": "contains",
                         "value": "some value",
                     },
                     {
                         "type": "rule",
-                        "field": "other field",
+                        "field": "location",
                         "operator": "equals",
                         "value": "other value",
                     },
@@ -47,10 +47,10 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
             {
                 "op": "and",
                 "0_op": "or",
-                "0_0_field": "some field",
+                "0_0_field": "description",
                 "0_0_op": "equals",
                 "0_0_val": "some value",
-                "1_field": "other field",
+                "1_field": "location",
                 "1_op": "equals",
                 "1_val": "other value",
             },
@@ -64,15 +64,15 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                         "items": [
                             {
                                 "type": "rule",
-                                "field": "some field",
-                                "operator": "equals",
+                                "field": "description",
+                                "operator": "contains",
                                 "value": "some value",
                             },
                         ],
                     },
                     {
                         "type": "rule",
-                        "field": "other field",
+                        "field": "location",
                         "operator": "equals",
                         "value": "other value",
                     },
@@ -91,8 +91,8 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                 "items": [
                     {
                         "type": "rule",
-                        "field": "field_1",
-                        "operator": "equals",
+                        "field": "description",
+                        "operator": "contains",
                         "value": "",
                     }
                 ],
