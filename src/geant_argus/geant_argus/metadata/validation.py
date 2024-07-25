@@ -2,7 +2,7 @@ import json
 import typing
 from django.http import HttpRequest, JsonResponse
 import jsonschema
-from .schema import METADATA_V0A3_SCHEMA
+from .schema import METADATA_SCHEMAS
 
 
 class MetadataValidationMiddleware:
@@ -30,7 +30,17 @@ class MetadataValidationMiddleware:
         if not isinstance(payload, dict) or "metadata" not in payload:
             return
 
+        if payload["metadata"].get("version") not in METADATA_SCHEMAS:
+            return JsonResponse(
+                {
+                    "message": (
+                        f"metadata must be one of version: {', '.join(METADATA_SCHEMAS.keys())}"
+                    )
+                },
+                status=400,
+            )
+        schema = METADATA_SCHEMAS[payload["metadata"]["version"]]
         try:
-            jsonschema.validate(payload["metadata"], METADATA_V0A3_SCHEMA)
+            jsonschema.validate(payload["metadata"], schema)
         except jsonschema.ValidationError as e:
             return JsonResponse({e.json_path.replace("$", "metadata", 1): e.message}, status=400)
