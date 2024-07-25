@@ -25,6 +25,8 @@ setup(
             "python-dotenv",
             "django-extensions",
             "flake8",
+            "pytest",
+            "pytest-django",
         ],
     },
     include_package_data=True,
