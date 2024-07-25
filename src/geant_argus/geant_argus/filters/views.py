@@ -1,7 +1,8 @@
 import itertools
 from typing import Optional
 
-from argus.incident.models import Filter, User
+from argus.filter.filters import Filter
+from argus.incident.models import User
 from django.core.paginator import Paginator
 from django.http import (
     HttpResponse,
@@ -13,8 +14,15 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-FIELDS = ["field_1", "field_2"]
-OPERATORS = ["equals", "not_equals", "contains"]
+FIELDS_AND_OPERATORS = {
+    "description": ["contains"],
+    "comment": ["contains"],
+    "location": ["contains"],
+    "service_deck_ack": ["is"],
+    "ncc_ack": ["is"],
+    "start_time": ["before_abs", "after_abs", "after_rel", "before_rel"],
+}
+FIRST_FIELD = next(iter(FIELDS_AND_OPERATORS))
 
 
 def get_all_filters():
@@ -64,8 +72,7 @@ def edit_filter(request, pk: Optional[int] = None):
             return HttpResponseBadRequest("only htmx supported")
         filter_dict = update_filter(request.POST, request.GET)
         context = {
-            "fields": FIELDS,
-            "operators": OPERATORS,
+            "fields_operators": FIELDS_AND_OPERATORS,
             "filter_dict": filter_dict,
             "is_root": True,
         }
@@ -78,8 +85,7 @@ def edit_filter(request, pk: Optional[int] = None):
         filter = None
         filter_dict = default_filter()
     context = {
-        "fields": FIELDS,
-        "operators": OPERATORS,
+        "fields_operators": FIELDS_AND_OPERATORS,
         "filter_dict": filter_dict,
         "filter": filter,
         "pk": pk,
@@ -137,7 +143,12 @@ def update_filter(form_data, commands):
 
 
 def default_filter():
-    return {"type": "rule", "field": FIELDS[0], "operator": OPERATORS[0], "value": ""}
+    return {
+        "type": "rule",
+        "field": FIRST_FIELD,
+        "operator": FIELDS_AND_OPERATORS[FIRST_FIELD][0],
+        "value": "",
+    }
 
 
 def _get_items_list(filter_dict: dict, location: str) -> tuple[list, int]:
@@ -155,23 +166,26 @@ def parse_filter_form_data(form_data, prefix=""):
     if value := form_data.get(prefix + "field"):
         if value in ("or", "and"):
             return {"type": "group", "operator": value, "items": [default_filter()]}
-        if value not in FIELDS:
-            value = FIELDS[0]
+        if value not in FIELDS_AND_OPERATORS:
+            value = FIRST_FIELD
+        op = form_data.get(prefix + "op")
+        if op not in FIELDS_AND_OPERATORS[value]:
+            op = FIELDS_AND_OPERATORS[value][0]
         return {
             "type": "rule",
             "field": value,
-            "operator": form_data.get(prefix + "op", OPERATORS[0]),
+            "operator": form_data.get(prefix + "op", FIELDS_AND_OPERATORS[value][0]),
             "value": form_data.get(prefix + "val", ""),
         }
 
     if (value := form_data.get(prefix + "op")) is not None:
         if value not in ("or", "and"):
-            if value not in FIELDS:
-                value = FIELDS[0]
+            if value not in FIELDS_AND_OPERATORS:
+                value = FIRST_FIELD
             return {
                 "type": "rule",
                 "field": value,
-                "operator": OPERATORS[0],
+                "operator": FIELDS_AND_OPERATORS[value][0],
                 "value": "",
             }
         result = {"type": "group", "operator": value, "items": []}
