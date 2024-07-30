@@ -35,16 +35,16 @@
             {% with forloop.counter as endpoint_counter %}
             <tr>
                 <td rowspan="{{ endpoint.events|length }}">{{ endpoint.name }}</td>
-                {% for alarm in endpoint.events %}
+                {% for event in endpoint.events %}
                 {% if not forloop.first %}
             <tr>{% endif %}
-                <td>{{ alarm.properties.id }}</td>
-                <td>{{ alarm.is_up|yesno:"Up,Down" }}</td>
-                <td>{{ alarm.init_time }}</td>
-                <td>{{ alarm.clear_time }}</td>
+                <td>{{ event.properties.id }}</td>
+                <td>{{ event.is_up|yesno:"Up,Down" }}</td>
+                <td>{{ event.init_time }}</td>
+                <td>{{ event.clear_time }}</td>
                 <td>
                     <button type="button"
-                        _="on click add .open to #modal_{{ endpoint_counter }}_{{ forloop.counter }}">See
+                        _="on click add .open to #modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ forloop.counter }}">See
                         more</button>
 
                 </td>
@@ -61,22 +61,15 @@
 
 </section>
 
-
 {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
 {% for endpoint in endpoints %}
 {% with forloop.counter as endpoint_counter %}
-{% for alarm in endpoint.alarms %}
-{% include "htmx/incidents/_incident_event_properties_modal.html" with
-endpoint_name=endpoint.name
-alarm=alarm
-endpoint_counter=endpoint_counter
-alarm_counter=forloop.counter %}
+{% for event in endpoint.events %}
+{% include "htmx/incidents/_incident_event_properties_modal.html" with endpoint_name=endpoint.name event=event endpoint_type=endpoint_type endpoint_counter=endpoint_counter event_counter=forloop.counter %}
 {% endfor %}
 {% endwith %}
 {% endfor %}
 {% endfor %}
-
-
 {% else %}
 <p>Cannot show additional information (mismatched metadata version)</p>
 {% endif %}
