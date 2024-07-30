@@ -1,12 +1,14 @@
 {% extends "htmx/base.html" %}
 {% block main %}
-    <section>
-        {% block table %}
-            {% include "./_filter_table.html" %}
-        {% endblock table %}
-    </section>
-    <section>
-        <p>Total: {{ count }}</p>
-        <a href="{% url 'geant:new-filter'%}"><button type="button">add</button></a>
-    </section>
+  <section>
+    {% block table %}
+      {% include "./_filter_table.html" %}
+    {% endblock table %}
+  </section>
+  <section>
+    <p>Total: {{ count }}</p>
+    <a href="{% url 'geant:new-filter' %}">
+      <button type="button">add</button>
+    </a>
+  </section>
 {% endblock main %}
