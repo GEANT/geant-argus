@@ -27,6 +27,7 @@ setup(
             "flake8",
             "pytest",
             "pytest-django",
+            "djlint",
         ],
     },
     include_package_data=True,
