@@ -1,0 +1,25 @@
+<span class="rule-buttons"> &nbsp;
+  <button type="button"
+          {% if not can_delete %}disabled{% endif %}
+          hx-post="?delete={{ prefix }}"
+          hx-include="#filter_edit_root"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="#filter_edit_root">-</button>
+  <button type="button"
+          hx-post="?create_after={{ prefix }}"
+          hx-include="#filter_edit_root"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="#filter_edit_root">+</button>
+  <button type="button"
+          {% if is_top %}disabled{% endif %}
+          hx-post="?move_up={{ prefix }}"
+          hx-include="#filter_edit_root"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="#filter_edit_root">↑</button>
+  <button type="button"
+          {% if is_bottom %}disabled{% endif %}
+          hx-post="?move_down={{ prefix }}"
+          hx-include="#filter_edit_root"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="#filter_edit_root">↓</button>
+</span>
