@@ -1,23 +1,18 @@
-<div id="modal_{{ ept_idx }}_{{ evt_idx }}"
-     class="modal"
-     _="on closeModal add .closing then wait for animationend then remove .open .closing">
+<div id="modal_{{ endpoint_counter }}_{{ alarm_counter }}" class="modal"
+    _="on closeModal add .closing then wait for animationend then remove .open .closing">
     <div class="modal-underlay" _="on click trigger closeModal"></div>
     <div class="modal-content">
-        <h2>{{ endpoint.name }}</h2>
+        <h2>{{ endpoint_name }}</h2>
         <table>
             <tbody>
-                {% for key, value in event.properties.items %}
-                    <tr>
-                        <th>{{ key }}</th>
-                        <th>{{ value }}</th>
-                    </tr>
+                {% for key, value in alarm.properties.items %}
+                <tr>
+                    <th>{{ key }}</th>
+                    <td>{{ value }}</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <ul>
-        </ul>
-        <br>
-        <br>
         <button class="btn danger" _="on click trigger closeModal">Close</button>
     </div>
 </div>

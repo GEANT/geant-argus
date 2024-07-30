@@ -1,65 +1,84 @@
 {% extends "htmx/incidents/incident_detail.html" %}
 {% load incident_extras %}
 {% block head %}
-    {{ block.super }}
-    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+{{ block.super }}
+<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 {% endblock head %}
 {% block main %}
-    <h1>[{{ incident.pk }}] - [{{ incident.source_incident_id }}]</h1>
-    {% if incident.metadata %}
-        <h2>{{ incident.metadata.description }}</h2>
-    {% else %}
-        <h2>{{ incident.description }}</h2>
-    {% endif %}
-    {% block incident_detail %}
-        {% if incident.metadata and incident.metadata.version == "v0a3" %}
-            <section id="endpoints">
-                <h3>Endpoints</h3>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Endpoint Name</th>
-                            <th>Endpoint Type</th>
-                            <th>Alarm ID</th>
-                            <th>Status</th>
-                            <th>Init Time</th>
-                            <th>Clear Time</th>
-                            <th>Properties</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for endpoint in incident.metadata.endpoints %}
-                        {% with forloop.counter as outer_counter %}
-                            <tr>
-                                <td rowspan="{{ endpoint.alarms|length }}">{{ endpoint.name }}</td>
-                                <td rowspan="{{ endpoint.alarms|length }}">{{ endpoint.type }}</td>
-                                {% for alarm in endpoint.alarms %}
-                                    {% if not forloop.first %}<tr>{% endif %}
-                                        <td>{{ alarm.id }}</td>
-                                        <td>{{ alarm.is_up|yesno:"Up,Down" }}</td>
-                                        <td>{{ alarm.init_time }}</td>
-                                        <td>{{ alarm.clear_time }}</td>
-                                        <td>
-                                            <button type="button" _="on click add .open to #modal_{{ outer_counter }}_{{ forloop.counter }}">See more</button>
-                                        </td>
-                                        {% if not forloop.last %}</tr>{% endif %}
-                                {% endfor %}
-                            </tr>
-                {% endwith %}
+<h1>[{{ incident.pk }}] - [{{ incident.source_incident_id }}]</h1>
+{% if incident.metadata %}
+<h2>{{ incident.metadata.description }}</h2>
+{% else %}
+<h2>{{ incident.description }}</h2>
+{% endif %}
+{% block incident_detail %}
+{% if incident.metadata and incident.metadata.version == "v0a4" %}
 
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </section>
-            {% for endpoint in incident.metadata.endpoints %}
-                {% with forloop.counter as outer_counter %}
-                    {% for event in endpoint.alarms %}
-                        {% include "htmx/incidents/_incident_event_properties_modal.html" with endpoint=endpoint event=event ept_idx=outer_counter evt_idx=forloop.counter %}
-                    {% endfor %}
-                {% endwith %}
+<section id="endpoints">
+    <h3>Endpoints</h3>
+    {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
+    <h4>{{ endpoint_type }}</h4>
+    {% if endpoints %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Endpoint Name</th>
+                <th>Alarm ID</th>
+                <th>Status</th>
+                <th>Init Time</th>
+                <th>Clear Time</th>
+                <th>Properties</th>
+            </tr>
+        </thead>
+        {% for endpoint in endpoints %}
+        <tbody>
+            {% with forloop.counter as endpoint_counter %}
+            <tr>
+                <td rowspan="{{ endpoint.events|length }}">{{ endpoint.name }}</td>
+                {% for alarm in endpoint.events %}
+                {% if not forloop.first %}
+            <tr>{% endif %}
+                <td>{{ alarm.properties.id }}</td>
+                <td>{{ alarm.is_up|yesno:"Up,Down" }}</td>
+                <td>{{ alarm.init_time }}</td>
+                <td>{{ alarm.clear_time }}</td>
+                <td>
+                    <button type="button"
+                        _="on click add .open to #modal_{{ endpoint_counter }}_{{ forloop.counter }}">See
+                        more</button>
+
+                </td>
+                {% if not forloop.last %}
+            </tr>{% endif %}
             {% endfor %}
-        {% else %}
-            <p>Cannot show additional information (mismatched metadata version)</p>
-        {% endif %}
-    {% endblock incident_detail %}
+            </tr>
+            {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    {% endfor %}
+
+</section>
+
+
+{% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
+{% for endpoint in endpoints %}
+{% with forloop.counter as endpoint_counter %}
+{% for alarm in endpoint.alarms %}
+{% include "htmx/incidents/_incident_event_properties_modal.html" with
+endpoint_name=endpoint.name
+alarm=alarm
+endpoint_counter=endpoint_counter
+alarm_counter=forloop.counter %}
+{% endfor %}
+{% endwith %}
+{% endfor %}
+{% endfor %}
+
+
+{% else %}
+<p>Cannot show additional information (mismatched metadata version)</p>
+{% endif %}
+{% endblock incident_detail %}
 {% endblock main %}
