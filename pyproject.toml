@@ -5,3 +5,17 @@ extend-exclude = '''
 )/
 '''
 line-length = 99
+
+[tool.djlint]
+format_css = true
+format_js = true
+indent = 2
+
+[tool.djlint.css]
+indent_size = 2
+
+[tool.djlint.js]
+indent_size = 2
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "test.settings"
