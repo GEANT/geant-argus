@@ -1,0 +1,7 @@
+<label for="filter-select">Filter:</label>
+<select name="filter_pk" autocomplete="off" id="filter-select">
+    <option value="">-</option>
+    {% for filter in filters %}
+        <option value="{{ filter.pk }}" {% if selected == filter.pk %}selected{% endif %}>{{ filter.name }}</option>
+    {% endfor %}
+</select>

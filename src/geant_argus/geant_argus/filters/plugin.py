@@ -1,21 +1,28 @@
+import functools
+import operator
 from typing import Any, Dict
+
+import jsonschema
 from argus.filter.default import (  # noqa: F401
-    ComplexFallbackFilterWrapper,
-    FilterSerializer as DefaultFilterSerializer,
-    QuerySetFilter,
-    IncidentFilter as DefaultIncidentFilter,
-    SourceLockedIncidentFilter,
     INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
     SOURCE_LOCKED_INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
+    ComplexFallbackFilterWrapper,
 )
-from drf_spectacular.openapi import AutoSchema
-import jsonschema
-from rest_framework import serializers, fields
+from argus.filter.default import FilterSerializer as DefaultFilterSerializer
+from argus.filter.default import IncidentFilter as DefaultIncidentFilter
+from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # noqa: F401
+from argus.filter.filters import Filter
+from django import forms
+from django.db.models import Q, QuerySet
+from django.template import loader
 from drf_spectacular.extensions import OpenApiSerializerExtension
+from drf_spectacular.openapi import AutoSchema
+from rest_framework import fields, serializers
+from rest_framework.filters import BaseFilterBackend
+
 from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
 
-from django.template import loader
-from argus.filter.filters import Filter
+SUPPORTED_FILTER_VERSIONS = ["v1"]
 
 
 class _FilterBlobSerializer(serializers.Serializer):
@@ -32,8 +39,8 @@ class _FilterBlobSerializer(serializers.Serializer):
         return instance
 
 
-class GeantFilterBackend:
-    form_template = "geant.filters._select_filter_by_name.html"
+class GeantFilterBackend(BaseFilterBackend):
+    template = "geant/filters/_select_filter_by_name.html"
 
     @classmethod
     def get_filter_blob_serializer(cls):
@@ -64,16 +71,65 @@ class GeantFilterBackend:
 
         return IncidentFilter
 
-    @classmethod
-    def incident_list_filter(cls, request, qs):
+    def incident_list_filter(self, request, queryset):
+        return self.to_html(request), self.filter_queryset(request, queryset)
 
-        return cls.to_html(request), qs
+    def filter_queryset(self, request, queryset, view=None):
+        """implements BaseFilterBackend.filter_queryset"""
+        form = SelectFilterByPKForm(request.GET)
+        if not form.is_valid():
+            return queryset
 
-    @classmethod
-    def to_html(cls, request):
-        template = loader.get_template(cls.template)
-        context = {"filters": Filter.objects.filter("")}
+        filter = Filter.objects.get(pk=form.cleaned_data["filter_pk"])
+        if not (
+            filter and filter.filter and filter.filter.get("version") in SUPPORTED_FILTER_VERSIONS
+        ):
+            return queryset
+        return GeantBooleanFiltering(filter).filter(queryset)
+
+    def to_html(self, request):
+        form = SelectFilterByPKForm(request.GET)
+        form.full_clean()
+
+        template = loader.get_template(self.template)
+        context = {
+            "filters": Filter.objects.filter(filter__version="v1"),
+            "selected": form.cleaned_data.get("filter_pk"),
+        }
         return template.render(context, request)
+
+
+class GeantBooleanFiltering:
+    FILTER_FIELD_MAPPING = {"description": "metadata__description"}
+
+    def __init__(self, filter: Filter):
+        self.filter_dict = filter.filter
+        assert self.filter_dict["version"] == "v1", "unsupported filter version"
+
+    def filter(self, qs: QuerySet) -> QuerySet:
+        return qs.filter(self._parse_item(self.filter_dict))
+
+    def _parse_item(self, item: dict):
+        if item["type"] == "group":
+            return self._parse_group(item)
+        if item["type"] == "rule":
+            return self._parse_rule(item)
+        raise ValueError("invalid item type")
+
+    def _parse_group(self, group: dict):
+        op = operator.ior if group["operator"] == "or" else operator.iand
+        return functools.reduce(op, (self._parse_item(i) for i in group["items"]))
+
+    def _parse_rule(self, rule: dict):
+        db_field = self.FILTER_FIELD_MAPPING[rule["field"]]
+        if rule["operator"] == "equals":
+            return Q(**{db_field: rule["value"]})
+        if rule["operator"] == "contains":
+            return Q(**{f"{db_field}__icontains": rule["value"]})
+
+
+class SelectFilterByPKForm(forms.Form):
+    filter_pk = forms.fields.IntegerField(min_value=0, required=True)
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):
@@ -96,9 +152,10 @@ class _FilterBlobExtension(OpenApiSerializerExtension):
         }
 
 
-validate_jsonfilter = GeantFilterBackend.validate_jsonfilter
-FilterSerializer = GeantFilterBackend.get_filter_serializer()
-FilterBlobSerializer = GeantFilterBackend.get_filter_blob_serializer()
-IncidentFilter = GeantFilterBackend.get_incident_filter()
+_backend = GeantFilterBackend()
+validate_jsonfilter = _backend.validate_jsonfilter
+FilterSerializer = _backend.get_filter_serializer()
+FilterBlobSerializer = _backend.get_filter_blob_serializer()
+IncidentFilter = _backend.get_incident_filter()
 
-incident_list_filter = GeantFilterBackend.incident_list_filter
+incident_list_filter = _backend.incident_list_filter
