@@ -166,4 +166,4 @@ by custom boolean rules (combination of AND and OR filters) and we provide this 
 through a filtering backend plugin. The api of this plugin is in its early stages, but currently
 involves pointing Argus to a module containing the relevant objects through the
 `ARGUS_FILTER_BACKEND` settings. See also `argus.filter.default` for which objects to expose and
-theire default implementation
+their default implementation
