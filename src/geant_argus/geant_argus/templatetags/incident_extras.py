@@ -21,7 +21,7 @@ def level_to_severity(value):
     min_level = min(IncidentSeverity)
     max_level = max(IncidentSeverity)
     level = max(min_level, min(max_level, value))
-    return IncidentSeverity(level)
+    return IncidentSeverity(level).name
 
 
 @register.filter(name="json_pp")

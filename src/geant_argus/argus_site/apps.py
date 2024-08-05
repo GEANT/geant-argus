@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class ArgusSiteConfig(AppConfig):
     """
-    By default, Argus has a TEMPLATES setting (see argus.site.settings.base) that makes it1
+    By default, Argus has a TEMPLATES setting (see argus.site.settings.base) that makes it
     impossible to override templates in `argus.site.templates` due to TEMPLATES-> DIRS being
     checked for templates before it looks in apps' templates/ directories. We have fixed this by
     overriding the TEMPLATES settings (see geant_argus.settings.base) to only look for templates in
