@@ -38,19 +38,22 @@ AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DA
 
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
-    "id",
     "start_time",
     "status",
-    "level",
+    IncidentTableColumn(
+        "level",
+        label="Severity",
+        cell_template="htmx/incidents/_incident_level.html",
+    ),
     "description",
     IncidentTableColumn(
         "endpoint_count",
-        label="Endpoints",
+        label="Flaps",
         cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
-        "alarm_group_size",
-        label="Alarm group",
-        cell_template="htmx/incidents/_incident_coalesce_count.html",
+        "details",
+        label="Details",
+        cell_template="htmx/incidents/_incident_details_button.html",
     ),
 ]
