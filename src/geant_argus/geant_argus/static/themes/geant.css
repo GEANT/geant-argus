@@ -1,6 +1,7 @@
-.modal:not(.open){
+.modal:not(.open) {
     display: none;
 }
+
 .modal.open {
     /* Underlay covers entire screen. */
     position: fixed;
