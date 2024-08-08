@@ -85,7 +85,7 @@
 {% endblock head %}
 {% block main %}
   <div>
-    <form action="{% if pk is None %}{% url 'geant:save-new-filter' %} {% else %} {% url 'geant:save-filter' pk %} {% endif %}"
+    <form action="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
           method="post">
       <label>
         Name:
@@ -94,7 +94,7 @@
       <div id="filter_edit_root">{% include "./_filter_item.html" with is_root=True %}</div>
       {% csrf_token %}
       <input type="submit" value="Save">
-      <a href="{% url 'geant:filter-list' %}">
+      <a href="{% url 'geant-filters:filter-list' %}">
         <button type="button">Cancel</button>
       </a>
       <button type="button"
