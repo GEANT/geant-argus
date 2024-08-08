@@ -6,17 +6,6 @@ from django.views.decorators.http import require_POST
 from django_htmx.middleware import HtmxDetails
 
 
-def prefetch_incident_daughters():
-    return Incident.objects.select_related("source").prefetch_related(
-        "incident_tag_relations",
-        "incident_tag_relations__tag",
-        "events",
-        "events__ack",
-        "events__actor",
-        "events__actor__groups",
-    )
-
-
 class HtmxHttpRequest(HttpRequest):
     htmx: HtmxDetails
 
