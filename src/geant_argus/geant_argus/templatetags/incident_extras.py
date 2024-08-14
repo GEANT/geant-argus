@@ -1,7 +1,9 @@
-from enum import IntEnum
 import json
-from django import template
+from enum import IntEnum
+
 from argus.auth.models import User
+from django import template
+from django.template.defaultfilters import stringfilter
 
 register = template.Library()
 
@@ -32,6 +34,14 @@ def json_pp(value):
         return json.dumps(value, indent=2)
     except TypeError:
         return value
+
+
+@register.filter
+@stringfilter
+def upperfirst(value: str):
+    if not value:
+        return ""
+    return value[0].upper() + value[1:].lower()
 
 
 @register.filter
