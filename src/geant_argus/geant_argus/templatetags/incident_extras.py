@@ -1,5 +1,7 @@
-from enum import IntEnum
 import json
+from enum import IntEnum
+
+from argus.auth.models import User
 from django import template
 from django.template.defaultfilters import stringfilter
 
@@ -25,7 +27,7 @@ def level_to_severity(value):
     return IncidentSeverity(level).name
 
 
-@register.filter(name="json_pp")
+@register.filter
 def json_pp(value):
     """pretty formats as json if possible"""
     try:
@@ -40,3 +42,8 @@ def upperfirst(value: str):
     if not value:
         return ""
     return value[0].upper() + value[1:].lower()
+
+
+@register.filter
+def has_group(user: User, group):
+    return user.groups.filter(name=group).exists()

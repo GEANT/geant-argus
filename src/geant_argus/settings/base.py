@@ -16,7 +16,7 @@ MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
-
+DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
 
 MEDIA_PLUGINS = [
     "argus.notificationprofile.media.email.EmailNotification",
@@ -39,6 +39,11 @@ AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DA
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
     "start_time",
+    IncidentTableColumn(
+        "endpoint_count",
+        label="Flaps",
+        cell_template="htmx/incidents/_incident_endpoint_count.html",
+    ),
     "status",
     IncidentTableColumn(
         "level",
@@ -47,9 +52,16 @@ INCIDENT_TABLE_COLUMNS = [
     ),
     "description",
     IncidentTableColumn(
-        "endpoint_count",
-        label="Flaps",
-        cell_template="htmx/incidents/_incident_endpoint_count.html",
+        "noc_ack",
+        label="NOC Ack",
+        cell_template="htmx/incidents/_incident_group_ack.html",
+        context={"group": "noc"},
+    ),
+    IncidentTableColumn(
+        "sd_ack",
+        label="SD Ack",
+        cell_template="htmx/incidents/_incident_group_ack.html",
+        context={"group": "servicedesk"},
     ),
     IncidentTableColumn(
         "details",
