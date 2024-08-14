@@ -14,7 +14,7 @@
             <td>{{ object.name }}</td>
             <td>{{ object.user.username }}</td>
             <td>
-              <a href="{% url 'geant:edit-filter' object.pk %}">X</a>
+              <a href="{% url 'geant-filters:edit-filter' object.pk %}">X</a>
             </td>
           </tr>
         {% endblock object %}
