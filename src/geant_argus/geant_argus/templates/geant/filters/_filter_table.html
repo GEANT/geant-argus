@@ -1,33 +1,34 @@
-<table id="table" <thead>
-  <tr>
-    <th>name</th>
-    <th>user</th>
-    <th>edit</th>
-  </tr>
-</thead>
-<tbody id="table-body">
-  {% block incident_rows %}
-    {% for object in page.object_list %}
-      {% block object %}
-        <tr id="obj-{{ incident.pk }}-row">
-          <td>{{ object.name }}</td>
-          <td>{{ object.user.username }}</td>
-          <td>
-            <a href="{% url 'geant:edit-filter' object.pk %}">X</a>
-          </td>
+<table id="table">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>user</th>
+      <th>edit</th>
+    </tr>
+  </thead>
+  <tbody id="table-body">
+    {% block incident_rows %}
+      {% for object in page.object_list %}
+        {% block object %}
+          <tr id="obj-{{ incident.pk }}-row">
+            <td>{{ object.name }}</td>
+            <td>{{ object.user.username }}</td>
+            <td>
+              <a href="{% url 'geant:edit-filter' object.pk %}">X</a>
+            </td>
+          </tr>
+        {% endblock object %}
+      {% empty %}
+        <tr>
+          <td colspan="2">No items on this page.</td>
         </tr>
-      {% endblock object %}
-    {% empty %}
-      <tr>
-        <td colspan="2">No items on this page.</td>
-      </tr>
-    {% endfor %}
-  {% endblock incident_rows %}
-</tbody>
-<tfoot>
-  <tr>
-    <td colspan="{{ column_count }}">
-      <!--
+      {% endfor %}
+    {% endblock incident_rows %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="{{ column_count }}">
+        <!--
             The htmx attributes set on the nav here are inherited by the child links.
             hx-target tells where htmx to swap the fetched content in, and hx-swap
             tells it how to swap it - by replacing the 'outerHTML' attribute of the
@@ -35,44 +36,44 @@
             htmx to push the fetched URL into the browser history, so we can use
             the backwards/forwards buttons to navigate these subpages.
             -->
-      <nav class="paginator"
-           hx-target="#table"
-           hx-swap="outerHTML"
-           hx-push-url="true">
-        <ul>
-          {% if page.number != 1 %}
-            <li>
-              <!--
+        <nav class="paginator"
+             hx-target="#table"
+             hx-swap="outerHTML"
+             hx-push-url="true">
+          <ul>
+            {% if page.number != 1 %}
+              <li>
+                <!--
                               For each link we use hx-get to tell htmx to fetch that URL and
                               swap it in. We also repeat the URL in the href attribute so the
                               page works without JavaScript, and to ensure the link is
                               displayed as clickable.
                             -->
-              <a hx-get="?page=1" href="?page=1">&laquo; First</a>
-            </li>
-          {% endif %}
-          {% if page.has_previous %}
-            <li>
-              <a hx-get="?page={{ page.previous_page_number }}"
-                 href="?page={{ page.previous_page_number }}">{{ page.previous_page_number }}</a>
-            </li>
-          {% endif %}
-          <li>{{ page.number }}</li>
-          {% if page.has_next %}
-            <li>
-              <a hx-get="?page={{ page.next_page_number }}"
-                 href="?page={{ page.next_page_number }}">{{ page.next_page_number }}</a>
-            </li>
-          {% endif %}
-          {% if page.number != page.paginator.num_pages %}
-            <li>
-              <a hx-get="?page={{ page.paginator.num_pages }}"
-                 href="?page={{ page.paginator.num_pages }}">&raquo; Last</a>
-            </li>
-          {% endif %}
-        </ul>
-      </nav>
-    </td>
-  </tr>
-</tfoot>
+                <a hx-get="?page=1" href="?page=1">&laquo; First</a>
+              </li>
+            {% endif %}
+            {% if page.has_previous %}
+              <li>
+                <a hx-get="?page={{ page.previous_page_number }}"
+                   href="?page={{ page.previous_page_number }}">{{ page.previous_page_number }}</a>
+              </li>
+            {% endif %}
+            <li>{{ page.number }}</li>
+            {% if page.has_next %}
+              <li>
+                <a hx-get="?page={{ page.next_page_number }}"
+                   href="?page={{ page.next_page_number }}">{{ page.next_page_number }}</a>
+              </li>
+            {% endif %}
+            {% if page.number != page.paginator.num_pages %}
+              <li>
+                <a hx-get="?page={{ page.paginator.num_pages }}"
+                   href="?page={{ page.paginator.num_pages }}">&raquo; Last</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </td>
+    </tr>
+  </tfoot>
 </table>
