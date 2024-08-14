@@ -136,6 +136,7 @@ METADATA_V0A4_SCHEMA = {
     "properties": {
         "version": {"const": "v0a4"},
         "phase": {"type": "string"},
+        "status": {"type": "string", "enum": ["ACTIVE", "CLEAR", "CLOSED"]},
         "severity": {"type": "string"},
         "endpoints": {
             "type": "object",
@@ -162,10 +163,11 @@ METADATA_V0A4_SCHEMA = {
         },
         "description": {"type": "string"},
         "coalesce_count": {"type": "integer"},
+        "endpoint_count": {"type": "integer"},
     },
     "required": [
-        "phase",
         "version",
+        "phase",
         "severity",
         "endpoints",
         "description",

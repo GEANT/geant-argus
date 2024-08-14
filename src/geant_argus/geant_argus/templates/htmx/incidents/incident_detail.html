@@ -1,15 +1,100 @@
 {% extends "htmx/incidents/incident_detail.html" %}
 {% load incident_extras %}
+{% block head %}
+  {{ block.super }}
+  <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css">
+{% endblock head %}
 {% block main %}
-    <h1>[{{ incident.pk }}] - [{{ incident.source_incident_id }}]</h1>
-    {% if incident.metadata %}
-        <h2>{{ incident.metadata.description }}</h2>
+  <nav class="breadcrumb has-arrow-separator is-centered"
+       aria-label="breadcrumbs">
+    <ul>
+      <li>
+        <a href="#">[{{ incident.pk }}]</a>
+      </li>
+      <li class="is-active">
+        <a href="#" aria-current="page">[{{ incident.source_incident_id }}]</a>
+      </li>
+    </ul>
+  </nav>
+  {% if incident.metadata %}
+    <h2>{{ incident.metadata.description }}</h2>
+  {% else %}
+    <h2>{{ incident.description }}</h2>
+  {% endif %}
+  {% block incident_detail %}
+    {% if incident.metadata and incident.metadata.version == "v0a4" %}
+      <section id="endpoints" class="section has-background-light">
+        <div class="title is-size-4">Endpoints</div>
+        {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
+          {% if endpoints %}
+            <div id="endpoint_type" class="message is-light is-success">
+              <div class="message-header ">
+                <div class="title is-size-5 is-centered is-capitalized">{{ endpoint_type }}</div>
+                <button class="delete"></button>
+              </div>
+              <div class="message-body">
+                <div class="hero">
+                  <table class="my-3 table is-bordered is-striped">
+                    <thead>
+                      <tr>
+                        <th>Endpoint Name</th>
+                        <th>Alarm ID</th>
+                        <th>Status</th>
+                        <th>Init Time</th>
+                        <th>Clear Time</th>
+                        <th>Properties</th>
+                      </tr>
+                    </thead>
+                    {% for endpoint in endpoints %}
+                      <tbody>
+                        {% with forloop.counter as endpoint_counter %}
+                          <tr>
+                            <td rowspan="{{ endpoint.events|length }}">{{ endpoint.name }}</td>
+                            {% for event in endpoint.events %}
+                              {% if not forloop.first %}<tr>{% endif %}
+                                <td>{{ event.properties.id }}</td>
+                                <td>{{ event.is_up|yesno:"Up,Down" }}</td>
+                                <td>{{ event.init_time }}</td>
+                                <td>{{ event.clear_time }}</td>
+                                <td>
+                                  <button type="button"
+                                          class="button is-small is-success is-rounded"
+                                          _="on click add .open to #modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ forloop.counter }}">
+                                    See
+                                    more
+                                  </button>
+                                </td>
+                                {% if not forloop.last %}</tr>{% endif %}
+                            {% endfor %}
+                          </tr>
+                        {% endwith %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div id="endpoint_type"
+                 class="notification is-info is-light is-capitalized">
+              <div class="title is-size-5">{{ endpoint_type }}</div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </section>
+      {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
+        {% for endpoint in endpoints %}
+          {% with forloop.counter as endpoint_counter %}
+            {% for event in endpoint.events %}
+              {% include "htmx/incidents/_incident_event_properties_modal.html" with endpoint_name=endpoint.name event=event endpoint_type=endpoint_type endpoint_counter=endpoint_counter event_counter=forloop.counter %}
+            {% endfor %}
+          {% endwith %}
+        {% endfor %}
+      {% endfor %}
     {% else %}
-        <h2>{{ incident.description }}</h2>
+      <p>Cannot show additional information (mismatched metadata version)</p>
     {% endif %}
-    {% if incident.metadata %}
-        <section id="metadata">
-            <pre>{{ incident.metadata | json_pp }}</pre>
-        </section>
-    {% endif %}
+  {% endblock incident_detail %}
 {% endblock main %}

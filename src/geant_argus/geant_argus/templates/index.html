@@ -1,12 +1,12 @@
 {% extends "index.html" %}
 {% block main %}
-    {{ block.super }}
-    <ul>
-        <li>
-            <a href="{% url 'htmx:incident-list' %}" title="Incident list view">Incidents</a>
-        </li>
-        <li>
-            <a href="{% url 'geant:filter-list' %}" title="Filter list view">Filters</a>
-        </li>
-    </ul>
+  {{ block.super }}
+  <ul>
+    <li>
+      <a href="{% url 'htmx:incident-list' %}" title="Incident list view">Incidents</a>
+    </li>
+    <li>
+      <a href="{% url 'geant:filter-list' %}" title="Filter list view">Filters</a>
+    </li>
+  </ul>
 {% endblock main %}
