@@ -1,0 +1,6 @@
+{% load incident_extras %}
+{% if incident.open %}
+  {{ incident.metadata.status|default:"Active"|upperfirst }}
+{% else %}
+  Closed
+{% endif %}
