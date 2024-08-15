@@ -7,7 +7,7 @@ from django.template.context import make_context
 
 class Command(BaseCommand):
     help = """\
-uses the templates specified in the TAILWIND_CONFIG_TEMPLATE setting (default: tailwind.config.js)
+Uses the template specified in the TAILWIND_CONFIG_TEMPLATE setting (default: tailwind.config.js)
 to dynamically build a tailwind.config.js in the current directory. The template should contain a
 '{{ tailwind_content }}' section inside square brackets that will be popuplated by all current
 template dirs so that tailwindcss can scan them all for used tailwind classes
