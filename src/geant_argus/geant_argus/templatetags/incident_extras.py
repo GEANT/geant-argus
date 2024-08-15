@@ -47,3 +47,10 @@ def upperfirst(value: str):
 @register.filter
 def has_group(user: User, group):
     return user.groups.filter(name=group).exists()
+
+
+@register.filter
+def is_acked_by(incident, group: str) -> bool:
+    """Backport of filter with the same name in argus-htmx-frontend"""
+    # TODO: remove once argus-htmx-frontend v0.5 is released
+    return incident.is_acked_by(group)
