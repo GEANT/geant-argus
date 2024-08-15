@@ -44,13 +44,26 @@ INCIDENT_TABLE_COLUMNS = [
         label="Flaps",
         cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
-    "status",
+    IncidentTableColumn(
+        "status",
+        label="Status",
+        cell_template="htmx/incidents/_incident_status.html",
+    ),
     IncidentTableColumn(
         "level",
         label="Severity",
         cell_template="htmx/incidents/_incident_level.html",
     ),
-    "description",
+    IncidentTableColumn(
+        "alarm_id",
+        label="Alarm ID",
+        cell_template="htmx/incidents/_incident_source_incident_id.html",
+    ),
+    IncidentTableColumn(
+        "description",
+        label="Description",
+        cell_template="htmx/incidents/_incident_description.html",
+    ),
     IncidentTableColumn(
         "noc_ack",
         label="NOC Ack",
