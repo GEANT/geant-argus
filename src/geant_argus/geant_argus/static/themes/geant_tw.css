@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-background-base: 255, 255, 255;
+        --color-text-base: 255, 255, 255;
+        --color-text-active-section: 255, 255, 255;
+        --color-text-disabled-section: 182, 191, 194;
+        --color-text-muted: 199, 210, 254;
+        --color-text-inverted: 79, 70, 229;
+        --color-fill: 255, 255, 255;
+        --color-fill-active-section: 134, 175, 73;
+        --color-fill-active-section-body: 212, 222, 217;
+        --color-fill-disabled-section: 73, 151, 175;
+        --color-button-accent: 34, 197, 94;
+        --color-button-accent-hover: 171, 209, 97;
+        --color-button-muted: 99, 102, 241;
+        --color-border-active-section: 74, 222, 128;
+        --color-border-disabled-section: 96, 165, 250;
+        --color-fill-table-head: 184, 224, 210;
+        --color-table-header-background: 171, 209, 97;
+        --color-table-header-text: 0, 0, 0;
+        --color-table-row-background: 214, 234, 223;
+        --color-table-row-text: 171, 209, 97;
+        --color-table-row-border: 0, 0, 0;
+        --color-table-hover-background: 171, 209, 97;
+        --color-table-hover-text: 171, 209, 97;
+        --color-table-border: 0, 0, 0;
+    }
+
+    .test {
+        --color-background-base: 255, 255, 255;
+        --color-text-base: 255, 255, 255;
+        --color-text-active-section: 255, 255, 255;
+        --color-text-disabled-section: 182, 191, 194;
+        --color-text-muted: 199, 210, 254;
+        --color-text-inverted: 79, 70, 229;
+        --color-fill: 255, 255, 255;
+        --color-fill-active-section: 73, 87, 175;
+        --color-fill-active-section-body: 215, 212, 222;
+        --color-fill-disabled-section: 73, 151, 175;
+        --color-button-accent: 34, 197, 94;
+        --color-button-accent-hover: 171, 209, 97;
+        --color-button-muted: 99, 102, 241;
+        --color-border-active-section: 74, 222, 128;
+        --color-border-disabled-section: 96, 165, 250;
+        --color-fill-table-head: 184, 186, 224;
+        --color-table-header-background: 186, 186, 224;
+        --color-table-header-text: 0, 0, 0;
+        --color-table-row-background: 215, 214, 234;
+        --color-table-row-text: 171, 209, 97;
+        --color-table-row-border: 0, 0, 0;
+        --color-table-hover-background: 171, 209, 97;
+        --color-table-hover-text: 171, 209, 97;
+        --color-table-border: 0, 0, 0;
+    }
+
+    .uat {
+        --color-background-base: 255, 255, 255;
+        --color-text-base: 255, 255, 255;
+        --color-text-active-section: 255, 255, 255;
+        --color-text-disabled-section: 234, 207, 207;
+        --color-text-muted: 199, 210, 254;
+        --color-text-inverted: 79, 70, 229;
+        --color-fill: 255, 255, 255;
+        --color-fill-active-section: 175, 73, 73;
+        --color-fill-active-section-body: 222, 212, 212;
+        --color-fill-disabled-section: 149, 111, 113;
+        --color-button-accent: 34, 197, 94;
+        --color-button-accent-hover: 171, 209, 97;
+        --color-button-muted: 99, 102, 241;
+        --color-border-active-section: 250, 96, 96;
+        --color-border-disabled-section: 250, 96, 96;
+        --color-fill-table-head: 224, 184, 184;
+        --color-table-header-background: 186, 186, 224;
+        --color-table-header-text: 0, 0, 0;
+        --color-table-row-background: 234, 214, 216;
+        --color-table-row-text: 171, 209, 97;
+        --color-table-row-border: 0, 0, 0;
+        --color-table-hover-background: 171, 209, 97;
+        --color-table-hover-text: 171, 209, 97;
+        --color-table-border: 0, 0, 0;
+    }
+
+    .prod {
+        --color-background-base: 255, 255, 255;
+        --color-text-base: 255, 255, 255;
+        --color-text-active-section: 255, 255, 255;
+        --color-text-disabled-section: 249, 238, 189;
+        --color-text-muted: 199, 210, 254;
+        --color-text-inverted: 79, 70, 229;
+        --color-fill: 255, 255, 255;
+        --color-fill-active-section: 175, 171, 73;
+        --color-fill-active-section-body: 222, 212, 212;
+        --color-fill-disabled-section: 136, 145, 104;
+        --color-button-accent: 34, 197, 94;
+        --color-button-accent-hover: 171, 209, 97;
+        --color-button-muted: 99, 102, 241;
+        --color-border-active-section: 246, 250, 96;
+        --color-border-disabled-section: 246, 250, 96;
+        --color-fill-table-head: 213, 224, 184;
+        --color-table-header-background: 186, 186, 224;
+        --color-table-header-text: 0, 0, 0;
+        --color-table-row-background: 234, 230, 214;
+        --color-table-row-text: 171, 209, 97;
+        --color-table-row-border: 0, 0, 0;
+        --color-table-hover-background: 171, 209, 97;
+        --color-table-hover-text: 171, 209, 97;
+        --color-table-border: 0, 0, 0;
+    }
+}
+
+.modal:not(.open) {
+    display: none;
+}
+
+.modal.open {
+    /* Underlay covers entire screen. */
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+
+    /* Flexbox centers the .modal-content vertically and horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Animate when opening */
+    animation-name: fadeIn;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+.modal>.modal-underlay {
+    /* underlay takes up the entire viewport. This is only
+	required if you want to click to dismiss the popup */
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.modal>.modal-content {
+    /* Position visible dialog near the top of the window */
+    margin-top: 10vh;
+
+    /* Sizing for visible dialog */
+    width: 80%;
+    max-width: 600px;
+
+    /* Display properties for visible dialog*/
+    border: solid 1px #999;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+    background-color: white;
+    padding: 20px;
+
+    /* Animate when opening */
+    animation-name: zoomIn;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+.modal.closing {
+    /* Animate when closing */
+    animation-name: fadeOut;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+.modal.closing>.modal-content {
+    /* Animate when closing */
+    animation-name: zoomOut;
+    animation-duration: 150ms;
+    animation-timing-function: ease;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomOut {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
+}

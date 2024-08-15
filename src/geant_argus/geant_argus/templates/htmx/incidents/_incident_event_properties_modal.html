@@ -1,20 +1,20 @@
 <div id="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ event_counter }}"
      class="modal"
      _="on closeModal add .closing then wait for animationend then remove .open .closing">
-  <div class="modal-underlay " _="on click trigger closeModal"></div>
-  <div class="modal-content hero">
-    <div class="title is-size-5">{{ endpoint_name }}</div>
-    <table class="my-3 table is-bordered is-striped">
+  <div class="fixed inset-0" _="on click trigger closeModal"></div>
+  <div class="bg-white p-6 rounded-lg shadow-lg mx-auto my-8 max-w-full w-full md:max-w-4xl">
+    <div class="text-lg font-semibold">{{ endpoint_name }}</div>
+    <table class="my-3 w-full border border-gray-300">
       <tbody>
         {% for key, value in event.properties.items %}
-          <tr>
-            <th>{{ key }}</th>
-            <td>{{ value }}</td>
+          <tr class="border-t border-gray-300">
+            <th class="py-2 px-4 border capitalize">{{ key }}</th>
+            <td class="py-2 px-4 border">{{ value }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
-    <button class=" button is-small is-rounded is-danger margin-top"
+    <button class="bg-red-500 text-white py-2 px-4 rounded mt-4"
             _="on click trigger closeModal">Close</button>
   </div>
 </div>
