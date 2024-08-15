@@ -82,3 +82,5 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_details_button.html",
     ),
 ]
+
+TAILWIND_CONFIG_TEMPLATE = "tailwind.config.js"
