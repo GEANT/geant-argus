@@ -68,3 +68,6 @@ staticfiles/
 
 # Tailwind config is dynamically generated
 /tailwind.config.js
+
+# Tailwind css is dynamically generated
+/src/geant_argus/geant_argus/static/themes/geant.css

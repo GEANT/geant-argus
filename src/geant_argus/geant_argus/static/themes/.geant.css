@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .modal:not(.open){
     display: none;
 }
@@ -106,4 +110,4 @@
     100% {
         transform: scale(0.9);
     }
-}
+} 
