@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     *INSTALLED_APPS,  # noqa: F405
     "django_htmx",
     "argus_htmx",
+    "widget_tweaks",
 ]
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
@@ -28,7 +29,7 @@ INDELIBLE_INCIDENTS = False
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
 # Theming
-DEFAULT_THEME = "geant"
+DEFAULT_THEME = "dark"
 # context processor for theming
 TEMPLATES[0]["OPTIONS"]["context_processors"].append(
     "geant_argus.geant_argus.context_processors.geant_theme"
