@@ -65,7 +65,7 @@ def edit_filter(request, pk: Optional[int] = None):
         filter = get_object_or_404(Filter, pk=pk)
         filter.delete()
         resp = HttpResponse()
-        resp["HX-Redirect"] = reverse("geant:filter-list")
+        resp["HX-Redirect"] = reverse("geant-filters:filter-list")
         return resp
 
     if request.method == "POST":
@@ -115,7 +115,7 @@ def save_filter(request, pk: Optional[int] = None):
         filter.filter = result
         filter.save()
 
-    return HttpResponseRedirect(reverse("geant:filter-list"))
+    return HttpResponseRedirect(reverse("geant-filters:filter-list"))
 
 
 def update_filter(form_data, commands):

@@ -16,7 +16,7 @@ MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
-
+DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
 
 MEDIA_PLUGINS = [
     "argus.notificationprofile.media.email.EmailNotification",
@@ -41,17 +41,42 @@ ARGUS_HTMX_FILTER_FUNCTION = ARGUS_FILTER_BACKEND
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
     "start_time",
-    "status",
+    IncidentTableColumn(
+        "endpoint_count",
+        label="Flaps",
+        cell_template="htmx/incidents/_incident_endpoint_count.html",
+    ),
+    IncidentTableColumn(
+        "status",
+        label="Status",
+        cell_template="htmx/incidents/_incident_status.html",
+    ),
     IncidentTableColumn(
         "level",
         label="Severity",
         cell_template="htmx/incidents/_incident_level.html",
     ),
-    "description",
     IncidentTableColumn(
-        "endpoint_count",
-        label="Flaps",
-        cell_template="htmx/incidents/_incident_endpoint_count.html",
+        "alarm_id",
+        label="Alarm ID",
+        cell_template="htmx/incidents/_incident_source_incident_id.html",
+    ),
+    IncidentTableColumn(
+        "description",
+        label="Description",
+        cell_template="htmx/incidents/_incident_description.html",
+    ),
+    IncidentTableColumn(
+        "noc_ack",
+        label="NOC Ack",
+        cell_template="htmx/incidents/_incident_group_ack.html",
+        context={"group": "noc"},
+    ),
+    IncidentTableColumn(
+        "sd_ack",
+        label="SD Ack",
+        cell_template="htmx/incidents/_incident_group_ack.html",
+        context={"group": "servicedesk"},
     ),
     IncidentTableColumn(
         "details",
