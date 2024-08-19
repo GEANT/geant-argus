@@ -60,6 +60,10 @@ METADATA_V0A4_SCHEMA = {
                     "items": {"$ref": "#/definitions/endpoint_event"},
                 },
             },
+            "additionalProperties": False,
+        },
+        "up_down_null": {
+            "anyOf": [{"type": "null"}, {"type": ["string"], "enum": ["up", "down"]}]
         },
         "endpoint_event": {
             "type": "object",
@@ -96,8 +100,8 @@ METADATA_V0A4_SCHEMA = {
         "link_properties": {
             "properties": {
                 "id": {"type": "integer"},
-                "admin_status": {"type": "string", "enum": ["up", "down"]},
-                "oper_status": {"type": "string", "enum": ["up", "down"]},
+                "admin_status": {"$ref": "#/definitions/up_down_null"},
+                "oper_status": {"$ref": "#/definitions/up_down_null"},
                 "admin_down_time": {"type": ["string", "null"]},
                 "oper_down_time": {"type": ["string", "null"]},
                 "admin_up_time": {"type": ["string", "null"]},
@@ -164,6 +168,7 @@ METADATA_V0A4_SCHEMA = {
         "description": {"type": "string"},
         "coalesce_count": {"type": "integer"},
         "endpoint_count": {"type": "integer"},
+        "short_lived": {"type": "boolean"},
     },
     "required": [
         "version",
@@ -171,7 +176,6 @@ METADATA_V0A4_SCHEMA = {
         "severity",
         "endpoints",
         "description",
-        "coalesce_count",
     ],
 }
 
