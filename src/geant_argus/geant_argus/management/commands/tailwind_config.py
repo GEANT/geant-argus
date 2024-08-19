@@ -19,7 +19,7 @@ template dirs so that tailwindcss can scan them all for used tailwind classes
 
         context = {
             "tailwind_content": "\n".join(
-                f"        '{d}/**/*.html'," for d in self.get_template_glob_dirs()
+                f"        '{d}/**/*.html'," for d in self.get_template_dirs()
             )
         }
         pathlib.Path(self.CONFIG_FILENAME).write_text(
@@ -34,6 +34,6 @@ template dirs so that tailwindcss can scan them all for used tailwind classes
         return template.template.render(make_context(context, autoescape=False))
 
     @staticmethod
-    def get_template_glob_dirs():
+    def get_template_dirs():
         for engine in engines.all():
             yield from getattr(engine, "template_dirs", [])
