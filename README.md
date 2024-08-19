@@ -9,7 +9,46 @@ frontend for the NOC. Argus is an application written in Django. This web framew
 extension/customization capabilities, which makes it relatively easy to slightly modify
 applications written in Django
 
+## Development
 
+
+### Installation
+
+Install this package editable
+
+```python
+pip install -e[dev]
+```
+
+alternatively you can also install [Argus](https://github.com/Uninett/Argus/) and
+[argus-htmx-frontend](https://github.com/Uninett/argus-htmx-frontend/) editable by first checking
+out those repos
+
+### Create a cmd.sh
+To help with setting the correct environment variables, you can create a `cmd.sh` from the
+`cmd.sh-template`.
+```bash
+cp cmd.sh-template cmd.sh
+chmod +x cmd.sh
+```
+Then fill in the required environment variables such as `SECRET_KEY` and `DATABASE_URL`.
+You can then call Django management commands through this cmd (eg. `./cmd.sh runserver`)
+*Note* obtaining a running Postgres server is not part of this Readme
+
+### Prepare database for first use
+If you connected to a virgin postgres database, you first need to prepare it
+
+```
+./cmd.sh migrate
+./cmd.sh createsuperuser
+./cmd.sh initial_setup
+```
+
+###
+You can now run the development server
+```
+./cmd.sh runserver
+```
 
 ## Customization techniques
 In order to customize Argus, we a number of techniques. These are described below. Some of this
