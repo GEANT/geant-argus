@@ -83,4 +83,6 @@ INCIDENT_TABLE_COLUMNS = [
     ),
 ]
 
-TAILWIND_CONFIG_TEMPLATE = "tailwind.config.js"
+# Tailwind config template relative to the repository root directory
+TAILWIND_CONFIG_TEMPLATE = "tailwind.config.template.js"
+TAILWIND_CONFIG_TARGET = "tailwind.config.js"
