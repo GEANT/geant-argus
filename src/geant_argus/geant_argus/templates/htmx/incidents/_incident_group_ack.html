@@ -9,6 +9,7 @@
            {% if not user|has_group:column.context.group %}disabled{% endif %}
            hx-post="{% url 'geant-incidents:ack-incident' pk=incident.pk %}?group={{ column.context.group }}"
            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-           hx-target="#incident-{{ incident.pk }}-{{ column.context.group }}-ack">
+           hx-target="#incident-{{ incident.pk }}-{{ column.context.group }}-ack"
+           hx-push-url="false">
   {% endif %}
 </div>
