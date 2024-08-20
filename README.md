@@ -40,7 +40,7 @@ This project uses Tailwind together with Daisy UI for css styling. It is recomme
 [standalone CLI](https://tailwindcss.com/blog/standalone-cli). In that case make sure to use a
 version that [includes Daisy](https://github.com/dobicinaitis/tailwind-cli-extra). Download the
 version for your platform from [Github](https://github.com/dobicinaitis/tailwind-cli-extra/releases),
-and put it somewhere on your path (eg `/usr/local/bin`).
+rename it to `tailwindcss`, and put it somewhere on your path (eg `/usr/local/bin`).
 
 You then need to generate a `tailwind.config.js` that points to the installed dependencies and
 build the tailwind css:
