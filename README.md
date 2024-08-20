@@ -35,6 +35,22 @@ Then fill in the required environment variables such as `SECRET_KEY` and `DATABA
 You can then call Django management commands through this cmd (eg. `./cmd.sh runserver`)
 *Note* obtaining a running Postgres server is not part of this Readme
 
+### Tailwind
+This project uses Tailwind together with Daisy UI for css styling. It is recommended to use the
+[standalone CLI](https://tailwindcss.com/blog/standalone-cli). In that case make sure to use a
+version that [includes Daisy](https://github.com/dobicinaitis/tailwind-cli-extra). Download the
+version for your platform from [Github](https://github.com/dobicinaitis/tailwind-cli-extra/releases),
+rename it to `tailwindcss`, and put it somewhere on your path (eg `/usr/local/bin`).
+
+You then need to generate a `tailwind.config.js` that points to the installed dependencies and
+build the tailwind css:
+
+```
+./cmd.sh tailwind_config
+tailwindcss -i src/geant_argus/geant_argus//static/themes/.geant.css -o src/geant_argus/geant_argus//static/themes/geant.css
+```
+To have `tailwindcss` automatically pick up changes, run that command with the `-w` watch flag.
+
 ### Prepare database for first use
 If you connected to a virgin postgres database, you first need to prepare it
 

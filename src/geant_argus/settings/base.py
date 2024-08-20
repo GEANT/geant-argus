@@ -82,3 +82,7 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_details_button.html",
     ),
 ]
+
+# Tailwind config template relative to the repository root directory
+TAILWIND_CONFIG_TEMPLATE = "tailwind.config.template.js"
+TAILWIND_CONFIG_TARGET = "tailwind.config.js"
