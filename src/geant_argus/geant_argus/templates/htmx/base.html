@@ -1,0 +1,9 @@
+{% extends "htmx/base.html" %}
+{% block navlinks %}
+  <li>
+    <a href="{% url 'htmx:incident-list' %}">Incidents</a>
+  </li>
+  <li>
+    <a href="{% url 'geant-filters:filter-list' %}">Filters</a>
+  </li>
+{% endblock navlinks %}

@@ -2,9 +2,13 @@
 {% load incident_extras %}
 <div id="incident-{{ incident.pk }}-{{ column.context.group }}-ack">
   {% if is_ack %}
-    <input type="checkbox" checked disabled>
+    <input type="checkbox"
+           class="checkbox checkbox-sm border border-primary"
+           checked
+           disabled>
   {% else %}
     <input type="checkbox"
+           class="checkbox checkbox-sm checkbox-accent border"
            {% if incident|is_acked_by:column.context.group %}checked disabled{% endif %}
            {% if not user|has_group:column.context.group %}disabled{% endif %}
            hx-post="{% url 'geant-incidents:ack-incident' pk=incident.pk %}?group={{ column.context.group }}"
