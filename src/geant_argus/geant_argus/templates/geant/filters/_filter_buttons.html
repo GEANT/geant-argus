@@ -1,27 +1,27 @@
 <span class="rule-buttons">
   <button type="button"
-          class="btn btn-sm btn-ghost font-black"
-          {% if not can_delete %}disabled style="background-color: transparent;"{% endif %}
+          class="btn btn-sm btn-ghost disabled:bg-transparent font-black"
+          {% if not can_delete %}disabled{% endif %}
           hx-post="?delete={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-target="#filter_edit_root">🗑</button>
   <button type="button"
-          class="btn btn-sm btn-ghost font-black text-lg"
+          class="btn btn-sm btn-ghost disabled:bg-transparent font-black text-lg"
           hx-post="?create_after={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-target="#filter_edit_root">+</button>
   <button type="button"
-          {% if is_top %}disabled style="background-color: transparent;"{% endif %}
-          class="btn btn-sm btn-ghost font-black text-lg"
+          {% if is_top %}disabled{% endif %}
+          class="btn btn-sm btn-ghost disabled:bg-transparent font-black text-lg"
           hx-post="?move_up={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-target="#filter_edit_root">↑</button>
   <button type="button"
-          {% if is_bottom %}disabled style="background-color: transparent;"{% endif %}
-          class="btn btn-sm btn-ghost font-black text-lg"
+          {% if is_bottom %}disabled{% endif %}
+          class="btn btn-sm btn-ghost disabled:bg-transparent font-black text-lg"
           hx-post="?move_down={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
