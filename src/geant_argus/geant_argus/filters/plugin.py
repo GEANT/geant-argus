@@ -27,7 +27,7 @@ SUPPORTED_FILTER_VERSIONS = ["v1"]
 
 class _FilterBlobSerializer(serializers.Serializer):
     def to_internal_value(self, data):
-        data = fields.JSONField(required=self.required).to_internal_value()
+        data = fields.JSONField(required=self.required).to_internal_value(data)
         try:
             jsonschema.validate(data, schema=FILTER_SCHEMA_V1)
         except jsonschema.ValidationError as e:
