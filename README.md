@@ -63,7 +63,12 @@ build the tailwind css:
 tailwindcss -c tailwindcss/tailwind.config.js -i tailwindcss/geant.base.css -o src/geant_argus/geant_argus/static/geant.css
 ```
 
-To have `tailwindcss` automatically pick up changes, run that command with the `-w` watch flag.
+Alternatively, you can use the following command to launch `tailwindcss` in watch mode so that 
+changes are picked up automatically:
+
+```bash
+make watch-tailwind
+```
 
 #### Updating the CSS file on commit
 During development you should create your css file as `geant.css` using the above steps. However,
