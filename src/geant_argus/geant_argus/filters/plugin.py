@@ -72,7 +72,7 @@ class GeantFilterBackend(BaseFilterBackend):
         return IncidentFilter
 
     def incident_list_filter(self, request, queryset):
-        form = SelectFilterByPKForm(request.GET or None)
+        form = SelectFilterByPKForm(request.GET or {"open": True})
         return form, form.filter_queryset(queryset)
 
     def filter_queryset(self, request, queryset, view=None):
@@ -129,8 +129,7 @@ class SelectFilterByPKForm(forms.Form):
             return queryset
 
         queryset = self._filter_by_pk(queryset)
-        queryset = self._filter_by_open(queryset)
-        queryset = self._filter_by_close(queryset)
+        queryset = self._filter_by_open_close(queryset)
         queryset = self._filter_by_description(queryset)
         return queryset
 
@@ -145,15 +144,16 @@ class SelectFilterByPKForm(forms.Form):
             return queryset
         return GeantBooleanFiltering(filter).filter(queryset)
 
-    def _filter_by_open(self, queryset):
-        if not self.cleaned_data.get("open"):
-            return queryset
-        return queryset.filter(end_time__isnull=False, end_time__gt=Now())
+    def _filter_by_open_close(self, queryset):
+        is_open = bool(self.cleaned_data.get("open"))
+        is_closed = bool(self.cleaned_data.get("closed"))
 
-    def _filter_by_close(self, queryset):
-        if not self.cleaned_data.get("closed"):
+        if not (is_open ^ is_closed):
             return queryset
-        return queryset.filter(Q(end_time__isnull=True) | Q(end_time__lte=Now()))
+        q = Q(end_time__isnull=False, end_time__gt=Now())
+        if is_closed:
+            q = ~q
+        return queryset.filter(q)
 
     def _filter_by_description(self, queryset):
         if not (description := self.cleaned_data.get("description")):
