@@ -99,7 +99,7 @@ def save_filter(request, pk: Optional[int] = None):
     result = parse_filter_form_data(request.POST)
     name = request.POST.get("name")
     if not re.match(r"^[a-zA-Z0-9_-]+$", name):
-        raise HttpResponseBadRequest("Name can only contain letters, numbers, - or _")
+        return HttpResponseBadRequest("Name can only contain letters, numbers, - or _")
     user = request.user
 
     # WARNING: COMPLETE HACK FOR DEMO PURPOSES

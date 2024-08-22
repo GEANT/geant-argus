@@ -14,7 +14,7 @@ from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # n
 from argus.filter.filters import Filter
 from django import forms
 from django.db.models import Q, QuerySet
-from django.template import loader
+from django.db.models.functions import Now
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
@@ -72,31 +72,11 @@ class GeantFilterBackend(BaseFilterBackend):
         return IncidentFilter
 
     def incident_list_filter(self, request, queryset):
-        return self.to_html(request), self.filter_queryset(request, queryset)
+        form = SelectFilterByPKForm(request.GET or None)
+        return form, form.filter_queryset(queryset)
 
     def filter_queryset(self, request, queryset, view=None):
-        """implements BaseFilterBackend.filter_queryset"""
-        form = SelectFilterByPKForm(request.GET)
-        if not form.is_valid():
-            return queryset
-
-        filter = Filter.objects.get(pk=form.cleaned_data["filter_pk"])
-        if not (
-            filter and filter.filter and filter.filter.get("version") in SUPPORTED_FILTER_VERSIONS
-        ):
-            return queryset
-        return GeantBooleanFiltering(filter).filter(queryset)
-
-    def to_html(self, request):
-        form = SelectFilterByPKForm(request.GET)
-        form.full_clean()
-
-        template = loader.get_template(self.template)
-        context = {
-            "filters": Filter.objects.filter(filter__version="v1"),
-            "selected": form.cleaned_data.get("filter_pk"),
-        }
-        return template.render(context, request)
+        return SelectFilterByPKForm(request.GET or None).filter_queryset(queryset)
 
 
 class GeantBooleanFiltering:
@@ -129,7 +109,56 @@ class GeantBooleanFiltering:
 
 
 class SelectFilterByPKForm(forms.Form):
-    filter_pk = forms.fields.IntegerField(min_value=0, required=True)
+    open = forms.BooleanField(required=False)
+    closed = forms.BooleanField(required=False)
+    description = forms.CharField(max_length=255, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["filter_pk"] = forms.ChoiceField(
+            required=False,
+            label="Filter",
+            choices=[
+                ("", "------"),
+                *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
+            ],
+        )
+
+    def filter_queryset(self, queryset):
+        if not self.is_valid():
+            return queryset
+
+        queryset = self._filter_by_pk(queryset)
+        queryset = self._filter_by_open(queryset)
+        queryset = self._filter_by_close(queryset)
+        queryset = self._filter_by_description(queryset)
+        return queryset
+
+    def _filter_by_pk(self, queryset):
+        if not (filter_pk := self.cleaned_data.get("filter_pk")):
+            return queryset
+        filter = Filter.objects.get(pk=filter_pk)
+
+        if not (
+            filter and filter.filter and filter.filter.get("version") in SUPPORTED_FILTER_VERSIONS
+        ):
+            return queryset
+        return GeantBooleanFiltering(filter).filter(queryset)
+
+    def _filter_by_open(self, queryset):
+        if not self.cleaned_data.get("open"):
+            return queryset
+        return queryset.filter(end_time__isnull=False, end_time__gt=Now())
+
+    def _filter_by_close(self, queryset):
+        if not self.cleaned_data.get("closed"):
+            return queryset
+        return queryset.filter(Q(end_time__isnull=True) | Q(end_time__lte=Now()))
+
+    def _filter_by_description(self, queryset):
+        if not (description := self.cleaned_data.get("description")):
+            return queryset
+        return queryset.filter(metadata__description__icontains=description)
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):
