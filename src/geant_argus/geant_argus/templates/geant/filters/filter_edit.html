@@ -3,70 +3,7 @@
   {{ block.super }}
   <style>
     // source: https://github.com/Ahnfelt/rulebuilder
-    h3 {
-      color: #303030;
-      font-family: Courier, serif;
-    }
 
-    .rule-rule {
-      color: #505050;
-      font-size: 13px;
-      font-family: Verdana, sans-serif;
-    }
-
-    .rule-rule input,
-    .rule-rule select {
-      color: #303030;
-      font-size: 13px;
-      font-family: Verdana, sans-serif;
-    }
-
-    .rule-rule input,
-    .rule-rule select {
-      padding-left: 5px;
-      box-sizing: border-box;
-      height: 22px;
-      max-height: 22px;
-    }
-
-    .rule-atom {
-      margin-top: 15px;
-    }
-
-    .rule-list .rule-list {
-      margin-top: 15px;
-    }
-
-    .rule-list,
-    .rule-atom {
-      padding: 5px;
-      border-radius: 3px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      background: hsl(0, 0%, 97%);
-    }
-
-    .rule-list .rule-list,
-    .rule-list .rule-atom {
-      background: hsl(0, 0%, 95%);
-    }
-
-    .rule-list .rule-list .rule-list,
-    .rule-list .rule-list .rule-atom {
-      background: hsl(0, 0%, 92%);
-    }
-
-    .rule-list .rule-list .rule-list .rule-list,
-    .rule-list .rule-list .rule-list .rule-atom {
-      background: hsl(0, 0%, 89%);
-    }
-
-    .rule-operands {
-      margin: 15px 5px 5px 15px;
-    }
-
-    .rule-buttons button {
-      cursor: pointer;
-    }
 
     .rule-buttons button:not(:hover),
     .rule-buttons button[disabled] {
@@ -84,22 +21,31 @@
   </style>
 {% endblock head %}
 {% block main %}
-  <div>
+  <div class="p-2">
     <form action="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
           method="post">
-      <label>
-        Name:
-        <input type="text" name="name" value="{{ filter.name }}" />
+      <label class="form-control w-full max-w-xs">
+        <span class="label-text">Name:</span>
+        <input type="text"
+               class="input input-bordered w-full max-w-xs bg-white"
+               name="name"
+               value="{{ filter.name }}" />
       </label>
-      <div id="filter_edit_root">{% include "./_filter_item.html" with is_root=True %}</div>
+      <div id="filter_edit_root"
+           class="bg-gray-100 border rounded-lg px-2 pb-2 mt-2 mb-3 mr-2">
+        {% include "./_filter_item.html" with is_root=True %}
+      </div>
       {% csrf_token %}
-      <input type="submit" value="Save">
-      <a href="{% url 'geant-filters:filter-list' %}">
-        <button type="button">Cancel</button>
-      </a>
-      <button type="button"
-              hx-delete="."
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>
+      <div class="join">
+        <input class="btn btn-primary join-item" type="submit" value="Save">
+        <a href="{% url 'geant-filters:filter-list' %}">
+          <button class="btn btn-primary join-item">Cancel</button>
+        </a>
+        <button type="button"
+                class="btn btn-primary join-item"
+                hx-delete="."
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>
+      </div>
     </form>
   </div>
   <div id="response"></div>

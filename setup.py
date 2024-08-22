@@ -13,6 +13,7 @@ setup(
         "Django>=4.2.11,<5.1",
         "argus-server",
         "argus-htmx-frontend",
+        "django-widget-tweaks",
     ],
     extras_require={
         "prod": [

@@ -1,20 +1,23 @@
-<table id="table">
+<table id="table"
+       class="table border border-separate border-spacing-1 border-primary mt-2">
   <thead>
-    <tr>
-      <th>name</th>
-      <th>user</th>
-      <th>edit</th>
+    <tr class="border-b border-primary">
+      <th class="border-b border-primary">Name</th>
+      <th class="border-b border-primary">User</th>
+      <th class="border-b border-primary">Edit</th>
     </tr>
   </thead>
   <tbody id="table-body">
     {% block incident_rows %}
       {% for object in page.object_list %}
         {% block object %}
-          <tr id="obj-{{ incident.pk }}-row">
+          <tr id="obj-{{ object.pk }}-row" class="hover">
             <td>{{ object.name }}</td>
             <td>{{ object.user.username }}</td>
             <td>
-              <a href="{% url 'geant-filters:edit-filter' object.pk %}">X</a>
+              <a href="{% url 'geant-filters:edit-filter' object.pk %}">
+                <button type="button" class="btn btn-sm btn-ghost">Edit</button>
+              </a>
             </td>
           </tr>
         {% endblock object %}
@@ -27,20 +30,33 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="{{ column_count }}">
-        <!--
-            The htmx attributes set on the nav here are inherited by the child links.
-            hx-target tells where htmx to swap the fetched content in, and hx-swap
-            tells it how to swap it - by replacing the 'outerHTML' attribute of the
-            target, i.e. replacing the target's actual DOM node. hx-push-url tells
-            htmx to push the fetched URL into the browser history, so we can use
-            the backwards/forwards buttons to navigate these subpages.
-            -->
-        <nav class="paginator"
-             hx-target="#table"
-             hx-swap="outerHTML"
-             hx-push-url="true">
-          <ul>
+      <td colspan="{{ column_count }}" class="border-t border-primary">
+        <div class="flex justify-between items-center">
+          <dl class="stats stats-horizontal shadow leading-none overflow-x-auto font-medium bg-neutral text-neutral-content">
+            <div class="stat py-2">
+              <dt class="stat-title text-neutral-content/80">Total</dt>
+              <dd class="stat-value text-2xl text-base">
+                {{ count }}
+              </dd>
+            </div>
+            <div class="stat py-0 px-1">
+              <a href="{% url 'geant-filters:new-filter' %}">
+                <button class="btn btn-ghost">Create new filter</button>
+              </a>
+            </div>
+          </dl>
+          <!--
+                The htmx attributes set on the nav here are inherited by the child links.
+                hx-target tells where htmx to swap the fetched content in, and hx-swap
+                tells it how to swap it - by replacing the 'outerHTML' attribute of the
+                target, i.e. replacing the target's actual DOM node. hx-push-url tells
+                htmx to push the fetched URL into the browser history, so we can use
+                the backwards/forwards buttons to navigate these subpages.
+                -->
+          <ul class="join"
+              hx-target="#table"
+              hx-swap="outerHTML"
+              hx-push-url="true">
             {% if page.number != 1 %}
               <li>
                 <!--
@@ -49,30 +65,41 @@
                               page works without JavaScript, and to ensure the link is
                               displayed as clickable.
                             -->
-                <a hx-get="?page=1" href="?page=1">&laquo; First</a>
+                <a hx-get="?page=1" href="?page=1" class="join-item btn btn-neutral">&laquo; First</a>
               </li>
             {% endif %}
             {% if page.has_previous %}
               <li>
                 <a hx-get="?page={{ page.previous_page_number }}"
-                   href="?page={{ page.previous_page_number }}">{{ page.previous_page_number }}</a>
+                   href="?page={{ page.previous_page_number }}"
+                   class="join-item btn btn-neutral">{{ page.previous_page_number }}</a>
               </li>
             {% endif %}
-            <li>{{ page.number }}</li>
+            {% if page.paginator.num_pages > 1 %}
+              <li>
+                <button class="join-item btn btn-active btn-neutral">{{ page.number }}</button>
+              </li>
+            {% else %}
+              <li>
+                <button class="btn btn-active btn-neutral">{{ page.number }}</button>
+              </li>
+            {% endif %}
             {% if page.has_next %}
               <li>
                 <a hx-get="?page={{ page.next_page_number }}"
-                   href="?page={{ page.next_page_number }}">{{ page.next_page_number }}</a>
+                   href="?page={{ page.next_page_number }}"
+                   class="join-item btn btn-neutral">{{ page.next_page_number }}</a>
               </li>
             {% endif %}
             {% if page.number != page.paginator.num_pages %}
               <li>
                 <a hx-get="?page={{ page.paginator.num_pages }}"
-                   href="?page={{ page.paginator.num_pages }}">&raquo; Last</a>
+                   href="?page={{ page.paginator.num_pages }}"
+                   class="join-item btn btn-neutral">&raquo; Last</a>
               </li>
             {% endif %}
           </ul>
-        </nav>
+        </div>
       </td>
     </tr>
   </tfoot>
