@@ -10,13 +10,15 @@ INSTALLED_APPS = [
     *INSTALLED_APPS,  # noqa: F405
     "django_htmx",
     "argus_htmx",
+    "widget_tweaks",
 ]
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
-DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
+if "DATABASES" in globals():
+    DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
 
 MEDIA_PLUGINS = [
     "argus.notificationprofile.media.email.EmailNotification",
@@ -28,7 +30,8 @@ INDELIBLE_INCIDENTS = False
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
 # Theming
-DEFAULT_THEME = "geant"
+DEFAULT_THEME = "argus"
+DEFAULT_TW_CSS = "geant.css"
 # context processor for theming
 TEMPLATES[0]["OPTIONS"]["context_processors"].append(
     "geant_argus.geant_argus.context_processors.geant_theme"
@@ -84,5 +87,5 @@ INCIDENT_TABLE_COLUMNS = [
 ]
 
 # Tailwind config template relative to the repository root directory
-TAILWIND_CONFIG_TEMPLATE = "tailwind.config.template.js"
-TAILWIND_CONFIG_TARGET = "tailwind.config.js"
+TAILWIND_CONFIG_TEMPLATE = "tailwindcss/tailwind.config.template.js"
+TAILWIND_CONFIG_TARGET = "tailwindcss/tailwind.config.js"

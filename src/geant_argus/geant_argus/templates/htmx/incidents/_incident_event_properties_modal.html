@@ -1,10 +1,8 @@
-<div id="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ event_counter }}"
-     class="modal"
-     _="on closeModal add .closing then wait for animationend then remove .open .closing">
-  <div class="modal-underlay " _="on click trigger closeModal"></div>
-  <div class="modal-content hero">
-    <div class="title is-size-5">{{ endpoint_name }}</div>
-    <table class="my-3 table is-bordered is-striped">
+<dialog id="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ event_counter }}"
+        class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">{{ endpoint_name }}</h3>
+    <table class="table">
       <tbody>
         {% for key, value in event.properties.items %}
           <tr>
@@ -14,7 +12,10 @@
         {% endfor %}
       </tbody>
     </table>
-    <button class=" button is-small is-rounded is-danger margin-top"
-            _="on click trigger closeModal">Close</button>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Close</button>
+      </form>
+    </div>
   </div>
-</div>
+</dialog>
