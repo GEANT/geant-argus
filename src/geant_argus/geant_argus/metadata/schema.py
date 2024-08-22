@@ -87,7 +87,7 @@ METADATA_V0A4_SCHEMA = {
             "properties": {
                 "id": {"type": "integer"},
                 "peer": {"type": "string"},
-                "status": {"type": "string"},
+                "status": {"type": ["string", "null"]},
                 "idle_time": {"type": ["string", "null"]},
                 "connect_time": {"type": ["string", "null"]},
                 "establish_time": {"type": ["string", "null"]},

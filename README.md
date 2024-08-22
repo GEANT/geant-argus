@@ -1,4 +1,5 @@
 # Geant Argus
+
 Geant specific customizations for [Argus](https://github.com/Uninett/Argus/) and
 [argus-htmx-frontend](https://github.com/Uninett/argus-htmx-frontend/) for use of Argus in the
 Geant NOC
@@ -10,7 +11,6 @@ extension/customization capabilities, which makes it relatively easy to slightly
 applications written in Django
 
 ## Development
-
 
 ### Installation
 
@@ -25,17 +25,21 @@ alternatively you can also install [Argus](https://github.com/Uninett/Argus/) an
 out those repos
 
 ### Create a cmd.sh
+
 To help with setting the correct environment variables, you can create a `cmd.sh` from the
 `cmd.sh-template`.
+
 ```bash
 cp cmd.sh-template cmd.sh
 chmod +x cmd.sh
 ```
+
 Then fill in the required environment variables such as `SECRET_KEY` and `DATABASE_URL`.
 You can then call Django management commands through this cmd (eg. `./cmd.sh runserver`)
-*Note* obtaining a running Postgres server is not part of this Readme
+_Note_ obtaining a running Postgres server is not part of this Readme
 
 ### Tailwind
+
 This project uses Tailwind together with Daisy UI for css styling. It is recommended to use the
 [standalone CLI](https://tailwindcss.com/blog/standalone-cli). In that case make sure to use a
 version that [includes DaisyUI](https://github.com/dobicinaitis/tailwind-cli-extra/releases).
@@ -48,19 +52,34 @@ chmod +x tailwindcss
 sudo mv tailwindcss /usr/local/bin/
 ```
 
-*Note* the above commands can also be used to upgrade `tailwind-cli-extra` when a newer version of
+_Note_ the above commands can also be used to upgrade `tailwind-cli-extra` when a newer version of
 Tailwind or DaisyUI has been released.
-
 
 You then need to generate a `tailwind.config.js` that points to the installed dependencies and
 build the tailwind css:
 
-```
+```bash
 ./cmd.sh tailwind_config
-tailwindcss -i src/geant_argus/geant_argus/static/themes/.geant.css -o src/geant_argus/geant_argus/static/themes/geant.css
+tailwindcss -c tailwindcss/tailwind.config.js -i tailwindcss/geant.base.css -o src/geant_argus/geant_argus/static/geant.css
 ```
-To have `tailwindcss` automatically pick up changes, run that command with the `-w` watch flag.
 
+Alternatively, you can use the following command to launch `tailwindcss` in watch mode so that 
+changes are picked up automatically:
+
+```bash
+make watch-tailwind
+```
+
+#### Updating the CSS file on commit
+During development you should create your css file as `geant.css` using the above steps. However,
+for packaging and production. We use a minified version of the css file. This file is included in
+the repository and package. If you're committing any changes to `tailwind.config.template.js` or
+any of the templates, you should also update the minified version of
+`src/geant_argus/geant_argus/static/geant.min.css` by running
+
+```bash
+    make css
+```
 ### Prepare database for first use
 If you connected to a virgin postgres database, you first need to prepare it
 
@@ -70,21 +89,24 @@ If you connected to a virgin postgres database, you first need to prepare it
 ./cmd.sh initial_setup
 ```
 
-###
+### Run the server
+
 You can now run the development server
+
 ```
 ./cmd.sh runserver
 ```
 
 ## Customization techniques
+
 In order to customize Argus, we a number of techniques. These are described below. Some of this
 information can also be found [here](https://argus-server.readthedocs.io/en/latest/site-specific-settings.html)
 
-*note*: A Django application is organized into Apps (see below). In order to prevent confusion, in
+_note_: A Django application is organized into Apps (see below). In order to prevent confusion, in
 this write-up, a full Django application is referred to as a Site, and the individual apps as Apps.
 
-
 ### Settings
+
 Every Django Site is goverened by a `settings` file that contains the settings for running a
 particular instance of a Site. Settings may import other settings files. For `geant-argus` we have
 settings files located in the `src/geant_argus/settings`. We have settings for `dev` and `prod` for
@@ -93,16 +115,17 @@ the `prod.py` settings. Settings tied to a specific deployed environment are man
 There is also the `base.py` settings file which contains settings that are valid for all instances
 of geant-argus. This file includes `argus.site.settings.base` as the base Argus settings.
 
-
 ### Extra apps
+
 Django has the concept of Apps. An app is a collection of code and/or data models and a Django
 site is a collection of one of more Apps. Which Apps are loaded is indicated in the
 `INSTALLED_APPS` setting. For Geant Argus we have the following additional apps
-* `geant_argus` an app containing our all our customizations
-* `argus_site` a references to the `argus.site` package as an app (required for some template
-    overriding)
-* `django_htmx` the generic package that implements htmx for a django Site
-* `argus_htmx` the (new) Argus front-end using htmx
+
+- `geant_argus` an app containing our all our customizations
+- `argus_site` a references to the `argus.site` package as an app (required for some template
+  overriding)
+- `django_htmx` the generic package that implements htmx for a django Site
+- `argus_htmx` the (new) Argus front-end using htmx
 
 Some of our extra Apps are appended to the default `INSTALLED_APPS` setting, while others are
 prepended. When resolving a certain resource, such as a template, Django traverses the installed
@@ -111,8 +134,8 @@ prepended Apps can override existing resources, while appended Apps cannot.
 
 See also: [https://docs.djangoproject.com/en/5.0/ref/applications/](https://docs.djangoproject.com/en/5.0/ref/applications/s)
 
-
 ### Templates
+
 Like many web frameworks, Django uses templates for rendering (html) pages. Templates are
 identified by a their relative path in valid `templates/` directories. Because every App can have
 their own `templates/` directory, it is possible to override an existing template by creating a
@@ -120,18 +143,18 @@ new file with the same name in another App `templates/` directory. We use this f
 implementation of the incidents details page `htmx/incidents/incident_detail.html` which overrides
 a template from the `argus_htmx` App.
 
-*note* Argus has a default setting `TEMPLATES[0]["DIRS"]` that disables Django's behaviour of
+_note_ Argus has a default setting `TEMPLATES[0]["DIRS"]` that disables Django's behaviour of
 resolving templates in the apps' directories. We reset this setting in our `base.py` settings file
 
-*note* by reverting this setting, Django can by default no longer resolve the templates in the
+_note_ by reverting this setting, Django can by default no longer resolve the templates in the
 `argus.site` package, since this is not marked as a Djanog App. We mark this as a Django app by
 creating our own custom `AppConfig` class that refers to this package (see
 `geant_argus.argus_site.apps.py`) so that `argus.site` templates are resolved.
 
 See also: [https://docs.djangoproject.com/en/5.0/howto/overriding-templates/](https://docs.djangoproject.com/en/5.0/howto/overriding-templates/)
 
-
 #### Template tags
+
 While not necessarily a customization of existing Argus behaviour, it is useful to mention template
 tags. Template tags (and filters) are the mechanism with which to extend Django's templating
 functionality. We currently don't implement our own template tags, but do have some template
@@ -150,6 +173,7 @@ def my_filter(arg1, arg2):
 ```
 
 `my_filter` can then be used inside a Django template as following:
+
 ```
 {% load myfilters %}
 {{ my_value|my_filter:some_argument }}
@@ -164,8 +188,8 @@ filter is used when rendering the template.
 
 See also: [https://docs.djangoproject.com/en/5.0/howto/custom-template-tags/](https://docs.djangoproject.com/en/5.0/howto/custom-template-tags/)
 
-
 #### Context processors
+
 Another useful way to add some functionality is the concept of context processors. When rendering a
 template in a Django view, you must supply a context that contains all the variables that you need
 to access in your template. Some variables are tied to that specific view, but sometimes you want
@@ -180,14 +204,14 @@ context processor, which inject a `theme` variable (see also Theme below)
 
 See also: [https://docs.djangoproject.com/en/5.0/ref/templates/api/#writing-your-own-context-processors](https://docs.djangoproject.com/en/5.0/ref/templates/api/#writing-your-own-context-processors)
 
-
 ### Urls
+
 Additional url endpoints (views) can be added to the `url_patterns` variable in `geant_argus.urls`.
 That module is assigned to the `ROOT_URLFCONF` setting and extends the default `argus.site.urls`
 urls.
 
-
 ### Middleware
+
 Django has the concept of middleware. These are functions or classes that can add behaviour to
 every request made in the Site. They take in the current `Request` and a `get_response` function
 and must return a `Response`, usually the result of the `get_response` function. They can also
@@ -200,8 +224,8 @@ the future in case Argus exposes a hook for validating incident metadata directl
 
 See also: [https://docs.djangoproject.com/en/5.0/topics/http/middleware/](https://docs.djangoproject.com/en/5.0/topics/http/middleware/)
 
-
 ### Migrations
+
 A way to update the data model is to add database migrations. These can add new resources models
 (tables) to the database or update existing ones. It is not recommended to add or modify columns
 to existing tables, since the code using that model is most likely not goverened by us and
@@ -210,22 +234,15 @@ as adding an index. Migrations can depend on other migrations in the same app bu
 migrations in a different app. See `geant_argus.migrations.0002_incident_metadata_description_gin_idx.py`
 for an example.
 
-
-### Theme
-`argus_htmx` supports basic theming. Theming involves setting a `theme` variable in the template
-rendering context refering to a `{theme}.css` file in the `static/themes/`  directory. This css
-is then included in every page. We currently have one theme: `geant.css` that contains all our css
-customizations
-
-
 ### Incident overview table columns
+
 The incident listing table has a default set of columns. For geant-argus we want to customize
 these columns to show information that is relevant to Geant for every incident. This can be done
 by overriding or extending the `INCIDENT_TABLE_COLUMNS` setting. See also
 `argus_htmx.settings.INCIDENT_TABLE_COLUMNS`
 
-
 ### Filter backend
+
 For geant-argus we implement custom incident filtering capabilities. We need to be able to filter
 by custom boolean rules (combination of AND and OR filters) and we provide this functionality
 through a filtering backend plugin. The api of this plugin is in its early stages, but currently
