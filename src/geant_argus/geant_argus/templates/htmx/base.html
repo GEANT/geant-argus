@@ -6,4 +6,9 @@
   <li>
     <a href="{% url 'geant-filters:filter-list' %}">Filters</a>
   </li>
+  {% if request.user.is_staff %}
+    <li>
+      <a href="{% url 'admin:index' %}">Admin</a>
+    </li>
+  {% endif %}
 {% endblock navlinks %}
