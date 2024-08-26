@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 @layer components {
-  .input, .checkbox, .select, .radio {
+  .input,
+  .checkbox,
+  .select,
+  .radio {
     background-color: white;
   }
-
 }
