@@ -50,10 +50,20 @@ def is_acked_by(incident, group: str) -> bool:
 
 @register.filter
 def row_classes(incident: Incident):
+    status = incident.metadata.get("status", "").upper()
+    if status == "CLEAR":
+        return "bg-incident-clear"
     match IncidentSeverity(incident.level):
-        case IncidentSeverity.CRITICAL | IncidentSeverity.MAJOR:
-            return "bg-error"
+        case IncidentSeverity.CRITICAL:
+            color = "bg-incident-critical"
+        case IncidentSeverity.MAJOR:
+            color = "bg-incident-major"
         case IncidentSeverity.MINOR:
-            return "bg-warning"
+            color = "bg-incident-minor"
+        case IncidentSeverity.WARNING:
+            color = "bg-incident-warning"
         case _:
-            return ""
+            color = ""
+    if color and status == "CLOSED":
+        color = f"{color}/50"
+    return color

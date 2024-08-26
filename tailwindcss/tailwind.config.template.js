@@ -7,8 +7,24 @@ module.exports = {
         borderWidth: {
             DEFAULT: '2px',
         },
-        extend: {},
+        extend: {
+            colors: {
+                "incident-major": "rgba(var(--color-incident-major), <alpha-value>)",
+                "incident-minor": "rgba(var(--color-incident-minor), <alpha-value>)",
+                "incident-critical": "rgba(var(--color-incident-critical), <alpha-value>)",
+                "incident-warning": "rgba(var(--color-incident-warning), <alpha-value>)",
+                "incident-clear": "rgba(var(--color-incident-clear), <alpha-value>)",
+              },
+        },
     },
+    safelist: [
+        // these classes are dynamically generated so not seen by tailwind
+        "bg-incident-major/50",
+        "bg-incident-minor/50",
+        "bg-incident-critical/50",
+        "bg-incident-warning/50",
+        "bg-incident-clear/50",
+    ],
     daisyui: {
         themes: ["light", "dark",
             {
@@ -33,9 +49,15 @@ module.exports = {
                 "warning-content": "#140200",
                 "error": "#e5545a",
                 "error-content": "#120203",
+                "--color-incident-clear": '80, 200, 120',
+                "--color-incident-warning": '237, 250, 255', // same as base-100
+                "--color-incident-minor": '238, 194, 0',
+                "--color-incident-major": '238, 155, 0',
+                "--color-incident-critical": '238, 32, 0',
             }
         }],
       },
+
     plugins: [
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
