@@ -72,11 +72,11 @@ class GeantFilterBackend(BaseFilterBackend):
         return IncidentFilter
 
     def incident_list_filter(self, request, queryset):
-        form = SelectFilterByPKForm(request.GET or {"open": True})
+        form = IncidentFilterForm(request.GET or {"open": True})
         return form, form.filter_queryset(queryset)
 
     def filter_queryset(self, request, queryset, view=None):
-        return SelectFilterByPKForm(request.GET or None).filter_queryset(queryset)
+        return IncidentFilterForm(request.GET or None).filter_queryset(queryset)
 
 
 class GeantBooleanFiltering:
@@ -108,10 +108,12 @@ class GeantBooleanFiltering:
             return Q(**{f"{db_field}__icontains": rule["value"]})
 
 
-class SelectFilterByPKForm(forms.Form):
+class IncidentFilterForm(forms.Form):
     open = forms.BooleanField(required=False)
     closed = forms.BooleanField(required=False)
     description = forms.CharField(max_length=255, required=False)
+    newest_first = forms.BooleanField(required=False)
+    field_order = ["open", "closed", "description", "filter_pk", "newest_first"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -123,6 +125,7 @@ class SelectFilterByPKForm(forms.Form):
                 *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
             ],
         )
+        self.order_fields(self.field_order)
 
     def filter_queryset(self, queryset):
         if not self.is_valid():
@@ -131,6 +134,7 @@ class SelectFilterByPKForm(forms.Form):
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_open_close(queryset)
         queryset = self._filter_by_description(queryset)
+        queryset = self._order_by_newest_first(queryset)
         return queryset
 
     def _filter_by_pk(self, queryset):
@@ -159,6 +163,13 @@ class SelectFilterByPKForm(forms.Form):
         if not (description := self.cleaned_data.get("description")):
             return queryset
         return queryset.filter(metadata__description__icontains=description)
+
+    def _order_by_newest_first(self, queryset):
+        if self.cleaned_data.get("newest_first"):
+            return queryset.order_by("-start_time")
+        # Here we are lucky that statuses 'active', 'clear', 'closed' are alphabetically
+        # in that order, so it's easy to sort
+        return queryset.order_by("metadata__status", "level", "-start_time")
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):
