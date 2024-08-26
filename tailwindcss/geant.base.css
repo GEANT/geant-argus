@@ -6,4 +6,11 @@
   #table {
     @apply border-spacing-0;
   }
+
+  .input,
+  .checkbox,
+  .select,
+  .radio {
+    background-color: white;
+  }
 }

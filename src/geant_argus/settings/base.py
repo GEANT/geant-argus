@@ -30,7 +30,7 @@ INDELIBLE_INCIDENTS = False
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
 # Theming
-DEFAULT_THEME = "argus"
+DEFAULT_THEME = "geant"
 DEFAULT_TW_CSS = "geant.css"
 # context processor for theming
 TEMPLATES[0]["OPTIONS"]["context_processors"].append(
