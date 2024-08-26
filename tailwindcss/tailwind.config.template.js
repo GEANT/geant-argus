@@ -19,11 +19,9 @@ module.exports = {
     },
     safelist: [
         // these classes are dynamically generated so not seen by tailwind
-        "bg-incident-major/50",
-        "bg-incident-minor/50",
-        "bg-incident-critical/50",
-        "bg-incident-warning/50",
-        "bg-incident-clear/50",
+        {
+            pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
+        },
     ],
     daisyui: {
         themes: ["light", "dark",
