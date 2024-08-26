@@ -25,7 +25,7 @@ const incidentColors = {
     '--color-incident-warning': '237, 250, 255', // same as base-100
     '--color-incident-minor': '238, 194, 0',
     '--color-incident-major': '238, 155, 0',
-    '--color-incident-critical': '238, 32, 0',
+    '--color-incident-critical': '240, 67, 67',
 }
 
 module.exports = {
