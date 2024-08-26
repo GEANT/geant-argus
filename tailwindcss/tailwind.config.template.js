@@ -1,6 +1,7 @@
 module.exports = {
     content: [
 {{ tailwind_content }}
+        "src/geant_argus/geant_argus/templatetags/**/*.py",
     ],
     theme: {
         borderWidth: {
@@ -28,7 +29,7 @@ module.exports = {
                 "info-content": "#000512",
                 "success": "#008700",
                 "success-content": "#d3e7d1",
-                "warning": "#ee4900",
+                "warning": "#eec200",
                 "warning-content": "#140200",
                 "error": "#e5545a",
                 "error-content": "#120203",
