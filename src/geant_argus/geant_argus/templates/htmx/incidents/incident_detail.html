@@ -5,17 +5,16 @@
   <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 {% endblock head %}
 {% block main %}
-  <nav class="breadcrumb flex items-center justify-center py-4"
-       aria-label="breadcrumbs">
+  <div class="breadcrumbs text-sm py-4 px-4">
     <ul>
       <li>
         <a href="#">[{{ incident.pk }}]</a>
       </li>
-      <li class="is-active">
-        <a href="#" aria-current="page">[{{ incident.source_incident_id }}]</a>
+      <li>
+        <a href="#">[{{ incident.source_incident_id }}]</a>
       </li>
     </ul>
-  </nav>
+  </div>
   {% if incident.metadata %}
     <h2>{{ incident.metadata.description }}</h2>
   {% else %}
@@ -23,66 +22,59 @@
   {% endif %}
   {% block incident_detail %}
     {% if incident.metadata and incident.metadata.version == "v0a4" %}
-      <section id="endpoints" class="test">
-        <h1 class="text-3xl mb-4">Endpoints</h1>
+      <section id="endpoints" class="test rounded-box border border-accent">
+        <legend class="menu-title text-2xl pb-0">Endpoints</legend>
         {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
           {% if endpoints %}
-            <div class="bg-skin-active-section-body mb-4">
-              <div id="endpoint_type"
-                   class="bg-skin-active-section border border-skin-active-section text-skin-active-section px-4 py-3 rounded relative mb-4">
-                <div class="flex justify-between items-center">
-                  <div class="text-xl capitalize">{{ endpoint_type }}</div>
+            <div class="p-2">
+              <div class="collapse  bg-base-100 px-0">
+                <input type="checkbox" name="my-accordion-3" checked="checked" />
+                <div class="collapse-title text-xl font-medium bg-primary text-primary-content capitalize">{{ endpoint_type }}</div>
+                <div class="collapse-content bg-secondary p-6">
+                  <table class="border border-separate border-spacing-1 border-primary table bg-primary-content text-base-content">
+                    <thead>
+                      <tr class="border-b border-primary">
+                        <th class="py-2 px-4 border-b border-primary">Endpoint Name</th>
+                        <th class="py-2 px-4 border-b border-primary">Alarm ID</th>
+                        <th class="py-2 px-4 border-b border-primary">Status</th>
+                        <th class="py-2 px-4 border-b border-primary">Init Time</th>
+                        <th class="py-2 px-4 border-b border-primary">Clear Time</th>
+                        <th class="py-2 px-4 border-b border-primary">Properties</th>
+                      </tr>
+                    </thead>
+                    {% for endpoint in endpoints %}
+                      <tbody class="border-accent border-t">
+                        {% with forloop.counter as endpoint_counter %}
+                          <tr class="hover">
+                            <td class="py-2 px-4 " rowspan="{{ endpoint.events|length }}">{{ endpoint.name }}</td>
+                            {% for event in endpoint.events %}
+                              {% if not forloop.first %}<tr class="border-t">{% endif %}
+                                <td class="py-2 px-4 ">{{ event.properties.id }}</td>
+                                <td class="py-2 px-4 ">
+                                  <div class="flex items-center">
+                                    <div class="inline-block w-4 h-4 mr-2 {% if event.is_up %} bg-green-500 {% else %} bg-red-500 {% endif %} rounded-full">
+                                    </div>
+                                    {{ event.is_up|yesno:"Up,Down" }}
+                                  </div>
+                                </td>
+                                <td class="py-2 px-4 ">{{ event.init_time }}</td>
+                                <td class="py-2 px-4 ">{{ event.clear_time }}</td>
+                                <td class="py-2 px-4 ">
+                                  <button type="button"
+                                          class="bg-accent hover:bg-neutral text-accent-content py-1 px-2 rounded"
+                                          onclick="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ forloop.counter }}.showModal()">
+                                    See more
+                                  </button>
+                                </td>
+                                {% if not forloop.last %}</tr>{% endif %}
+                            {% endfor %}
+                          </tr>
+                        {% endwith %}
+                      </tbody>
+                    {% endfor %}
+                  </table>
                 </div>
               </div>
-              <div class=" p-6">
-                <table class="table min-w-full border-skin-table bg-skin-fill border">
-                  <thead class="bg-skin-table-head text-skin-table-header">
-                    <tr>
-                      <th class="py-2 px-4">Endpoint Name</th>
-                      <th class="py-2 px-4">Alarm ID</th>
-                      <th class="py-2 px-4">Status</th>
-                      <th class="py-2 px-4">Init Time</th>
-                      <th class="py-2 px-4">Clear Time</th>
-                      <th class="py-2 px-4">Properties</th>
-                    </tr>
-                  </thead>
-                  {% for endpoint in endpoints %}
-                    <tbody class="bg-skin-table-row border-skin-table-row">
-                      {% with forloop.counter as endpoint_counter %}
-                        <tr class="border-skin-table-row border-t">
-                          <td class="py-2 px-4 " rowspan="{{ endpoint.events|length }}">{{ endpoint.name }}</td>
-                          {% for event in endpoint.events %}
-                            {% if not forloop.first %}<tr class="border-t">{% endif %}
-                              <td class="py-2 px-4 ">{{ event.properties.id }}</td>
-                              <td class="py-2 px-4 ">
-                                <div class="flex items-center">
-                                  <div class="inline-block w-4 h-4 mr-2 {% if event.is_up %} bg-green-500 {% else %} bg-red-500 {% endif %} rounded-full">
-                                  </div>
-                                  {{ event.is_up|yesno:"Up,Down" }}
-                                </div>
-                              </td>
-                              <td class="py-2 px-4 ">{{ event.init_time }}</td>
-                              <td class="py-2 px-4 ">{{ event.clear_time }}</td>
-                              <td class="py-2 px-4 ">
-                                <button type="button"
-                                        class="bg-skin-button-accent hover:bg-skin-button-accent-hover text-skin-base py-1 px-2 rounded"
-                                        onclick="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ forloop.counter }}.showModal()">
-                                  See more
-                                </button>
-                              </td>
-                              {% if not forloop.last %}</tr>{% endif %}
-                          {% endfor %}
-                        </tr>
-                      {% endwith %}
-                    </tbody>
-                  {% endfor %}
-                </table>
-              </div>
-            </div>
-          {% else %}
-            <div id="endpoint_type"
-                 class="bg-skin-disabled-section border border-skin-disabled-section text-skin-disabled-section px-4 py-3 rounded relative mb-4 capitalize">
-              <div class="text-xl">{{ endpoint_type }}</div>
             </div>
           {% endif %}
         {% endfor %}
