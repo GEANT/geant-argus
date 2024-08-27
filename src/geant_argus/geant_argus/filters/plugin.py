@@ -73,7 +73,9 @@ class GeantFilterBackend(BaseFilterBackend):
         return IncidentFilter
 
     def incident_list_filter(self, request, queryset):
-        form = IncidentFilterForm(request.GET or {"open": True, "min_severity": 4})
+        form = IncidentFilterForm(
+            request.GET or {"open": True, "min_severity": IncidentSeverity.WARNING.value}
+        )
         return form, form.filter_queryset(queryset)
 
     def filter_queryset(self, request, queryset, view=None):
