@@ -17,7 +17,7 @@ applications written in Django
 Install this package editable
 
 ```python
-pip install -e[dev]
+pip install -e .[dev]
 ```
 
 alternatively you can also install [Argus](https://github.com/Uninett/Argus/) and
