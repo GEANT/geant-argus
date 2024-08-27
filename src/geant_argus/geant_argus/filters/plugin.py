@@ -21,6 +21,7 @@ from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
 
 from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
+from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
 SUPPORTED_FILTER_VERSIONS = ["v1"]
 
@@ -72,7 +73,9 @@ class GeantFilterBackend(BaseFilterBackend):
         return IncidentFilter
 
     def incident_list_filter(self, request, queryset):
-        form = IncidentFilterForm(request.GET or {"open": True})
+        form = IncidentFilterForm(
+            request.GET or {"open": True, "min_severity": IncidentSeverity.WARNING.value}
+        )
         return form, form.filter_queryset(queryset)
 
     def filter_queryset(self, request, queryset, view=None):
@@ -113,7 +116,10 @@ class IncidentFilterForm(forms.Form):
     closed = forms.BooleanField(required=False)
     description = forms.CharField(max_length=255, required=False)
     newest_first = forms.BooleanField(required=False)
-    field_order = ["open", "closed", "description", "filter_pk", "newest_first"]
+    min_severity = forms.ChoiceField(
+        required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
+    )
+    field_order = ["open", "closed", "description", "filter_pk", "min_severity", "newest_first"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -134,6 +140,7 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_open_close(queryset)
         queryset = self._filter_by_description(queryset)
+        queryset = self._filter_by_severity(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
 
@@ -163,6 +170,11 @@ class IncidentFilterForm(forms.Form):
         if not (description := self.cleaned_data.get("description")):
             return queryset
         return queryset.filter(metadata__description__icontains=description)
+
+    def _filter_by_severity(self, queryset):
+        if not (level := self.cleaned_data.get("min_severity")):
+            return queryset
+        return queryset.filter(level__lte=level)
 
     def _order_by_newest_first(self, queryset):
         if self.cleaned_data.get("newest_first"):
