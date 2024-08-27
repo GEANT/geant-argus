@@ -5,7 +5,7 @@ from geant_argus.geant_argus.incidents import urls as incident_urls
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    path("", RedirectView.as_view(url="incidents/", permanent=False)),
+    path("", RedirectView.as_view(url="incidents/", permanent=False), name="home"),
     *argus_urlpatterns,
     path("geant/incidents/", include(incident_urls)),
     path("filters/", include(filter_urls)),
