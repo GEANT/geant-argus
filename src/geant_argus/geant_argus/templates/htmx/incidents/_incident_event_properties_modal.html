@@ -1,0 +1,21 @@
+<dialog id="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ event_counter }}"
+        class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">{{ endpoint_name }}</h3>
+    <table class="table">
+      <tbody>
+        {% for key, value in event.properties.items %}
+          <tr>
+            <th>{{ key }}</th>
+            <td>{{ value }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>

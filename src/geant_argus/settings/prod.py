@@ -30,3 +30,4 @@ LOGGING = {
         "level": "INFO",
     },
 }
+DEFAULT_TW_CSS = "geant.min.css"

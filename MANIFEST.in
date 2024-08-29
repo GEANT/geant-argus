@@ -1,1 +1,2 @@
 recursive-include src/**/templates/ *
+recursive-include src/**/static/ *

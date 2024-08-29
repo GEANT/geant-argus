@@ -1,0 +1,52 @@
+{% extends "htmx/base.html" %}
+{% block head %}
+  {{ block.super }}
+  <style>
+    // source: https://github.com/Ahnfelt/rulebuilder
+
+
+    .rule-buttons button:not(:hover),
+    .rule-buttons button[disabled] {
+      opacity: 0.50;
+    }
+
+    .rule-buttons {
+      visibility: hidden;
+    }
+
+    .rule-atom:hover .rule-buttons,
+    .rule-group:hover .rule-buttons {
+      visibility: visible;
+    }
+  </style>
+{% endblock head %}
+{% block main %}
+  <div class="p-2">
+    <form action="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
+          method="post">
+      <label class="form-control w-full max-w-xs">
+        <span class="label-text">Name:</span>
+        <input type="text"
+               class="input input-bordered w-full max-w-xs"
+               name="name"
+               value="{{ filter.name }}" />
+      </label>
+      <div id="filter_edit_root"
+           class="bg-gray-100 border rounded-lg px-2 pb-2 mt-2 mb-3 mr-2">
+        {% include "./_filter_item.html" with is_root=True %}
+      </div>
+      {% csrf_token %}
+      <div class="join">
+        <input class="btn btn-primary join-item" type="submit" value="Save">
+        <a href="{% url 'geant-filters:filter-list' %}">
+          <button class="btn btn-primary join-item">Cancel</button>
+        </a>
+        <button type="button"
+                class="btn btn-primary join-item"
+                hx-delete="."
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>
+      </div>
+    </form>
+  </div>
+  <div id="response"></div>
+{% endblock main %}

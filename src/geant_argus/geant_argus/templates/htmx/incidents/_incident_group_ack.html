@@ -1,0 +1,18 @@
+{% load argus_htmx %}
+{% load incident_extras %}
+<div id="incident-{{ incident.pk }}-{{ column.context.group }}-ack">
+  {% if is_ack %}
+    <input type="checkbox"
+           class="checkbox checkbox-sm border border-primary"
+           checked
+           disabled>
+  {% else %}
+    <input type="checkbox"
+           class="checkbox checkbox-sm checkbox-accent border"
+           {% if incident|is_acked_by:column.context.group %}checked disabled{% elif not user|has_group:column.context.group %}disabled{% elif incident.metadata.phase == "PENDING" %}disabled{% endif %}
+           hx-post="{% url 'geant-incidents:ack-incident' pk=incident.pk %}?group={{ column.context.group }}"
+           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+           hx-target="#incident-{{ incident.pk }}-{{ column.context.group }}-ack"
+           hx-push-url="false">
+  {% endif %}
+</div>

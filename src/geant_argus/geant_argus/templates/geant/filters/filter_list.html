@@ -1,0 +1,8 @@
+{% extends "htmx/base.html" %}
+{% block main %}
+  <section class="overflow-x-auto">
+    {% block table %}
+      {% include "./_filter_table.html" %}
+    {% endblock table %}
+  </section>
+{% endblock main %}

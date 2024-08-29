@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.1",
+    version="0.2",
     author="GEANT",
     author_email="swd@geant.org",
     description="Dashboard V3 framework",
@@ -13,6 +13,7 @@ setup(
         "Django>=4.2.11,<5.1",
         "argus-server",
         "argus-htmx-frontend",
+        "django-widget-tweaks",
     ],
     extras_require={
         "prod": [
@@ -25,6 +26,9 @@ setup(
             "python-dotenv",
             "django-extensions",
             "flake8",
+            "pytest",
+            "pytest-django",
+            "djlint",
         ],
     },
     include_package_data=True,
@@ -32,8 +36,6 @@ setup(
     license_files=("LICENSE.txt",),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
