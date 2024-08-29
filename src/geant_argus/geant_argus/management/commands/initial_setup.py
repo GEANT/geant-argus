@@ -43,7 +43,7 @@ class Command(initial_setup.Command):
         groupname = groupname or username
         user, created = self.try_create_user(username=username, specified_password=password)
         group, _ = self.try_create_ack_group(groupname)
-        if created and group not in user.groups:
+        if created and group not in user.groups.all():
             user.groups.add(group)
 
     def configure_service_desk_account(self, options):

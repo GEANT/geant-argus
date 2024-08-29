@@ -6,16 +6,23 @@ FROM python:3.10-slim
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends tini \
-    build-essential libpq-dev libffi-dev libssl-dev
+    build-essential libpq-dev libffi-dev libssl-dev postgresql-client
 RUN mkdir -p /argus
-COPY . /argus
-
 
 WORKDIR /argus
-RUN pip install -r requirements.txt && pip install -e .
+COPY requirements.txt /argus
+
+RUN pip install -r requirements.txt
+
+COPY . /argus
+RUN pip install -e .
+
+COPY ./demo /argus
+RUN mv /argus/settings.py /argus/src/geant_argus/settings/demo.py
 
 ENV PYTHONPATH=/argus/src
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV DJANGO_SETTINGS_MODULE='geant_argus.settings.demo'
 
-ENTRYPOINT ["/usr/bin/tini", "-v", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/argus/docker-entrypoint.sh"]

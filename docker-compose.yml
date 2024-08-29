@@ -1,38 +1,41 @@
 version: '3.5'
 services:
-  api:
+  argus:
     build: .
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_started
+      init:
+        condition: service_completed_successfully
     environment:
-      - TIME_ZONE=Europe/Oslo
-      - DJANGO_SETTINGS_MODULE=argus.site.settings.dockerdev
-      - DATABASE_URL=postgresql://argus:HahF9araeKoo@postgres/argus
-      - ARGUS_REDIS_SERVER=redis
-    volumes:
-      - ${PWD}:/argus
-    restart: always
+      - TIME_ZONE=Europe/Amsterdam
+      - DATABASE_URL=postgresql://argus:argus@postgres/argus
+      - ARGUS_DISABLE_REDIS=True
+      - POSTGRES_USER=argus
+      - POSTGRES_PASSWORD=argus
+      - POSTGRES_DB=argus
+    restart: unless-stopped
 
+  init:
+    build: .
+    depends_on:
+      - postgres
+    command: "/argus/initialize-db.sh"
+    environment:
+      - TIME_ZONE=Europe/Amsterdam
+      - DATABASE_URL=postgresql://argus:argus@postgres/argus
+      - ARGUS_DISABLE_REDIS=True
+      - PGHOST=postgres
+      - PGUSER=argus
+      - PGPASSWORD=argus
+      - PGDATABASE=argus
 
   postgres:
     image: "postgres:12"
-    volumes:
-      - postgres:/var/lib/postgresql/data:Z
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=argus
-      - POSTGRES_PASSWORD=HahF9araeKoo
+      - POSTGRES_PASSWORD=argus
       - POSTGRES_DB=argus
-
-
-  redis:
-    image: "redis:latest"
-    restart: always
-
-
-volumes:
-  postgres:
-    driver: local

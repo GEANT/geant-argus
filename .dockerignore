@@ -1,0 +1,11 @@
+*
+!demo-docker
+!src
+!Dockerfile
+!LICENSE.txt
+!Makefile
+!manage.py
+!pyproject.toml
+!README.md
+!requirements.txt
+!setup.py

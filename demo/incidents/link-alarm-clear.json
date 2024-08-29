@@ -1,0 +1,60 @@
+{
+  "phase": "FINALIZED",
+  "status": "CLEAR",
+  "version": "v0a4",
+  "severity": "WARNING",
+  "endpoints": {
+    "bgp": [],
+    "link": [
+      {
+        "name": "rt1.rig.lv.geant.net::ae3",
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T07:19:05",
+            "clear_time": "2024-08-29T07:30:30",
+            "properties": {
+              "id": 15448074,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-29T07:30:30",
+              "admin_up_time": "2024-08-29T07:19:05",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.rig.lv.geant.net",
+              "interface_name": "ae3",
+              "oper_down_time": "2024-08-29T07:19:05",
+              "admin_down_time": null
+            }
+          }
+        ]
+      },
+      {
+        "name": "rt1.rig.lv.geant.net::xe-0/1/0",
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T07:19:05",
+            "clear_time": "2024-08-29T07:30:27",
+            "properties": {
+              "id": 15448084,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-29T07:30:27",
+              "admin_up_time": "2024-08-29T07:19:05",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.rig.lv.geant.net",
+              "interface_name": "xe-0/1/0",
+              "oper_down_time": "2024-08-29T07:19:05",
+              "admin_down_time": null
+            }
+          }
+        ]
+      }
+    ],
+    "coriant": [],
+    "infinera": []
+  },
+  "description": "DCN-MANAGEMENT-RIG1-LV-, EX4300-MANAGEMENT-RIG-LV (interface ae3) Incident",
+  "short_lived": false,
+  "endpoint_count": 2
+}
