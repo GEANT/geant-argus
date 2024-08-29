@@ -84,6 +84,11 @@ INCIDENT_TABLE_COLUMNS = [
         context={"group": "servicedesk"},
     ),
     IncidentTableColumn(
+        "comment",
+        label="Ack with comment",
+        cell_template="htmx/incidents/_incident_comment_ack.html",
+    ),
+    IncidentTableColumn(
         "details",
         label="Details",
         cell_template="htmx/incidents/_incident_details_button.html",

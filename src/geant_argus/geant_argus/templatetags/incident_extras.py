@@ -1,7 +1,8 @@
 import json
+from typing import Optional
 
 from argus.auth.models import User
-from argus.incident.models import Incident
+from argus.incident.models import Incident, Acknowledgement
 from django import template
 from django.template.defaultfilters import stringfilter
 
@@ -46,6 +47,15 @@ def is_acked_by(incident, group: str) -> bool:
     """Backport of filter with the same name in argus-htmx-frontend"""
     # TODO: remove once argus-htmx-frontend v0.5 is released
     return incident.is_acked_by(group)
+
+
+@register.filter
+def ack_description(incident: Incident, ack: Optional[Acknowledgement] = None):
+    if ack:
+        return ack.event.description
+    for ack in incident.acks:
+        if desc := ack.event.description:
+            return desc
 
 
 @register.filter
