@@ -41,12 +41,13 @@ theme: {
         colors: {
             'incident-major': 'rgba(var(--color-incident-major), <alpha-value>)',
                 'incident-minor': 'rgba(var(--color-incident-minor), <alpha-value>)',
-                    'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
-                        'incident-warning': 'rgba(var(--color-incident-warning), <alpha-value>)',
-                            'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
-              },
+                'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
+                'incident-warning': 'rgba(var(--color-incident-warning), <alpha-value>)',
+                'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
+            },
+        },
     },
-},
+
 safelist: [
     // these classes are dynamically generated so not seen by tailwind
     {
@@ -54,22 +55,26 @@ safelist: [
     },
 ],
     daisyui: {
-    themes: ['light', 'dark',
-        {
+        themes: [{
+            'light': {
+                ...require("daisyui/src/theming/themes")["light"],
+                ...incidentColors
+            },
+            'dark': {
+                ...require("daisyui/src/theming/themes")["dark"],
+                ...incidentColors
+            },
             'argus': {
                 ...baseArgusColors,
                 ...incidentColors
             },
-        },
-        {
             'geant': {
                 ...baseArgusColors,
                 'accent': baseArgusColors['neutral'],
                 'accent-content': baseArgusColors['neutral-content'],
                 'warning': '#eec200',
                 ...incidentColors
-            }
-        }, {
+            },
             "geant-test": {
                 "primary": "#a8c5d5",
                 "primary-content": "#e4f0f5",
@@ -90,10 +95,9 @@ safelist: [
                 "warning": "#f5a48f",
                 "warning-content": "#6e463a",
                 "error": "#f2a5a9",
-                "error-content": "#4d2a2b"
-            }
-        },
-        {
+                "error-content": "#4d2a2b",
+                ...incidentColors
+            },
             "geant-uat": {
                 "primary": "#d1a7c4",
                 "primary-content": "#f7ebf3",
@@ -114,9 +118,9 @@ safelist: [
                 "warning": "#d1b7a7",
                 "warning-content": "#594a3e",
                 "error": "#d1a7a7",
-                "error-content": "#4a2d2d"
-            }
-        }, {
+                "error-content": "#4a2d2d",
+                ...incidentColors
+            },
             "geant-prod": {
                 "primary": "#f2c94c",
                 "primary-content": "#fff9e0",
@@ -137,9 +141,9 @@ safelist: [
                 "warning": "#ffb74d",
                 "warning-content": "#5c4d27",
                 "error": "#f2a3a3",
-                "error-content": "#6e2c2c"
+                "error-content": "#6e2c2c",
+                ...incidentColors
             }
-
         }],
       },
 
