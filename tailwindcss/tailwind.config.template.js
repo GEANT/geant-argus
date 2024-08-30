@@ -30,16 +30,16 @@ const incidentColors = {
 
 module.exports = {
     content: [
-        {{ tailwind_content }}
-'src/geant_argus/geant_argus/templatetags/**/*.py',
+{{ tailwind_content }}
+        'src/geant_argus/geant_argus/templatetags/**/*.py',
     ],
-theme: {
-    borderWidth: {
-        DEFAULT: '2px',
+    theme: {
+        borderWidth: {
+            DEFAULT: '2px',
         },
-    extend: {
-        colors: {
-            'incident-major': 'rgba(var(--color-incident-major), <alpha-value>)',
+        extend: {
+            colors: {
+                'incident-major': 'rgba(var(--color-incident-major), <alpha-value>)',
                 'incident-minor': 'rgba(var(--color-incident-minor), <alpha-value>)',
                 'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
                 'incident-warning': 'rgba(var(--color-incident-warning), <alpha-value>)',
@@ -47,13 +47,12 @@ theme: {
             },
         },
     },
-
-safelist: [
-    // these classes are dynamically generated so not seen by tailwind
-    {
-        pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
-    },
-],
+    safelist: [
+        // these classes are dynamically generated so not seen by tailwind
+        {
+            pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
+        },
+    ],
     daisyui: {
         themes: [{
             'light': {
@@ -147,8 +146,8 @@ safelist: [
         }],
       },
 
-plugins: [
-    require('@tailwindcss/aspect-ratio'),
-    require('daisyui')
-],
+    plugins: [
+        require('@tailwindcss/aspect-ratio'),
+        require('daisyui')
+    ],
 }
