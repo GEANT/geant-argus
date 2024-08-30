@@ -62,7 +62,7 @@ class Command(initial_setup.Command):
             self.stderr.write(self.style.WARNING(msg))
             created = False
         except User.DoesNotExist:
-            user = User.objects.create(
+            user = User.objects.create_user(
                 username=username,
                 email="",
                 first_name=username.capitalize(),
