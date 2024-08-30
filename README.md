@@ -10,6 +10,29 @@ frontend for the NOC. Argus is an application written in Django. This web framew
 extension/customization capabilities, which makes it relatively easy to slightly modify
 applications written in Django
 
+## Quick start
+
+The easiest way to start an instance of Geant Argus is to use docker compose:
+
+```
+docker compose up
+```
+
+This will spin up everything you need for demoing Argus. It can be reached on
+http://127.0.0.1:8000. The database is automatically populated with the incidents described in
+the `demo/incidents` directory. You can reset the instance to its initial settings by running one
+of two commands:
+
+```bash
+docker compose down -v && docker compose up
+```
+
+or
+
+```bash
+docker compose exec -t argus ./initialize-db.py --force
+```
+
 ## Development
 
 ### Installation
@@ -63,7 +86,7 @@ build the tailwind css:
 tailwindcss -c tailwindcss/tailwind.config.js -i tailwindcss/geant.base.css -o src/geant_argus/geant_argus/static/geant.css
 ```
 
-Alternatively, you can use the following command to launch `tailwindcss` in watch mode so that 
+Alternatively, you can use the following command to launch `tailwindcss` in watch mode so that
 changes are picked up automatically:
 
 ```bash
@@ -71,6 +94,7 @@ make watch-tailwind
 ```
 
 #### Updating the CSS file on commit
+
 During development you should create your css file as `geant.css` using the above steps. However,
 for packaging and production. We use a minified version of the css file. This file is included in
 the repository and package. If you're committing any changes to `tailwind.config.template.js` or
@@ -80,7 +104,9 @@ any of the templates, you should also update the minified version of
 ```bash
     make css
 ```
+
 ### Prepare database for first use
+
 If you connected to a virgin postgres database, you first need to prepare it
 
 ```
