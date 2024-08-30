@@ -6,7 +6,7 @@ services:
       - "8000:8000"
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
       init:
         condition: service_completed_successfully
     environment:
@@ -21,8 +21,9 @@ services:
   init:
     build: .
     depends_on:
-      - postgres
-    command: "/argus/initialize-db.sh"
+      postgres:
+        condition: service_healthy
+    command: "python3 /argus/initialize-db.py"
     environment:
       - TIME_ZONE=Europe/Amsterdam
       - DATABASE_URL=postgresql://argus:argus@postgres/argus
@@ -39,3 +40,9 @@ services:
       - POSTGRES_USER=argus
       - POSTGRES_PASSWORD=argus
       - POSTGRES_DB=argus
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U argus -d argus"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
