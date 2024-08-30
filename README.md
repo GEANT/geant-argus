@@ -16,7 +16,7 @@ applications written in Django
 
 Install this package editable
 
-```python
+```bash
 pip install -e .[dev]
 ```
 
@@ -27,7 +27,7 @@ out those repos
 ### Database
 Get a postgres database. For example, you can start one using docker:
 
-```
+```bash
 docker run -e POSTGRES_USER=argus -e POSTGRES_DB=argus -e POSTGRES_PASSWORD=some_password -p 5432:5432 postgres
 ```
 
@@ -60,7 +60,7 @@ VERSION=1.7.12
 curl -sLo tailwindcss https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v${VERSION}/tailwindcss-extra-linux-arm64
 chmod +x tailwindcss
 
-# Optionally: move the executable somehwere on your PATH (eg. ~/bin or /usr/local/bin)
+# Optional: move the executable somehwere on your PATH (eg. ~/bin or /usr/local/bin)
 mv tailwindcss ~/bin
 ```
 
