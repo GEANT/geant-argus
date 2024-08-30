@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.2",
+    version="0.5",
     author="GEANT",
     author_email="swd@geant.org",
     description="Dashboard V3 framework",
@@ -36,8 +36,6 @@ setup(
     license_files=("LICENSE.txt",),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",

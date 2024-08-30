@@ -54,8 +54,15 @@ module.exports = {
         },
     ],
     daisyui: {
-        themes: ['light', 'dark',
-        {
+        themes: [{
+            'light': {
+                ...require("daisyui/src/theming/themes")["light"],
+                ...incidentColors
+            },
+            'dark': {
+                ...require("daisyui/src/theming/themes")["dark"],
+                ...incidentColors
+            },
             'argus': {
                 ...baseArgusColors,
                 ...incidentColors
