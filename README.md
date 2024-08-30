@@ -46,7 +46,7 @@ version that [includes DaisyUI](https://github.com/dobicinaitis/tailwind-cli-ext
 Download the correct version for you platform. For example, for linux you could do:
 
 ```bash
-VERSION=1.7.11
+VERSION=1.7.12
 curl -sLo tailwindcss https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v${VERSION}/tailwindcss-extra-linux-arm64
 chmod +x tailwindcss
 sudo mv tailwindcss /usr/local/bin/
