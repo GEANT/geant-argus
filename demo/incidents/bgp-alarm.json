@@ -1,0 +1,54 @@
+{
+  "phase": "FINALIZED",
+  "status": "ACTIVE",
+  "version": "v0a4",
+  "severity": "WARNING",
+  "init_time": "2024-08-31T23:35:55",
+  "endpoints": {
+    "bgp": [
+      {
+        "name": "rt1.mar.fr.geant.net::159.226.10.14",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-31T23:35:55",
+            "clear_time": null,
+            "properties": {
+              "id": 15465849,
+              "peer": "159.226.10.14",
+              "status": "connected",
+              "idle_time": "2024-08-31T23:35:55",
+              "source_ip": "62.40.96.5",
+              "connect_time": "2024-08-31T23:36:02",
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.mar.fr.geant.net",
+              "establish_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-31T09:20:09",
+            "clear_time": "2024-08-31T23:34:13",
+            "properties": {
+              "id": 15465234,
+              "peer": "159.226.10.14",
+              "status": "established",
+              "idle_time": "2024-08-31T09:20:09",
+              "source_ip": "62.40.96.5",
+              "connect_time": "2024-08-31T09:20:11",
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.mar.fr.geant.net",
+              "establish_time": "2024-08-31T23:34:13"
+            }
+          }
+        ]
+      }
+    ],
+    "link": [],
+    "coriant": [],
+    "infinera": []
+  },
+  "description": "BGP peering (159.226.10.14) Incident",
+  "short_lived": false,
+  "endpoint_count": 2
+}

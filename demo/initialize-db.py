@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+import datetime
 import json
 import os
 import pathlib
@@ -42,20 +43,48 @@ def purge_db():
 
 
 def populate_db(incidents_dir: pathlib.Path):
-    from argus.incident.models import create_fake_incident
-
     for file in incidents_dir.glob("*.json"):
-        data = json.loads(file.read_text())
-        error = validate_metadata(data)
+        metadata = json.loads(file.read_text())
+        error = validate_metadata(metadata)
         if error:
             print(f"skipping {str(file)} due to schema error: '{error}'")
             continue
+        create_fake_incident(metadata)
+        print(f"Created fake incident {metadata['description']}")
 
-        create_fake_incident(
-            description=data["description"],
-            level=IncidentSeverity[data["severity"]],
-            metadata=data,
+
+def create_fake_incident(metadata=None):
+    from argus.incident.models import get_or_create_default_instances, Incident
+    from argus.util.datetime_utils import INFINITY_REPR
+    from django.utils import timezone
+    from random import randint
+
+    user, _, source_system = get_or_create_default_instances()
+
+    description = metadata["description"]
+    level = IncidentSeverity[metadata["severity"]]
+    if init_time := metadata.get("init_time"):
+        start_time = datetime.datetime.fromisoformat(init_time).replace(
+            tzinfo=timezone.get_default_timezone()
         )
+    else:
+        start_time = timezone.now()
+
+    end_time = INFINITY_REPR
+    source_incident_id = randint(1, 10**6) + 10**7
+
+    incident = Incident.objects.create(
+        start_time=start_time,
+        end_time=end_time,
+        source_incident_id=source_incident_id,
+        source=source_system,
+        description=description,
+        level=level,
+        metadata=metadata,
+    )
+    incident.create_first_event()
+    if metadata["status"] == "CLOSED":
+        incident.set_end(user)
 
 
 def main(argv):

@@ -3,6 +3,7 @@
   "status": "CLEAR",
   "version": "v0a4",
   "severity": "WARNING",
+  "init_time": "2024-08-29T07:19:05",
   "endpoints": {
     "bgp": [],
     "link": [

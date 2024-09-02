@@ -16,6 +16,8 @@ services:
       - POSTGRES_USER=argus
       - POSTGRES_PASSWORD=argus
       - POSTGRES_DB=argus
+    volumes:
+      - ./demo/incidents:/argus/incidents
     restart: unless-stopped
 
   init:

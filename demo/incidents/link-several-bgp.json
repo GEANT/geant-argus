@@ -1,0 +1,244 @@
+{
+  "phase": "FINALIZED",
+  "status": "ACTIVE",
+  "version": "v0a4",
+  "severity": "CRITICAL",
+  "init_time": "2024-08-29T21:22:08",
+  "endpoints": {
+    "bgp": [
+      {
+        "name": "rt1.mil2.it.geant.net::2001:0798:0001:0000:0000:0000:0000:011a",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:22:08",
+            "clear_time": null,
+            "properties": {
+              "id": 15463189,
+              "peer": "2001:0798:0001:0000:0000:0000:0000:011a",
+              "status": "established",
+              "idle_time": "2024-08-29T21:22:08",
+              "source_ip": "62.40.96.6",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T21:20:11",
+            "clear_time": "2024-08-29T21:20:34",
+            "properties": {
+              "id": 15463154,
+              "peer": "2001:0798:0001:0000:0000:0000:0000:011a",
+              "status": "established",
+              "idle_time": "2024-08-29T21:20:11",
+              "source_ip": "62.40.96.6",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": "2024-08-29T21:20:34"
+            }
+          }
+        ]
+      },
+      {
+        "name": "rt1.mil2.it.geant.net::62.40.125.143",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:22:09",
+            "clear_time": null,
+            "properties": {
+              "id": 15463194,
+              "peer": "62.40.125.143",
+              "status": "established",
+              "idle_time": "2024-08-29T21:22:09",
+              "source_ip": "62.40.96.6",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T21:20:11",
+            "clear_time": "2024-08-29T21:20:21",
+            "properties": {
+              "id": 15463159,
+              "peer": "62.40.125.143",
+              "status": "established",
+              "idle_time": "2024-08-29T21:20:11",
+              "source_ip": "62.40.96.6",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": "2024-08-29T21:20:21"
+            }
+          }
+        ]
+      },
+      {
+        "name": "rt1.mil2.it.geant.net::2001:0798:0099:0001:0000:0000:0000:012a",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:22:09",
+            "clear_time": null,
+            "properties": {
+              "id": 15463209,
+              "peer": "2001:0798:0099:0001:0000:0000:0000:012a",
+              "status": "established",
+              "idle_time": "2024-08-29T21:22:09",
+              "source_ip": "62.40.96.6",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T21:20:11",
+            "clear_time": "2024-08-29T21:20:26",
+            "properties": {
+              "id": 15463164,
+              "peer": "2001:0798:0099:0001:0000:0000:0000:012a",
+              "status": "established",
+              "idle_time": "2024-08-29T21:20:11",
+              "source_ip": "62.40.96.6",
+              "connect_time": "2024-08-29T21:20:24",
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": "2024-08-29T21:20:26"
+            }
+          }
+        ]
+      },
+      {
+        "name": "rt1.mil2.it.geant.net::83.97.88.229",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:22:08",
+            "clear_time": null,
+            "properties": {
+              "id": 15463199,
+              "peer": "83.97.88.229",
+              "status": "established",
+              "idle_time": "2024-08-29T21:22:08",
+              "source_ip": "62.40.96.6",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T21:20:11",
+            "clear_time": "2024-08-29T21:20:27",
+            "properties": {
+              "id": 15463174,
+              "peer": "83.97.88.229",
+              "status": "established",
+              "idle_time": "2024-08-29T21:20:11",
+              "source_ip": "62.40.96.6",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "establish_time": "2024-08-29T21:20:27"
+            }
+          }
+        ]
+      }
+    ],
+    "link": [
+      {
+        "name": "rt1.mil2.it.geant.net::ae16",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:22:08",
+            "clear_time": null,
+            "properties": {
+              "id": 15463184,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:22:08",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "interface_name": "ae16",
+              "oper_down_time": "2024-08-29T21:22:08",
+              "admin_down_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T21:20:11",
+            "clear_time": "2024-08-29T21:20:11",
+            "properties": {
+              "id": 15463169,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-29T21:20:11",
+              "admin_up_time": "2024-08-29T21:20:11",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "interface_name": "ae16",
+              "oper_down_time": "2024-08-29T21:20:11",
+              "admin_down_time": null
+            }
+          }
+        ]
+      },
+      {
+        "name": "rt1.mil2.it.geant.net::et-4/1/5",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:22:09",
+            "clear_time": null,
+            "properties": {
+              "id": 15463204,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:22:09",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "interface_name": "et-4/1/5",
+              "oper_down_time": "2024-08-29T21:22:09",
+              "admin_down_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T21:20:11",
+            "clear_time": "2024-08-29T21:20:12",
+            "properties": {
+              "id": 15463179,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-29T21:20:12",
+              "admin_up_time": "2024-08-29T21:20:11",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.mil2.it.geant.net",
+              "interface_name": "et-4/1/5",
+              "oper_down_time": "2024-08-29T21:20:11",
+              "admin_down_time": null
+            }
+          }
+        ]
+      }
+    ],
+    "coriant": [],
+    "infinera": []
+  },
+  "description": "RASH-AP1-100G, RASH-AP1-100G-IAS (interface ae16) Incident",
+  "short_lived": false,
+  "endpoint_count": 12
+}

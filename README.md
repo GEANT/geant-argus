@@ -21,13 +21,16 @@ docker compose up
 This will spin up everything you need for demoing Argus. It can be reached on
 http://127.0.0.1:8000. The database is automatically populated with the incidents described in
 the `demo/incidents` directory. You can reset the instance to its initial settings by running one
-of two commands:
+of two commands.:
 
 ```bash
 docker compose down -v && docker compose up
 ```
 
-or
+The `demo/incidents` directory is mounted inside the container, so you can also edit the indicents
+as you see fit and then run to update the incident list. 
+
+*note* this will also reset the database to its initial state.
 
 ```bash
 docker compose exec -t argus ./initialize-db.py --force

@@ -1,0 +1,101 @@
+{
+  "phase": "FINALIZED",
+  "status": "ACTIVE",
+  "version": "v0a4",
+  "severity": "MAJOR",
+  "init_time": "2024-09-01T10:37:36",
+  "endpoints": {
+    "bgp": [
+      {
+        "name": "mx1.lon.uk.geant.net::195.66.225.44",
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-09-01T10:37:36",
+            "clear_time": null,
+            "properties": {
+              "id": 15466089,
+              "peer": "195.66.225.44",
+              "status": "established",
+              "idle_time": "2024-09-01T10:37:36",
+              "source_ip": "62.40.97.5",
+              "connect_time": "2024-09-01T10:37:47",
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "mx1.lon.uk.geant.net",
+              "establish_time": "2024-09-01T10:40:24"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mx1.lon.uk.geant.net::195.66.226.79",
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-09-01T10:37:39",
+            "clear_time": "2024-09-01T10:40:27",
+            "properties": {
+              "id": 15466094,
+              "peer": "195.66.226.79",
+              "status": "established",
+              "idle_time": "2024-09-01T10:37:39",
+              "source_ip": "62.40.97.5",
+              "connect_time": "2024-09-01T10:37:54",
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "mx1.lon.uk.geant.net",
+              "establish_time": "2024-09-01T10:40:27"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mx1.lon.uk.geant.net::2001:07f8:0004:0000:0000:0000:2167:0001",
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-09-01T10:37:51",
+            "clear_time": "2024-09-01T10:40:13",
+            "properties": {
+              "id": 15466099,
+              "peer": "2001:07f8:0004:0000:0000:0000:2167:0001",
+              "status": "established",
+              "idle_time": "2024-09-01T10:37:51",
+              "source_ip": "62.40.97.5",
+              "connect_time": "2024-09-01T10:38:05",
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "mx1.lon.uk.geant.net",
+              "establish_time": "2024-09-01T10:40:13"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mx1.lon.uk.geant.net::2001:07f8:0004:0000:0000:0000:d79b:0001",
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-09-01T10:37:51",
+            "clear_time": "2024-09-01T10:40:09",
+            "properties": {
+              "id": 15466104,
+              "peer": "2001:07f8:0004:0000:0000:0000:d79b:0001",
+              "status": "established",
+              "idle_time": "2024-09-01T10:37:51",
+              "source_ip": "62.40.97.5",
+              "connect_time": "2024-09-01T10:38:14",
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "mx1.lon.uk.geant.net",
+              "establish_time": "2024-09-01T10:40:09"
+            }
+          }
+        ]
+      }
+    ],
+    "link": [],
+    "coriant": [],
+    "infinera": []
+  },
+  "description": "Multiple IX peering down on mx1.lon.uk.geant.net",
+  "short_lived": false,
+  "endpoint_count": 4
+}
