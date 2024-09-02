@@ -1,0 +1,52 @@
+<script>
+  // this is written in such a way as to minimize garbage and allow garbage collection of any
+  // timers when this script snippet is autoreloaded by htmx to prevent memory leaks.
+
+  function setCounter() {
+    counter = document.getElementById('refresh-counter')
+    if (!counter) return;
+
+    if (window.serviceStatusBoxTimer) {
+      clearInterval(window.serviceStatusBoxTimer)
+    }
+
+    window.serviceStatusBoxTimer = setInterval(() => {
+      counter.textContent = parseInt(counter.textContent) + 1
+    }, 1000)
+  }
+  setTimeout(setCounter, 100)
+</script>
+<dl class="stats stats-horizontal shadow leading-none overflow-x-auto text-xs bg-neutral mb-2 w-full">
+  <div class="stat py-1">
+    <dt class="stat-title text-neutral-content">Last refresh</dt>
+    <dd class="stat-value text-sm text-neutral-content">
+      <span id="refresh-counter" class="pl-0.5">0</span>s
+    </dd>
+  </div>
+  <div class="stat py-1">
+    <dt class="stat-title text-neutral-content/80">Trap last correlated</dt>
+    <dd class="stat-value text-sm text-neutral-content">
+      {{ last_correlated }}
+    </dd>
+  </div>
+  <div class="stat py-1">
+    <div>
+      <dt class="stat-title text-neutral-content/80">Inventory last updated</dt>
+      <dd class="stat-value text-sm text-neutral-content">
+        {{ inventory.last_update|date:"DATETIME_FORMAT"|default:"?" }}
+        <a href="#" class="text-base">⟳</a>
+      </dd>
+    </div>
+  </div>
+</dl>
+<dl class="stats stats-horizontal shadow leading-none overflow-x-auto text-xs bg-neutral w-full">
+  {% for service, status in services.items %}
+    <div class="stat py-1">
+      <dt class="stat-title text-neutral-content">{{ service }}</dt>
+      <dd class="stat-value leading-2">
+        <div class="inline-block w-full max-w-20 h-3 mr-2 bg-{{ status.color }} rounded-full"
+             title="{{ status.message }}"></div>
+      </dd>
+    </div>
+  {% endfor %}
+</dl>

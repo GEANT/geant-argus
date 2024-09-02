@@ -13,19 +13,19 @@ const baseArgusColors = {
     'base-content': '#141516',
     'info': '#0073e5',
     'info-content': '#000512',
-    'success': '#008700',
+    'success': '#50c878',
     'success-content': '#d3e7d1',
-    'warning': '#ee4900',
+    'warning': '#eec200',
     'warning-content': '#140200',
-    'error': '#e5545a',
+    'error': '#f04343',
     'error-content': '#120203',
 }
 const incidentColors = {
-    '--color-incident-clear': '80, 200, 120',
-    '--color-incident-warning': '237, 250, 255', // same as base-100
-    '--color-incident-minor': '238, 194, 0',
-    '--color-incident-major': '238, 155, 0',
-    '--color-incident-critical': '240, 67, 67',
+    '--color-incident-clear': '80, 200, 120', // #50c878, same as success
+    '--color-incident-warning': '237, 250, 255', // #f7f8f2, same as base-100
+    '--color-incident-minor': '238, 194, 0', // #eec200, same as warning
+    '--color-incident-major': '238, 155, 0', // #ee9b00
+    '--color-incident-critical': '240, 67, 67', // #f04343, same as critical
 }
 
 module.exports = {
@@ -45,12 +45,18 @@ module.exports = {
                 'incident-warning': 'rgba(var(--color-incident-warning), <alpha-value>)',
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
             },
+            lineHeight: {
+                '2': '0.5rem',
+              }
         },
     },
     safelist: [
         // these classes are dynamically generated so not seen by tailwind
         {
             pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
+        },
+        {
+            pattern: /bg-(success|warning|error)/,
         },
     ],
     daisyui: {

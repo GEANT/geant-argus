@@ -10,4 +10,5 @@ def geant_theme(request):
             "file": "logo_white.png",
             "alt": "geant-argus",
         },
+        "incidents_extra_widget": "htmx/status/_services_status_widget.html",
     }
