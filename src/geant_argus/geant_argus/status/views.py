@@ -1,9 +1,11 @@
 from datetime import datetime
 import time
-from django.views.decorators.http import require_GET
+from django.conf import settings
+from django.views.decorators.http import require_GET, require_POST
 from django.http import HttpRequest
 from django.shortcuts import render
 from argus.util.datetime_utils import make_aware
+import requests
 
 CORRELATOR_REL_TIME = [
     [300, ">5 min"],
@@ -13,38 +15,74 @@ CORRELATOR_REL_TIME = [
     [0, "<30s"],
 ]
 
-HEALTH = {
-    "classifier": {"message": "OK", "status": "healthy", "timestamp": 1725266813},
-    "collector": {"message": "no FORWARDER processes found", "status": "error", "timestamp": -1},
-    "correlator": {
-        "message": "OK (leader is uat-noc-alarms-vm01.geant.org)",
-        "status": "healthy",
-        "timestamp": 1725266813,
-    },
-    "inventory": {
-        "message": "update in progress (last updated 8 minutes ago)",
-        "status": "warning",
-        "timestamp": 1725266286,
-    },
-}
 
-INPROV_VERSION = {
-    "api": "0.1",
-    "latch": {
-        "current": 0,
-        "failure": False,
-        "next": 3,
-        "pending": True,
-        "this": 0,
-        "timestamp": 1725266286.3155851,
-        "update-started": 1725266797.034249,
-    },
-    "module": "0.129",
-}
+@require_GET
+def service_status(request: HttpRequest):
+    return render(
+        request, "htmx/status/_services_status_widget_content.html", context=get_service_info()
+    )
+
+
+@require_POST
+def update_inventory(request: HttpRequest):
+    send_update_inprov()
+    return render(
+        request, "htmx/status/_services_status_widget_content.html", context=get_service_info()
+    )
+
+
+def get_service_info():
+    health = get_services_health()
+    inprov_status = get_inprov_status()
+    return {
+        "services": {
+            "Correlator": single_service_status(health, "correlator"),
+            "Forwarder": single_service_status(health, "collector"),
+            "Classifier": single_service_status(health, "classifier"),
+            "Inventory Provider": single_service_status(health, "inventory"),
+        },
+        "last_correlated": get_trap_last_correlated(
+            health.get("correlator", {}).get("timestamp", 0)
+        ),
+        "inventory": get_inventory_update_status(inprov_status.get("latch")),
+    }
+
+
+def get_services_health():
+    try:
+        response = requests.get(settings.STATUS_CHECKER_HEALTH_URL, timeout=10)
+    except requests.Timeout:
+        return {}
+    if response.status_code >= 400:
+        return {}
+    return response.json()
+
+
+def get_inprov_status():
+    try:
+        response = requests.get(settings.STATUS_CHECKER_INPROV_URL, timeout=10)
+    except requests.Timeout:
+        return {}
+    if response.status_code >= 400:
+        return {}
+    return response.json()
+
+
+def send_update_inprov():
+    # This request takes ages so we fully expect to hit the timeout. The timeout is there
+    # so that inprov has started and we can reload the widget
+    try:
+        response = requests.get(settings.STATUS_CHECKER_UPDATE_INPROV_URL, timeout=5)
+    except requests.Timeout:
+        return {}
+    if response.status_code >= 400:
+        return {}
+    return response.json()
 
 
 def single_service_status(health, service):
-    info = health[service]
+    if not (info := health.get(service)):
+        return {"color": "slate-300", "message": "No info"}
     status_to_color = {"healthy": "success"}
     return {
         "color": status_to_color.get(info["status"], info["status"]),
@@ -53,6 +91,8 @@ def single_service_status(health, service):
 
 
 def get_trap_last_correlated(timestamp: int):
+    if not timestamp:
+        return "?"
     diff = time.time() - timestamp
     for breakpoint, msg in CORRELATOR_REL_TIME:
         if diff > breakpoint:
@@ -67,20 +107,5 @@ def get_inventory_update_status(latch):
             if (timestamp := latch.get("timestamp"))
             else "N/A"
         ),
-        "pending": latch["pending"],
+        "pending": latch.get("pending"),
     }
-
-
-@require_GET
-def service_status(request: HttpRequest):
-    context = {
-        "services": {
-            "Correlator": single_service_status(HEALTH, "correlator"),
-            "Forwarder": single_service_status(HEALTH, "collector"),
-            "Classifier": single_service_status(HEALTH, "classifier"),
-            "Inventory Provider": single_service_status(HEALTH, "inventory"),
-        },
-        "last_correlated": get_trap_last_correlated(HEALTH["correlator"]["timestamp"]),
-        "inventory": get_inventory_update_status(INPROV_VERSION["latch"]),
-    }
-    return render(request, "htmx/status/_services_status_widget_content.html", context=context)

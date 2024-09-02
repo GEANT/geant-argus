@@ -56,7 +56,7 @@ module.exports = {
             pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
         },
         {
-            pattern: /bg-(success|warning|error)/,
+            pattern: /bg-(success|warning|error|slate-300)/,
         },
     ],
     daisyui: {

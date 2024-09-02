@@ -34,7 +34,18 @@
       <dt class="stat-title text-neutral-content/80">Inventory last updated</dt>
       <dd class="stat-value text-sm text-neutral-content">
         {{ inventory.last_update|date:"DATETIME_FORMAT"|default:"?" }}
-        <a href="#" class="text-base">⟳</a>
+        <span class="text-base cursor-pointer"
+              hx-post="{% url 'geant-status:update' %}"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              hx-push-url="false"
+              hx-target="#service-status"
+              {% if pending %}disabled{% endif %}>
+          {% if pending %}
+            !
+          {% else %}
+            ⟳
+          {% endif %}
+        </span>
       </dd>
     </div>
   </div>
