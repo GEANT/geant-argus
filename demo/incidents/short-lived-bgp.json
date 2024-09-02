@@ -1,0 +1,38 @@
+{
+  "phase": "FINALIZED",
+  "status": "CLOSED",
+  "version": "v0a4",
+  "severity": "WARNING",
+  "endpoints": {
+    "bgp": [
+      {
+        "name": "rt1.fra.de.geant.net::128.223.157.40",
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-09-02T08:40:19",
+            "clear_time": "2024-09-02T08:41:19",
+            "properties": {
+              "id": 15467089,
+              "peer": "128.223.157.40",
+              "status": "established",
+              "idle_time": "2024-09-02T08:40:19",
+              "source_ip": "62.40.96.22",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.fra.de.geant.net",
+              "establish_time": "2024-09-02T08:41:19"
+            }
+          }
+        ]
+      }
+    ],
+    "link": [],
+    "coriant": [],
+    "infinera": []
+  },
+  "init_time": "2024-09-02T08:40:20",
+  "description": "BGP peering (128.223.157.40) Incident",
+  "short_lived": true,
+  "endpoint_count": 1
+}

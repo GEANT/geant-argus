@@ -1,0 +1,56 @@
+{
+  "phase": "FINALIZED",
+  "status": "CLOSED",
+  "version": "v0a4",
+  "severity": "WARNING",
+  "endpoints": {
+    "bgp": [],
+    "link": [
+      {
+        "name": "sw1.lju.si.geant.net::irb.998",
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-09-02T08:30:59",
+            "clear_time": "2024-09-02T08:31:01",
+            "properties": {
+              "id": 15466904,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-09-02T08:31:01",
+              "admin_up_time": "2024-09-02T08:30:59",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "sw1.lju.si.geant.net",
+              "interface_name": "irb.998",
+              "oper_down_time": "2024-09-02T08:30:59",
+              "admin_down_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-09-02T08:30:58",
+            "clear_time": "2024-09-02T08:30:59",
+            "properties": {
+              "id": 15466889,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-09-02T08:30:59",
+              "admin_up_time": "2024-09-02T08:30:58",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "sw1.lju.si.geant.net",
+              "interface_name": "irb.998",
+              "oper_down_time": "2024-09-02T08:30:58",
+              "admin_down_time": null
+            }
+          }
+        ]
+      }
+    ],
+    "coriant": [],
+    "infinera": []
+  },
+  "init_time": "2024-09-02T08:30:59",
+  "description": "Interface irb.998 Incident",
+  "short_lived": true,
+  "endpoint_count": 2
+}
