@@ -3,5 +3,7 @@
      hx-get="{% url 'geant-status:status' %}"
      hx-trigger="load, every 60s"
      hx-push-url="false">
-  <p>loading status widget...</p>
+  <div class="h-full w-full flex items-center justify-center">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
 </div>
