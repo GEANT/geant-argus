@@ -77,8 +77,9 @@
   </div>
   {% block incident_detail %}
     {% if incident.metadata and incident.metadata.version == "v0a4" %}
-      <section id="endpoints" class="test rounded-box border border-accent">
-        <legend class="menu-title text-2xl pb-0">Endpoints</legend>
+      <section id="endpoints"
+               class="test rounded-box border border-accent bg-base-300">
+        <legend class="menu-title text-2xl pb-0 text-secondary-content">Endpoints</legend>
         {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
           {% if endpoints %}
             <div class="p-2">
@@ -86,7 +87,7 @@
                 <input type="checkbox" name="my-accordion-3" checked="checked" />
                 <div class="collapse-title text-xl font-medium bg-primary text-primary-content capitalize">{{ endpoint_type }}</div>
                 <div class="collapse-content bg-secondary p-6">
-                  <table class="border border-separate border-spacing-1 border-primary table bg-primary-content text-base-content">
+                  <table class="border border-separate border-spacing-1 border-secondary table bg-base-200 text-base-content">
                     <thead>
                       <tr class="border-b border-primary">
                         <th class="py-2 px-4 border-b border-primary">Endpoint Name</th>
