@@ -24,17 +24,17 @@
     </dd>
   </div>
   <div class="stat py-1">
-    <dt class="stat-title text-neutral-content/80">Trap last correlated</dt>
+    <dt class="stat-title text-neutral-content">Trap last correlated</dt>
     <dd class="stat-value text-sm text-neutral-content">
       {{ last_correlated }}
     </dd>
   </div>
   <div class="stat py-1">
     <div>
-      <dt class="stat-title text-neutral-content/80">Inventory last updated</dt>
+      <dt class="stat-title text-neutral-content">Inventory last updated</dt>
       <dd class="stat-value text-sm text-neutral-content">
         {{ inventory.last_update|date:"DATETIME_FORMAT"|default:"?" }}
-        <span class="text-base cursor-pointer"
+        <span class="text-base cursor-pointer htmx-loading-pulse"
               hx-post="{% url 'geant-status:update' %}"
               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
               hx-push-url="false"

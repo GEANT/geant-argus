@@ -19,7 +19,7 @@ CORRELATOR_REL_TIME = [
 @require_GET
 def service_status(request: HttpRequest):
     return render(
-        request, "htmx/status/_services_status_widget_content.html", context=get_service_info()
+        request, "htmx/status/_status_checker_widget_content.html", context=get_service_info()
     )
 
 
@@ -27,7 +27,7 @@ def service_status(request: HttpRequest):
 def update_inventory(request: HttpRequest):
     send_update_inprov()
     return render(
-        request, "htmx/status/_services_status_widget_content.html", context=get_service_info()
+        request, "htmx/status/_status_checker_widget_content.html", context=get_service_info()
     )
 
 
@@ -49,30 +49,20 @@ def get_service_info():
 
 
 def get_services_health():
-    try:
-        response = requests.get(settings.STATUS_CHECKER_HEALTH_URL, timeout=10)
-    except requests.Timeout:
-        return {}
-    if response.status_code >= 400:
-        return {}
-    return response.json()
+    return _get_or_empty(settings.STATUS_CHECKER_HEALTH_URL)
 
 
 def get_inprov_status():
-    try:
-        response = requests.get(settings.STATUS_CHECKER_INPROV_URL, timeout=10)
-    except requests.Timeout:
-        return {}
-    if response.status_code >= 400:
-        return {}
-    return response.json()
+    return _get_or_empty(settings.STATUS_CHECKER_INPROV_URL)
 
 
 def send_update_inprov():
-    # This request takes ages so we fully expect to hit the timeout. The timeout is there
-    # so that inprov has started and we can reload the widget
+    return _get_or_empty(settings.STATUS_CHECKER_UPDATE_INPROV_URL)
+
+
+def _get_or_empty(*args, timeout=10, **kwargs):
     try:
-        response = requests.get(settings.STATUS_CHECKER_UPDATE_INPROV_URL, timeout=5)
+        response = requests.get(*args, timeout=timeout, **kwargs)
     except requests.Timeout:
         return {}
     if response.status_code >= 400:
