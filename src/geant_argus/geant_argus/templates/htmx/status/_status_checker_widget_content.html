@@ -2,7 +2,7 @@
   // this is written in such a way as to minimize garbage and allow garbage collection of any
   // timers when this script snippet is autoreloaded by htmx to prevent memory leaks.
 
-  function setCounter() {
+  window.setCounter = function() {
     counter = document.getElementById('refresh-counter')
     if (!counter) return;
 
@@ -14,7 +14,7 @@
       counter.textContent = parseInt(counter.textContent) + 1
     }, 1000)
   }
-  setTimeout(setCounter, 100)
+  setTimeout(window.setCounter, 100)
 </script>
 <dl class="stats stats-horizontal shadow leading-none overflow-x-auto text-xs bg-neutral mb-2 w-full">
   <div class="stat py-1">
