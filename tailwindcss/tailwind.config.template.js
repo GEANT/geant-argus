@@ -1,3 +1,13 @@
+const alertColors = {
+    'info': '#0073e5',
+    'info-content': '#204766',
+    'success': '#50c878',
+    'success-content': '#609978',
+    'warning': '#eec200',
+    'warning-content': '#907900',
+    'error': '#f04343',
+    'error-content': '#b03232',
+}
 const baseArgusColors = {
     'primary': '#006d91',
     'primary-content': '#d1e1e9',
@@ -11,14 +21,7 @@ const baseArgusColors = {
     'base-200': '#ced9de',
     'base-300': '#b0babd',
     'base-content': '#141516',
-    'info': '#0073e5',
-    'info-content': '#000512',
-    'success': '#008700',
-    'success-content': '#d3e7d1',
-    'warning': '#ee4900',
-    'warning-content': '#140200',
-    'error': '#e5545a',
-    'error-content': '#120203',
+    ...alertColors
 }
 const incidentColors = {
     '--color-incident-clear': '80, 200, 120',
@@ -27,6 +30,7 @@ const incidentColors = {
     '--color-incident-major': '238, 155, 0',
     '--color-incident-critical': '240, 67, 67',
 }
+
 
 module.exports = {
     content: [
@@ -87,14 +91,7 @@ module.exports = {
                 "base-200": "#e2e5d9",
                 "base-300": "#cfd3c6",
                 "base-content": "#4a4b4c",
-                "info": "#85baf0",
-                "info-content": "#4d5b6e",
-                "success": "#81ce81",
-                "success-content": "#e7f2e6",
-                "warning": "#f5a48f",
-                "warning-content": "#6e463a",
-                "error": "#f2a5a9",
-                "error-content": "#4d2a2b",
+                ...alertColors,
                 ...incidentColors
             },
             "geant-uat": {
@@ -110,14 +107,7 @@ module.exports = {
                 "base-200": "#e0e5da",
                 "base-300": "#ccd3c6",
                 "base-content": "#464847",
-                "info": "#a7c4d1",
-                "info-content": "#4b5b65",
-                "success": "#a7d1a7",
-                "success-content": "#e7f2e7",
-                "warning": "#d1b7a7",
-                "warning-content": "#594a3e",
-                "error": "#d1a7a7",
-                "error-content": "#4a2d2d",
+                ...alertColors,
                 ...incidentColors
             },
             "geant-prod": {
@@ -133,14 +123,7 @@ module.exports = {
                 "base-200": "#e2e1e2",
                 "base-300": "#c8c6c8",
                 "base-content": "#4a4a4a",
-                "info": "#56c5e0",
-                "info-content": "#0e4e6b",
-                "success": "#6fcf6f",
-                "success-content": "#e6f7e6",
-                "warning": "#ffb74d",
-                "warning-content": "#5c4d27",
-                "error": "#f2a3a3",
-                "error-content": "#6e2c2c",
+                ...alertColors,
                 ...incidentColors
             }
         }],
