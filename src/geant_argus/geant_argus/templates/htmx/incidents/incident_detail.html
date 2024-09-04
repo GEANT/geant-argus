@@ -1,121 +1,93 @@
-{% extends "htmx/incidents/incident_detail.html" %}
+{% extends "htmx/base.html" %}
 {% load incident_extras %}
-{% block head %}
-  {{ block.super }}
-  <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-{% endblock head %}
 {% block main %}
-  <div class="card lg:card-side bg-secondary text-secondary-content shadow-xl p-10">
-    <div class="card-body">
-      <h2 class="card-title">Alarm Description</h2>
-      <table class="text-secondary-content">
-        <tbody>
-          <tr>
-            <td>Alarm Id</td>
-            <td>{{ incident.source_incident_id }}</td>
-          </tr>
-          <tr class="divider-row">
-            <td colspan="2">
-              <hr class="border-primary">
-            </td>
-          </tr>
-          <tr>
-            <td>Description</td>
-            <td class="max-w-xs break-words">
-              {% if incident.metadata %}
-                {{ incident.metadata.description }}
-              {% else %}
-                {{ incident.description }}
-              {% endif %}
-            </td>
-          </tr>
-          <tr class="divider-row">
-            <td colspan="2">
-              <hr class="border-primary">
-            </td>
-          </tr>
-          <tr>
-            <td>Status</td>
-            <td>
-              {% if incident.open %}
-                {{ incident.metadata.status|default:"Active"|upperfirst }}
-              {% else %}
-                Closed
-              {% endif %}
-            </td>
-          </tr>
-          <tr class="divider-row">
-            <td colspan="2">
-              <hr class="border-primary">
-            </td>
-          </tr>
-          <tr>
-            <td>Severity</td>
-            <td>{{ incident.metadata.severity }}</td>
-          </tr>
-          <tr class="divider-row">
-            <td colspan="2">
-              <hr class="border-primary">
-            </td>
-          </tr>
-          <tr>
-            <td>Timestamp</td>
-            <td>{{ incident.start_time }}</td>
-          </tr>
-          <tr class="divider-row">
-            <td colspan="2">
-              <hr class="border-primary">
-            </td>
-          </tr>
-          <tr>
-            <td>Flaps</td>
-            <td>{{ incident.metadata.endpoint_count|default:"-" }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <section class="">
+    <div class="rounded-box border border-accent p-2">
+      <h1 class="font-bold text-2xl ml-2">Incident Details</h1>
+      <div class="p-4 md:pr-16 lg:pr-24 xl:pr-60">
+        <table class="table text-lg">
+          <tbody>
+            <tr class="border-primary">
+              <td class="py-0 font-bold">Timestamp</td>
+              <td class="py-0">{{ incident.start_time }}</td>
+            </tr>
+            <tr class="border-primary">
+              <td class="py-0 font-bold">Description</td>
+              <td class="py-0 ">
+                {% if incident.metadata %}
+                  {{ incident.metadata.description }}
+                {% else %}
+                  {{ incident.description }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr class="border-primary">
+              <td class="py-0 font-bold">Alarm Id</td>
+              <td class="py-0">{{ incident.source_incident_id }}</td>
+            </tr>
+            <tr class="border-primary">
+              <td class="py-0 font-bold">Status</td>
+              <td class="py-0">
+                {% if incident.open %}
+                  {{ incident.metadata.status|default:"Active"|upperfirst }}
+                {% else %}
+                  Closed
+                {% endif %}
+              </td>
+            </tr>
+            <tr class="border-primary">
+              <td class="py-0 font-bold">Severity</td>
+              <td class="py-0">{{ incident.metadata.severity }}</td>
+            </tr>
+            <tr class="border-primary">
+              <td class="py-0 font-bold">Flaps</td>
+              <td class="py-0">{{ incident.metadata.endpoint_count|default:"-" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  </section>
   {% block incident_detail %}
     {% if incident.metadata and incident.metadata.version == "v0a4" %}
-      <section id="endpoints"
-               class="test rounded-box border border-accent bg-base-300">
-        <legend class="menu-title text-2xl pb-0 text-secondary-content">Endpoints</legend>
+      <section id="endpoints" class="rounded-box border border-accent p-2">
+        <h1 class="font-bold text-2xl  ml-2">Endpoints</h1>
         {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
           {% if endpoints %}
-            <div class="p-2">
-              <div class="collapse collapse-arrow  bg-base-100 px-0">
-                <input type="checkbox" name="my-accordion-3" checked="checked" />
+            <div>
+              <div class="collapse collapse-arrow px-0 mt-2">
+                <input type="checkbox" name="is-open-checkbox" checked />
                 <div class="collapse-title text-xl font-medium bg-primary text-primary-content capitalize">{{ endpoint_type }}</div>
-                <div class="collapse-content bg-secondary p-6">
-                  <table class="border border-separate border-spacing-1 border-secondary table bg-base-200 text-base-content">
+                <div class="collapse-content p-0">
+                  <table class="table rounded-t-none border-x border-b border-primary border-separate text-base-content p-1">
                     <thead>
-                      <tr class="border-b border-primary">
-                        <th class="py-2 px-4 border-b border-primary">Endpoint Name</th>
-                        <th class="py-2 px-4 border-b border-primary">Alarm ID</th>
-                        <th class="py-2 px-4 border-b border-primary">Status</th>
-                        <th class="py-2 px-4 border-b border-primary">Init Time</th>
-                        <th class="py-2 px-4 border-b border-primary">Clear Time</th>
-                        <th class="py-2 px-4 border-b border-primary">Properties</th>
+                      <tr>
+                        <th class="py-2 border-b border-primary">Endpoint Name</th>
+                        <th class="py-2 border-b border-primary">Alarm ID</th>
+                        <th class="py-2 border-b border-primary">Status</th>
+                        <th class="py-2 border-b border-primary">Init Time</th>
+                        <th class="py-2 border-b border-primary">Clear Time</th>
+                        <th class="py-2 border-b border-primary">Properties</th>
                       </tr>
                     </thead>
                     {% for endpoint in endpoints %}
-                      <tbody class="border border-primary">
+                      <tbody>
                         {% with forloop.counter as endpoint_counter %}
-                          <tr class="hover">
-                            <td class="py-2 px-4 " rowspan="{{ endpoint.events|length }}">{{ endpoint.name }}</td>
+                          <tr class="hover:bg-base-200 py-2 px-4">
+                            <td class=" " rowspan="{{ endpoint.events|length }}">{{ endpoint.name }}</td>
                             {% for event in endpoint.events %}
                               {% if not forloop.first %}<tr class="border border-primary">{% endif %}
-                                <td class="py-2 px-4 ">{{ event.properties.id }}</td>
-                                <td class="py-2 px-4 ">
+                                <td class=" ">{{ event.properties.id }}</td>
+                                <td class=" ">
                                   <div class="flex items-center">
-                                    <div class="inline-block w-4 h-4 mr-2 {% if event.is_up %} bg-green-500 {% else %} bg-red-500 {% endif %} rounded-full">
+                                    <div class="inline-block w-4 h-4 mr-2 {% if event.is_up %} bg-success {% else %} bg-error {% endif %} rounded-full">
                                     </div>
                                     {{ event.is_up|yesno:"Up,Down" }}
                                   </div>
                                 </td>
-                                <td class="py-2 px-4 ">{{ event.init_time }}</td>
-                                <td class="py-2 px-4 ">{{ event.clear_time }}</td>
-                                <td class="py-2 px-4 ">
+                                <td>{{ event.init_time }}</td>
+                                <td>{{ event.clear_time|default:"-" }}</td>
+                                <td>
                                   <button type="button"
                                           class="bg-accent hover:bg-neutral text-accent-content py-1 px-2 rounded"
                                           onclick="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ forloop.counter }}.showModal()">
