@@ -25,7 +25,6 @@ const baseArgusColors = {
 }
 const incidentColors = {
     '--color-incident-clear': '80, 200, 120',
-    '--color-incident-warning': '237, 250, 255', // same as base-100
     '--color-incident-minor': '238, 194, 0',
     '--color-incident-major': '238, 155, 0',
     '--color-incident-critical': '240, 67, 67',
@@ -46,7 +45,7 @@ module.exports = {
                 'incident-major': 'rgba(var(--color-incident-major), <alpha-value>)',
                 'incident-minor': 'rgba(var(--color-incident-minor), <alpha-value>)',
                 'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
-                'incident-warning': 'rgba(var(--color-incident-warning), <alpha-value>)',
+                'incident-warning': 'oklch(var(--b1)/<alpha-value>)', // same as base-100
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
             },
         },
@@ -65,7 +64,11 @@ module.exports = {
             },
             'dark': {
                 ...require("daisyui/src/theming/themes")["dark"],
-                ...incidentColors
+                ...incidentColors,
+                '--color-incident-critical': '182, 35, 35',
+                '--color-incident-major': '195, 101, 1',
+                '--color-incident-minor': '146, 137, 0',
+                '--color-incident-clear': '18, 103, 0',
             },
             'argus': {
                 ...baseArgusColors,
