@@ -10,13 +10,58 @@ from ..incidents.severity import IncidentSeverity
 register = template.Library()
 
 
-@register.filter(name="to_severity")
-def level_to_severity(value):
-    """Removes all values of arg from the given string"""
+def _level_to_severity(value):
     min_level = min(IncidentSeverity)
     max_level = max(IncidentSeverity)
     level = max(min_level, min(max_level, value))
-    return IncidentSeverity(level).name
+    return IncidentSeverity(level)
+
+
+@register.filter(name="to_severity")
+def level_to_severity(value):
+    """Removes all values of arg from the given string"""
+    return _level_to_severity(value).name
+
+
+@register.filter(name="levelbadge")
+def level_to_badge(incident: Incident):
+    severity = _level_to_severity(incident.level)
+    match severity:
+        case IncidentSeverity.CRITICAL:
+            color = "incident-critical"
+        case IncidentSeverity.MAJOR:
+            color = "incident-major"
+        case IncidentSeverity.MINOR:
+            color = "incident-minor"
+        case IncidentSeverity.WARNING:
+            color = "incident-warning"
+        case _:
+            return "badge-outline-ghost"
+
+    return f'bg-{color}{"/50" if not incident.open else ""} border-{color}'
+
+
+def _incident_status(incident: Incident):
+    if incident.open:
+        return upperfirst(incident.metadata.get("status", "Active"))
+    return "Closed"
+
+
+@register.filter(name="incidentstatus")
+def incident_status_text(incident: Incident):
+    return _incident_status(incident)
+
+
+@register.filter(name="statusbadge")
+def incident_status_badge(incident: Incident):
+    status = _incident_status(incident)
+    match status:
+        case "Active":
+            return "badge-primary"
+        case "Clear":
+            return "bg-incident-clear border-incident-clear"
+        case "Closed":
+            return "badge-outline-ghost"
 
 
 @register.filter
@@ -46,24 +91,3 @@ def is_acked_by(incident, group: str) -> bool:
     """Backport of filter with the same name in argus-htmx-frontend"""
     # TODO: remove once argus-htmx-frontend v0.5 is released
     return incident.is_acked_by(group)
-
-
-@register.filter
-def row_classes(incident: Incident):
-    status = incident.metadata.get("status", "").upper()
-    if status == "CLEAR":
-        return "bg-incident-clear"
-    match IncidentSeverity(incident.level):
-        case IncidentSeverity.CRITICAL:
-            color = "bg-incident-critical"
-        case IncidentSeverity.MAJOR:
-            color = "bg-incident-major"
-        case IncidentSeverity.MINOR:
-            color = "bg-incident-minor"
-        case IncidentSeverity.WARNING:
-            color = "bg-incident-warning"
-        case _:
-            color = ""
-    if color and status == "CLOSED":
-        color = f"{color}/50"
-    return color
