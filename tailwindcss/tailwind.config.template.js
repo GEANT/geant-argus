@@ -39,6 +39,13 @@ module.exports = {
     theme: {
         borderWidth: {
             DEFAULT: '2px',
+            '0': '0',
+            '1': '1px',
+            '2': '2px',
+            '3': '3px',
+            '4': '4px',
+            '6': '6px',
+            '8': '8px',
         },
         extend: {
             colors: {
@@ -53,7 +60,7 @@ module.exports = {
     safelist: [
         // these classes are dynamically generated so not seen by tailwind
         {
-            pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
+            pattern: /(bg|border)-incident-(clear|warning|minor|major|critical)/,
         },
     ],
     daisyui: {

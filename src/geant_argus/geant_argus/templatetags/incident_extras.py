@@ -24,17 +24,21 @@ def level_to_severity(value):
 
 
 @register.filter(name="levelbadge")
-def level_to_badge(value):
-    severity = _level_to_severity(value)
+def level_to_badge(incident: Incident):
+    severity = _level_to_severity(incident.level)
     match severity:
         case IncidentSeverity.CRITICAL:
-            return "bg-incident-critical border-incident-critical"
+            color = "incident-critical"
         case IncidentSeverity.MAJOR:
-            return "bg-incident-major border-incident-major"
+            color = "incident-major"
         case IncidentSeverity.MINOR:
-            return "bg-incident-minor border-incident-minor"
+            color = "incident-minor"
+        case IncidentSeverity.WARNING:
+            color = "incident-warning"
         case _:
             return "badge-outline-ghost"
+
+    return f'bg-{color}{"/50" if not incident.open else ""} border-{color}'
 
 
 def _incident_status(incident: Incident):
@@ -53,7 +57,7 @@ def incident_status_badge(incident: Incident):
     status = _incident_status(incident)
     match status:
         case "Active":
-            return "badge-neutral"
+            return "badge-primary"
         case "Clear":
             return "bg-incident-clear border-incident-clear"
         case "Closed":
@@ -87,24 +91,3 @@ def is_acked_by(incident, group: str) -> bool:
     """Backport of filter with the same name in argus-htmx-frontend"""
     # TODO: remove once argus-htmx-frontend v0.5 is released
     return incident.is_acked_by(group)
-
-
-@register.filter
-def row_classes(incident: Incident):
-    status = incident.metadata.get("status", "").upper()
-    if status == "CLEAR":
-        return "bg-incident-clear"
-    match IncidentSeverity(incident.level):
-        case IncidentSeverity.CRITICAL:
-            color = "bg-incident-critical"
-        case IncidentSeverity.MAJOR:
-            color = "bg-incident-major"
-        case IncidentSeverity.MINOR:
-            color = "bg-incident-minor"
-        case IncidentSeverity.WARNING:
-            color = "bg-incident-warning"
-        case _:
-            color = ""
-    if color and status == "CLOSED":
-        color = f"{color}/50"
-    return color
