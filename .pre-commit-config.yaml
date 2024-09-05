@@ -7,8 +7,13 @@ repos:
     rev: 24.8.0
     hooks:
       - id: black
-
   - repo: https://github.com/djlint/djLint
     rev: v1.34.1
     hooks:
       - id: djlint-reformat-django
+  - repo: local
+    hooks:
+      - id: tailwind-ccs
+        name: Update minified tailwind CSS
+        entry: make css
+        language: system
