@@ -45,12 +45,7 @@ ARGUS_HTMX_FILTER_FUNCTION = ARGUS_FILTER_BACKEND
 
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
-    IncidentTableColumn(
-        "start_time",
-        label="Timestamp",
-        cell_template="htmx/incidents/_incident_start_time.html",
-        header_template="htmx/incidents/_incident_start_time_header.html",
-    ),
+    "start_time",
     IncidentTableColumn(
         "endpoint_count",
         label="Flaps",
@@ -98,3 +93,10 @@ INCIDENT_TABLE_COLUMNS = [
 # Tailwind config template relative to the repository root directory
 TAILWIND_CONFIG_TEMPLATE = "tailwindcss/tailwind.config.template.js"
 TAILWIND_CONFIG_TARGET = "tailwindcss/tailwind.config.js"
+
+
+# Status checker widget
+STATUS_CHECKER_ENABLED = True
+STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
+STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
+STATUS_CHECKER_UPDATE_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_UPDATE_INPROV_URL")
