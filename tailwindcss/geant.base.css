@@ -13,4 +13,8 @@
   .radio {
     background-color: white;
   }
+
+  .htmx-loading-pulse.htmx-request{
+    @apply animate-pulse
+  }
 }

@@ -24,10 +24,10 @@ const baseArgusColors = {
     ...alertColors
 }
 const incidentColors = {
-    '--color-incident-clear': '80, 200, 120',
-    '--color-incident-minor': '238, 194, 0',
-    '--color-incident-major': '238, 155, 0',
-    '--color-incident-critical': '240, 67, 67',
+    '--color-incident-clear': '80, 200, 120', // #50c878, same as success
+    '--color-incident-minor': '238, 194, 0', // #eec200, same as warning
+    '--color-incident-major': '238, 155, 0', // #ee9b00
+    '--color-incident-critical': '240, 67, 67', // #f04343, same as critical
 }
 
 
@@ -55,12 +55,18 @@ module.exports = {
                 'incident-warning': 'oklch(var(--b1)/<alpha-value>)', // same as base-100
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
             },
+            lineHeight: {
+                '2': '0.5rem',
+              }
         },
     },
     safelist: [
         // these classes are dynamically generated so not seen by tailwind
         {
             pattern: /(bg|border)-incident-(clear|warning|minor|major|critical)/,
+        },
+        {
+            pattern: /bg-(success|warning|error|slate-300)/,
         },
     ],
     daisyui: {

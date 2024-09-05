@@ -1,0 +1,9 @@
+<div id="service-status"
+     class="border border-primary rounded-2xl h-full p-2"
+     hx-get="{% url 'geant-status:status' %}"
+     hx-trigger="load, every 60s"
+     hx-push-url="false">
+  <div class="h-full w-full flex items-center justify-center">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+</div>
