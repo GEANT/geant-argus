@@ -1,2 +1,2 @@
 {% load incident_extras %}
-{{ incident.level | to_severity }}
+<div class="badge {{ incident|levelbadge }}">{{ incident.level | to_severity }}</div>

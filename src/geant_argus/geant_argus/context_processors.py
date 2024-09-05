@@ -10,4 +10,9 @@ def geant_theme(request):
             "file": "logo_white.png",
             "alt": "geant-argus",
         },
+        "incidents_extra_widget": (
+            "htmx/status/_status_checker_widget.html"
+            if getattr(settings, "STATUS_CHECKER_ENABLED")
+            else None
+        ),
     }
