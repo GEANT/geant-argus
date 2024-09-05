@@ -60,7 +60,7 @@ module.exports = {
     safelist: [
         // these classes are dynamically generated so not seen by tailwind
         {
-            pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
+            pattern: /(bg|border)-incident-(clear|warning|minor|major|critical)/,
         },
     ],
     daisyui: {
