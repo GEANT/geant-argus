@@ -24,15 +24,22 @@ def level_to_severity(value):
 
 
 @register.filter(name="levelbadge")
-def level_to_badge(value):
-    severity = _level_to_severity(value)
-    match severity:
-        case IncidentSeverity.CRITICAL:
+def level_to_badge(incident: Incident):
+    severity = _level_to_severity(incident.level)
+    is_open = incident.open
+    match (severity, is_open):
+        case (IncidentSeverity.CRITICAL, True):
             return "bg-incident-critical border-incident-critical"
-        case IncidentSeverity.MAJOR:
-            return "bg-incident-major border-incident-major"
-        case IncidentSeverity.MINOR:
+        case (IncidentSeverity.MAJOR, True):
+            return "bg-incident-major border-incident-major "
+        case (IncidentSeverity.MINOR, True):
             return "bg-incident-minor border-incident-minor"
+        case (IncidentSeverity.CRITICAL, False):
+            return "border-incident-critical border-2"
+        case (IncidentSeverity.MAJOR, False):
+            return "border-incident-major border-2"
+        case (IncidentSeverity.MINOR, False):
+            return "border-incident-minor border-2"
         case _:
             return "badge-outline-ghost"
 
