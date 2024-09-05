@@ -1,1 +1,6 @@
-{{ incident.metadata.description | default:"unknown incident" }}
+<div class="has-tooltip relative">
+  <div>{{ incident.metadata.description | default:"unknown incident" }}</div>
+  <div class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 w-100 top-16">
+    {% include "htmx/incidents/_incident_detail_summary.html" with responsive=False %}
+  </div>
+</div>

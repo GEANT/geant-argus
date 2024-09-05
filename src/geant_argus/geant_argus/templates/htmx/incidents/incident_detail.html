@@ -1,52 +1,8 @@
 {% extends "htmx/base.html" %}
 {% load incident_extras %}
 {% block main %}
-  <section class="">
-    <div class="rounded-box border border-accent p-2">
-      <h1 class="font-bold text-2xl ml-2">Incident Details</h1>
-      <div class="p-4 md:pr-16 lg:pr-24 xl:pr-60">
-        <table class="table text-lg">
-          <tbody>
-            <tr class="border-primary">
-              <td class="py-0 font-bold">Timestamp</td>
-              <td class="py-0">{{ incident.start_time }}</td>
-            </tr>
-            <tr class="border-primary">
-              <td class="py-0 font-bold">Description</td>
-              <td class="py-0 ">
-                {% if incident.metadata %}
-                  {{ incident.metadata.description }}
-                {% else %}
-                  {{ incident.description }}
-                {% endif %}
-              </td>
-            </tr>
-            <tr class="border-primary">
-              <td class="py-0 font-bold">Alarm Id</td>
-              <td class="py-0">{{ incident.source_incident_id }}</td>
-            </tr>
-            <tr class="border-primary">
-              <td class="py-0 font-bold">Status</td>
-              <td class="py-0">
-                {% if incident.open %}
-                  {{ incident.metadata.status|default:"Active"|upperfirst }}
-                {% else %}
-                  Closed
-                {% endif %}
-              </td>
-            </tr>
-            <tr class="border-primary">
-              <td class="py-0 font-bold">Severity</td>
-              <td class="py-0">{{ incident.metadata.severity }}</td>
-            </tr>
-            <tr class="border-primary">
-              <td class="py-0 font-bold">Flaps</td>
-              <td class="py-0">{{ incident.metadata.endpoint_count|default:"-" }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <section id="summary">
+    {% include "htmx/incidents/_incident_detail_summary.html" with responsive=True %}
   </section>
   {% block incident_detail %}
     {% if incident.metadata and incident.metadata.version == "v0a4" %}
