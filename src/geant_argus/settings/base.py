@@ -45,12 +45,7 @@ ARGUS_HTMX_FILTER_FUNCTION = ARGUS_FILTER_BACKEND
 
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
-    IncidentTableColumn(
-        "start_time",
-        label="Timestamp",
-        cell_template="htmx/incidents/_incident_start_time.html",
-        header_template="htmx/incidents/_incident_start_time_header.html",
-    ),
+    "start_time",
     IncidentTableColumn(
         "endpoint_count",
         label="Flaps",
