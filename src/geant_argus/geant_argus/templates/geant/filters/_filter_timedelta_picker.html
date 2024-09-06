@@ -1,19 +1,21 @@
-<select name="{{ prefix }}unit"
-        class="select select-bordered max-w-xs"
+<div class="join w-40">
+  <button class="btn btn-primary font-bold rounded-r-none border-1 border-base-content/20" _="on click halt the event then if (next
+    <input/>).value > 1 decrement (next
+    <input/>).value">-</button>
+  <input type="number"
+         class="w-full rounded-none text-center input input-bordered border-base-content/20 hide-buttons text-sm"
+         name="{{ prefix }}val:timedelta"
+         value="{{ rule.value }}"
+         min="1"
+         step="1" />
+  <button class="btn btn-primary font-bold rounded-l-none border-base-content/20" _="on click halt the event then increment (previous
+    <input/>).value">+</button>
+</div>
+<select class="select select-bordered max-w-xs"
+        name="{{ prefix }}unit"
         autocomplete="off">
   {% for unit in operator.units %}
     <option value={{ unit }} {% if rule.unit == unit %}selected{% endif %}>{{ unit }}
     </option>
   {% endfor %}
 </select>
-<div class="join w-40">
-  <button class="btn rounded-r-none btn-primary"
-          _="on click halt then decrement #numberInput.value">-</button>
-  <input id="numberInput"
-         type="number"
-         class="w-full rounded-none text-center px- input input-bordered hide-buttons"
-         value="5"
-         min="1"
-         step="1" />
-  <button class="rounded-l-none btn" _="on click increment #numberInput.value">+</button>
-</div>

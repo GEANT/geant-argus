@@ -25,8 +25,7 @@ class TextOperator(Operator):
         return {"value": ""}
 
     def parse_formdata(self, form_data: dict, prefix):
-        value = form_data.get(prefix + "val:str", "")
-        return {"value": value}
+        return {"value": form_data.get(prefix + "val:str", "")[:100]}
 
 
 class BooleanOperator(Operator):
@@ -66,7 +65,7 @@ class TimeDeltaOperator(Operator):
     def parse_formdata(self, form_data: dict, prefix: str):
         raw_amount = form_data.get(prefix + "val:timedelta", "1")
         try:
-            amount = int(raw_amount)
+            amount = max(1, int(raw_amount))
         except ValueError:
             amount = 1
 

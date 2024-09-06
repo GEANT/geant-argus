@@ -7,7 +7,6 @@ from django.core.paginator import Paginator
 from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
-    HttpResponseRedirect,
     HttpResponseNotAllowed,
 )
 from django.shortcuts import get_object_or_404, render
@@ -105,6 +104,10 @@ def list_filters(request):
     return render(request, base_template, context=context)
 
 
+def default_context():
+    return {"name": "", "model": FILTER_MODEL}
+
+
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
     if request.method == "DELETE":
@@ -112,18 +115,13 @@ def edit_filter(request, pk: Optional[int] = None):
             return HttpResponseNotAllowed(permitted_methods=["HEAD", "GET", "POST"])
         filter = get_object_or_404(Filter, pk=pk)
         filter.delete()
-
-        # TODO: write as HttpRedirect
-        resp = HttpResponse()
-        resp["HX-Redirect"] = reverse("geant-filters:filter-list")
-        return resp
-
+        return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
     if request.method == "POST":
         if not request.htmx:
             return HttpResponseBadRequest("only htmx supported")
         filter_dict = update_filter(request.POST, request.GET)
         context = {
-            "model": FILTER_MODEL,
+            **default_context(),
             "filter_dict": filter_dict,
             "is_root": True,
         }
@@ -136,7 +134,7 @@ def edit_filter(request, pk: Optional[int] = None):
         filter = None
         filter_dict = FILTER_MODEL.default_rule()
     context = {
-        "model": FILTER_MODEL,
+        **default_context(),
         "filter_dict": filter_dict,
         "filter": filter,
         "pk": pk,
@@ -148,9 +146,14 @@ def edit_filter(request, pk: Optional[int] = None):
 def save_filter(request, pk: Optional[int] = None):
     result = parse_filter_form_data(request.POST)
     name = request.POST.get("name")
-    # TODO: respond as input validation error
     if not re.match(r"^[a-zA-Z0-9_-]+$", name):
-        return HttpResponseBadRequest("Name can only contain letters, numbers, - or _")
+        context = {
+            **default_context(),
+            "errors": {"name": "Name can only contain letters, numbers, - or _"},
+            "filter_dict": result,
+            "name": name,
+        }
+        return render(request, "geant/filters/_filter_edit_form.html", context=context)
     user = request.user
 
     # WARNING: COMPLETE HACK FOR DEMO PURPOSES
@@ -165,8 +168,7 @@ def save_filter(request, pk: Optional[int] = None):
         filter.name = name
         filter.filter = result
         filter.save()
-
-    return HttpResponseRedirect(reverse("geant-filters:filter-list"))
+    return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
 
 
 def update_filter(form_data, commands):
