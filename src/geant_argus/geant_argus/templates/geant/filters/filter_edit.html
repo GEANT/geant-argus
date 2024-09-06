@@ -1,6 +1,7 @@
 {% extends "htmx/base.html" %}
 {% block head %}
   {{ block.super }}
+  <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
   <style>
     // source: https://github.com/Ahnfelt/rulebuilder
 
@@ -21,8 +22,10 @@
   </style>
 {% endblock head %}
 {% block main %}
+  {{ filter_dict }}
   <div class="p-2">
-    <form action="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
+    <form id="filter-form"
+          action="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
           method="post">
       <label class="form-control w-full max-w-xs">
         <span class="label-text">Name:</span>
@@ -36,17 +39,20 @@
         {% include "./_filter_item.html" with is_root=True %}
       </div>
       {% csrf_token %}
-      <div class="join">
-        <input class="btn btn-primary join-item" type="submit" value="Save">
-        <a href="{% url 'geant-filters:filter-list' %}">
-          <button class="btn btn-primary join-item">Cancel</button>
-        </a>
-        <button type="button"
-                class="btn btn-primary join-item"
-                hx-delete="."
-                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>
-      </div>
     </form>
+    <div class="join">
+      <input class="btn btn-primary join-item"
+             type="submit"
+             form="filter-form"
+             value="Save">
+      <a href="{% url 'geant-filters:filter-list' %}">
+        <button class="btn btn-primary join-item">Cancel</button>
+      </a>
+      <button type="button"
+              class="btn btn-primary join-item"
+              hx-delete="."
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>
+    </div>
   </div>
   <div id="response"></div>
 {% endblock main %}

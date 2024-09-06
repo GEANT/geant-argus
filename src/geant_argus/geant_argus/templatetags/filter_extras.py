@@ -25,6 +25,7 @@ def is_multiple(arr: Optional[list]):
 
 @register.filter
 def get_item(dictionary, key):
+    print(dictionary, key)
     return dictionary.get(key)
 
 
@@ -42,3 +43,20 @@ def display_text(item):
         "before_rel": "before (relative)",
         "after_rel": "after (relative)",
     }.get(item, item)
+
+
+@register.filter
+def filterinput(op: str):
+    path = "geant/filters/"
+    return (
+        path
+        + {
+            "contains": "_filter_text_input.html",
+            "equals": "_filter_text_input.html",
+            "is": "_filter_boolean_input.html",
+            "before_abs": "_filter_date_picker.html",
+            "after_abs": "_filter_date_picker.html",
+            "before_rel": "_filter_timedelta_picker.html",
+            "after_rel": "_filter_timedelta_picker.html",
+        }[op]
+    )

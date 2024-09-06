@@ -1,0 +1,19 @@
+<select name="{{ prefix }}unit"
+        class="select select-bordered max-w-xs"
+        autocomplete="off">
+  {% for unit in operator.units %}
+    <option value={{ unit }} {% if rule.unit == unit %}selected{% endif %}>{{ unit }}
+    </option>
+  {% endfor %}
+</select>
+<div class="join w-40">
+  <button class="btn rounded-r-none btn-primary"
+          _="on click halt then decrement #numberInput.value">-</button>
+  <input id="numberInput"
+         type="number"
+         class="w-full rounded-none text-center px- input input-bordered hide-buttons"
+         value="5"
+         min="1"
+         step="1" />
+  <button class="rounded-l-none btn" _="on click increment #numberInput.value">+</button>
+</div>
