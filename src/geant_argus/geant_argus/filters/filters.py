@@ -1,6 +1,10 @@
 import dataclasses
-from datetime import datetime
+import datetime
+import functools
 import itertools
+import operator
+
+from django.db.models import Q, QuerySet
 
 
 @dataclasses.dataclass
@@ -17,6 +21,9 @@ class Operator:
     def parse_formdata(self, form_data: dict, prefix: str):
         raise NotImplementedError
 
+    def to_sql(self, db_field: str, op: str, rule: dict):
+        raise NotImplementedError
+
 
 class TextOperator(Operator):
     template = "geant/filters/_filter_text_input.html"
@@ -26,6 +33,12 @@ class TextOperator(Operator):
 
     def parse_formdata(self, form_data: dict, prefix):
         return {"value": form_data.get(prefix + "val:str", "")[:100]}
+
+    def to_sql(self, db_field: str, op: str, rule: dict):
+        if op == "contains":
+            return Q(**{f"{db_field}__icontains": rule["value"]})
+        if op == "equals":
+            return Q(**{f"{db_field}": rule["value"]})
 
 
 class BooleanOperator(Operator):
@@ -38,21 +51,34 @@ class BooleanOperator(Operator):
         raw = form_data.get(prefix + "val:bool", "true")
         return {"value": raw == "true"}
 
+    def to_sql(self, db_field: str, op: str, rule: dict):
+        if op != "is":
+            return None
+
+        # TODO: implement for acks
+        return None
+
 
 class DateTimeOperator(Operator):
     NORMALIZED_DATETIME = "%Y-%m-%dT%H:%M"
     template = "geant/filters/_filter_datetime_picker.html"
 
     def initial_value(self):
-        return {"value": datetime.now().strftime(self.NORMALIZED_DATETIME)}
+        return {"value": datetime.datetime.now().strftime(self.NORMALIZED_DATETIME)}
 
     def parse_formdata(self, form_data: dict, prefix: str):
         raw = form_data.get(prefix + "val:datetime", "")
         try:
-            datetime.strptime(raw, self.NORMALIZED_DATETIME)
+            datetime.datetime.strptime(raw, self.NORMALIZED_DATETIME)
         except ValueError:
-            raw = datetime.now().strftime(self.NORMALIZED_DATETIME)
+            raw = datetime.datetime.now().strftime(self.NORMALIZED_DATETIME)
         return {"value": raw}
+
+    def to_sql(self, db_field: str, op: str, rule: dict):
+        if op == "before_abs":
+            return Q(**{f"{db_field}__lt": rule["value"]})
+        if op == "after_abs":
+            return Q(**{f"{db_field}__gt": rule["value"]})
 
 
 class TimeDeltaOperator(Operator):
@@ -74,14 +100,35 @@ class TimeDeltaOperator(Operator):
 
         return {"value": amount, "unit": unit}
 
+    def to_sql(self, db_field: str, op: str, rule: dict):
+        target_dt = datetime.datetime.now(tz=datetime.UTC) - self.rule_to_timedelta(rule)
+        if op == "before_rel":
+            return Q(**{f"{db_field}__lt": target_dt})
+        if op == "after_rel":
+            return Q(**{f"{db_field}__gt": target_dt})
+
+    def rule_to_timedelta(self, rule):
+        amount = rule["value"]
+        time_unit_raw = rule["unit"]
+
+        return {
+            "minutes": datetime.timedelta(minutes=amount),
+            "hours": datetime.timedelta(hours=amount),
+            "days": datetime.timedelta(days=amount),
+            "weeks": datetime.timedelta(weeks=amount),
+        }[time_unit_raw]
+
 
 @dataclasses.dataclass
 class FilterField:
     name: str
     display_name: str
     operators: list[Operator]
+    db_fields: list[str]
 
     def __post_init__(self):
+        assert self.db_fields, "db_fields must have at least one item"
+        assert self.operators, "operators must have at least one item"
         self.operators_by_name = {op.name: op for op in self.operators}
 
     def default_rule(self):
@@ -97,7 +144,12 @@ class FilterField:
         op_str = form_data.get(prefix + "op")
         if op_str not in self.operators_by_name:
             op = self.operators[0]
-            return {"type": "rule", "field": self.name, "operator": op.name, **op.initial_value()}
+            return {
+                "type": "rule",
+                "field": self.name,
+                "operator": op.name,
+                **op.parse_formdata(form_data, prefix),
+            }
 
         op = self.operators_by_name[op_str]
         return {
@@ -107,8 +159,14 @@ class FilterField:
             **op.parse_formdata(form_data, prefix=prefix),
         }
 
-    def render(self, value) -> str:
-        pass
+    def to_sql(self, rule: dict):
+        op_str: str = rule.get("operator")
+        if (op := self.operators_by_name.get(op_str)) is None:
+            return Q()
+
+        return functools.reduce(
+            operator.ior, (op.to_sql(f, op_str, rule) or Q() for f in self.db_fields)
+        )
 
 
 class ComplexFilter:
@@ -151,5 +209,81 @@ class ComplexFilter:
             return result
         return None
 
-    def render(self, json: dict) -> str:
-        pass
+    def filter_queryset(self, qs: QuerySet, filter_dict: dict) -> QuerySet:
+        if filter_dict["version"] != "v1":
+            raise ValueError("unsupported filter version")
+
+        return qs.filter(self._parse_filter_item(filter_dict))
+
+    def _parse_filter_item(self, item: dict):
+        if item["type"] == "group":
+            return self._parse_filter_group(item)
+        if item["type"] == "rule":
+            return self._parse_filter_rule(item)
+        raise ValueError("invalid item type")
+
+    def _parse_filter_group(self, group: dict):
+        op = operator.ior if group["operator"] == "or" else operator.iand
+        return functools.reduce(op, (self._parse_filter_item(i) for i in group["items"]))
+
+    def _parse_filter_rule(self, rule: dict):
+        field = self.fields_by_name[rule["field"]]
+        return field.to_sql(rule)
+
+
+FILTER_MODEL = ComplexFilter(
+    fields=[
+        FilterField(
+            "description",
+            "Description",
+            operators=[
+                TextOperator("contains"),
+            ],
+            db_fields=["metadata__description"],
+        ),
+        # Comment field not yet supported
+        # FilterField(
+        #     "comment",
+        #     "Comment",
+        #     operators=[
+        #         TextOperator("contains"),
+        #     ],
+        # ),
+        FilterField(
+            "location",
+            "Location",
+            operators=[
+                TextOperator("equals"),
+                TextOperator("contains"),
+            ],
+            db_fields=["metadata__location"],
+        ),
+        FilterField(
+            "sd_ack",
+            "Ack (SD)",
+            operators=[
+                BooleanOperator("is"),
+            ],
+            db_fields=["acks"],
+        ),
+        FilterField(
+            "noc_ack",
+            "Ack (NOC)",
+            operators=[
+                BooleanOperator("is"),
+            ],
+            db_fields=["acks"],
+        ),
+        FilterField(
+            "start_time",
+            "Start Time",
+            operators=[
+                DateTimeOperator("before_abs", "before (absolute)"),
+                DateTimeOperator("after_abs", "after (absolute)"),
+                TimeDeltaOperator("before_rel", "before (relative)"),
+                TimeDeltaOperator("after_rel", "after (relative)"),
+            ],
+            db_fields=["start_time"],
+        ),
+    ]
+)

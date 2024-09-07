@@ -4,73 +4,12 @@ from typing import Optional
 from argus.filter.filters import Filter
 from argus.incident.models import User
 from django.core.paginator import Paginator
-from django.http import (
-    HttpResponse,
-    HttpResponseBadRequest,
-    HttpResponseNotAllowed,
-)
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-from .filters import (
-    ComplexFilter,
-    FilterField,
-    TextOperator,
-    BooleanOperator,
-    DateTimeOperator,
-    TimeDeltaOperator,
-)
 
-FILTER_MODEL = ComplexFilter(
-    fields=[
-        FilterField(
-            "description",
-            "Description",
-            operators=[
-                TextOperator("contains"),
-            ],
-        ),
-        FilterField(
-            "comment",
-            "Comment",
-            operators=[
-                TextOperator("contains"),
-            ],
-        ),
-        FilterField(
-            "location",
-            "Location",
-            operators=[
-                TextOperator("equals"),
-                TextOperator("contains"),
-            ],
-        ),
-        FilterField(
-            "sd_ack",
-            "Ack (SD)",
-            operators=[
-                BooleanOperator("is"),
-            ],
-        ),
-        FilterField(
-            "noc_ack",
-            "Ack (NOC)",
-            operators=[
-                BooleanOperator("is"),
-            ],
-        ),
-        FilterField(
-            "start_time",
-            "Start Time",
-            operators=[
-                DateTimeOperator("before_abs", "before (absolute)"),
-                DateTimeOperator("after_abs", "after (absolute)"),
-                TimeDeltaOperator("before_rel", "before (relative)"),
-                TimeDeltaOperator("after_rel", "after (relative)"),
-            ],
-        ),
-    ]
-)
+from .filters import FILTER_MODEL
 
 
 def get_all_filters():
