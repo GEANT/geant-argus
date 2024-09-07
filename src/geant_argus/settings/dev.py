@@ -23,4 +23,3 @@ STATUS_CHECKER_INPROV_URL = get_str_env(
 STATUS_CHECKER_UPDATE_INPROV_URL = get_str_env(
     "STATUS_CHECKER_UPDATE_INPROV_URL", "https://uat-inprov01.geant.org/jobs/update"
 )
-STATUS_CHECKER_ENABLED = False
