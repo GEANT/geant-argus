@@ -9,7 +9,8 @@
         hx-target="#filter_edit_root">
   <option value="and" {% if selected == "and" %}selected{% endif %}>All</option>
   <option value="or" {% if selected == "or" %}selected{% endif %}>Any</option>
-  {% for field in fields_operators.keys %}
-    <option value="{{ field }}" {% if selected == field %}selected{% endif %}>{{ field|display_text }}</option>
+  {% for field in model.fields %}
+    <option value="{{ field.name }}"
+            {% if selected == field.name %}selected{% endif %}>{{ field.display_name }}</option>
   {% endfor %}
 </select>

@@ -20,6 +20,7 @@ from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
 
+from geant_argus.geant_argus.filters.filters import FILTER_MODEL
 from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
@@ -153,7 +154,7 @@ class IncidentFilterForm(forms.Form):
             filter and filter.filter and filter.filter.get("version") in SUPPORTED_FILTER_VERSIONS
         ):
             return queryset
-        return GeantBooleanFiltering(filter).filter(queryset)
+        return FILTER_MODEL.filter_queryset(queryset, filter.filter)
 
     def _filter_by_open_close(self, queryset):
         is_open = bool(self.cleaned_data.get("open"))

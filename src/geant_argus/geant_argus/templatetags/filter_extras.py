@@ -26,19 +26,3 @@ def is_multiple(arr: Optional[list]):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
-
-
-@register.filter
-def display_text(item):
-    return {
-        "description": "Description",
-        "comment": "Comment",
-        "location": "Location",
-        "service_deck_ack": "Ack (SD)",
-        "ncc_ack": "Ack (NOC)",
-        "start_time": "Start Time",
-        "before_abs": "before (absolute)",
-        "after_abs": "after (absolute)",
-        "before_rel": "before (relative)",
-        "after_rel": "after (relative)",
-    }.get(item, item)

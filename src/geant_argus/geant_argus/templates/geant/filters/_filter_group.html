@@ -2,7 +2,7 @@
 <div class="mt-2 p-1 border border-black/10 rounded-lg bg-black/5">
   <div class="rule-group">
     {% include "./_filter_selector.html" with key="op" selected=group.operator %}
-    &nbsp;&nbsp;of the following are true&nbsp;
+    <span class="ml-1">of the following are true</span>
     {% if not is_root %}
       {% include "./_filter_buttons.html" with can_delete=can_delete is_top=is_top is_bottom=is_bottom prefix=prefix %}
     {% endif %}
