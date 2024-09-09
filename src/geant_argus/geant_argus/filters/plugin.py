@@ -116,11 +116,21 @@ class IncidentFilterForm(forms.Form):
     open = forms.BooleanField(required=False)
     closed = forms.BooleanField(required=False)
     description = forms.CharField(max_length=255, required=False)
-    newest_first = forms.BooleanField(required=False)
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
-    field_order = ["open", "closed", "description", "filter_pk", "min_severity", "newest_first"]
+    newest_first = forms.BooleanField(required=False)
+    short_lived = forms.BooleanField(required=False)
+
+    field_order = [
+        "open",
+        "close",
+        "description",
+        "filter_pk",
+        "min_severity",
+        "newest_first",
+        "short_lived",
+    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -140,6 +150,7 @@ class IncidentFilterForm(forms.Form):
 
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_open_close(queryset)
+        queryset = self._filter_by_short_lived(queryset)
         queryset = self._filter_by_description(queryset)
         queryset = self._filter_by_severity(queryset)
         queryset = self._order_by_newest_first(queryset)
@@ -160,12 +171,21 @@ class IncidentFilterForm(forms.Form):
         is_open = bool(self.cleaned_data.get("open"))
         is_closed = bool(self.cleaned_data.get("closed"))
 
+        # short lived alarms are always closed, so we don't extra filter on open/closed
+        if self.cleaned_data.get("short_lived"):
+            return queryset
+
         if not (is_open ^ is_closed):
             return queryset
         q = Q(end_time__isnull=False, end_time__gt=Now())
         if is_closed:
             q = ~q
         return queryset.filter(q)
+
+    def _filter_by_short_lived(self, queryset):
+        if self.cleaned_data.get("short_lived"):
+            return queryset.filter(metadata__short_lived=True)
+        return queryset
 
     def _filter_by_description(self, queryset):
         if not (description := self.cleaned_data.get("description")):
