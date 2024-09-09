@@ -57,7 +57,16 @@ module.exports = {
             },
             lineHeight: {
                 '2': '0.5rem',
-              }
+            },
+            animation: {
+                'blink': 'blink 2s infinite'
+            },
+            keyframes: {
+                blink: {
+                    '0%, 49%, 100%': { opacity: '1' },
+                    '50%, 99%': { opacity: '0' },
+                }
+            },
         },
     },
     safelist: [
