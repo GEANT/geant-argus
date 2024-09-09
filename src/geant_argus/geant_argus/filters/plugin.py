@@ -128,6 +128,7 @@ class IncidentFilterForm(forms.Form):
     )
     newest_first = forms.BooleanField(required=False)
     short_lived = forms.BooleanField(required=False)
+
     field_order = [
         "status",
         "description",
