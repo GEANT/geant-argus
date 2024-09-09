@@ -14,7 +14,6 @@ from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # n
 from argus.filter.filters import Filter
 from django import forms
 from django.db.models import Q, QuerySet
-from django.db.models.functions import Now
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
@@ -75,7 +74,8 @@ class GeantFilterBackend(BaseFilterBackend):
 
     def incident_list_filter(self, request, queryset):
         form = IncidentFilterForm(
-            request.GET or {"open": True, "min_severity": IncidentSeverity.WARNING.value}
+            request.GET
+            or {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value},
         )
         return form, form.filter_queryset(queryset)
 
@@ -112,15 +112,30 @@ class GeantBooleanFiltering:
             return Q(**{f"{db_field}__icontains": rule["value"]})
 
 
+class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    template_name = "forms/daisy_multiple_select_checkbox.html"
+
+
 class IncidentFilterForm(forms.Form):
-    open = forms.BooleanField(required=False)
-    closed = forms.BooleanField(required=False)
+    status = forms.MultipleChoiceField(
+        required=False,
+        choices=[("active", "Active"), ("clear", "Clear"), ("closed", "Closed")],
+        widget=DaisyCheckboxSelectMultiple,
+    )
     description = forms.CharField(max_length=255, required=False)
     newest_first = forms.BooleanField(required=False)
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
-    field_order = ["open", "closed", "description", "filter_pk", "min_severity", "newest_first"]
+    short_lived = forms.BooleanField(required=False)
+    field_order = [
+        "status",
+        "description",
+        "filter_pk",
+        "min_severity",
+        "newest_first",
+        "short_lived",
+    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -132,14 +147,20 @@ class IncidentFilterForm(forms.Form):
                 *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
             ],
         )
-        self.order_fields(self.field_order)
+
+    min_severity = forms.ChoiceField(
+        required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
+    )
+    newest_first = forms.BooleanField(required=False)
+    short_lived = forms.BooleanField(required=False)
 
     def filter_queryset(self, queryset):
         if not self.is_valid():
             return queryset
 
         queryset = self._filter_by_pk(queryset)
-        queryset = self._filter_by_open_close(queryset)
+        queryset = self._filter_by_status(queryset)
+        queryset = self._filter_by_short_lived(queryset)
         queryset = self._filter_by_description(queryset)
         queryset = self._filter_by_severity(queryset)
         queryset = self._order_by_newest_first(queryset)
@@ -156,16 +177,17 @@ class IncidentFilterForm(forms.Form):
             return queryset
         return FILTER_MODEL.filter_queryset(queryset, filter.filter)
 
-    def _filter_by_open_close(self, queryset):
-        is_open = bool(self.cleaned_data.get("open"))
-        is_closed = bool(self.cleaned_data.get("closed"))
-
-        if not (is_open ^ is_closed):
+    def _filter_by_status(self, queryset):
+        status = [s.upper() for s in self.cleaned_data.get("status")]
+        # short lived alarms are always closed, so we don't extra filter on open/closed
+        if bool(self.cleaned_data.get("short_lived")):
             return queryset
-        q = Q(end_time__isnull=False, end_time__gt=Now())
-        if is_closed:
-            q = ~q
-        return queryset.filter(q)
+        return queryset.filter(metadata__status__in=status)
+
+    def _filter_by_short_lived(self, queryset):
+        if bool(self.cleaned_data.get("short_lived")):
+            return queryset.filter(metadata__short_lived=True)
+        return queryset
 
     def _filter_by_description(self, queryset):
         if not (description := self.cleaned_data.get("description")):
