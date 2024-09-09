@@ -1,0 +1,38 @@
+{% extends "htmx/base.html" %}
+{% block main %}
+  <div class="p-6 flex justify-center">
+    <div class="card border border-neutral p-2 w-full sm:w-96 flex items-center">
+      <h2 class="card-title">Log in</h2>
+      <div class="card-body">
+        <form method="post" class="flex gap-6 flex-col">
+          {% csrf_token %}
+          <label class="items-center gap-2 flex flex-row">
+            <span class="w-24">Username:</span>
+            <div class="indicator ">
+              <span class="indicator-item indicator-top indicator-start badge border-none mask mask-circle text-warning text-base">＊</span>
+              <input type="text"
+                     class="input input-bordered appearance-none grow border-none"
+                     name="username"
+                     autofocus
+                     autocomplete="username"
+                     maxlength="150"
+                     required>
+            </div>
+          </label>
+          <label class="items-center gap-2 flex flex-row">
+            <span class="w-24">Password:</span>
+            <div class="indicator flex-row">
+              <span class="indicator-item indicator-top indicator-start badge border-none mask mask-circle text-warning text-base">＊</span>
+              <input type="password"
+                     class="input input-bordered appearance-none grow border-none"
+                     name="password"
+                     autocomplete="current-password"
+                     required>
+            </div>
+          </label>
+          <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock main %}
