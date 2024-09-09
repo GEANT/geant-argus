@@ -126,6 +126,7 @@ class IncidentFilterForm(forms.Form):
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
+    newest_first = forms.BooleanField(required=False)
     short_lived = forms.BooleanField(required=False)
     field_order = [
         "status",
@@ -146,12 +147,7 @@ class IncidentFilterForm(forms.Form):
                 *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
             ],
         )
-
-    min_severity = forms.ChoiceField(
-        required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
-    )
-    newest_first = forms.BooleanField(required=False)
-    short_lived = forms.BooleanField(required=False)
+        self.order_fields(self.field_order)
 
     def filter_queryset(self, queryset):
         if not self.is_valid():
