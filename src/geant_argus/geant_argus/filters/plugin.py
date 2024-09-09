@@ -123,7 +123,6 @@ class IncidentFilterForm(forms.Form):
         widget=DaisyCheckboxSelectMultiple,
     )
     description = forms.CharField(max_length=255, required=False)
-    newest_first = forms.BooleanField(required=False)
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
@@ -180,12 +179,12 @@ class IncidentFilterForm(forms.Form):
     def _filter_by_status(self, queryset):
         status = [s.upper() for s in self.cleaned_data.get("status")]
         # short lived alarms are always closed, so we don't extra filter on open/closed
-        if bool(self.cleaned_data.get("short_lived")):
+        if self.cleaned_data.get("short_lived"):
             return queryset
         return queryset.filter(metadata__status__in=status)
 
     def _filter_by_short_lived(self, queryset):
-        if bool(self.cleaned_data.get("short_lived")):
+        if self.cleaned_data.get("short_lived"):
             return queryset.filter(metadata__short_lived=True)
         return queryset
 
