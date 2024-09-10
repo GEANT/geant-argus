@@ -1,0 +1,8 @@
+{% if use_tag %}
+  <{{ tag }}
+  {% if field.field.widget.label_class %}class="{{ field.field.widget.label_class }}"{% endif %}
+  {% include "django/forms/attrs.html" %}
+  ><span>{{ label }}</span> </{{ tag }}>
+{% else %}
+  {{ label }}
+{% endif %}

@@ -22,6 +22,12 @@ from rest_framework.filters import BaseFilterBackend
 from geant_argus.geant_argus.filters.filters import FILTER_MODEL
 from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
+from geant_argus.geant_argus.widgets import (
+    DaisyCheckboxInput,
+    DaisyCheckboxSelectMultiple,
+    DaisyTextInput,
+    DaisySelect,
+)
 
 SUPPORTED_FILTER_VERSIONS = ["v1"]
 
@@ -112,22 +118,36 @@ class GeantBooleanFiltering:
             return Q(**{f"{db_field}__icontains": rule["value"]})
 
 
-class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
-    template_name = "forms/daisy_multiple_select_checkbox.html"
-
-
 class IncidentFilterForm(forms.Form):
+    template_name_label = "forms/label.html"
     status = forms.MultipleChoiceField(
         required=False,
         choices=[("active", "Active"), ("clear", "Clear"), ("closed", "Closed")],
         widget=DaisyCheckboxSelectMultiple,
+        template_name="forms/field.html",
     )
-    description = forms.CharField(max_length=255, required=False)
+    description = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=DaisyTextInput,
+        template_name="forms/field.html",
+    )
     min_severity = forms.ChoiceField(
-        required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
+        required=False,
+        choices=[(s.value, s.name) for s in IncidentSeverity],
+        widget=DaisySelect,
+        template_name="forms/field.html",
     )
-    newest_first = forms.BooleanField(required=False)
-    short_lived = forms.BooleanField(required=False)
+    newest_first = forms.BooleanField(
+        required=False,
+        widget=DaisyCheckboxInput,
+        template_name="forms/field.html",
+    )
+    short_lived = forms.BooleanField(
+        required=False,
+        widget=DaisyCheckboxInput,
+        template_name="forms/field.html",
+    )
 
     field_order = [
         "status",
@@ -147,6 +167,8 @@ class IncidentFilterForm(forms.Form):
                 ("", "------"),
                 *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
             ],
+            widget=DaisySelect,
+            template_name="forms/field.html",
         )
         self.order_fields(self.field_order)
 

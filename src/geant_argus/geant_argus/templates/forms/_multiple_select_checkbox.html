@@ -1,0 +1,14 @@
+{% with id=widget.attrs.id %}
+  <div {% if id %}id="{{ id }}"{% endif %}>
+    {% for group, options, index in widget.optgroups %}
+      {% if group %}
+        <div>
+          <label>{{ group }}</label>
+        {% endif %}
+        {% for option in options %}
+          <div>{% include "forms/_input_option.html" with widget=option %}</div>
+        {% endfor %}
+        {% if group %}</div>{% endif %}
+    {% endfor %}
+  </div>
+{% endwith %}

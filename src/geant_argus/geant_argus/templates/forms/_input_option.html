@@ -1,0 +1,9 @@
+{% if widget.wrap_label %}
+  <label {% if widget.attrs.id %}for="{{ widget.attrs.id }}"{% endif %}
+         {% if widget.label_class %}class="{{ widget.label_class }}"{% endif %}>
+  {% endif %}
+  {% include "./_input.html" %}
+  {% if widget.wrap_label %}
+    <span>{{ widget.label }}</span>
+  </label>
+{% endif %}
