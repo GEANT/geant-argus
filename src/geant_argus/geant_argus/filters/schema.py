@@ -9,6 +9,7 @@ FILTER_SCHEMA_V1 = {
                 "field": {"type": "string"},
                 "operator": {"type": "string"},
                 "value": {"type": "string"},
+                "unit": {"type": "string"},
             },
             "required": ["type", "field", "operator", "value"],
         },

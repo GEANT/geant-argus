@@ -3,7 +3,7 @@
   // timers when this script snippet is autoreloaded by htmx to prevent memory leaks.
 
   window.setCounter = function() {
-    counter = document.getElementById('refresh-counter')
+    let counter = document.getElementById('refresh-counter')
     if (!counter) return;
 
     if (window.serviceStatusBoxTimer) {
