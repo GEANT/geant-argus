@@ -12,8 +12,9 @@ from argus.filter.default import FilterSerializer as DefaultFilterSerializer
 from argus.filter.default import IncidentFilter as DefaultIncidentFilter
 from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # noqa: F401
 from argus.filter.filters import Filter
+from argus.incident.models import Event
 from django import forms
-from django.db.models import Q, QuerySet
+from django.db.models import Q, QuerySet, Subquery, OuterRef
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
@@ -159,6 +160,7 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._filter_by_description(queryset)
         queryset = self._filter_by_severity(queryset)
+        queryset = self._annotate_acks(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
 
@@ -195,12 +197,32 @@ class IncidentFilterForm(forms.Form):
             return queryset
         return queryset.filter(level__lte=level)
 
+    def _annotate_acks(self, queryset):
+        return queryset.annotate(
+            noc_ack=Subquery(
+                Event.objects.filter(
+                    incident=OuterRef("pk"), type="ACK", actor__groups__name="noc"
+                )
+                .order_by("-timestamp")
+                .values("timestamp")[:1]
+            ),
+            servicedesk_ack=Subquery(
+                Event.objects.filter(
+                    incident=OuterRef("pk"), type="ACK", actor__groups__name="servicedesk"
+                )
+                .order_by("-timestamp")
+                .values("timestamp")[:1]
+            ),
+        )
+
     def _order_by_newest_first(self, queryset):
         if self.cleaned_data.get("newest_first"):
             return queryset.order_by("-start_time")
         # Here we are lucky that statuses 'active', 'clear', 'closed' are alphabetically
         # in that order, so it's easy to sort
-        return queryset.order_by("metadata__status", "level", "-start_time")
+        return queryset.order_by(
+            "-noc_ack", "-servicedesk_ack", "metadata__status", "level", "-start_time"
+        )
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):
