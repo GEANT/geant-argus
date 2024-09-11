@@ -29,4 +29,21 @@
   input[type="number"].hide-buttons {
     -moz-appearance: textfield;
   }
+
+  .inline-label {
+    position: relative;
+    padding-top: 0.5rem;
+  }
+
+  .inline-label > span {
+    position: absolute;
+    top: -18px;
+    left: 10px;
+    z-index: 1;
+    @apply badge;
+    @apply border-none;
+    @apply text-xs;
+    @apply px-1;
+    @apply bg-base-100;
+  }
 }

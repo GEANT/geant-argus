@@ -1,0 +1,21 @@
+<form>
+  <fieldset hx-get="{% url 'htmx:incident-list' %}"
+            hx-include="this"
+            hx-trigger="change delay:100ms"
+            hx-target="#table"
+            hx-swap="outerHTML"
+            hx-push-url="true">
+    <legend class="sr-only">Filter incidents</legend>
+    <div class="flex items-center gap-4 py-1.5 text-sm">
+      {% for field in filter_form %}
+        <div {% if field.field.widget.wrapper_class %}class="{{ field.field.widget.wrapper_class }}"{% endif %}>
+          {{ field.render }}
+        </div>
+      {% empty %}
+        No filter fields configured
+      {% endfor %}
+    </div>
+    <ul class="menu menu-horizontal menu-sm flex items-center gap-2 py-1.5">
+    </ul>
+  </fieldset>
+</form>
