@@ -4,8 +4,10 @@ import json
 from argus.auth.models import User
 from argus.incident.models import Incident
 from django import template
+from django.conf import settings
 from django.template.defaultfilters import stringfilter
 from django.utils import timezone
+
 from ..incidents.severity import IncidentSeverity
 
 register = template.Library()
@@ -97,15 +99,21 @@ MUST_ACK_TIMEDELTA = datetime.timedelta(minutes=10)
 
 @register.filter
 def must_ack(incident: Incident):
+    must_ack_timedelta = None
+    if (must_ack_within_minutes := getattr(settings, "MUST_ACK_WITHIN_MINUTES", None)) is not None:
+        must_ack_timedelta = datetime.timedelta(minutes=must_ack_within_minutes)
     is_ack = is_acked(incident, group="any")
-    is_closed = incident.metadata.get("status", "").lower() == "closed"
     return (
-        not is_closed and not is_ack and timezone.now() > incident.start_time + MUST_ACK_TIMEDELTA
+        not is_ack
+        and can_ack(incident)
+        and must_ack_timedelta is not None
+        and timezone.now() > incident.start_time + must_ack_timedelta
     )
 
 
 @register.filter
 def can_ack(incident: Incident):
     return (
-        incident.metadata.get("phase") != "PENDING" and incident.metadata.get("status") != "CLOSED"
+        incident.metadata.get("phase", "").upper() != "PENDING"
+        and incident.metadata.get("status", "").upper() != "CLOSED"
     )
