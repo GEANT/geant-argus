@@ -1,2 +1,4 @@
 {% load incident_extras %}
-{{ incident.level | to_severity }}
+<div class="badge {{ incident|levelbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
+  {{ incident.level|to_severity }}
+</div>

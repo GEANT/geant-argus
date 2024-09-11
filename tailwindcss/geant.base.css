@@ -13,4 +13,20 @@
   .radio {
     background-color: white;
   }
+
+  .htmx-loading-pulse.htmx-request {
+    @apply animate-pulse;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button.hide-buttons,
+  input::-webkit-inner-spin-button.hide-buttons {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"].hide-buttons {
+    -moz-appearance: textfield;
+  }
 }
