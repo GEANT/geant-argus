@@ -12,6 +12,8 @@ applications written in Django
 
 ## Development
 
+_note_ additional information on how we customize Argus can be found in `DEVELOPMENT.md`
+
 ### Installation
 
 Install this package editable
@@ -25,6 +27,7 @@ alternatively you can also install [Argus](https://github.com/Uninett/Argus/) an
 out those repos
 
 ### Database
+
 Get a postgres database. For example, you can start one using docker:
 
 ```bash
@@ -83,6 +86,7 @@ make watch-tailwind
 ```
 
 #### Updating the CSS file on commit
+
 During development you should create your css file as `geant.css` using the above steps. However,
 for packaging and production. We use a minified version of the css file. This file is included in
 the repository and package. If you're committing any changes to `tailwind.config.template.js` or
@@ -92,7 +96,9 @@ any of the templates, you should also update the minified version of
 ```bash
 make css
 ```
+
 ### Prepare database for first use
+
 If you are connected to a virgin postgres database, you first need to prepare it
 
 ```
@@ -113,4 +119,3 @@ You can now run the development server
 ```
 ./cmd.sh runserver
 ```
-
