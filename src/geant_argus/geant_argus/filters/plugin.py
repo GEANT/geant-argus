@@ -14,7 +14,7 @@ from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # n
 from argus.filter.filters import Filter
 from argus.incident.models import Event
 from django import forms
-from django.db.models import Q, QuerySet, Subquery, OuterRef
+from django.db.models import Q, QuerySet, OuterRef, Exists
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
@@ -199,19 +199,16 @@ class IncidentFilterForm(forms.Form):
 
     def _annotate_acks(self, queryset):
         return queryset.annotate(
-            noc_ack=Subquery(
+            any_ack=Exists(Event.objects.filter(incident=OuterRef("pk"), type="ACK")),
+            noc_ack=Exists(
                 Event.objects.filter(
                     incident=OuterRef("pk"), type="ACK", actor__groups__name="noc"
                 )
-                .order_by("-timestamp")
-                .values("timestamp")[:1]
             ),
-            servicedesk_ack=Subquery(
+            servicedesk_ack=Exists(
                 Event.objects.filter(
                     incident=OuterRef("pk"), type="ACK", actor__groups__name="servicedesk"
                 )
-                .order_by("-timestamp")
-                .values("timestamp")[:1]
             ),
         )
 
@@ -220,9 +217,7 @@ class IncidentFilterForm(forms.Form):
             return queryset.order_by("-start_time")
         # Here we are lucky that statuses 'active', 'clear', 'closed' are alphabetically
         # in that order, so it's easy to sort
-        return queryset.order_by(
-            "-noc_ack", "-servicedesk_ack", "metadata__status", "level", "-start_time"
-        )
+        return queryset.order_by("any_ack", "metadata__status", "level", "-start_time")
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):

@@ -1,7 +1,8 @@
 from argus.incident.models import Incident
 from django import forms
-from django.http import HttpRequest, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django_htmx.middleware import HtmxDetails
 
@@ -26,12 +27,11 @@ def acknowledge_incident(request: HtmxHttpRequest, pk: int):
     incident = get_object_or_404(Incident, id=pk)
 
     is_group_member = request.user.groups.filter(name=group).exists()
-    if not is_group_member:
-        status = 401
-    else:
+    if is_group_member:
         incident.create_ack(request.user, description="Acknowledged using the UI")
-        status = 200
-    context = {"column": {"context": group}, "incident": incident, "is_ack": True}
-    return render(
-        request, "htmx/incidents/_incident_group_ack.html", context=context, status=status
-    )
+
+    redirect_to = reverse("htmx:incident-list")
+    if request.htmx:
+        redirect_to = request.htmx.current_url_abs_path or redirect_to
+        return HttpResponse(headers={"HX-Redirect": redirect_to})
+    return redirect(redirect_to)

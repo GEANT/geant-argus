@@ -1,9 +1,12 @@
+import datetime
 import json
 
 from argus.auth.models import User
 from argus.incident.models import Incident
 from django import template
+from django.conf import settings
 from django.template.defaultfilters import stringfilter
+from django.utils import timezone
 
 from ..incidents.severity import IncidentSeverity
 
@@ -87,6 +90,30 @@ def has_group(user: User, group):
 
 
 @register.filter
-def is_acked_by(incident, group: str) -> bool:
-    """Backport of filter with the same name in argus-htmx-frontend"""
+def is_acked(incident, group: str) -> bool:
     return bool(getattr(incident, f"{group}_ack", None))
+
+
+MUST_ACK_TIMEDELTA = datetime.timedelta(minutes=10)
+
+
+@register.filter
+def must_ack(incident: Incident):
+    must_ack_timedelta = None
+    if (must_ack_within_minutes := getattr(settings, "MUST_ACK_WITHIN_MINUTES", None)) is not None:
+        must_ack_timedelta = datetime.timedelta(minutes=must_ack_within_minutes)
+    is_ack = is_acked(incident, group="any")
+    return (
+        not is_ack
+        and can_ack(incident)
+        and must_ack_timedelta is not None
+        and timezone.now() > incident.start_time + must_ack_timedelta
+    )
+
+
+@register.filter
+def can_ack(incident: Incident):
+    return (
+        incident.metadata.get("phase", "").upper() != "PENDING"
+        and incident.metadata.get("status", "").upper() != "CLOSED"
+    )
