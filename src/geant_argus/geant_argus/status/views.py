@@ -18,7 +18,6 @@ CORRELATOR_REL_TIME = [
 
 @require_GET
 def service_status(request: HttpRequest):
-    print(settings.USE_TZ)
     return render(
         request, "htmx/status/_status_checker_widget_content.html", context=get_service_info()
     )
