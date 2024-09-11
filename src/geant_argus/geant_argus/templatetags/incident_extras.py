@@ -87,23 +87,25 @@ def has_group(user: User, group):
     return user.groups.filter(name=group).exists()
 
 
-ACK_GROUPS = ("noc", "sd")
-MUST_ACK_TIMEDELTA = datetime.timedelta(hours=2, minutes=10)
+@register.filter
+def is_acked(incident, group: str) -> bool:
+    return bool(getattr(incident, f"{group}_ack", None))
+
+
+MUST_ACK_TIMEDELTA = datetime.timedelta(minutes=10)
 
 
 @register.filter
-def is_acked(incident, group: str | None = None) -> bool:
-    """Backport of filter with the same name in argus-htmx-frontend"""
-    if not group:
-        group = ACK_GROUPS
-    if isinstance(group, str):
-        group = [group]
-
-    return any((getattr(incident, f"{g}_ack", None) for g in group))
+def must_ack(incident: Incident):
+    is_ack = is_acked(incident, group="any")
+    is_closed = incident.metadata.get("status", "").lower() == "closed"
+    return (
+        not is_closed and not is_ack and timezone.now() > incident.start_time + MUST_ACK_TIMEDELTA
+    )
 
 
 @register.filter
-def must_ack(incident: Incident, group: str | None = None):
-    is_ack = is_acked(incident, group)
-    print(incident.start_time)
-    return not is_ack and timezone.now() > incident.start_time + MUST_ACK_TIMEDELTA
+def can_ack(incident: Incident):
+    return (
+        incident.metadata.get("phase") != "PENDING" and incident.metadata.get("status") != "CLOSED"
+    )

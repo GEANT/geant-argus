@@ -11,7 +11,7 @@
     {% else %}
       <input type="checkbox"
              class="checkbox checkbox-sm checkbox-primary border {% if incident|must_ack %}checkbox-error bg-error/50 disabled:bg-error/40{% endif %}"
-             {% if incident|is_acked:group %}checked disabled{% elif not user|has_group:group %}disabled{% elif incident.metadata.phase == "PENDING" %}disabled{% endif %}
+             {% if incident|is_acked_by:group %}checked disabled{% elif not user|has_group:group %}disabled{% elif not incident|can_ack %}disabled{% endif %}
              hx-post="{% url 'geant-incidents:ack-incident' pk=incident.pk %}?group={{ group }}"
              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
              hx-indicator="#incident-{{ incident.pk }}-{{ group }}-ack">

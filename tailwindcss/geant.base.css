@@ -30,7 +30,7 @@
     -moz-appearance: textfield;
   }
 
-  /*Ack checkboxes get a indicator spinner while processing an htmx ack request */
+  /*Ack checkboxes get an indicator spinner while processing an htmx ack request */
   .ack-checkbox.htmx-request {
     animation: none;
   }
@@ -39,8 +39,5 @@
   }
   .ack-checkbox:not(.htmx-request) .htmx-indicator {
     display: none;
-  }
-  .ack-checkbox.htmx-request .htmx-indicator {
-    display: unset;
   }
 }
