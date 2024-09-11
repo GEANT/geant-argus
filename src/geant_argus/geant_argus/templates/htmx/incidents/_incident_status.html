@@ -1,6 +1,4 @@
 {% load incident_extras %}
-{% if incident.open %}
-  {{ incident.metadata.status|default:"Active"|upperfirst }}
-{% else %}
-  Closed
-{% endif %}
+<div class="badge {{ incident|statusbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
+  {{ incident|incidentstatus }}
+</div>

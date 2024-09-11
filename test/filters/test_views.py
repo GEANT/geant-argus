@@ -8,7 +8,7 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
     "form_data, expected",
     [
         (
-            {"field": "description", "op": "equals", "val": "some value"},
+            {"field": "description", "op": "equals", "val:str": "some value"},
             {
                 "version": "v1",
                 "type": "rule",
@@ -22,10 +22,10 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                 "op": "and",
                 "0_field": "description",
                 "0_op": "equals",
-                "0_val": "some value",
+                "0_val:str": "some value",
                 "1_field": "location",
                 "1_op": "equals",
-                "1_val": "other value",
+                "1_val:str": "other value",
             },
             {
                 "version": "v1",
@@ -53,10 +53,10 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data
                 "0_op": "or",
                 "0_0_field": "description",
                 "0_0_op": "equals",
-                "0_0_val": "some value",
+                "0_0_val:str": "some value",
                 "1_field": "location",
                 "1_op": "equals",
-                "1_val": "other value",
+                "1_val:str": "other value",
             },
             {
                 "version": "v1",

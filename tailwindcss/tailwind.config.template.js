@@ -1,3 +1,13 @@
+const alertColors = {
+    'info': '#0073e5',
+    'info-content': '#204766',
+    'success': '#50c878',
+    'success-content': '#609978',
+    'warning': '#eec200',
+    'warning-content': '#907900',
+    'error': '#f04343',
+    'error-content': '#b03232',
+}
 const baseArgusColors = {
     'primary': '#006d91',
     'primary-content': '#d1e1e9',
@@ -11,22 +21,15 @@ const baseArgusColors = {
     'base-200': '#ced9de',
     'base-300': '#b0babd',
     'base-content': '#141516',
-    'info': '#0073e5',
-    'info-content': '#000512',
-    'success': '#008700',
-    'success-content': '#d3e7d1',
-    'warning': '#ee4900',
-    'warning-content': '#140200',
-    'error': '#e5545a',
-    'error-content': '#120203',
+    ...alertColors
 }
 const incidentColors = {
-    '--color-incident-clear': '80, 200, 120',
-    '--color-incident-warning': '237, 250, 255', // same as base-100
-    '--color-incident-minor': '238, 194, 0',
-    '--color-incident-major': '238, 155, 0',
-    '--color-incident-critical': '240, 67, 67',
+    '--color-incident-clear': '80, 200, 120', // #50c878, same as success
+    '--color-incident-minor': '238, 194, 0', // #eec200, same as warning
+    '--color-incident-major': '238, 155, 0', // #ee9b00
+    '--color-incident-critical': '240, 67, 67', // #f04343, same as critical
 }
+
 
 module.exports = {
     content: [
@@ -36,21 +39,43 @@ module.exports = {
     theme: {
         borderWidth: {
             DEFAULT: '2px',
+            '0': '0',
+            '1': '1px',
+            '2': '2px',
+            '3': '3px',
+            '4': '4px',
+            '6': '6px',
+            '8': '8px',
         },
         extend: {
             colors: {
                 'incident-major': 'rgba(var(--color-incident-major), <alpha-value>)',
                 'incident-minor': 'rgba(var(--color-incident-minor), <alpha-value>)',
                 'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
-                'incident-warning': 'rgba(var(--color-incident-warning), <alpha-value>)',
+                'incident-warning': 'oklch(var(--b1)/<alpha-value>)', // same as base-100
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
+            },
+            lineHeight: {
+                '2': '0.5rem',
+            },
+            animation: {
+                'blink': 'blink 2s infinite'
+            },
+            keyframes: {
+                blink: {
+                    '0%, 49%, 100%': { opacity: '1' },
+                    '50%, 99%': { opacity: '0' },
+                }
             },
         },
     },
     safelist: [
         // these classes are dynamically generated so not seen by tailwind
         {
-            pattern: /bg-incident-(clear|warning|minor|major|critical)\/50/,
+            pattern: /(bg|border)-incident-(clear|warning|minor|major|critical)/,
+        },
+        {
+            pattern: /bg-(success|warning|error|slate-300)/,
         },
     ],
     daisyui: {
@@ -61,7 +86,11 @@ module.exports = {
             },
             'dark': {
                 ...require("daisyui/src/theming/themes")["dark"],
-                ...incidentColors
+                ...incidentColors,
+                '--color-incident-critical': '182, 35, 35',
+                '--color-incident-major': '195, 101, 1',
+                '--color-incident-minor': '146, 137, 0',
+                '--color-incident-clear': '18, 103, 0',
             },
             'argus': {
                 ...baseArgusColors,
@@ -76,71 +105,50 @@ module.exports = {
             },
             "geant-test": {
                 "primary": "#a8c5d5",
-                "primary-content": "#e4f0f5",
+                "primary-content": "#000000",
                 "secondary": "#faedd6",
-                "secondary-content": "#6e5840",
+                "secondary-content": "#000000",
                 "accent": "#b4cc7f",
-                "accent-content": "#f0f5e4",
+                "accent-content": "#000000",
                 "neutral": "#d5c8b0",
-                "neutral-content": "#f5f0e4",
-                "base-100": "#f7f8f2",
+                "neutral-content": "#000000",
+                "base-100": "#f8f7f0",
                 "base-200": "#e2e5d9",
                 "base-300": "#cfd3c6",
-                "base-content": "#4a4b4c",
-                "info": "#85baf0",
-                "info-content": "#4d5b6e",
-                "success": "#81ce81",
-                "success-content": "#e7f2e6",
-                "warning": "#f5a48f",
-                "warning-content": "#6e463a",
-                "error": "#f2a5a9",
-                "error-content": "#4d2a2b",
+                "base-content": "#000000",
+                ...alertColors,
                 ...incidentColors
             },
             "geant-uat": {
                 "primary": "#d1a7c4",
-                "primary-content": "#f7ebf3",
+                "primary-content": "#3E143D",
                 "secondary": "#e6f3e8",
-                "secondary-content": "#405947",
-                "accent": "#d1c4a7",
-                "accent-content": "#f3f0e7",
+                "secondary-content": "#464847",
+                "accent": "#e8c8d1",
+                "accent-content": "#6B1919",
                 "neutral": "#c4a7d1",
-                "neutral-content": "#f5ebf7",
+                "neutral-content": "#4D0000",
                 "base-100": "#f5f7f2",
                 "base-200": "#e0e5da",
-                "base-300": "#ccd3c6",
-                "base-content": "#464847",
-                "info": "#a7c4d1",
-                "info-content": "#4b5b65",
-                "success": "#a7d1a7",
-                "success-content": "#e7f2e7",
-                "warning": "#d1b7a7",
-                "warning-content": "#594a3e",
-                "error": "#d1a7a7",
-                "error-content": "#4a2d2d",
+                "base-300": "#cfd3c6",
+                "base-content": "#284336",
+                ...alertColors,
                 ...incidentColors
             },
             "geant-prod": {
-                "primary": "#f2c94c",
-                "primary-content": "#fff9e0",
-                "secondary": "#f2e5d6",
-                "secondary-content": "#1b4d73",
-                "accent": "#ff6f61",
-                "accent-content": "#ffe6e2",
-                "neutral": "#d9b7a1",
-                "neutral-content": "#f5ebdf",
-                "base-100": "#f9f7f6",
-                "base-200": "#e2e1e2",
-                "base-300": "#c8c6c8",
-                "base-content": "#4a4a4a",
-                "info": "#56c5e0",
-                "info-content": "#0e4e6b",
-                "success": "#6fcf6f",
-                "success-content": "#e6f7e6",
-                "warning": "#ffb74d",
-                "warning-content": "#5c4d27",
-                "error": "#f2a3a3",
-                "error-content": "#6e2c2c",
+                "primary": "#a78ac4",
+                "primary-content": "#1E003D",
+                "secondary": "#d3e8e6",
+                "secondary-content": "#2E3D3E",
+                "accent": "#d1b8c8",
+                "accent-content": "#3B1919",
+                "neutral": "#a7c4d1",
+                "neutral-content": "#2D0000",
+                "base-100": "#f0f2f5",
+                "base-200": "#d4d9e0",
+                "base-300": "#b8c3d0",
+                "base-content": "#223344",
+                ...alertColors,
                 ...incidentColors
             }
         }],
