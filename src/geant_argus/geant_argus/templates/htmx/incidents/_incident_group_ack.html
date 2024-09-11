@@ -3,19 +3,12 @@
 {% with group=column.context.group %}
   <div id="incident-{{ incident.pk }}-{{ group }}-ack"
        class="flex items-center ack-checkbox {% if incident|must_ack %}animate-blink{% endif %}">
-    {% if is_ack %}
-      <input type="checkbox"
-             class="checkbox checkbox-sm border border-primary"
-             checked
-             disabled>
-    {% else %}
-      <input type="checkbox"
-             class="checkbox checkbox-sm border border-primary {% if incident|must_ack %}checkbox-error bg-error/50 disabled:bg-error/40{% endif %}"
-             {% if incident|is_acked_by:group %}checked disabled{% elif not user|has_group:group %}disabled{% elif not incident|can_ack %}disabled{% endif %}
-             hx-post="{% url 'geant-incidents:ack-incident' pk=incident.pk %}?group={{ group }}"
-             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-             hx-indicator="#incident-{{ incident.pk }}-{{ group }}-ack">
-    {% endif %}
+    <input type="checkbox"
+           class="checkbox checkbox-sm checkbox-primary border {% if incident|must_ack %}checkbox-error bg-error/50 disabled:bg-error/40{% endif %}"
+           {% if incident|is_acked_by:group %}checked disabled{% elif not user|has_group:group %}disabled{% elif not incident|can_ack %}disabled{% endif %}
+           hx-post="{% url 'geant-incidents:ack-incident' pk=incident.pk %}?group={{ group }}"
+           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+           hx-indicator="#incident-{{ incident.pk }}-{{ group }}-ack">
     <span class="htmx-indicator loading loading-spinner loading-sm text-primary"></span>
     </
   {% endwith %}
