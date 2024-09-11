@@ -18,15 +18,29 @@
     @apply animate-pulse;
   }
 
+  /* Hide default +/- buttons on numberinputs with .hide-buttons class*/
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button.hide-buttons,
   input::-webkit-inner-spin-button.hide-buttons {
     -webkit-appearance: none;
     margin: 0;
   }
-
   /* Firefox */
   input[type="number"].hide-buttons {
     -moz-appearance: textfield;
+  }
+
+  /*Ack checkboxes get a indicator spinner while processing an htmx ack request */
+  .ack-checkbox.htmx-request {
+    animation: none;
+  }
+  .ack-checkbox.htmx-request input {
+    display: none;
+  }
+  .ack-checkbox:not(.htmx-request) .htmx-indicator {
+    display: none;
+  }
+  .ack-checkbox.htmx-request .htmx-indicator {
+    display: unset;
   }
 }

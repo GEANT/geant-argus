@@ -1,10 +1,11 @@
+import datetime
 import json
 
 from argus.auth.models import User
 from argus.incident.models import Incident
 from django import template
 from django.template.defaultfilters import stringfilter
-
+from django.utils import timezone
 from ..incidents.severity import IncidentSeverity
 
 register = template.Library()
@@ -86,7 +87,23 @@ def has_group(user: User, group):
     return user.groups.filter(name=group).exists()
 
 
+ACK_GROUPS = ("noc", "sd")
+MUST_ACK_TIMEDELTA = datetime.timedelta(hours=2, minutes=10)
+
+
 @register.filter
-def is_acked_by(incident, group: str) -> bool:
+def is_acked(incident, group: str | None = None) -> bool:
     """Backport of filter with the same name in argus-htmx-frontend"""
-    return bool(getattr(incident, f"{group}_ack", None))
+    if not group:
+        group = ACK_GROUPS
+    if isinstance(group, str):
+        group = [group]
+
+    return any((getattr(incident, f"{g}_ack", None) for g in group))
+
+
+@register.filter
+def must_ack(incident: Incident, group: str | None = None):
+    is_ack = is_acked(incident, group)
+    print(incident.start_time)
+    return not is_ack and timezone.now() > incident.start_time + MUST_ACK_TIMEDELTA
