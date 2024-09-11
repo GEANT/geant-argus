@@ -32,6 +32,8 @@ def acknowledge_incident(request: HtmxHttpRequest, pk: int):
 
     redirect_to = reverse("htmx:incident-list")
     if request.htmx:
+        # HX-Current-URL may contain query params that we want to keep. use incident-list
+        # as a fallback option
         redirect_to = request.headers.get("HX-Current-URL", redirect_to)
         return HttpResponse(headers={"HX-Redirect": redirect_to})
     return redirect(redirect_to)
