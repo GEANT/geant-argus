@@ -37,7 +37,7 @@ def level_to_badge(incident: Incident):
         case IncidentSeverity.MINOR:
             color = "incident-minor"
         case IncidentSeverity.WARNING:
-            color = "incident-warning"
+            color = "incident-warning border-base-200"
         case _:
             return "badge-outline-ghost"
 
