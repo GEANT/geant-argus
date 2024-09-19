@@ -14,7 +14,7 @@ from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # n
 from argus.filter.filters import Filter
 from argus.incident.models import Event
 from django import forms
-from django.db.models import Q, QuerySet, OuterRef, Exists
+from django.db.models import Q, QuerySet, OuterRef, Exists, Case, When, Value
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
@@ -199,7 +199,10 @@ class IncidentFilterForm(forms.Form):
 
     def _annotate_acks(self, queryset):
         return queryset.annotate(
-            any_ack=Exists(Event.objects.filter(incident=OuterRef("pk"), type="ACK")),
+            any_ack=Case(
+                When(metadata__status="CLOSED", then=Value(True)),
+                default=Exists(Event.objects.filter(incident=OuterRef("pk"), type="ACK")),
+            ),
             noc_ack=Exists(
                 Event.objects.filter(
                     incident=OuterRef("pk"), type="ACK", actor__groups__name="noc"
