@@ -136,6 +136,15 @@ METADATA_V0A4_SCHEMA = {
             "required": ["object_type"],
             "additionalProperties": False,
         },
+        "blacklist_info": {
+            "type": "object",
+            "properties": {
+                "applied": {"type": "boolean"},
+                "message": {"type": "string"},
+                "original_severity": {"type": "string"},
+            },
+            "additionalProperties": False,
+        },
     },
     "properties": {
         "version": {"const": "v0a4"},
@@ -166,14 +175,14 @@ METADATA_V0A4_SCHEMA = {
             "additionalProperties": False,
         },
         "description": {"type": "string"},
-        "coalesce_count": {"type": "integer"},
-        "endpoint_count": {"type": "integer"},
+        "blacklist": {"$ref": "#/definitions/blacklist_info"},
         "short_lived": {"type": "boolean"},
     },
     "required": [
         "version",
         "phase",
         "severity",
+        "blacklist",
         "endpoints",
         "description",
     ],
