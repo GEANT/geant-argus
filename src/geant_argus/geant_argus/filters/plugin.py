@@ -1,5 +1,3 @@
-import functools
-import operator
 from typing import Any, Dict
 
 import jsonschema
@@ -14,14 +12,14 @@ from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # n
 from argus.filter.filters import Filter
 from argus.incident.models import Event
 from django import forms
-from django.db.models import Q, QuerySet, OuterRef, Exists, Case, When, Value
+from django.db.models import OuterRef, Exists, Case, When, Value
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
 
-from geant_argus.geant_argus.filters.filters import FILTER_MODEL
-from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
+from .filters import FILTER_MODEL
+from .schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
 SUPPORTED_FILTER_VERSIONS = ["v1"]
@@ -82,35 +80,6 @@ class GeantFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view=None):
         return IncidentFilterForm(request.GET or None).filter_queryset(queryset)
-
-
-class GeantBooleanFiltering:
-    FILTER_FIELD_MAPPING = {"description": "metadata__description"}
-
-    def __init__(self, filter: Filter):
-        self.filter_dict = filter.filter
-        assert self.filter_dict["version"] == "v1", "unsupported filter version"
-
-    def filter(self, qs: QuerySet) -> QuerySet:
-        return qs.filter(self._parse_item(self.filter_dict))
-
-    def _parse_item(self, item: dict):
-        if item["type"] == "group":
-            return self._parse_group(item)
-        if item["type"] == "rule":
-            return self._parse_rule(item)
-        raise ValueError("invalid item type")
-
-    def _parse_group(self, group: dict):
-        op = operator.ior if group["operator"] == "or" else operator.iand
-        return functools.reduce(op, (self._parse_item(i) for i in group["items"]))
-
-    def _parse_rule(self, rule: dict):
-        db_field = self.FILTER_FIELD_MAPPING[rule["field"]]
-        if rule["operator"] == "equals":
-            return Q(**{db_field: rule["value"]})
-        if rule["operator"] == "contains":
-            return Q(**{f"{db_field}__icontains": rule["value"]})
 
 
 class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
