@@ -22,7 +22,6 @@ def _level_to_severity(value):
 
 @register.filter(name="to_severity")
 def level_to_severity(value):
-    """Removes all values of arg from the given string"""
     return _level_to_severity(value).name
 
 
@@ -31,17 +30,17 @@ def level_to_badge(incident: Incident):
     severity = _level_to_severity(incident.level)
     match severity:
         case IncidentSeverity.CRITICAL:
-            color = "incident-critical"
+            classes = ["incident-critical"]
         case IncidentSeverity.MAJOR:
-            color = "incident-major"
-        case IncidentSeverity.MINOR:
-            color = "incident-minor"
-        case IncidentSeverity.WARNING:
-            color = "incident-warning"
-        case _:
-            return "badge-outline-ghost"
+            classes = ["incident-major"]
 
-    return f'bg-{color}{"/50" if not incident.open else ""} border-{color}'
+        case IncidentSeverity.MINOR:
+            classes = ["incident-minor"]
+        case _:
+            classes = ["incident-default"]
+    if not incident.open:
+        classes.append("incident-closed")
+    return " ".join(classes)
 
 
 def _incident_status(incident: Incident):
@@ -62,9 +61,9 @@ def incident_status_badge(incident: Incident):
         case "Active":
             return "badge-primary"
         case "Clear":
-            return "bg-incident-clear border-incident-clear"
+            return "incident-clear"
         case "Closed":
-            return "badge-outline-ghost"
+            return "incident-default"
 
 
 @register.filter
@@ -117,3 +116,17 @@ def can_ack(incident: Incident):
         incident.metadata.get("phase", "").upper() != "PENDING"
         and incident.metadata.get("status", "").upper() != "CLOSED"
     )
+
+
+@register.filter
+def blacklist_symbol(incident: Incident):
+    match incident.metadata:
+        case {"blacklist": {"original_severity": str(severity)}} if severity in IncidentSeverity:
+            if IncidentSeverity[severity] > incident.level:
+                return "▲"
+            if IncidentSeverity[severity] == incident.level:
+                return "="
+            if IncidentSeverity[severity] < incident.level:
+                return "▼"
+        case _:
+            return "?"
