@@ -2,7 +2,8 @@ import dataclasses
 
 import pytest
 
-from geant_argus.geant_argus.templatetags.incident_extras import level_to_badge
+from geant_argus.geant_argus.incidents.severity import IncidentSeverity
+from geant_argus.geant_argus.templatetags.incident_extras import blacklist_symbol, level_to_badge
 
 
 @dataclasses.dataclass
@@ -25,3 +26,20 @@ class FakeIncident:
 )
 def test_level_to_badge(incident, expected_classes):
     assert level_to_badge(incident) == expected_classes
+
+
+@pytest.mark.parametrize(
+    "original_severity, final_severity, symbol",
+    [
+        ("CRITICAL", "MINOR", "▼"),
+        ("MAJOR", "MAJOR", "="),
+        ("MAJOR", "CRITICAL", "▲"),
+        (None, "MINOR", "?"),
+    ],
+)
+def test_blacklist_symbol(original_severity, final_severity, symbol):
+    incident = FakeIncident(
+        level=IncidentSeverity[final_severity],
+        metadata={"blacklist": {"original_severity": original_severity}},
+    )
+    assert blacklist_symbol(incident) == symbol
