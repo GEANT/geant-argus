@@ -159,7 +159,7 @@ class IncidentFilterForm(forms.Form):
     def _filter_by_description(self, queryset):
         if not (description := self.cleaned_data.get("description")):
             return queryset
-        return queryset.filter(metadata__description__icontains=description)
+        return queryset.filter(description__icontains=description)
 
     def _filter_by_severity(self, queryset):
         if not (level := self.cleaned_data.get("min_severity")):
