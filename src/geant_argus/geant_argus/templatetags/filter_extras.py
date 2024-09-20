@@ -21,8 +21,3 @@ def is_multiple(arr: Optional[list]):
     if not arr:
         return False
     return len(arr) > 1
-
-
-@register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)

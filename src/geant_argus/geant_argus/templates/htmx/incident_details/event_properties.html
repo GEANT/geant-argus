@@ -1,0 +1,23 @@
+<button type="button"
+        class="bg-accent hover:bg-neutral text-accent-content py-1 px-2 rounded"
+        onclick="modal_{{ event.properties.id }}.showModal()">See more</button>
+<dialog id="modal_{{ event.properties.id }}" class="modal">
+  <div class="modal-box bg-base-200">
+    <h3 class="text-lg font-bold">Additional properties</h3>
+    <table class="table">
+      <tbody>
+        {% for key, value in event.properties.items %}
+          <tr>
+            <th>{{ key }}</th>
+            <td>{{ value }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn bg-neutral text-neutral-content">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
