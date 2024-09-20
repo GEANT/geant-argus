@@ -70,12 +70,16 @@ INCIDENT_TABLE_COLUMNS = [
     IncidentTableColumn(
         "location",
         label="Location",
-        cell_template="htmx/incidents/_incident_location.html",
+        cell_template="htmx/incidents/_incident_location_equipment.html",
+        header_template="htmx/incidents/_incident_location_header.html",
+        context={"field": "location"},
     ),
     IncidentTableColumn(
         "equipment",
         label="Equipment",
-        cell_template="htmx/incidents/_incident_equipment.html",
+        cell_template="htmx/incidents/_incident_location_equipment.html",
+        header_template="htmx/incidents/_incident_equipment_header.html",
+        context={"field": "equipment"},
     ),
     IncidentTableColumn(
         "description",
