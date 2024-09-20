@@ -1,7 +1,7 @@
 {% extends "htmx/base.html" %}
 {% load incident_extras %}
 {% block main %}
-  <section class="">
+  <section>
     <div class="rounded-box border border-accent p-2">
       <h1 class="font-bold text-2xl ml-2">Incident Details</h1>
       <div class="p-4 md:pr-16 lg:pr-24 xl:pr-60">
@@ -50,9 +50,9 @@
   </section>
   {% block incident_detail %}
     {% if incident.metadata and incident.metadata.version == "v0a4" %}
-      {% include './_incident_detail_v0a4.html' %}
+      {% include "./_incident_detail_v0a4.html" %}
     {% elif incident.metadata and incident.metadata.version == "v0a5" %}
-      {% include './_incident_detail_v0a5.html' %}
+      {% include "./_incident_detail_v0a5.html" %}
     {% else %}
       <p class="text-red-500">Cannot show additional information (mismatched metadata version)</p>
     {% endif %}
