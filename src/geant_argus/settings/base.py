@@ -84,7 +84,7 @@ INCIDENT_TABLE_COLUMNS = [
     ),
     IncidentTableColumn(
         "ticket_ref",
-        label="Ticket Reference",
+        label="TT",
         cell_template="htmx/incidents/_incident_ticket_ref.html",
     ),
     IncidentTableColumn(
