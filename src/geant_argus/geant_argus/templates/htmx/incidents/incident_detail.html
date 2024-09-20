@@ -50,9 +50,9 @@
   </section>
   {% block incident_detail %}
     {% if incident.metadata and incident.metadata.version == "v0a4" %}
-      {% include './_incident_detail_v0a4.html' %}
+      {% include "./_incident_detail_v0a4.html" %}
     {% elif incident.metadata and incident.metadata.version == "v0a5" %}
-      {% include './_incident_detail_v0a5.html' %}
+      {% include "./_incident_detail_v0a5.html" %}
     {% else %}
       <p class="text-red-500">Cannot show additional information (mismatched metadata version)</p>
     {% endif %}
