@@ -239,7 +239,7 @@ FILTER_MODEL = ComplexFilter(
             operators=[
                 TextOperator("contains"),
             ],
-            db_fields=["metadata__description"],
+            db_fields=["description"],
         ),
         # Comment field not yet supported
         # FilterField(
@@ -253,7 +253,6 @@ FILTER_MODEL = ComplexFilter(
             "location",
             "Location",
             operators=[
-                TextOperator("equals"),
                 TextOperator("contains"),
             ],
             db_fields=["metadata__location"],
