@@ -1,0 +1,3 @@
+{% if incident.metadata.ticket_ref %}
+  <span title="{{ incident.metadata.ticket_ref }}">{{ incident.metadata.ticket_ref|slice:"-5:" }}</span>
+{% endif %}
