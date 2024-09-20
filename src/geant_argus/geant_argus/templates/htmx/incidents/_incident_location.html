@@ -1,1 +1,7 @@
-{% for loc in incident.metadata.location %}<div>{{ loc }}</div>{% endfor %}
+{% if incident.metadata.location|length == 2 %}
+  <div>{{ incident.metadata.location.0 }} - {{ incident.metadata.location.1 }}</div>
+{% elif incident.metadata.location|length == 1 %}
+  <div>{{ incident.metadata.location.0 }}</div>
+{% else %}
+  <div></div>
+{% endif %}
