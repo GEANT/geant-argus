@@ -130,3 +130,8 @@ def blacklist_symbol(incident: Incident):
                 return "▼"
         case _:
             return "?"
+
+
+@register.filter
+def duration(incident: Incident):
+    return datetime.datetime.now(tz=datetime.UTC) - incident.start_time
