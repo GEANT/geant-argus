@@ -68,9 +68,24 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_source_incident_id.html",
     ),
     IncidentTableColumn(
+        "location",
+        label="Location",
+        cell_template="htmx/incidents/_incident_location.html",
+    ),
+    IncidentTableColumn(
+        "equipment",
+        label="Equipment",
+        cell_template="htmx/incidents/_incident_equipment.html",
+    ),
+    IncidentTableColumn(
         "description",
         label="Description",
         cell_template="htmx/incidents/_incident_description.html",
+    ),
+    IncidentTableColumn(
+        "ticket_ref",
+        label="Ticket Reference",
+        cell_template="htmx/incidents/_incident_ticket_ref.html",
     ),
     IncidentTableColumn(
         "noc_ack",
