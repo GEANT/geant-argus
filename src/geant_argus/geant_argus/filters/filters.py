@@ -101,7 +101,7 @@ class TimeDeltaOperator(Operator):
         return {"value": amount, "unit": unit}
 
     def to_sql(self, db_field: str, op: str, rule: dict):
-        target_dt = datetime.datetime.now(tz=datetime.UTC) - self.rule_to_timedelta(rule)
+        target_dt = datetime.datetime.now(tz=datetime.timezone.utc) - self.rule_to_timedelta(rule)
         if op == "before_rel":
             return Q(**{f"{db_field}__lt": target_dt})
         if op == "after_rel":

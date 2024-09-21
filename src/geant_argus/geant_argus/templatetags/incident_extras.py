@@ -134,4 +134,4 @@ def blacklist_symbol(incident: Incident):
 
 @register.filter
 def duration(incident: Incident):
-    return datetime.datetime.now(tz=datetime.UTC) - incident.start_time
+    return datetime.datetime.now(tz=datetime.timezone.utc) - incident.start_time
