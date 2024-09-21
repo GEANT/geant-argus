@@ -136,8 +136,8 @@ def blacklist_symbol(incident: Incident):
 @register.filter
 def duration(incident: Incident):
     end_time = (
-        dateparse(clear_time).astimezone(datetime.timezone.utc)
+        dateparse(clear_time)
         if (clear_time := incident.metadata.get("clear_time"))
-        else datetime.datetime.now(tz=datetime.timezone.utc)
-    )
+        else datetime.datetime.now()
+    ).astimezone(datetime.timezone.utc)
     return end_time - incident.start_time
