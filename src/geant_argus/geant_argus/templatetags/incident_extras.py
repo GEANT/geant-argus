@@ -9,6 +9,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils import timezone
 
 from ..incidents.severity import IncidentSeverity
+from .template_utils import dateparse
 
 register = template.Library()
 
@@ -134,4 +135,9 @@ def blacklist_symbol(incident: Incident):
 
 @register.filter
 def duration(incident: Incident):
-    return datetime.datetime.now(tz=datetime.timezone.utc) - incident.start_time
+    end_time = (
+        dateparse(clear_time).astimezone(datetime.timezone.utc)
+        if (clear_time := incident.metadata.get("clear_time"))
+        else datetime.datetime.now(tz=datetime.timezone.utc)
+    )
+    return end_time - incident.start_time
