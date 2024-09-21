@@ -221,14 +221,14 @@ METADATA_V0A5_SCHEMA = {
                 "events": v0a5_endpoint_event(
                     {
                         "id": {"type": "integer"},
-                        "peer": {"type": "string"},
-                        "status": {"type": "string"},
+                        "peer": {"type": ["string", "null"]},
+                        "status": {"type": ["string", "null"]},
                         "idle_time": {"type": ["string", "null"]},
                         "connect_time": {"type": ["string", "null"]},
                         "establish_time": {"type": ["string", "null"]},
-                        "source_ip": {"type": "string"},
-                        "equipment_name": {"type": "string"},
-                        "snmp_trap_oid": {"type": "string"},
+                        "source_ip": {"type": ["string", "null"]},
+                        "equipment_name": {"type": ["string", "null"]},
+                        "snmp_trap_oid": {"type": ["string", "null"]},
                     }
                 ),
             },
@@ -241,15 +241,25 @@ METADATA_V0A5_SCHEMA = {
                 "events": v0a5_endpoint_event(
                     {
                         "id": {"type": "integer"},
-                        "admin_status": {"type": "string", "enum": ["up", "down"]},
-                        "oper_status": {"type": "string", "enum": ["up", "down"]},
+                        "admin_status": {
+                            "anyOf": [
+                                {"type": "null"},
+                                {"type": ["string"], "enum": ["up", "down"]},
+                            ]
+                        },
+                        "oper_status": {
+                            "anyOf": [
+                                {"type": "null"},
+                                {"type": ["string"], "enum": ["up", "down"]},
+                            ]
+                        },
                         "admin_down_time": {"type": ["string", "null"]},
                         "oper_down_time": {"type": ["string", "null"]},
                         "admin_up_time": {"type": ["string", "null"]},
                         "oper_up_time": {"type": ["string", "null"]},
-                        "equipment_name": {"type": "string"},
-                        "interface_name": {"type": "string"},
-                        "snmp_trap_oid": {"type": "string"},
+                        "equipment_name": {"type": ["string", "null"]},
+                        "interface_name": {"type": ["string", "null"]},
+                        "snmp_trap_oid": {"type": ["string", "null"]},
                     }
                 ),
             },
@@ -263,10 +273,10 @@ METADATA_V0A5_SCHEMA = {
                     {
                         "id": {"type": "integer"},
                         "status": {"type": "string"},
-                        "equipment_name": {"type": "string"},
-                        "entity_string": {"type": "string"},
-                        "probable_cause": {"type": "string"},
-                        "severity": {"type": "string"},
+                        "equipment_name": {"type": ["string", "null"]},
+                        "entity_string": {"type": ["string", "null"]},
+                        "probable_cause": {"type": ["string", "null"]},
+                        "severity": {"type": ["string", "null"]},
                     }
                 ),
             },
@@ -279,12 +289,12 @@ METADATA_V0A5_SCHEMA = {
                 "events": v0a5_endpoint_event(
                     {
                         "id": {"type": "integer"},
-                        "status": {"type": "string"},
-                        "equipment_name": {"type": "string"},
-                        "object_name": {"type": "string"},
-                        "object_type": {"type": "string"},
-                        "probable_cause": {"type": "string"},
-                        "severity": {"type": "string"},
+                        "status": {"type": ["string", "null"]},
+                        "equipment_name": {"type": ["string", "null"]},
+                        "object_name": {"type": ["string", "null"]},
+                        "object_type": {"type": ["string", "null"]},
+                        "probable_cause": {"type": ["string", "null"]},
+                        "severity": {"type": ["string", "null"]},
                     }
                 ),
             },
