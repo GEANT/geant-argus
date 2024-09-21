@@ -299,15 +299,27 @@ METADATA_V0A5_SCHEMA = {
                 ),
             },
         },
+        "blacklist_info": {
+            "type": "object",
+            "properties": {
+                "applied": {"type": "boolean"},
+                "message": {"type": "string"},
+                "original_severity": {"type": "string"},
+            },
+            "additionalProperties": False,
+        },
     },
     "properties": {
         "version": {"const": "v0a5"},
         "init_time": {"type": ["string", "null"]},
+        "clear_time": {"type": ["string", "null"]},
+        "blacklist": {"$ref": "#/definitions/blacklist_info"},
         "phase": {"type": "string"},
         "status": {"type": "string", "enum": ["ACTIVE", "CLEAR", "CLOSED"]},
         "severity": {"type": "string"},
         "location": {"type": "array", "items": {"type": "string"}},
         "equipment": {"type": "array", "items": {"type": "string"}},
+        "endpoint_count": {"type": "integer"},
         "ticket_ref": {"type": "string"},
         "endpoints": {
             "type": "object",
@@ -343,6 +355,8 @@ METADATA_V0A5_SCHEMA = {
         "endpoints",
         "description",
         "short_lived",
+        "blacklist",
+        "endpoint_count",
     ],
 }
 
