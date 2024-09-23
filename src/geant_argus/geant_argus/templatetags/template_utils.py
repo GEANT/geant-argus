@@ -11,6 +11,8 @@ def get_item(dictionary, key):
 
 @register.filter
 def dateparse(datestr):
+    if not isinstance(datestr, str):
+        return None
     return parse_datetime(datestr)
 
 
@@ -37,3 +39,10 @@ def smooth_timedelta(timedeltaobj):
     if secs > 0:
         parts.append(f" {int(secs)}s")
     return " ".join(parts)
+
+
+@register.filter
+def underscores_to_spaces(value):
+    if not isinstance(value, str):
+        return value
+    return value.replace("_", " ")
