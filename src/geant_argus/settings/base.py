@@ -34,19 +34,28 @@ DEFAULT_THEME = "geant"
 DEFAULT_TW_CSS = "geant.css"
 DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
 
-# context processor for theming
-TEMPLATES[0]["OPTIONS"]["context_processors"].append(
-    "geant_argus.geant_argus.context_processors.geant_theme"
+# context processors customization
+TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
+    [
+        "geant_argus.geant_argus.context_processors.geant_theme",
+        "argus_htmx.context_processors.datetime_format_via_session",
+    ]
 )
 
 AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS", 14))
 ARGUS_FILTER_BACKEND = "geant_argus.geant_argus.filters.plugin"
 ARGUS_HTMX_FILTER_FUNCTION = ARGUS_FILTER_BACKEND
+
+ARGUS_FRONTEND_DATETIME_FORMAT = "ISO"
 TIME_ZONE = "UTC"
 
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
-    "start_time",
+    IncidentTableColumn(
+        "timestamp",
+        label="Timestamp",
+        cell_template="htmx/incidents/_incident_start_time.html",
+    ),
     IncidentTableColumn(
         "endpoint_count",
         label="Flaps",

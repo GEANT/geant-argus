@@ -1,1 +1,2 @@
-{{ event.init_time }}
+{% load template_utils %}
+{{ event.init_time|dateparse|date:datetime_format }}

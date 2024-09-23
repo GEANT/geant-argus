@@ -21,7 +21,19 @@
     <div class="stat py-1">
       <dt class="stat-title text-neutral-content">Last refresh</dt>
       <dd class="stat-value text-sm text-neutral-content">
-        <span id="refresh-counter" class="pl-0.5">0</span>s
+        {{ inventory.last_update|date:datetime_format|default:"?" }}
+        <span class="text-base cursor-pointer htmx-loading-pulse"
+              hx-post="{% url 'geant-status:update' %}"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              hx-push-url="false"
+              hx-target="#service-status"
+              {% if pending %}disabled{% endif %}>
+          {% if pending %}
+            !
+          {% else %}
+            ⟳
+          {% endif %}
+        </span>
       </dd>
     </div>
     <div class="stat py-1">
