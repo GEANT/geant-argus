@@ -30,11 +30,11 @@ def geant_theme(request):
                 {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
                 {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
                 {
-                    "name": "Init Time",
+                    "name": "Init Time (UTC)",
                     "cell_template": "htmx/incident_details/event_init_time.html",
                 },
                 {
-                    "name": "Clear Time",
+                    "name": "Clear Time (UTC)",
                     "cell_template": "htmx/incident_details/event_clear_time.html",
                 },
                 {
@@ -56,11 +56,11 @@ def geant_theme(request):
                 {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
                 {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
                 {
-                    "name": "Init Time",
+                    "name": "Init Time (UTC)",
                     "cell_template": "htmx/incident_details/event_init_time.html",
                 },
                 {
-                    "name": "Clear Time",
+                    "name": "Clear Time (UTC)",
                     "cell_template": "htmx/incident_details/event_clear_time.html",
                 },
                 {
@@ -82,11 +82,11 @@ def geant_theme(request):
                 {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
                 {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
                 {
-                    "name": "Init Time",
+                    "name": "Init Time (UTC)",
                     "cell_template": "htmx/incident_details/event_init_time.html",
                 },
                 {
-                    "name": "Clear Time",
+                    "name": "Clear Time (UTC)",
                     "cell_template": "htmx/incident_details/event_clear_time.html",
                 },
                 {
@@ -108,11 +108,11 @@ def geant_theme(request):
                 {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
                 {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
                 {
-                    "name": "Init Time",
+                    "name": "Init Time (UTC)",
                     "cell_template": "htmx/incident_details/event_init_time.html",
                 },
                 {
-                    "name": "Clear Time",
+                    "name": "Clear Time (UTC)",
                     "cell_template": "htmx/incident_details/event_clear_time.html",
                 },
                 {

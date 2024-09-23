@@ -1,1 +1,6 @@
-{{ event.clear_time|default:"-" }}
+{% load template_utils %}
+{% if event.clear_time %}
+  {{ event.clear_time|dateparse|date:datetime_format }}
+{% else %}
+  -
+{% endif %}
