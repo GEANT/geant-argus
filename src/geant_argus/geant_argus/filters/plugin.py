@@ -92,6 +92,7 @@ class IncidentFilterForm(forms.Form):
         choices=[("active", "Active"), ("clear", "Clear"), ("closed", "Closed")],
         widget=DaisyCheckboxSelectMultiple,
     )
+    alarm_id = forms.CharField(max_length=255, required=False, label="Alarm ID")
     description = forms.CharField(max_length=255, required=False)
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
@@ -101,6 +102,7 @@ class IncidentFilterForm(forms.Form):
 
     field_order = [
         "status",
+        "alarm_id",
         "description",
         "filter_pk",
         "min_severity",
@@ -126,6 +128,7 @@ class IncidentFilterForm(forms.Form):
 
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_status(queryset)
+        queryset = self._filter_by_alarm_id(queryset)
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._filter_by_description(queryset)
         queryset = self._filter_by_severity(queryset)
@@ -150,6 +153,11 @@ class IncidentFilterForm(forms.Form):
         if self.cleaned_data.get("short_lived"):
             return queryset
         return queryset.filter(metadata__status__in=status)
+
+    def _filter_by_alarm_id(self, queryset):
+        if not (alarm_id := self.cleaned_data.get("alarm_id")):
+            return queryset
+        return queryset.filter(source_incident_id=alarm_id)
 
     def _filter_by_short_lived(self, queryset):
         if self.cleaned_data.get("short_lived"):
