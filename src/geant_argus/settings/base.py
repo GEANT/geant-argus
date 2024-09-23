@@ -51,7 +51,11 @@ TIME_ZONE = "UTC"
 
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
-    "start_time",
+    IncidentTableColumn(
+        "timestamp",
+        label="Timestamp",
+        cell_template="htmx/incidents/_incident_start_time.html",
+    ),
     IncidentTableColumn(
         "endpoint_count",
         label="Flaps",
