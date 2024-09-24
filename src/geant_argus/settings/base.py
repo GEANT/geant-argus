@@ -75,6 +75,7 @@ INCIDENT_TABLE_COLUMNS = [
         "alarm_id",
         label="Alarm ID",
         cell_template="htmx/incidents/_incident_source_incident_id.html",
+        filter_field="alarm_id",
     ),
     IncidentTableColumn(
         "location",
@@ -92,6 +93,7 @@ INCIDENT_TABLE_COLUMNS = [
         "description",
         label="Description",
         cell_template="htmx/incidents/_incident_description.html",
+        filter_field="description",
     ),
     IncidentTableColumn(
         "ticket_ref",
