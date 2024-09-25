@@ -1,4 +1,4 @@
-{% load filter_extras %}
+{% load template_utils %}
 {% if rule.field in model.fields_by_name %}
   {% with field=model.fields_by_name|get_item:rule.field %}
     <div class="rule-atom mt-2 p-1 border border-black/10 rounded-lg bg-black/5">

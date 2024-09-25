@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer components {
+  :root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
+    overflow: unset;
+    scrollbar-gutter: unset;
+  }
+
   #table {
     @apply border-spacing-0;
   }
@@ -18,15 +23,59 @@
     @apply animate-pulse;
   }
 
+  /* Hide default +/- buttons on numberinputs with .hide-buttons class*/
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button.hide-buttons,
   input::-webkit-inner-spin-button.hide-buttons {
     -webkit-appearance: none;
     margin: 0;
   }
-
   /* Firefox */
   input[type="number"].hide-buttons {
     -moz-appearance: textfield;
+  }
+
+  /*Ack checkboxes get an indicator spinner while processing an htmx ack request */
+  .ack-checkbox.htmx-request {
+    animation: none;
+  }
+  .ack-checkbox.htmx-request input {
+    display: none;
+  }
+  .ack-checkbox:not(.htmx-request) .htmx-indicator {
+    display: none;
+  }
+
+  .badge.incident-critical {
+    background-color: rgba(var(--color-incident-critical));
+    border: none;
+  }
+  .badge.incident-critical.incident-closed {
+    background-color: rgba(var(--color-incident-critical), 0.5);
+    border: none;
+  }
+  .badge.incident-major {
+    background-color: rgba(var(--color-incident-major));
+    border: none;
+  }
+  .badge.incident-major.incident-closed {
+    background-color: rgba(var(--color-incident-major), 0.5);
+    border: none;
+  }
+  .badge.incident-minor {
+    background-color: rgba(var(--color-incident-minor));
+    border: none;
+  }
+  .badge.incident-minor.incident-closed {
+    background-color: rgba(var(--color-incident-minor), 0.5);
+    border: none;
+  }
+  .badge.incident-default {
+    @apply bg-base-100;
+    @apply border-neutral-content/80;
+  }
+  .badge.incident-clear {
+    background-color: rgba(var(--color-incident-clear));
+    border: none;
   }
 }

@@ -1,0 +1,9 @@
+{% if incident.metadata.ticket_ref %}
+  {% if incident.ticket_url %}
+    <a href="{{ incident.ticket_url }}"
+       class="underline"
+       title="{{ incident.metadata.ticket_ref }}">{{ incident.metadata.ticket_ref|slice:"-5:" }}</a>
+  {% else %}
+    <span title="{{ incident.metadata.ticket_ref }}">{{ incident.metadata.ticket_ref|slice:"-5:" }}</span>
+  {% endif %}
+{% endif %}

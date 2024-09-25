@@ -1,4 +1,12 @@
 {% load incident_extras %}
-<div class="badge {{ incident|levelbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
-  {{ incident.level|to_severity }}
-</div>
+{% with blacklist=incident.metadata.blacklist %}
+  <div class="w-20 flex flex-row gap-x-1 items-center">
+    <span class="badge {{ incident|levelbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
+      {{ incident.level|to_severity }}
+    </span>
+    {% if blacklist.applied %}
+      <span class="text-lg cursor-default font-bold text-primary"
+            title="Original severity: {{ blacklist.original_severity }}&#010;Reason: {{ blacklist.message }}">{{ incident |blacklist_symbol }}</span>
+    {% endif %}
+  </div>
+{% endwith %}
