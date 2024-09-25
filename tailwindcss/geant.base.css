@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer components {
+  :root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
+    overflow: unset;
+    scrollbar-gutter: unset;
+  }
+
   #table {
     @apply border-spacing-0;
   }
@@ -68,7 +73,6 @@
   .badge.incident-default {
     @apply bg-base-100;
     @apply border-neutral-content/80;
-
   }
   .badge.incident-clear {
     background-color: rgba(var(--color-incident-clear));

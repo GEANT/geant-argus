@@ -1,12 +1,35 @@
 from django import template
 from django.utils.dateparse import parse_datetime
 
+
 register = template.Library()
 
 
 @register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
+def get_item(obj, key):
+    return _get_item(obj, key)
+
+
+def _get_item(obj, *keys):
+    if obj is None:
+        return None
+    if not len(keys):
+        return None
+    key, *rest = keys
+    result = obj.get(key, None) if isinstance(obj, dict) else getattr(obj, key, None)
+    if not rest:
+        return result
+    return _get_item(result, *rest)
+
+
+@register.filter
+def get_quick_glance_item(obj, key):
+    value = _get_item(obj, *key.split("."))
+
+    if isinstance(value, list):
+        return " - ".join(str(v) for v in value)
+
+    return value
 
 
 @register.filter
