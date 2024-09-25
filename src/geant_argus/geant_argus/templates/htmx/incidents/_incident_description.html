@@ -8,7 +8,7 @@
       <tbody>
         {% for item in incident_description_glance_table %}
           <tr>
-            <th>{{ item.name|underscores_to_spaces }}</th>
+            <th>{{ item.name }}</th>
             <td>{{ incident|get_quick_glance_item:item.cell_lookup_key|default:"-" }}</td>
           </tr>
         {% endfor %}
