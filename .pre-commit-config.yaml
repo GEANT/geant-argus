@@ -16,4 +16,6 @@ repos:
       - id: tailwind-ccs
         name: Update minified tailwind CSS
         entry: make css
-        language: system
+        language: system 
+        pass_filenames: false
+

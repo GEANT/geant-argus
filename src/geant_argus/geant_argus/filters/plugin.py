@@ -1,5 +1,3 @@
-import functools
-import operator
 from typing import Any, Dict
 
 import jsonschema
@@ -12,15 +10,16 @@ from argus.filter.default import FilterSerializer as DefaultFilterSerializer
 from argus.filter.default import IncidentFilter as DefaultIncidentFilter
 from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # noqa: F401
 from argus.filter.filters import Filter
+from argus.incident.models import Event
 from django import forms
-from django.db.models import Q, QuerySet
-from django.db.models.functions import Now
+from django.db.models import OuterRef, Exists, Case, When, Value
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
 
-from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
+from .filters import FILTER_MODEL
+from .schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
 SUPPORTED_FILTER_VERSIONS = ["v1"]
@@ -74,7 +73,8 @@ class GeantFilterBackend(BaseFilterBackend):
 
     def incident_list_filter(self, request, queryset):
         form = IncidentFilterForm(
-            request.GET or {"open": True, "min_severity": IncidentSeverity.WARNING.value}
+            request.GET
+            or {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value},
         )
         return form, form.filter_queryset(queryset)
 
@@ -82,44 +82,31 @@ class GeantFilterBackend(BaseFilterBackend):
         return IncidentFilterForm(request.GET or None).filter_queryset(queryset)
 
 
-class GeantBooleanFiltering:
-    FILTER_FIELD_MAPPING = {"description": "metadata__description"}
-
-    def __init__(self, filter: Filter):
-        self.filter_dict = filter.filter
-        assert self.filter_dict["version"] == "v1", "unsupported filter version"
-
-    def filter(self, qs: QuerySet) -> QuerySet:
-        return qs.filter(self._parse_item(self.filter_dict))
-
-    def _parse_item(self, item: dict):
-        if item["type"] == "group":
-            return self._parse_group(item)
-        if item["type"] == "rule":
-            return self._parse_rule(item)
-        raise ValueError("invalid item type")
-
-    def _parse_group(self, group: dict):
-        op = operator.ior if group["operator"] == "or" else operator.iand
-        return functools.reduce(op, (self._parse_item(i) for i in group["items"]))
-
-    def _parse_rule(self, rule: dict):
-        db_field = self.FILTER_FIELD_MAPPING[rule["field"]]
-        if rule["operator"] == "equals":
-            return Q(**{db_field: rule["value"]})
-        if rule["operator"] == "contains":
-            return Q(**{f"{db_field}__icontains": rule["value"]})
+class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    template_name = "forms/daisy_multiple_select_checkbox.html"
 
 
 class IncidentFilterForm(forms.Form):
-    open = forms.BooleanField(required=False)
-    closed = forms.BooleanField(required=False)
+    status = forms.MultipleChoiceField(
+        required=False,
+        choices=[("active", "Active"), ("clear", "Clear"), ("closed", "Closed")],
+        widget=DaisyCheckboxSelectMultiple,
+    )
     description = forms.CharField(max_length=255, required=False)
-    newest_first = forms.BooleanField(required=False)
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
-    field_order = ["open", "closed", "description", "filter_pk", "min_severity", "newest_first"]
+    newest_first = forms.BooleanField(required=False)
+    short_lived = forms.BooleanField(required=False)
+
+    field_order = [
+        "status",
+        "description",
+        "filter_pk",
+        "min_severity",
+        "newest_first",
+        "short_lived",
+    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -138,9 +125,11 @@ class IncidentFilterForm(forms.Form):
             return queryset
 
         queryset = self._filter_by_pk(queryset)
-        queryset = self._filter_by_open_close(queryset)
+        queryset = self._filter_by_status(queryset)
+        queryset = self._filter_by_short_lived(queryset)
         queryset = self._filter_by_description(queryset)
         queryset = self._filter_by_severity(queryset)
+        queryset = self._annotate_acks(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
 
@@ -153,35 +142,54 @@ class IncidentFilterForm(forms.Form):
             filter and filter.filter and filter.filter.get("version") in SUPPORTED_FILTER_VERSIONS
         ):
             return queryset
-        return GeantBooleanFiltering(filter).filter(queryset)
+        return FILTER_MODEL.filter_queryset(queryset, filter.filter)
 
-    def _filter_by_open_close(self, queryset):
-        is_open = bool(self.cleaned_data.get("open"))
-        is_closed = bool(self.cleaned_data.get("closed"))
-
-        if not (is_open ^ is_closed):
+    def _filter_by_status(self, queryset):
+        status = [s.upper() for s in self.cleaned_data.get("status")]
+        # short lived alarms are always closed, so we don't extra filter on open/closed
+        if self.cleaned_data.get("short_lived"):
             return queryset
-        q = Q(end_time__isnull=False, end_time__gt=Now())
-        if is_closed:
-            q = ~q
-        return queryset.filter(q)
+        return queryset.filter(metadata__status__in=status)
+
+    def _filter_by_short_lived(self, queryset):
+        if self.cleaned_data.get("short_lived"):
+            return queryset.filter(metadata__short_lived=True)
+        return queryset
 
     def _filter_by_description(self, queryset):
         if not (description := self.cleaned_data.get("description")):
             return queryset
-        return queryset.filter(metadata__description__icontains=description)
+        return queryset.filter(description__icontains=description)
 
     def _filter_by_severity(self, queryset):
         if not (level := self.cleaned_data.get("min_severity")):
             return queryset
         return queryset.filter(level__lte=level)
 
+    def _annotate_acks(self, queryset):
+        return queryset.annotate(
+            any_ack=Case(
+                When(metadata__status="CLOSED", then=Value(True)),
+                default=Exists(Event.objects.filter(incident=OuterRef("pk"), type="ACK")),
+            ),
+            noc_ack=Exists(
+                Event.objects.filter(
+                    incident=OuterRef("pk"), type="ACK", actor__groups__name="noc"
+                )
+            ),
+            servicedesk_ack=Exists(
+                Event.objects.filter(
+                    incident=OuterRef("pk"), type="ACK", actor__groups__name="servicedesk"
+                )
+            ),
+        )
+
     def _order_by_newest_first(self, queryset):
         if self.cleaned_data.get("newest_first"):
             return queryset.order_by("-start_time")
         # Here we are lucky that statuses 'active', 'clear', 'closed' are alphabetically
         # in that order, so it's easy to sort
-        return queryset.order_by("metadata__status", "level", "-start_time")
+        return queryset.order_by("any_ack", "metadata__status", "level", "-start_time")
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):

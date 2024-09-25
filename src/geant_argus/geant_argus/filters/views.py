@@ -1,29 +1,15 @@
-import itertools
 import re
 from typing import Optional
 
 from argus.filter.filters import Filter
 from argus.incident.models import User
 from django.core.paginator import Paginator
-from django.http import (
-    HttpResponse,
-    HttpResponseBadRequest,
-    HttpResponseRedirect,
-    HttpResponseNotAllowed,
-)
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-FIELDS_AND_OPERATORS = {
-    "description": ["contains"],
-    "comment": ["contains"],
-    "location": ["equals", "contains"],
-    "service_deck_ack": ["is"],
-    "ncc_ack": ["is"],
-    "start_time": ["before_abs", "after_abs", "after_rel", "before_rel"],
-}
-FIRST_FIELD = next(iter(FIELDS_AND_OPERATORS))
+from .filters import FILTER_MODEL
 
 
 def get_all_filters():
@@ -57,6 +43,10 @@ def list_filters(request):
     return render(request, base_template, context=context)
 
 
+def default_context():
+    return {"name": "", "model": FILTER_MODEL}
+
+
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
     if request.method == "DELETE":
@@ -64,16 +54,13 @@ def edit_filter(request, pk: Optional[int] = None):
             return HttpResponseNotAllowed(permitted_methods=["HEAD", "GET", "POST"])
         filter = get_object_or_404(Filter, pk=pk)
         filter.delete()
-        resp = HttpResponse()
-        resp["HX-Redirect"] = reverse("geant-filters:filter-list")
-        return resp
-
+        return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
     if request.method == "POST":
         if not request.htmx:
             return HttpResponseBadRequest("only htmx supported")
         filter_dict = update_filter(request.POST, request.GET)
         context = {
-            "fields_operators": FIELDS_AND_OPERATORS,
+            **default_context(),
             "filter_dict": filter_dict,
             "is_root": True,
         }
@@ -84,9 +71,9 @@ def edit_filter(request, pk: Optional[int] = None):
         filter_dict = filter.filter
     else:
         filter = None
-        filter_dict = default_filter()
+        filter_dict = FILTER_MODEL.default_rule()
     context = {
-        "fields_operators": FIELDS_AND_OPERATORS,
+        **default_context(),
         "filter_dict": filter_dict,
         "filter": filter,
         "pk": pk,
@@ -99,7 +86,13 @@ def save_filter(request, pk: Optional[int] = None):
     result = parse_filter_form_data(request.POST)
     name = request.POST.get("name")
     if not re.match(r"^[a-zA-Z0-9_-]+$", name):
-        return HttpResponseBadRequest("Name can only contain letters, numbers, - or _")
+        context = {
+            **default_context(),
+            "errors": {"name": "Name can only contain letters, numbers, - or _"},
+            "filter_dict": result,
+            "name": name,
+        }
+        return render(request, "geant/filters/_filter_edit_form.html", context=context)
     user = request.user
 
     # WARNING: COMPLETE HACK FOR DEMO PURPOSES
@@ -114,8 +107,7 @@ def save_filter(request, pk: Optional[int] = None):
         filter.name = name
         filter.filter = result
         filter.save()
-
-    return HttpResponseRedirect(reverse("geant-filters:filter-list"))
+    return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
 
 
 def update_filter(form_data, commands):
@@ -123,7 +115,7 @@ def update_filter(form_data, commands):
 
     if create_after := commands.get("create_after"):
         items, idx = _get_items_list(filter_dict, create_after)
-        items.insert(idx + 1, default_filter())
+        items.insert(idx + 1, FILTER_MODEL.default_rule())
 
     if delete := commands.get("delete"):
         items, idx = _get_items_list(filter_dict, delete)
@@ -144,15 +136,6 @@ def update_filter(form_data, commands):
     return filter_dict
 
 
-def default_filter():
-    return {
-        "type": "rule",
-        "field": FIRST_FIELD,
-        "operator": FIELDS_AND_OPERATORS[FIRST_FIELD][0],
-        "value": "",
-    }
-
-
 def _get_items_list(filter_dict: dict, location: str) -> tuple[list, int]:
     path = [int(i) for i in location.rstrip("_").split("_")]
     return _get_items_list_helper(filter_dict, path)
@@ -165,46 +148,4 @@ def _get_items_list_helper(filter_item: dict, path: list[int]):
 
 
 def parse_filter_form_data(form_data):
-    return {
-        "version": "v1",
-        **_parse_filter_form_data_helper(form_data, prefix=""),
-    }
-
-
-def _parse_filter_form_data_helper(form_data, prefix):
-    if value := form_data.get(prefix + "field"):
-        if value in ("or", "and"):
-            return {"type": "group", "operator": value, "items": [default_filter()]}
-        if value not in FIELDS_AND_OPERATORS:
-            value = FIRST_FIELD
-        op = form_data.get(prefix + "op")
-        if op not in FIELDS_AND_OPERATORS[value]:
-            op = FIELDS_AND_OPERATORS[value][0]
-        return {
-            "type": "rule",
-            "field": value,
-            "operator": op,
-            "value": form_data.get(prefix + "val", ""),
-        }
-
-    if (value := form_data.get(prefix + "op")) is not None:
-        if value not in ("or", "and"):
-            if value not in FIELDS_AND_OPERATORS:
-                value = FIRST_FIELD
-            return {
-                "type": "rule",
-                "field": value,
-                "operator": FIELDS_AND_OPERATORS[value][0],
-                "value": "",
-            }
-        result = {"type": "group", "operator": value, "items": []}
-        for idx in itertools.count():
-            new_prefix = f"{prefix}{idx}_"
-            parsed = _parse_filter_form_data_helper(form_data, prefix=new_prefix)
-            if parsed is None:
-                break
-            result["items"].append(parsed)
-        if not result["items"]:
-            result["items"].append(default_filter())
-        return result
-    return None
+    return FILTER_MODEL.parse_form_data(form_data)

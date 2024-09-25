@@ -3,7 +3,7 @@
   // timers when this script snippet is autoreloaded by htmx to prevent memory leaks.
 
   window.setCounter = function() {
-    counter = document.getElementById('refresh-counter')
+    let counter = document.getElementById('refresh-counter')
     if (!counter) return;
 
     if (window.serviceStatusBoxTimer) {
@@ -33,7 +33,7 @@
     <div>
       <dt class="stat-title text-neutral-content">Inventory last updated</dt>
       <dd class="stat-value text-sm text-neutral-content">
-        {{ inventory.last_update|date:"DATETIME_FORMAT"|default:"?" }}
+        {{ inventory.last_update|date:datetime_format|default:"?" }}
         <span class="text-base cursor-pointer htmx-loading-pulse"
               hx-post="{% url 'geant-status:update' %}"
               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

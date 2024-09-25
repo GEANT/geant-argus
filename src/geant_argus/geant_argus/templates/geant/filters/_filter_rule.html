@@ -1,16 +1,27 @@
-{% load filter_extras %}
-<div class="rule-atom mt-2 p-1 border border-black/10 rounded-lg bg-black/5">
-  {% include "./_filter_selector.html" with key="field" selected=rule.field %}
-  <select name="{{ prefix }}op" class="select select-bordered max-w-xs" autocomplete="off" value={{ rule.operator }}>
-    {% for op in fields_operators|get_item:rule.field %}
-      <option value="{{ op }}" {% if rule.operator == op %}selected{% endif %}>{{ op|display_text }}</option>
-    {% endfor %}
-  </select>
-  <input name="{{ prefix }}val"
-         type="text"
-         value="{{ rule.value }}"
-         class="input input-bordered w-full max-w-xs">
-  {% if not is_root %}
-    {% include "./_filter_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
-  {% endif %}
-</div>
+{% load template_utils %}
+{% if rule.field in model.fields_by_name %}
+  {% with field=model.fields_by_name|get_item:rule.field %}
+    <div class="rule-atom mt-2 p-1 border border-black/10 rounded-lg bg-black/5">
+      {% include "./_filter_selector.html" with key="field" selected=rule.field %}
+      <select name="{{ prefix }}op"
+              class="select select-bordered max-w-xs"
+              autocomplete="off"
+              hx-post="."
+              hx-include="#filter_edit_root"
+              hx-trigger="change"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              hx-target="#filter_edit_root">
+        {% for op in field.operators %}
+          <option value="{{ op.name }}"
+                  {% if rule.operator == op.name %}selected{% endif %}>{{ op.display_name }}</option>
+        {% endfor %}
+      </select>
+      {% with operator=field.operators_by_name|get_item:rule.operator %}
+        {% include operator.template with prefix=prefix rule=rule operator=operator %}
+        {% if not is_root %}
+          {% include "./_filter_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
+        {% endif %}
+      {% endwith %}
+    </div>
+  {% endwith %}
+{% endif %}
