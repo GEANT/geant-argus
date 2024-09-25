@@ -9,11 +9,7 @@
         {% for item in incident_description_glance_table %}
           <tr>
             <th>{{ item.name|underscores_to_spaces }}</th>
-            {% if item.is_meta_item %}
-              <td>{{ incident.metadata|get_item:item.cell_lookup_key }}</td>
-            {% else %}
-              <td>{{ incident|get_description_modal_item:item.cell_lookup_key }}</td>
-            {% endif %}
+            <td>{{ incident|get_quick_glance_item:item.cell_lookup_key|default:"-" }}</td>
           </tr>
         {% endfor %}
       </tbody>

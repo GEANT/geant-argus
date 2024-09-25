@@ -6,20 +6,28 @@ register = template.Library()
 
 
 @register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
+def get_item(obj, key):
+    return _get_item(obj, key)
+
+
+def _get_item(obj, *keys):
+    if obj is None:
+        return None
+    if not len(keys):
+        return None
+    key, *rest = keys
+    result = obj.get(key, None) if isinstance(obj, dict) else getattr(obj, key, None)
+    if not rest:
+        return result
+    return _get_item(result, *rest)
 
 
 @register.filter
-def get_description_modal_item(obj, key):
-    if isinstance(obj, dict):
-        value = obj.get(key, None)
-    else:
-        value = getattr(obj, key, None)
+def get_quick_glance_item(obj, key):
+    value = _get_item(obj, *key.split("."))
 
-    # Handle case where value is a list/array
     if isinstance(value, list):
-        return " ".join(str(v) for v in value)  # Join array elements into a string
+        return " - ".join(str(v) for v in value)
 
     return value
 
