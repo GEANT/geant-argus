@@ -122,7 +122,7 @@ def geant_theme(request):
             ],
         },
         "incident_description_glance_table": [
-            {"name": "Description", "cell_lookup_key": "metadata.description"},
+            {"name": "Description", "cell_lookup_key": "description"},
             {"name": "Start Time", "cell_lookup_key": "start_time"},
             {"name": "End Time", "cell_lookup_key": "metadata.end_time"},
             {"name": "Status", "cell_lookup_key": "metadata.status"},
