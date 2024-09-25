@@ -10,7 +10,7 @@
   "blacklist": {
     "applied": true,
     "message": "TO hide alarms from NE monitoring tools",
-    "original_severity": "HIDE"
+    "original_severity": "WARNING"
   },
   "endpoints": {
     "bgp": [

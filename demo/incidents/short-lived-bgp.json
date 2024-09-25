@@ -33,6 +33,7 @@
     "infinera": []
   },
   "init_time": "2024-09-02T08:40:20",
+  "clear_time": "2024-09-02T08:41:19",
   "description": "BGP peering (128.223.157.40) Incident",
 
   "location": ["fra"],
