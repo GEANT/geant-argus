@@ -1,4 +1,4 @@
-{% load template_utils %}
+{% load incident_extras %}
 <div _="on click js modal_{{ incident.source_incident_id }}.showModal()"
      class="cursor-pointer">{{ incident.description }}</div>
 <dialog id="modal_{{ incident.source_incident_id }}" class="modal">
@@ -9,7 +9,15 @@
         {% for item in incident_description_glance_table %}
           <tr>
             <th>{{ item.name }}</th>
-            <td>{{ incident|get_quick_glance_item:item.cell_lookup_key|default:"-" }}</td>
+            {% with value=incident|get_quick_glance_item:item|default:"-" %}
+              <td>
+                {% if item.cell_template %}
+                  {% include item.cell_template %}
+                {% else %}
+                  {{ value }}
+                {% endif %}
+              </td>
+            {% endwith %}
           </tr>
         {% endfor %}
       </tbody>

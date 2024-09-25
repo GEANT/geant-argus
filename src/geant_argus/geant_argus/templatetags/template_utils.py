@@ -1,3 +1,4 @@
+import datetime
 from django import template
 from django.utils.dateparse import parse_datetime
 
@@ -23,20 +24,11 @@ def _get_item(obj, *keys):
 
 
 @register.filter
-def get_quick_glance_item(obj, key):
-    value = _get_item(obj, *key.split("."))
-
-    if isinstance(value, list):
-        return " - ".join(str(v) for v in value)
-
-    return value
-
-
-@register.filter
-def dateparse(datestr):
-    if not isinstance(datestr, str):
-        return None
-    return parse_datetime(datestr)
+def dateparse(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj
+    if isinstance(obj, str):
+        return parse_datetime(obj)
 
 
 @register.filter
