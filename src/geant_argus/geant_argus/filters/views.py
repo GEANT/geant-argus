@@ -16,8 +16,7 @@ def get_all_filters():
     return Filter.objects.select_related("user")
 
 
-@require_GET
-def list_filters(request):
+def list_filter_context(request):
     # Load incidents
     qs = get_all_filters().order_by("name")
 
@@ -25,6 +24,20 @@ def list_filters(request):
     page_num = request.GET.get("page", "1")
     page = Paginator(object_list=qs, per_page=10).get_page(page_num)
 
+    return {
+        "column_count": 3,
+        "count": qs.count(),
+        "page_title": "Filters",
+        "page": page,
+    }
+
+
+def default_edit_context():
+    return {"name": "", "model": FILTER_MODEL}
+
+
+@require_GET
+def list_filters(request):
     # The htmx magic - use a different, minimal base template for htmx
     # requests, allowing us to skip rendering the unchanging parts of the
     # template.
@@ -33,52 +46,51 @@ def list_filters(request):
     else:
         base_template = "geant/filters/filter_list.html"
 
-    context = {
-        "column_count": 3,
-        "count": qs.count(),
-        "page_title": "Filters",
-        "page": page,
-    }
-
+    context = list_filter_context(request)
     return render(request, base_template, context=context)
 
 
-def default_context():
-    return {"name": "", "model": FILTER_MODEL}
-
-
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
-def edit_filter(request, pk: Optional[int] = None):
+def edit_filter(request, pk: Optional[int] = None, create=False):
+    if request.method == "GET":
+        if pk:
+            filter = get_object_or_404(Filter, pk=pk)
+            filter_dict = filter.filter
+        else:
+            filter = None
+            filter_dict = FILTER_MODEL.default_rule()
+        context = {
+            **list_filter_context(request),
+            **default_edit_context(),
+            "filter_dict": filter_dict,
+            "filter": filter,
+            "pk": pk,
+            "create": create,
+        }
+        template = (
+            "geant/filters/_filter_edit_content.html"
+            if request.htmx
+            else "geant/filters/filter_list.html"
+        )
+        return render(request, template, context=context)
+
+    if request.method == "POST":
+        if not request.htmx:
+            return HttpResponseBadRequest("only htmx supported")
+        filter_dict = update_filter(request.POST, request.GET)
+        context = {
+            **default_edit_context(),
+            "filter_dict": filter_dict,
+            "is_root": True,
+        }
+        return render(request, "geant/filters/_filter_item.html", context=context)
+
     if request.method == "DELETE":
         if not pk:
             return HttpResponseNotAllowed(permitted_methods=["HEAD", "GET", "POST"])
         filter = get_object_or_404(Filter, pk=pk)
         filter.delete()
         return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
-    if request.method == "POST":
-        if not request.htmx:
-            return HttpResponseBadRequest("only htmx supported")
-        filter_dict = update_filter(request.POST, request.GET)
-        context = {
-            **default_context(),
-            "filter_dict": filter_dict,
-            "is_root": True,
-        }
-        return render(request, "geant/filters/_filter_item.html", context=context)
-
-    if pk:
-        filter = get_object_or_404(Filter, pk=pk)
-        filter_dict = filter.filter
-    else:
-        filter = None
-        filter_dict = FILTER_MODEL.default_rule()
-    context = {
-        **default_context(),
-        "filter_dict": filter_dict,
-        "filter": filter,
-        "pk": pk,
-    }
-    return render(request, "geant/filters/filter_edit.html", context=context)
 
 
 @require_POST
@@ -87,7 +99,7 @@ def save_filter(request, pk: Optional[int] = None):
     name = request.POST.get("name")
     if not re.match(r"^[a-zA-Z0-9_-]+$", name):
         context = {
-            **default_context(),
+            **default_edit_context(),
             "errors": {"name": "Name can only contain letters, numbers, - or _"},
             "filter_dict": result,
             "name": name,

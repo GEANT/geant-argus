@@ -22,22 +22,5 @@
   </style>
 {% endblock head %}
 {% block main %}
-  <div class="p-2">
-    {% include "./_filter_edit_form.html" %}
-    <div class="join">
-      <button class="btn btn-primary join-item"
-              hx-post="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
-              hx-target="#filter-form"
-              hx-include="#filter-form"
-              hx-swab="outerHTML">Save</button>
-      <a href="{% url 'geant-filters:filter-list' %}">
-        <button class="btn btn-primary join-item">Cancel</button>
-      </a>
-      <button type="button"
-              class="btn btn-primary join-item"
-              hx-delete="."
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>
-    </div>
-  </div>
-  <div id="response"></div>
+  {% include "./_filter_edit_content.html" %}
 {% endblock main %}

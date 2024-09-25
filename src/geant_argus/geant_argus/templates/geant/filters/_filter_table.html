@@ -1,23 +1,28 @@
 <table id="table"
-       class="table border border-separate border-spacing-1 border-primary mt-2">
+       class="table border border-separate border-spacing-1 border-primary">
   <thead>
     <tr class="border-b border-primary">
       <th class="border-b border-primary">Name</th>
       <th class="border-b border-primary">User</th>
-      <th class="border-b border-primary">Edit</th>
+      <th class="border-b border-primary w-20">Edit</th>
     </tr>
   </thead>
   <tbody id="table-body">
     {% block incident_rows %}
       {% for object in page.object_list %}
         {% block object %}
-          <tr id="obj-{{ object.pk }}-row" class="hover">
+          <tr id="obj-{{ object.pk }}-row"
+              class="{% if pk == object.pk %}bg-primary text-primary-content{% else %}hover{% endif %}">
             <td>{{ object.name }}</td>
             <td>{{ object.user.username }}</td>
             <td>
-              <a href="{% url 'geant-filters:edit-filter' object.pk %}">
-                <button type="button" class="btn btn-sm btn-ghost">Edit</button>
-              </a>
+              <div class="flex w-full justify-center">
+                {% if not object.pk == pk %}
+                  <a href="{% url 'geant-filters:edit-filter' object.pk %}">
+                    <button type="button" class="btn btn-xs btn-primary btn-outline">Edit</button>
+                  </a>
+                {% endif %}
+              </div>
             </td>
           </tr>
         {% endblock object %}
