@@ -1,13 +1,12 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "WARNING",
   "init_time": "2024-08-31T23:35:55",
   "endpoints": {
     "bgp": [
       {
-        "name": "rt1.mar.fr.geant.net::159.226.10.14",
         "events": [
           {
             "is_up": false,
@@ -41,7 +40,9 @@
               "establish_time": "2024-08-31T23:34:13"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mar.fr.geant.net",
+        "remote_peer": "159.226.10.14"
       }
     ],
     "link": [],
@@ -49,6 +50,11 @@
     "infinera": []
   },
   "description": "BGP peering (159.226.10.14) Incident",
+  "location": ["mar"],
+	"equipment": ["rt1.mar.fr"],
   "short_lived": false,
-  "endpoint_count": 2
+  "endpoint_count": 2,
+  "blacklist": {
+    "applied": false
+  }
 }

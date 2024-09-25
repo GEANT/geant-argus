@@ -1,13 +1,12 @@
 {
   "phase": "FINALIZED",
   "status": "CLOSED",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "WARNING",
   "endpoints": {
     "bgp": [],
     "link": [
       {
-        "name": "sw1.lju.si.geant.net::irb.998",
         "events": [
           {
             "is_up": true,
@@ -43,7 +42,9 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "sw1.lju.si.geant.net",
+        "interface": "irb.998"
       }
     ],
     "coriant": [],
@@ -51,6 +52,15 @@
   },
   "init_time": "2024-09-02T08:30:59",
   "description": "Interface irb.998 Incident",
+  "location": [
+    "LJUBLJANA 1"
+  ],
+  "equipment": [
+    "SW1.LJU.SI"
+  ],
   "short_lived": true,
-  "endpoint_count": 2
+  "endpoint_count": 2,
+  "blacklist": {
+    "applied": false
+  }
 }

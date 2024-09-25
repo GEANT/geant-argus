@@ -1,15 +1,13 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "CRITICAL",
   "init_time": "2024-08-30T15:53:30",
-
   "endpoints": {
     "bgp": [],
     "link": [
       {
-        "name": "rt1.ham.de.geant.net::ae4",
         "events": [
           {
             "is_up": false,
@@ -28,10 +26,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "ae4"
       },
       {
-        "name": "rt1.ham.de.geant.net::et-2/0/5",
         "events": [
           {
             "is_up": true,
@@ -50,10 +49,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "et-2/0/5"
       },
       {
-        "name": "rt1.ham.de.geant.net::et-2/0/2",
         "events": [
           {
             "is_up": true,
@@ -72,10 +72,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "et-2/0/2"
       },
       {
-        "name": "rt1.ham.de.geant.net::et-2/1/2",
         "events": [
           {
             "is_up": true,
@@ -94,10 +95,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "et-2/1/2"
       },
       {
-        "name": "mx1.poz.pl.geant.net::et-7/1/2",
         "events": [
           {
             "is_up": true,
@@ -116,10 +118,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "et-7/1/2"
       },
       {
-        "name": "mx1.poz.pl.geant.net::et-7/1/5",
         "events": [
           {
             "is_up": true,
@@ -138,10 +141,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "et-7/1/5"
       },
       {
-        "name": "mx1.poz.pl.geant.net::ae4",
         "events": [
           {
             "is_up": true,
@@ -160,10 +164,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "ae4"
       },
       {
-        "name": "mx1.poz.pl.geant.net::et-7/0/5",
         "events": [
           {
             "is_up": true,
@@ -182,12 +187,13 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "et-7/0/5"
       }
     ],
     "coriant": [
       {
-        "name": "HAM01-GRV2::1-1.5-Optical-100GbE-TTP",
         "events": [
           {
             "is_up": false,
@@ -202,10 +208,11 @@
               "probable_cause": "remoteFault"
             }
           }
-        ]
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.5-Optical-100GbE-TTP"
       },
       {
-        "name": "POZ01-GRV3::1-1.3-Optical-100GbE-TTP",
         "events": [
           {
             "is_up": false,
@@ -220,10 +227,11 @@
               "probable_cause": "remoteFault"
             }
           }
-        ]
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.3-Optical-100GbE-TTP"
       },
       {
-        "name": "HAM01-GRV2::1-1.1-Optical-TTP",
         "events": [
           {
             "is_up": false,
@@ -238,10 +246,11 @@
               "probable_cause": "los"
             }
           }
-        ]
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.1-Optical-TTP"
       },
       {
-        "name": "POZ01-GRV3::1-1.5-Optical-100GbE-TTP",
         "events": [
           {
             "is_up": true,
@@ -256,10 +265,11 @@
               "probable_cause": "remoteFault"
             }
           }
-        ]
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.5-Optical-100GbE-TTP"
       },
       {
-        "name": "POZ01-GRV3::1-1.4-Optical-100GbE-TTP",
         "events": [
           {
             "is_up": true,
@@ -274,10 +284,11 @@
               "probable_cause": "remoteFault"
             }
           }
-        ]
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.4-Optical-100GbE-TTP"
       },
       {
-        "name": "HAM01-GRV2::1-1.4-Optical-100GbE-TTP",
         "events": [
           {
             "is_up": true,
@@ -292,10 +303,11 @@
               "probable_cause": "remoteFault"
             }
           }
-        ]
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.4-Optical-100GbE-TTP"
       },
       {
-        "name": "HAM01-GRV2::1-1.3-Optical-100GbE-TTP",
         "events": [
           {
             "is_up": true,
@@ -310,10 +322,11 @@
               "probable_cause": "remoteFault"
             }
           }
-        ]
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.3-Optical-100GbE-TTP"
       },
       {
-        "name": "POZ01-GRV3::1-1.1-Optical-TTP",
         "events": [
           {
             "is_up": true,
@@ -328,12 +341,13 @@
               "probable_cause": "los"
             }
           }
-        ]
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.1-Optical-TTP"
       }
     ],
     "infinera": [
       {
-        "name": "HAM01-MTC6-1::2-A-1-S1-1",
         "events": [
           {
             "is_up": true,
@@ -349,10 +363,11 @@
               "probable_cause": "Signaled SNC failure (COM0038)"
             }
           }
-        ]
+        ],
+        "ne_name": "HAM01-MTC6-1",
+        "port": "2-A-1-S1-1"
       },
       {
-        "name": "POZ01-MTC6-1::2-A-1-S1-1",
         "events": [
           {
             "is_up": true,
@@ -368,11 +383,20 @@
               "probable_cause": "Signaled SNC failure (COM0038)"
             }
           }
-        ]
+        ],
+        "ne_name": "POZ01-MTC6-1",
+        "port": "2-A-1-S1-1"
       }
     ]
   },
   "description": "Loss of Optical Service (HAM-POZ-IPTRUNK)",
+  "location": ["HAMBURG (SÜDERSTRASSE)","POZNAN 1"],
+	"equipment": ["RT1.HAM.DE", "MX1.POZ.PL"],
+  "ticket_ref": "942078",
+  "ticket_url": "https://tts.geant.net/otrs/index.pl?Action=AgentTicketZoom;TicketID=942078",
   "short_lived": false,
-  "endpoint_count": 18
+  "endpoint_count": 18,
+  "blacklist": {
+    "applied": false
+  }
 }

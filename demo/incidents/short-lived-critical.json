@@ -1,13 +1,12 @@
 {
   "phase": "FINALIZED",
   "status": "CLOSED",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "CRITICAL",
   "endpoints": {
     "bgp": [],
     "link": [
       {
-        "name": "mx1.gen.ch.geant.net::et-11/1/2",
         "events": [
           {
             "is_up": true,
@@ -26,10 +25,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "mx1.gen.ch.geant.net",
+        "interface": "et-11/1/2"
       },
       {
-        "name": "mx1.gen.ch.geant.net::ae4",
         "events": [
           {
             "is_up": true,
@@ -48,10 +48,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "mx1.gen.ch.geant.net",
+        "interface": "ae4"
       },
       {
-        "name": "mx1.gen.ch.geant.net::et-11/1/5",
         "events": [
           {
             "is_up": true,
@@ -70,10 +71,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "mx1.gen.ch.geant.net",
+        "interface": "et-11/1/5"
       },
       {
-        "name": "rt1.mar.fr.geant.net::et-4/0/5",
         "events": [
           {
             "is_up": true,
@@ -92,10 +94,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mar.fr.geant.net",
+        "interface": "et-4/0/5"
       },
       {
-        "name": "rt1.mar.fr.geant.net::ae4",
         "events": [
           {
             "is_up": true,
@@ -114,10 +117,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mar.fr.geant.net",
+        "interface": "ae4"
       },
       {
-        "name": "rt1.mar.fr.geant.net::et-4/0/2",
         "events": [
           {
             "is_up": true,
@@ -136,7 +140,9 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mar.fr.geant.net",
+        "interface": "et-4/0/2"
       }
     ],
     "coriant": [],
@@ -144,6 +150,17 @@
   },
   "init_time": "2024-08-30T12:57:16",
   "description": "GEN-MAR-IPTRUNK (interface ae4) Incident",
+  "location": [
+    "MARSEILLE",
+    "GENEVA"
+  ],
+  "equipment": [
+    "RT1.MAR.FR",
+    "MX1.GEN.CH"
+  ],
   "short_lived": true,
-  "endpoint_count": 6
+  "endpoint_count": 6,
+  "blacklist": {
+    "applied": false
+  }
 }

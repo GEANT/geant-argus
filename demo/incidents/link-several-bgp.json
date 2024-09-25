@@ -1,13 +1,12 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "CRITICAL",
   "init_time": "2024-08-29T21:22:08",
   "endpoints": {
     "bgp": [
       {
-        "name": "rt1.mil2.it.geant.net::2001:0798:0001:0000:0000:0000:0000:011a",
         "events": [
           {
             "is_up": false,
@@ -41,10 +40,11 @@
               "establish_time": "2024-08-29T21:20:34"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mil2.it.geant.net",
+        "remote_peer": "2001:0798:0001:0000:0000:0000:0000:011a"
       },
       {
-        "name": "rt1.mil2.it.geant.net::62.40.125.143",
         "events": [
           {
             "is_up": false,
@@ -78,10 +78,11 @@
               "establish_time": "2024-08-29T21:20:21"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mil2.it.geant.net",
+        "remote_peer": "62.40.125.143"
       },
       {
-        "name": "rt1.mil2.it.geant.net::2001:0798:0099:0001:0000:0000:0000:012a",
         "events": [
           {
             "is_up": false,
@@ -115,10 +116,11 @@
               "establish_time": "2024-08-29T21:20:26"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mil2.it.geant.net",
+        "remote_peer": "2001:0798:0099:0001:0000:0000:0000:012a"
       },
       {
-        "name": "rt1.mil2.it.geant.net::83.97.88.229",
         "events": [
           {
             "is_up": false,
@@ -152,12 +154,13 @@
               "establish_time": "2024-08-29T21:20:27"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mil2.it.geant.net",
+        "remote_peer": "83.97.88.229"
       }
     ],
     "link": [
       {
-        "name": "rt1.mil2.it.geant.net::ae16",
         "events": [
           {
             "is_up": false,
@@ -193,10 +196,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mil2.it.geant.net",
+        "interface": "ae16"
       },
       {
-        "name": "rt1.mil2.it.geant.net::et-4/1/5",
         "events": [
           {
             "is_up": false,
@@ -232,13 +236,20 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.mil2.it.geant.net",
+        "interface": "et-4/1/5"
       }
     ],
     "coriant": [],
     "infinera": []
   },
   "description": "RASH-AP1-100G, RASH-AP1-100G-IAS (interface ae16) Incident",
+  "location": ["MILAN 2 CALDERA"],
+	"equipment": ["RT1.MIL.IT"],
   "short_lived": false,
-  "endpoint_count": 12
+  "endpoint_count": 12,
+  "blacklist": {
+    "applied": false
+  }
 }

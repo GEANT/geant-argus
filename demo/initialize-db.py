@@ -70,9 +70,9 @@ def create_fake_incident(metadata=None):
     else:
         start_time = timezone.now()
 
+    ticket_url = metadata.pop("ticket_url", "")
     end_time = INFINITY_REPR
     source_incident_id = randint(1, 10**6) + 10**7
-
     incident = Incident.objects.create(
         start_time=start_time,
         end_time=end_time,
@@ -80,6 +80,7 @@ def create_fake_incident(metadata=None):
         source=source_system,
         description=description,
         level=level,
+        ticket_url=ticket_url,
         metadata=metadata,
     )
     incident.create_first_event()

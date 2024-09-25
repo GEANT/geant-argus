@@ -1,14 +1,13 @@
 {
   "phase": "FINALIZED",
   "status": "CLEAR",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "WARNING",
   "init_time": "2024-08-29T07:19:05",
   "endpoints": {
     "bgp": [],
     "link": [
       {
-        "name": "rt1.rig.lv.geant.net::ae3",
         "events": [
           {
             "is_up": true,
@@ -27,10 +26,11 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.rig.lv.geant.net",
+        "interface": "ae3"
       },
       {
-        "name": "rt1.rig.lv.geant.net::xe-0/1/0",
         "events": [
           {
             "is_up": true,
@@ -49,13 +49,20 @@
               "admin_down_time": null
             }
           }
-        ]
+        ],
+        "hostname": "rt1.rig.lv.geant.net",
+        "interface": "xe-0/1/0"
       }
     ],
     "coriant": [],
     "infinera": []
   },
   "description": "DCN-MANAGEMENT-RIG1-LV-, EX4300-MANAGEMENT-RIG-LV (interface ae3) Incident",
+  "location":["RIGA"],
+  "equipment": ["RT1.RIG.LV"],
   "short_lived": false,
-  "endpoint_count": 2
+  "endpoint_count": 2,
+  "blacklist": {
+    "applied": false
+  }
 }

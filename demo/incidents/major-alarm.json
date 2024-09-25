@@ -1,13 +1,12 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "MAJOR",
   "init_time": "2024-09-01T10:37:36",
   "endpoints": {
     "bgp": [
       {
-        "name": "mx1.lon.uk.geant.net::195.66.225.44",
         "events": [
           {
             "is_up": false,
@@ -25,10 +24,11 @@
               "establish_time": "2024-09-01T10:40:24"
             }
           }
-        ]
+        ],
+        "hostname": "mx1.lon.uk.geant.net",
+        "remote_peer": "195.66.225.44"
       },
       {
-        "name": "mx1.lon.uk.geant.net::195.66.226.79",
         "events": [
           {
             "is_up": true,
@@ -46,10 +46,11 @@
               "establish_time": "2024-09-01T10:40:27"
             }
           }
-        ]
+        ],
+        "hostname": "mx1.lon.uk.geant.net",
+        "remote_peer": "195.66.226.79"
       },
       {
-        "name": "mx1.lon.uk.geant.net::2001:07f8:0004:0000:0000:0000:2167:0001",
         "events": [
           {
             "is_up": true,
@@ -67,10 +68,11 @@
               "establish_time": "2024-09-01T10:40:13"
             }
           }
-        ]
+        ],
+        "hostname": "mx1.lon.uk.geant.net",
+        "remote_peer": "2001:07f8:0004:0000:0000:0000:2167:0001"
       },
       {
-        "name": "mx1.lon.uk.geant.net::2001:07f8:0004:0000:0000:0000:d79b:0001",
         "events": [
           {
             "is_up": true,
@@ -88,7 +90,9 @@
               "establish_time": "2024-09-01T10:40:09"
             }
           }
-        ]
+        ],
+        "hostname": "mx1.lon.uk.geant.net",
+        "remote_peer": "2001:07f8:0004:0000:0000:0000:d79b:0001"
       }
     ],
     "link": [],
@@ -96,6 +100,13 @@
     "infinera": []
   },
   "description": "Multiple IX peering down on mx1.lon.uk.geant.net",
+  "location": ["LONDON"],
+	"equipment": ["MX1.LON.UK"],
   "short_lived": false,
-  "endpoint_count": 4
+  "endpoint_count": 4,
+  "blacklist": {
+    "applied": true,
+    "original_severity": "MAJOR",
+    "message": "There is probably a good reason for this"
+  }
 }

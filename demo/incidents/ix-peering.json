@@ -1,13 +1,12 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "MINOR",
   "init_time": "2024-08-31T01:01:09",
   "endpoints": {
     "bgp": [
       {
-        "name": "rt1.ams.nl.geant.net::2001:07f8:0001:0000:0000:a501:6265:0001",
         "events": [
           {
             "is_up": false,
@@ -41,10 +40,11 @@
               "establish_time": "2024-08-31T01:01:06"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.ams.nl.geant.net",
+        "remote_peer": "2001:07f8:0001:0000:0000:a501:6265:0001"
       },
       {
-        "name": "rt1.ams.nl.geant.net::2001:07f8:0001:0000:0000:a500:4134:0001",
         "events": [
           {
             "is_up": true,
@@ -62,7 +62,9 @@
               "establish_time": "2024-08-31T00:01:10"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.ams.nl.geant.net",
+        "remote_peer": "2001:07f8:0001:0000:0000:a500:4134:0001"
       }
     ],
     "link": [],
@@ -70,6 +72,11 @@
     "infinera": []
   },
   "description": "One or more IX peering down on rt1.ams.nl.geant.net",
+  "location": ["AMSTERDAM"],
+	"equipment": ["RT1.AMS.NL"],
   "short_lived": false,
-  "endpoint_count": 3
+  "endpoint_count": 3,
+  "blacklist": {
+    "applied": false
+  }
 }

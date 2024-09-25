@@ -1,12 +1,11 @@
 {
   "phase": "FINALIZED",
   "status": "CLOSED",
-  "version": "v0a4",
+  "version": "v0a5",
   "severity": "WARNING",
   "endpoints": {
     "bgp": [
       {
-        "name": "rt1.fra.de.geant.net::128.223.157.40",
         "events": [
           {
             "is_up": true,
@@ -24,7 +23,9 @@
               "establish_time": "2024-09-02T08:41:19"
             }
           }
-        ]
+        ],
+        "hostname": "rt1.fra.de.geant.net",
+        "remote_peer": "128.223.157.40"
       }
     ],
     "link": [],
@@ -33,6 +34,12 @@
   },
   "init_time": "2024-09-02T08:40:20",
   "description": "BGP peering (128.223.157.40) Incident",
+
+  "location": ["fra"],
+	"equipment": ["rt1.fra.de"],
   "short_lived": true,
-  "endpoint_count": 1
+  "endpoint_count": 1,
+  "blacklist": {
+    "applied": false
+  }
 }
