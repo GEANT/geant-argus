@@ -1,12 +1,27 @@
 from django import template
 from django.utils.dateparse import parse_datetime
 
+
 register = template.Library()
 
 
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+
+@register.filter
+def get_description_modal_item(obj, key):
+    if isinstance(obj, dict):
+        value = obj.get(key, None)
+    else:
+        value = getattr(obj, key, None)
+
+    # Handle case where value is a list/array
+    if isinstance(value, list):
+        return " ".join(str(v) for v in value)  # Join array elements into a string
+
+    return value
 
 
 @register.filter
