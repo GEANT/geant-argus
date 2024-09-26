@@ -106,6 +106,11 @@ INCIDENT_TABLE_COLUMNS = [
         context={"group": "servicedesk"},
     ),
     IncidentTableColumn(
+        "comment",
+        label="Comment",
+        cell_template="htmx/incidents/_incident_comment.html",
+    ),
+    IncidentTableColumn(
         "details",
         label="Details",
         cell_template="htmx/incidents/_incident_details_button.html",
