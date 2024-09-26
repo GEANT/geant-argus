@@ -1,0 +1,76 @@
+{
+  "phase": "FINALIZED",
+  "status": "CLEAR",
+  "version": "v0a5",
+  "location": [
+    "kie",
+    "kie"
+  ],
+  "severity": "HIDE",
+  "blacklist": {
+    "applied": true,
+    "message": "TO hide alarms from NE monitoring tools",
+    "original_severity": "WARNING"
+  },
+  "endpoints": {
+    "bgp": [
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2023-05-16T13:56:04",
+            "clear_time": "2023-05-16T13:58:20",
+            "properties": {
+              "id": 13692641,
+              "peer": "193.177.129.61",
+              "status": "established",
+              "idle_time": "2023-05-16T13:55:32",
+              "source_ip": "62.40.96.1",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt1.kie.ua.geant.net",
+              "establish_time": "2023-05-16T13:58:20"
+            }
+          }
+        ],
+        "hostname": "rt1.kie.ua.geant.net",
+        "remote_peer": "193.177.129.61"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2023-05-16T13:57:33",
+            "clear_time": "2023-05-16T16:26:43",
+            "properties": {
+              "id": 13692647,
+              "peer": "193.177.129.61",
+              "status": "established",
+              "idle_time": "2023-05-16T13:57:33",
+              "source_ip": "62.40.96.68",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-MIB::bgpBackwardTransition",
+              "equipment_name": "rt2.kie.ua.geant.net",
+              "establish_time": "2023-05-16T16:26:43"
+            }
+          }
+        ],
+        "hostname": "rt2.kie.ua.geant.net",
+        "remote_peer": "193.177.129.61"
+      }
+    ],
+    "link": [],
+    "coriant": [],
+    "infinera": []
+  },
+  "equipment": [
+    "rt1.kie.ua",
+    "rt2.kie.ua"
+  ],
+  "init_time": "2023-05-16T16:13:06",
+  "clear_time": "2023-05-16T16:26:43",
+  "ticket_ref": "",
+  "description": "BGP peering (193.177.129.61) Incident",
+  "short_lived": false,
+  "endpoint_count": 2
+}

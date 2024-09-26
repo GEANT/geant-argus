@@ -1,0 +1,52 @@
+version: '3.5'
+services:
+  argus:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      init:
+        condition: service_completed_successfully
+    environment:
+      - TIME_ZONE=Europe/Amsterdam
+      - DATABASE_URL=postgresql://argus:argus@postgres/argus
+      - ARGUS_DISABLE_REDIS=True
+      - POSTGRES_USER=argus
+      - POSTGRES_PASSWORD=argus
+      - POSTGRES_DB=argus
+    volumes:
+      - ./demo/incidents:/argus/incidents
+    restart: unless-stopped
+
+  init:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: "python3 /argus/initialize-db.py"
+    environment:
+      - TIME_ZONE=Europe/Amsterdam
+      - DATABASE_URL=postgresql://argus:argus@postgres/argus
+      - ARGUS_DISABLE_REDIS=True
+      - PGHOST=postgres
+      - PGUSER=argus
+      - PGPASSWORD=argus
+      - PGDATABASE=argus
+    volumes:
+      - ./demo/incidents:/argus/incidents
+
+  postgres:
+    image: "postgres:12"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=argus
+      - POSTGRES_PASSWORD=argus
+      - POSTGRES_DB=argus
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U argus -d argus"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
