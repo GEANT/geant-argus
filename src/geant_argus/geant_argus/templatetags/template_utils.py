@@ -1,19 +1,34 @@
+import datetime
 from django import template
 from django.utils.dateparse import parse_datetime
+
 
 register = template.Library()
 
 
 @register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
+def get_item(obj, key):
+    return _get_item(obj, key)
+
+
+def _get_item(obj, *keys):
+    if obj is None:
+        return None
+    if not len(keys):
+        return None
+    key, *rest = keys
+    result = obj.get(key, None) if isinstance(obj, dict) else getattr(obj, key, None)
+    if not rest:
+        return result
+    return _get_item(result, *rest)
 
 
 @register.filter
-def dateparse(datestr):
-    if not isinstance(datestr, str):
-        return None
-    return parse_datetime(datestr)
+def dateparse(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj
+    if isinstance(obj, str):
+        return parse_datetime(obj)
 
 
 @register.filter
