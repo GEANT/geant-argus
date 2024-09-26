@@ -39,6 +39,8 @@ services:
 
   postgres:
     image: "postgres:12"
+    ports:
+      - "5433:5432"
     restart: unless-stopped
     environment:
       - POSTGRES_USER=argus
