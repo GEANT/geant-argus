@@ -133,10 +133,17 @@ def geant_theme(request):
                 "cell_lookup_key": "metadata.clear_time",
                 "cell_template": "htmx/incidents/_date_cell.html",
             },
+            {"name": "Alarm ID", "cell_lookup_key": "source_incident_id"},
             {"name": "Status", "cell_lookup_key": "metadata.status"},
             {"name": "Severity", "cell_lookup_key": "metadata.severity"},
             {"name": "Location", "cell_lookup_key": "metadata.location"},
             {"name": "Equipment", "cell_lookup_key": "metadata.equipment"},
             {"name": "Full Ticket Ref", "cell_lookup_key": "metadata.ticket_ref"},
+            {"name": "Comment", "cell_lookup_key": "metadata.comment"},
+            {
+                "name": "Short lived?",
+                "cell_lookup_key": "metadata.short_lived",
+                "cell_template": "htmx/incidents/_boolean_cell.html",
+            },
         ],
     }

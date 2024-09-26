@@ -72,11 +72,6 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_level.html",
     ),
     IncidentTableColumn(
-        "alarm_id",
-        label="Alarm ID",
-        cell_template="htmx/incidents/_incident_source_incident_id.html",
-    ),
-    IncidentTableColumn(
         "location",
         label="Location",
         cell_template="htmx/incidents/_incident_location_equipment.html",
@@ -109,6 +104,11 @@ INCIDENT_TABLE_COLUMNS = [
         label="SD Ack",
         cell_template="htmx/incidents/_incident_group_ack.html",
         context={"group": "servicedesk"},
+    ),
+    IncidentTableColumn(
+        "comment",
+        label="Comment",
+        cell_template="htmx/incidents/_incident_comment.html",
     ),
     IncidentTableColumn(
         "details",

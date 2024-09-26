@@ -10,6 +10,32 @@ frontend for the NOC. Argus is an application written in Django. This web framew
 extension/customization capabilities, which makes it relatively easy to slightly modify
 applications written in Django
 
+## Quick start
+
+The easiest way to start an instance of Geant Argus is to use docker compose:
+
+```
+docker compose up
+```
+
+This will spin up everything you need for demoing Argus. It can be reached on
+http://127.0.0.1:8000. The database is automatically populated with the incidents described in
+the `demo/incidents` directory. You can reset the instance to its initial settings by running one
+of two commands.:
+
+```bash
+docker compose down -v && docker compose up
+```
+
+The `demo/incidents` directory is mounted inside the container, so you can also edit the indicents
+as you see fit and then run to update the incident list. 
+
+*note* this will also reset the database to its initial state.
+
+```bash
+docker compose exec -t argus ./initialize-db.py --force
+```
+
 ## Development
 
 _note_ additional information on how we customize Argus can be found in `DEVELOPMENT.md`

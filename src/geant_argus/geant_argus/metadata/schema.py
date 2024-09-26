@@ -148,6 +148,7 @@ METADATA_V0A4_SCHEMA = {
     },
     "properties": {
         "version": {"const": "v0a4"},
+        "init_time": {"type": ["string", "null"]},
         "phase": {"type": "string"},
         "status": {"type": "string", "enum": ["ACTIVE", "CLEAR", "CLOSED"]},
         "severity": {"type": "string"},
@@ -346,6 +347,7 @@ METADATA_V0A5_SCHEMA = {
         },
         "description": {"type": "string"},
         "short_lived": {"type": "boolean"},
+        "comment": {"type": ["string", "null"]},
     },
     "required": [
         "version",
