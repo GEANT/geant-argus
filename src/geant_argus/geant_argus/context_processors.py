@@ -27,7 +27,7 @@ def geant_theme(request):
                     "name": "Remote Peer",
                     "cell_template": "htmx/incident_details/bgp_remote_peer.html",
                     "is_endpoint_column": True,
-                    "classes": "w-2/12",
+                    "classes": "w-3/12",
                 },
                 {
                     "name": "Alarm ID",
@@ -52,7 +52,7 @@ def geant_theme(request):
                 {
                     "name": "Properties",
                     "cell_template": "htmx/incident_details/event_properties.html",
-                    "classes": "w-2/12",
+                    "classes": "w-1/12",
                 },
             ],
             "link": [
@@ -66,7 +66,7 @@ def geant_theme(request):
                     "name": "Interface",
                     "cell_template": "htmx/incident_details/link_interface.html",
                     "is_endpoint_column": True,
-                    "classes": "w-2/12",
+                    "classes": "w-3/12",
                 },
                 {
                     "name": "Alarm ID",
@@ -105,7 +105,7 @@ def geant_theme(request):
                     "name": "Port",
                     "cell_template": "htmx/incident_details/optical_port.html",
                     "is_endpoint_column": True,
-                    "classes": "w-2/12",
+                    "classes": "w-3/12",
                 },
                 {
                     "name": "Alarm ID",
@@ -144,7 +144,7 @@ def geant_theme(request):
                     "name": "Port",
                     "cell_template": "htmx/incident_details/optical_port.html",
                     "is_endpoint_column": True,
-                    "classes": "w-2/12",
+                    "classes": "w-3/12",
                 },
                 {
                     "name": "Alarm ID",
