@@ -4,9 +4,10 @@ from .base import *  # noqa: F401, F403
 STORAGES["staticfiles"]["BACKEND"] = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 DEBUG = False
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [".geant.org"]
+if FRONTEND_URL:
+    CSRF_TRUSTED_ORIGINS = [FRONTEND_URL]
 COOKIE_DOMAIN = None
-CORS_ALLOW_ALL_ORIGINS = True
 
 _REDIS_HOSTS = get_str_env("GEANT_REDIS_URLS").split(" ")  # noqa: F405
 CHANNEL_LAYERS = {
