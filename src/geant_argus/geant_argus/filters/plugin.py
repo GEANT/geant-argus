@@ -6,7 +6,6 @@ from argus.filter.default import (  # noqa: F401
     SOURCE_LOCKED_INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
     ComplexFallbackFilterWrapper,
 )
-from argus.filter.default import FilterSerializer as DefaultFilterSerializer
 from argus.filter.default import IncidentFilter as DefaultIncidentFilter
 from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # noqa: F401
 from argus.filter.filters import Filter
@@ -45,24 +44,6 @@ class GeantFilterBackend(BaseFilterBackend):
     @classmethod
     def get_filter_blob_serializer(cls):
         return _FilterBlobSerializer
-
-    @classmethod
-    def validate_jsonfilter(cls, value: dict):
-        if not isinstance(value, dict):
-            raise serializers.ValidationError("Filter is not a dict")
-        if not value:
-            return True
-        serializer = cls.get_filter_blob_serializer()(data=value)
-        if serializer.is_valid():
-            return True
-        raise serializers.ValidationError("Filter is not valid")
-
-    @classmethod
-    def get_filter_serializer(cls):
-        class FilterSerializer(DefaultFilterSerializer):
-            filter = cls.get_filter_blob_serializer()(required=True)
-
-        return FilterSerializer
 
     @classmethod
     def get_incident_filter(cls):
@@ -213,8 +194,6 @@ class _FilterBlobExtension(OpenApiSerializerExtension):
 
 
 _backend = GeantFilterBackend()
-validate_jsonfilter = _backend.validate_jsonfilter
-FilterSerializer = _backend.get_filter_serializer()
 FilterBlobSerializer = _backend.get_filter_blob_serializer()
 IncidentFilter = _backend.get_incident_filter()
 
