@@ -1,7 +1,9 @@
 from argus.site.settings.prod import *  # noqa: F401, F403
 from .base import *  # noqa: F401, F403
 
-STORAGES["staticfiles"]["BACKEND"] = "django.contrib.staticfiles.storage.StaticFilesStorage"
+STORAGES["staticfiles"][
+    "BACKEND"
+] = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 DEBUG = False
 ALLOWED_HOSTS = [".geant.org"]
