@@ -58,7 +58,7 @@ INCIDENT_TABLE_COLUMNS = [
     ),
     IncidentTableColumn(
         "endpoint_count",
-        label="Flaps",
+        label="#",
         cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
