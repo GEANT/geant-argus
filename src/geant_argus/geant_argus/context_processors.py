@@ -124,12 +124,12 @@ def geant_theme(request):
         "incident_description_glance_table": [
             {"name": "Description", "cell_lookup_key": "description"},
             {
-                "name": "Start Time",
+                "name": "Start Time (UTC)",
                 "cell_lookup_key": "start_time",
                 "cell_template": "htmx/incidents/_date_cell.html",
             },
             {
-                "name": "Clear Time",
+                "name": "Clear Time (UTC)",
                 "cell_lookup_key": "metadata.clear_time",
                 "cell_template": "htmx/incidents/_date_cell.html",
             },
