@@ -32,7 +32,7 @@ TEMPLATES[0]["DIRS"] = []  # noqa: F405
 # Theming
 DEFAULT_THEME = "geant"
 DEFAULT_TW_CSS = "geant.css"
-DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
+# DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
 
 # context processors customization
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
@@ -118,8 +118,8 @@ INCIDENT_TABLE_COLUMNS = [
 ]
 
 # Tailwind config template relative to the repository root directory
-TAILWIND_CONFIG_TEMPLATE = "tailwindcss/tailwind.config.template.js"
-TAILWIND_CONFIG_TARGET = "tailwindcss/tailwind.config.js"
+TAILWIND_CONFIG_TEMPLATE = "tailwind/tailwind.config.js"
+# TAILWIND_CONFIG_TARGET = "../tailwindcss/tailwind.config.js"
 
 
 # Status checker widget
