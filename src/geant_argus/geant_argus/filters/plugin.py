@@ -6,7 +6,12 @@ from argus.filter.default import (  # noqa: F401
     SOURCE_LOCKED_INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
     ComplexFallbackFilterWrapper,
 )
-from argus.filter.default import FilterSerializer as DefaultFilterSerializer
+
+try:
+    from argus.filter.default import FilterSerializer as DefaultFilterSerializer
+except ImportError:
+    DefaultFilterSerializer = object
+
 from argus.filter.default import IncidentFilter as DefaultIncidentFilter
 from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # noqa: F401
 from argus.filter.filters import Filter
