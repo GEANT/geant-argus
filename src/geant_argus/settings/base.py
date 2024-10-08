@@ -53,12 +53,12 @@ INCIDENT_TABLE_COLUMNS = [
     "row_select",
     IncidentTableColumn(
         "timestamp",
-        label="Timestamp",
+        label="Start Time (UTC)",
         cell_template="htmx/incidents/_incident_start_time.html",
     ),
     IncidentTableColumn(
         "endpoint_count",
-        label="Flaps",
+        label="#",
         cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(

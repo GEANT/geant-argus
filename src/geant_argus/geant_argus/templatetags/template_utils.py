@@ -61,3 +61,10 @@ def underscores_to_spaces(value):
     if not isinstance(value, str):
         return value
     return value.replace("_", " ")
+
+
+@register.filter
+def utc_time_header(value: str):
+    if value.endswith("time"):
+        return value + " (UTC)"
+    return value
