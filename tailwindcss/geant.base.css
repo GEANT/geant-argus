@@ -78,4 +78,37 @@
     background-color: rgba(var(--color-incident-clear));
     border: none;
   }
+
+  .row-collapse {
+    display: grid;
+  }
+  .endpoints-table {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  /*
+  Currently every endpoints table has the same number of columns and relative column width. If
+  we want a endpoints table with a different number of column or relative widths (ie custom 
+  grid-template-columns setting, we should select on the #<endpoint_type>-endpoints-table id
+  that is assigned to that table eg:
+  
+  #bgp-endpoints-table.endpoints-table .headers,
+  #bgp-endpoints-table.endpoints-table .table-row {
+    grid-template-columns: 1fr 2fr 3fr;
+  }
+  */
+  .endpoints-table .headers,
+  .endpoints-table .table-row {
+    display: grid;
+
+    grid-template-columns: 2fr 3fr 1fr 1fr 2fr 2fr 1fr 1fr;
+  }
+  .row-collapse.open .row-collapse-btn::after {
+    content: "X";
+  }
+
+  .row-collapse:not(.open) .row-collapse-content {
+    display: none;
+  }
 }
