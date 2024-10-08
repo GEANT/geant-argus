@@ -106,7 +106,6 @@
   .row-collapse.open .row-collapse-btn::after {
     content: "✕";
   }
-
   .row-collapse:not(.open) .row-collapse-content {
     display: none;
   }
