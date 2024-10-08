@@ -1,43 +1,52 @@
 {% load template_utils %}
 <section id="endpoints" class="rounded-box border border-accent p-2">
-  <h1 class="font-bold text-2xl  ml-2">Endpoints</h1>
+  <h1 class="font-bold text-2xl ml-2">Endpoints</h1>
   {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
     {% if endpoints %}
       {% with endpoint_table=incident_details_tables|get_item:endpoint_type %}
-        <div>
-          <div class="collapse collapse-arrow px-0 mt-2">
-            <input type="checkbox" name="is-open-checkbox" checked />
-            <div class="collapse-title text-xl font-medium bg-primary text-primary-content capitalize">{{ endpoint_type }}</div>
-            <div class="collapse-content p-0">
-              <table class="table rounded-t-none border-x border-b border-primary border-separate text-base-content p-1">
-                <thead>
-                  <tr>
-                    {% for column in endpoint_table %}<th class="py-2 border-b border-primary">{{ column.name }}</th>{% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for endpoint in endpoints %}
-                    {% with endpoint_counter=forloop.counter %}
-                      <tr class="hover:bg-base-200 py-2 px-4">
-                        {% for column in endpoint_table %}
-                          {% if column.is_endpoint_column %}
-                            <td rowspan="{{ endpoint.events|length }}">{% include column.cell_template with endpoint=endpoint %}</td>
+        <div class="collapse collapse-arrow px-0 mt-2 border border-primary">
+          <input type="checkbox" name="is-open-checkbox" checked />
+          <div class="collapse-title text-xl font-medium bg-primary text-primary-content capitalize">{{ endpoint_type }}</div>
+          <div class="collapse-content !p-0">
+            <div id="{{ endpoint_type }}-endpoints-table"
+                 class="endpoints-table text-sm px-4 pt-2">
+              <div class="table-headers text-xs font-bold text-base-content/60 border-primary px-4 py-2 border-b-2">
+                {% for column in endpoint_table %}<div>{{ column.name }}</div>{% endfor %}
+                <div>History</div>
+              </div>
+              {% for endpoint in endpoints %}
+                <div class="table-row row-collapse px-4 py-2 hover:bg-base-200 {% if not forloop.last %}border-neutral/40 border-b-1{% endif %}">
+                  {% for event in endpoint.events %}
+                    {% with first_event=forloop.first %}
+                      {% for column in endpoint_table %}
+                        {% if first_event %}
+                          <div class="py-2">{% include column.cell_template with event=event %}</div>
+                          {% if forloop.last %}
+                            {% if endpoint.events|length > 1 %}
+                              <div class="py-2">
+                                <button type="button"
+                                        class="row-collapse-btn btn btn-xs btn-primary btn-outline"
+                                        _="on click toggle .open on closest parent .row-collapse">
+                                  +{{ endpoint.events|slice:":-1"|length }}
+                                </button>
+                              </div>
+                            {% else %}
+                              <div></div>
+                            {% endif %}
                           {% endif %}
-                        {% endfor %}
-                        {% for event in endpoint.events %}
-                          {% if not forloop.first %}<tr class="border border-primary">{% endif %}
-                            {% for column in endpoint_table %}
-                              {% if not column.is_endpoint_column %}
-                                <td>{% include column.cell_template with event=event %}</td>
-                              {% endif %}
-                            {% endfor %}
-                            {% if not forloop.last %}</tr>{% endif %}
-                        {% endfor %}
-                      </tr>
+                        {% else %}
+                          {% if not column.is_endpoint_column %}
+                            <div class="row-collapse-content py-2">{% include column.cell_template with event=event %}</div>
+                          {% else %}
+                            <div class="row-collapse-content"></div>
+                          {% endif %}
+                          {% if forloop.last %}<div></div>{% endif %}
+                        {% endif %}
+                      {% endfor %}
                     {% endwith %}
                   {% endfor %}
-                </tbody>
-              </table>
+                </div>
+              {% endfor %}
             </div>
           </div>
         </div>
