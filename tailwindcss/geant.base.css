@@ -98,10 +98,9 @@
     grid-template-columns: 1fr 2fr 3fr;
   }
   */
-  .endpoints-table .headers,
+  .endpoints-table .table-headers,
   .endpoints-table .table-row {
     display: grid;
-
     grid-template-columns: 2fr 3fr 1fr 1fr 2fr 2fr 1fr 1fr;
   }
   .row-collapse.open .row-collapse-btn::after {

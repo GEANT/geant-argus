@@ -10,12 +10,12 @@
           <div class="collapse-content !p-0">
             <div id="{{ endpoint_type }}-endpoints-table"
                  class="endpoints-table text-sm px-4 pt-2">
-              <div class="headers text-xs font-bold text-base-content/60 border-primary px-4 py-2 border-b-2">
+              <div class="table-headers text-xs font-bold text-base-content/60 border-primary px-4 py-2 border-b-2">
                 {% for column in endpoint_table %}<div>{{ column.name }}</div>{% endfor %}
                 <div>History</div>
               </div>
               {% for endpoint in endpoints %}
-                <div class="table-row row-collapse px-4 py-2 {% if not forloop.last %}border-neutral/60 border-b-1{% endif %}">
+                <div class="table-row row-collapse px-4 py-2 hover:bg-base-200 {% if not forloop.last %}border-neutral/40 border-b-1{% endif %}">
                   {% for event in endpoint.events %}
                     {% with first_event=forloop.first %}
                       {% for column in endpoint_table %}
