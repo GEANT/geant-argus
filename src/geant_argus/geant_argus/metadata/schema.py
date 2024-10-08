@@ -347,6 +347,7 @@ METADATA_V0A5_SCHEMA = {
         },
         "description": {"type": "string"},
         "short_lived": {"type": "boolean"},
+        "comment": {"type": ["string", "null"]},
     },
     "required": [
         "version",

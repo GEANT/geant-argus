@@ -53,12 +53,12 @@ INCIDENT_TABLE_COLUMNS = [
     "row_select",
     IncidentTableColumn(
         "timestamp",
-        label="Timestamp",
+        label="Start Time (UTC)",
         cell_template="htmx/incidents/_incident_start_time.html",
     ),
     IncidentTableColumn(
         "endpoint_count",
-        label="Flaps",
+        label="#",
         cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
@@ -70,11 +70,6 @@ INCIDENT_TABLE_COLUMNS = [
         "level",
         label="Severity",
         cell_template="htmx/incidents/_incident_level.html",
-    ),
-    IncidentTableColumn(
-        "alarm_id",
-        label="Alarm ID",
-        cell_template="htmx/incidents/_incident_source_incident_id.html",
     ),
     IncidentTableColumn(
         "location",
@@ -109,6 +104,11 @@ INCIDENT_TABLE_COLUMNS = [
         label="SD Ack",
         cell_template="htmx/incidents/_incident_group_ack.html",
         context={"group": "servicedesk"},
+    ),
+    IncidentTableColumn(
+        "comment",
+        label="Comment",
+        cell_template="htmx/incidents/_incident_comment.html",
     ),
     IncidentTableColumn(
         "details",

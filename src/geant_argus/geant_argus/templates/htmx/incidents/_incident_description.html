@@ -1,31 +1,3 @@
-{% load incident_extras %}
 <div _="on click js modal_{{ incident.source_incident_id }}.showModal()"
      class="cursor-pointer">{{ incident.description }}</div>
-<dialog id="modal_{{ incident.source_incident_id }}" class="modal">
-  <div class="modal-box bg-base-200">
-    <h3 class="text-lg font-bold">Quick Glance</h3>
-    <table class="table">
-      <tbody>
-        {% for item in incident_description_glance_table %}
-          <tr>
-            <th>{{ item.name }}</th>
-            {% with value=incident|get_quick_glance_item:item|default:"-" %}
-              <td>
-                {% if item.cell_template %}
-                  {% include item.cell_template %}
-                {% else %}
-                  {{ value }}
-                {% endif %}
-              </td>
-            {% endwith %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div class="modal-action">
-      <form method="dialog">
-        <button class="btn bg-neutral text-neutral-content">Close</button>
-      </form>
-    </div>
-  </div>
-</dialog>
+{% include "htmx/incidents/_incident_quick_glance_modal.html" %}
