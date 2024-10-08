@@ -104,7 +104,7 @@
     grid-template-columns: 2fr 3fr 1fr 1fr 2fr 2fr 1fr 1fr;
   }
   .row-collapse.open .row-collapse-btn::after {
-    content: "X";
+    content: "✕";
   }
 
   .row-collapse:not(.open) .row-collapse-content {
