@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.14",
+    version="0.15",
     author="GEANT",
     author_email="swd@geant.org",
     description="Dashboard V3 framework",
