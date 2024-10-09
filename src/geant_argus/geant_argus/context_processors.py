@@ -120,6 +120,32 @@ def geant_theme(request):
                     "cell_template": "htmx/incident_details/event_properties.html",
                 },
             ],
+            "fiberlink": [
+                {
+                    "name": "NE A",
+                    "cell_template": "htmx/incident_details/fiberlink_ne_a.html",
+                    "is_endpoint_column": True,
+                },
+                {
+                    "name": "NE B",
+                    "cell_template": "htmx/incident_details/fiberlink_ne_b.html",
+                    "is_endpoint_column": True,
+                },
+                {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
+                {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
+                {
+                    "name": "Init Time (UTC)",
+                    "cell_template": "htmx/incident_details/event_init_time.html",
+                },
+                {
+                    "name": "Clear Time (UTC)",
+                    "cell_template": "htmx/incident_details/event_clear_time.html",
+                },
+                {
+                    "name": "Properties",
+                    "cell_template": "htmx/incident_details/event_properties.html",
+                },
+            ],
         },
         "incident_description_glance_table": [
             {"name": "Description", "cell_lookup_key": "description"},

@@ -1,4 +1,5 @@
 import datetime
+from typing import Iterable, Union
 from django import template
 from django.utils.dateparse import parse_datetime
 
@@ -7,20 +8,18 @@ register = template.Library()
 
 
 @register.filter
-def get_item(obj, key):
-    return _get_item(obj, key)
-
-
-def _get_item(obj, *keys):
+def get_item(obj, key: Union[str, Iterable]):
     if obj is None:
         return None
-    if not len(keys):
+    if isinstance(key, str):
+        key = [key]
+    if not len(key):
         return None
-    key, *rest = keys
+    key, *rest = key
     result = obj.get(key, None) if isinstance(obj, dict) else getattr(obj, key, None)
     if not rest:
         return result
-    return _get_item(result, *rest)
+    return get_item(result, rest)
 
 
 @register.filter
