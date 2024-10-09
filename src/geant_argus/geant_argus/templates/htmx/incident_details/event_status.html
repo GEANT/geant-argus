@@ -1,0 +1,5 @@
+<div class="flex items-center">
+  <div class="inline-block w-4 h-4 mr-2 {% if event.is_up %} bg-success {% else %} bg-error {% endif %} rounded-full">
+  </div>
+  {{ event.is_up|yesno:"Up,Down" }}
+</div>

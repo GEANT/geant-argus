@@ -1,12 +1,16 @@
+import datetime
 import json
 from typing import Optional
 
 from argus.auth.models import User
-from argus.incident.models import Incident, Acknowledgement
+from argus.incident.models import Acknowledgement, Incident
 from django import template
+from django.conf import settings
 from django.template.defaultfilters import stringfilter
+from django.utils import timezone
 
 from ..incidents.severity import IncidentSeverity
+from .template_utils import dateparse, get_item
 
 register = template.Library()
 
@@ -20,7 +24,6 @@ def _level_to_severity(value):
 
 @register.filter(name="to_severity")
 def level_to_severity(value):
-    """Removes all values of arg from the given string"""
     return _level_to_severity(value).name
 
 
@@ -29,17 +32,17 @@ def level_to_badge(incident: Incident):
     severity = _level_to_severity(incident.level)
     match severity:
         case IncidentSeverity.CRITICAL:
-            color = "incident-critical"
+            classes = ["incident-critical"]
         case IncidentSeverity.MAJOR:
-            color = "incident-major"
-        case IncidentSeverity.MINOR:
-            color = "incident-minor"
-        case IncidentSeverity.WARNING:
-            color = "incident-warning"
-        case _:
-            return "badge-outline-ghost"
+            classes = ["incident-major"]
 
-    return f'bg-{color}{"/50" if not incident.open else ""} border-{color}'
+        case IncidentSeverity.MINOR:
+            classes = ["incident-minor"]
+        case _:
+            classes = ["incident-default"]
+    if not incident.open:
+        classes.append("incident-closed")
+    return " ".join(classes)
 
 
 def _incident_status(incident: Incident):
@@ -60,9 +63,9 @@ def incident_status_badge(incident: Incident):
         case "Active":
             return "badge-primary"
         case "Clear":
-            return "bg-incident-clear border-incident-clear"
+            return "incident-clear"
         case "Closed":
-            return "badge-outline-ghost"
+            return "incident-default"
 
 
 @register.filter
@@ -88,8 +91,7 @@ def has_group(user: User, group):
 
 
 @register.filter
-def is_acked_by(incident, group: str) -> bool:
-    """Backport of filter with the same name in argus-htmx-frontend"""
+def is_acked(incident, group: str) -> bool:
     return bool(getattr(incident, f"{group}_ack", None))
 
 
@@ -100,3 +102,63 @@ def ack_description(incident: Incident, ack: Optional[Acknowledgement] = None):
     for ack in incident.acks:
         if desc := ack.event.description:
             return desc
+
+
+MUST_ACK_TIMEDELTA = datetime.timedelta(minutes=10)
+
+
+@register.filter
+def must_ack(incident: Incident):
+    must_ack_timedelta = None
+    if (must_ack_within_minutes := getattr(settings, "MUST_ACK_WITHIN_MINUTES", None)) is not None:
+        must_ack_timedelta = datetime.timedelta(minutes=must_ack_within_minutes)
+    is_ack = is_acked(incident, group="any")
+    return (
+        not is_ack
+        and can_ack(incident)
+        and must_ack_timedelta is not None
+        and timezone.now() > incident.start_time + must_ack_timedelta
+    )
+
+
+@register.filter
+def can_ack(incident: Incident):
+    return (
+        incident.metadata.get("phase", "").upper() != "PENDING"
+        and incident.metadata.get("status", "").upper() != "CLOSED"
+    )
+
+
+@register.filter
+def blacklist_symbol(incident: Incident):
+    match incident.metadata:
+        case {"blacklist": {"original_severity": str(severity)}} if severity in IncidentSeverity:
+            if IncidentSeverity[severity] > incident.level:
+                return "▲"
+            if IncidentSeverity[severity] == incident.level:
+                return "="
+            if IncidentSeverity[severity] < incident.level:
+                return "▼"
+        case _:
+            return "?"
+
+
+@register.filter
+def duration(incident: Incident):
+    end_time = (
+        dateparse(clear_time)
+        if (clear_time := incident.metadata.get("clear_time"))
+        else datetime.datetime.now()
+    ).astimezone(datetime.timezone.utc)
+    return end_time - incident.start_time
+
+
+@register.filter
+def get_quick_glance_item(obj, item):
+    key = item["cell_lookup_key"]
+    value = get_item(obj, key.split("."))
+
+    if isinstance(value, list):
+        return " - ".join(str(v) for v in value)
+
+    return value

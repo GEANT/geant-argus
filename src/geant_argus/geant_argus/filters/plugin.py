@@ -1,5 +1,3 @@
-import functools
-import operator
 from typing import Any, Dict
 
 import jsonschema
@@ -8,20 +6,25 @@ from argus.filter.default import (  # noqa: F401
     SOURCE_LOCKED_INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
     ComplexFallbackFilterWrapper,
 )
-from argus.filter.default import FilterSerializer as DefaultFilterSerializer
+
+try:
+    from argus.filter.default import FilterSerializer as DefaultFilterSerializer
+except ImportError:
+    DefaultFilterSerializer = object
+
 from argus.filter.default import IncidentFilter as DefaultIncidentFilter
 from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # noqa: F401
 from argus.filter.filters import Filter
 from argus.incident.models import Event
 from django import forms
-from django.db.models import Q, QuerySet, Subquery, OuterRef
+from django.db.models import OuterRef, Exists, Case, When, Value
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
 
-from geant_argus.geant_argus.filters.filters import FILTER_MODEL
-from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
+from .filters import FILTER_MODEL
+from .schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
 SUPPORTED_FILTER_VERSIONS = ["v1"]
@@ -82,35 +85,6 @@ class GeantFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view=None):
         return IncidentFilterForm(request.GET or None).filter_queryset(queryset)
-
-
-class GeantBooleanFiltering:
-    FILTER_FIELD_MAPPING = {"description": "metadata__description"}
-
-    def __init__(self, filter: Filter):
-        self.filter_dict = filter.filter
-        assert self.filter_dict["version"] == "v1", "unsupported filter version"
-
-    def filter(self, qs: QuerySet) -> QuerySet:
-        return qs.filter(self._parse_item(self.filter_dict))
-
-    def _parse_item(self, item: dict):
-        if item["type"] == "group":
-            return self._parse_group(item)
-        if item["type"] == "rule":
-            return self._parse_rule(item)
-        raise ValueError("invalid item type")
-
-    def _parse_group(self, group: dict):
-        op = operator.ior if group["operator"] == "or" else operator.iand
-        return functools.reduce(op, (self._parse_item(i) for i in group["items"]))
-
-    def _parse_rule(self, rule: dict):
-        db_field = self.FILTER_FIELD_MAPPING[rule["field"]]
-        if rule["operator"] == "equals":
-            return Q(**{db_field: rule["value"]})
-        if rule["operator"] == "contains":
-            return Q(**{f"{db_field}__icontains": rule["value"]})
 
 
 class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
@@ -190,7 +164,7 @@ class IncidentFilterForm(forms.Form):
     def _filter_by_description(self, queryset):
         if not (description := self.cleaned_data.get("description")):
             return queryset
-        return queryset.filter(metadata__description__icontains=description)
+        return queryset.filter(description__icontains=description)
 
     def _filter_by_severity(self, queryset):
         if not (level := self.cleaned_data.get("min_severity")):
@@ -199,19 +173,19 @@ class IncidentFilterForm(forms.Form):
 
     def _annotate_acks(self, queryset):
         return queryset.annotate(
-            noc_ack=Subquery(
+            any_ack=Case(
+                When(metadata__status="CLOSED", then=Value(True)),
+                default=Exists(Event.objects.filter(incident=OuterRef("pk"), type="ACK")),
+            ),
+            noc_ack=Exists(
                 Event.objects.filter(
                     incident=OuterRef("pk"), type="ACK", actor__groups__name="noc"
                 )
-                .order_by("-timestamp")
-                .values("timestamp")[:1]
             ),
-            servicedesk_ack=Subquery(
+            servicedesk_ack=Exists(
                 Event.objects.filter(
                     incident=OuterRef("pk"), type="ACK", actor__groups__name="servicedesk"
                 )
-                .order_by("-timestamp")
-                .values("timestamp")[:1]
             ),
         )
 
@@ -220,9 +194,7 @@ class IncidentFilterForm(forms.Form):
             return queryset.order_by("-start_time")
         # Here we are lucky that statuses 'active', 'clear', 'closed' are alphabetically
         # in that order, so it's easy to sort
-        return queryset.order_by(
-            "-noc_ack", "-servicedesk_ack", "metadata__status", "level", "-start_time"
-        )
+        return queryset.order_by("any_ack", "metadata__status", "level", "-start_time")
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):

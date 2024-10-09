@@ -1,0 +1,6 @@
+{% load template_utils %}
+{% load incident_extras %}
+<div class="-my-2 min-h-fit">
+  <div class="text-nowrap">{{ incident.start_time|date:datetime_format }}</div>
+  <div class="text-base-content/50 text-nowrap">{{ incident|duration|smooth_timedelta }}</div>
+</div>

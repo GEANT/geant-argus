@@ -1,0 +1,167 @@
+{
+  "phase": "FINALIZED",
+  "status": "CLOSED",
+  "version": "v0a5",
+  "severity": "CRITICAL",
+  "endpoints": {
+    "bgp": [],
+    "link": [
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T12:57:16",
+            "clear_time": "2024-08-30T12:57:18",
+            "properties": {
+              "id": 15464113,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T12:57:18",
+              "admin_up_time": "2024-08-30T12:57:16",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.gen.ch.geant.net",
+              "interface_name": "et-11/1/2",
+              "oper_down_time": "2024-08-30T12:57:16",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.gen.ch.geant.net",
+        "interface": "et-11/1/2"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T12:57:16",
+            "clear_time": "2024-08-30T12:57:25",
+            "properties": {
+              "id": 15464118,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T12:57:25",
+              "admin_up_time": "2024-08-30T12:57:16",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.gen.ch.geant.net",
+              "interface_name": "ae4",
+              "oper_down_time": "2024-08-30T12:57:16",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.gen.ch.geant.net",
+        "interface": "ae4"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T12:57:16",
+            "clear_time": "2024-08-30T12:57:19",
+            "properties": {
+              "id": 15464123,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T12:57:19",
+              "admin_up_time": "2024-08-30T12:57:16",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.gen.ch.geant.net",
+              "interface_name": "et-11/1/5",
+              "oper_down_time": "2024-08-30T12:57:16",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.gen.ch.geant.net",
+        "interface": "et-11/1/5"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T12:57:46",
+            "clear_time": "2024-08-30T12:57:46",
+            "properties": {
+              "id": 15464128,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T12:57:46",
+              "admin_up_time": "2024-08-30T12:57:46",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.mar.fr.geant.net",
+              "interface_name": "et-4/0/5",
+              "oper_down_time": "2024-08-30T12:57:46",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.mar.fr.geant.net",
+        "interface": "et-4/0/5"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T12:57:46",
+            "clear_time": "2024-08-30T12:57:47",
+            "properties": {
+              "id": 15464133,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T12:57:47",
+              "admin_up_time": "2024-08-30T12:57:46",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.mar.fr.geant.net",
+              "interface_name": "ae4",
+              "oper_down_time": "2024-08-30T12:57:46",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.mar.fr.geant.net",
+        "interface": "ae4"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T12:57:46",
+            "clear_time": "2024-08-30T12:57:46",
+            "properties": {
+              "id": 15464138,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T12:57:46",
+              "admin_up_time": "2024-08-30T12:57:46",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.mar.fr.geant.net",
+              "interface_name": "et-4/0/2",
+              "oper_down_time": "2024-08-30T12:57:46",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.mar.fr.geant.net",
+        "interface": "et-4/0/2"
+      }
+    ],
+    "coriant": [],
+    "infinera": []
+  },
+  "init_time": "2024-08-30T12:57:16",
+  "clear_time": "2024-08-30T12:57:46",
+  "description": "GEN-MAR-IPTRUNK (interface ae4) Incident",
+  "location": [
+    "MARSEILLE",
+    "GENEVA"
+  ],
+  "equipment": [
+    "RT1.MAR.FR",
+    "MX1.GEN.CH"
+  ],
+  "short_lived": true,
+  "endpoint_count": 6,
+  "blacklist": {
+    "applied": false
+  }
+}

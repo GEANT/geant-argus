@@ -34,21 +34,31 @@ DEFAULT_THEME = "geant"
 DEFAULT_TW_CSS = "geant.css"
 DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
 
-# context processor for theming
-TEMPLATES[0]["OPTIONS"]["context_processors"].append(
-    "geant_argus.geant_argus.context_processors.geant_theme"
+# context processors customization
+TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
+    [
+        "geant_argus.geant_argus.context_processors.geant_theme",
+        "argus_htmx.context_processors.datetime_format_via_session",
+    ]
 )
 
 AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS", 14))
 ARGUS_FILTER_BACKEND = "geant_argus.geant_argus.filters.plugin"
 ARGUS_HTMX_FILTER_FUNCTION = ARGUS_FILTER_BACKEND
 
+ARGUS_FRONTEND_DATETIME_FORMAT = "ISO"
+TIME_ZONE = "UTC"
+
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
-    "start_time",
+    IncidentTableColumn(
+        "timestamp",
+        label="Start Time (UTC)",
+        cell_template="htmx/incidents/_incident_start_time.html",
+    ),
     IncidentTableColumn(
         "endpoint_count",
-        label="Flaps",
+        label="#",
         cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
@@ -62,14 +72,26 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_level.html",
     ),
     IncidentTableColumn(
-        "alarm_id",
-        label="Alarm ID",
-        cell_template="htmx/incidents/_incident_source_incident_id.html",
+        "location",
+        label="Location",
+        cell_template="htmx/incidents/_incident_location_equipment.html",
+        context={"field": "location"},
+    ),
+    IncidentTableColumn(
+        "equipment",
+        label="Equipment",
+        cell_template="htmx/incidents/_incident_location_equipment.html",
+        context={"field": "equipment"},
     ),
     IncidentTableColumn(
         "description",
         label="Description",
         cell_template="htmx/incidents/_incident_description.html",
+    ),
+    IncidentTableColumn(
+        "ticket_ref",
+        label="TT",
+        cell_template="htmx/incidents/_incident_ticket_ref.html",
     ),
     IncidentTableColumn(
         "noc_ack",
@@ -85,8 +107,8 @@ INCIDENT_TABLE_COLUMNS = [
     ),
     IncidentTableColumn(
         "comment",
-        label="Ack with comment",
-        cell_template="htmx/incidents/_incident_comment_ack.html",
+        label="Comment",
+        cell_template="htmx/incidents/_incident_comment.html",
     ),
     IncidentTableColumn(
         "details",
@@ -105,3 +127,7 @@ STATUS_CHECKER_ENABLED = True
 STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
 STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
 STATUS_CHECKER_UPDATE_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_UPDATE_INPROV_URL")
+
+# Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
+# on the incident listing
+MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=None)

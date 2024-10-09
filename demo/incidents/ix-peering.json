@@ -1,0 +1,82 @@
+{
+  "phase": "FINALIZED",
+  "status": "ACTIVE",
+  "version": "v0a5",
+  "severity": "MINOR",
+  "init_time": "2024-08-31T01:01:09",
+  "endpoints": {
+    "bgp": [
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-31T01:01:09",
+            "clear_time": null,
+            "properties": {
+              "id": 15464929,
+              "peer": "2001:07f8:0001:0000:0000:a501:6265:0001",
+              "status": "idle",
+              "idle_time": "2024-08-31T01:01:09",
+              "source_ip": "62.40.96.71",
+              "connect_time": null,
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "rt1.ams.nl.geant.net",
+              "establish_time": null
+            }
+          },
+          {
+            "is_up": true,
+            "init_time": "2024-08-31T00:00:02",
+            "clear_time": "2024-08-31T01:01:06",
+            "properties": {
+              "id": 15464869,
+              "peer": "2001:07f8:0001:0000:0000:a501:6265:0001",
+              "status": "established",
+              "idle_time": "2024-08-31T00:00:02",
+              "source_ip": "62.40.96.71",
+              "connect_time": "2024-08-31T00:00:24",
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "rt1.ams.nl.geant.net",
+              "establish_time": "2024-08-31T01:01:06"
+            }
+          }
+        ],
+        "hostname": "rt1.ams.nl.geant.net",
+        "remote_peer": "2001:07f8:0001:0000:0000:a501:6265:0001"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-31T00:00:14",
+            "clear_time": "2024-08-31T00:01:10",
+            "properties": {
+              "id": 15464874,
+              "peer": "2001:07f8:0001:0000:0000:a500:4134:0001",
+              "status": "established",
+              "idle_time": "2024-08-31T00:00:14",
+              "source_ip": "62.40.96.71",
+              "connect_time": "2024-08-31T00:00:28",
+              "snmp_trap_oid": "BGP4-V2-MIB-JUNIPER::jnxBgpM2BackwardTransition",
+              "equipment_name": "rt1.ams.nl.geant.net",
+              "establish_time": "2024-08-31T00:01:10"
+            }
+          }
+        ],
+        "hostname": "rt1.ams.nl.geant.net",
+        "remote_peer": "2001:07f8:0001:0000:0000:a500:4134:0001"
+      }
+    ],
+    "link": [],
+    "coriant": [],
+    "infinera": []
+  },
+  "description": "One or more IX peering down on rt1.ams.nl.geant.net",
+  "location": ["AMSTERDAM"],
+	"equipment": ["RT1.AMS.NL"],
+  "short_lived": false,
+  "endpoint_count": 3,
+  "blacklist": {
+    "applied": false
+  }
+}
