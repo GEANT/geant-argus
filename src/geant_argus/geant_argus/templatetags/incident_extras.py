@@ -1,7 +1,6 @@
 import datetime
 import json
 
-from argus.auth.models import User
 from argus.incident.models import Incident
 from django import template
 from django.conf import settings
@@ -85,11 +84,6 @@ def upperfirst(value: str):
 
 
 @register.filter
-def has_group(user: User, group):
-    return user.groups.filter(name=group).exists()
-
-
-@register.filter
 def is_acked(incident, group: str) -> bool:
     return bool(getattr(incident, f"{group}_ack", None))
 
@@ -102,9 +96,8 @@ def must_ack(incident: Incident):
     must_ack_timedelta = None
     if (must_ack_within_minutes := getattr(settings, "MUST_ACK_WITHIN_MINUTES", None)) is not None:
         must_ack_timedelta = datetime.timedelta(minutes=must_ack_within_minutes)
-    is_ack = is_acked(incident, group="any")
     return (
-        not is_ack
+        not getattr(incident, "ack", True)
         and can_ack(incident)
         and must_ack_timedelta is not None
         and timezone.now() > incident.start_time + must_ack_timedelta
