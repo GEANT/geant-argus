@@ -9,7 +9,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils import timezone
 
 from ..incidents.severity import IncidentSeverity
-from .template_utils import _get_item, dateparse
+from .template_utils import get_item, dateparse
 
 register = template.Library()
 
@@ -146,7 +146,7 @@ def duration(incident: Incident):
 @register.filter
 def get_quick_glance_item(obj, item):
     key = item["cell_lookup_key"]
-    value = _get_item(obj, *key.split("."))
+    value = get_item(obj, key.split("."))
 
     if isinstance(value, list):
         return " - ".join(str(v) for v in value)

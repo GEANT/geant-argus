@@ -369,7 +369,6 @@ METADATA_V0A5_SCHEMA = {
                     "items": {"$ref": "#/definitions/fiberlink_endpoint"},
                 },
             },
-            "required": ["bgp", "link", "coriant", "infinera", "fiberlink"],
         },
         "description": {"type": "string"},
         "short_lived": {"type": "boolean"},
