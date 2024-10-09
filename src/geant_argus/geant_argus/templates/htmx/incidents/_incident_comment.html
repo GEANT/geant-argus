@@ -1,4 +1,20 @@
-{% if incident.metadata.comment %}
-  <div class="text-primary -mt-[3px] text-xl/5 cursor-default"
-       title="{{ incident.metadata.comment }}">🛈</div>
-{% endif %}
+<div class="relative">
+  <div {% if incident.metadata.comment %}title="{{ incident.metadata.comment }}"{% endif %}
+       class="{% if incident.metadata.comment %}text-primary{% else %}text-primary/30{% endif %} -mt-[3px] text-xl/5 cursor-pointer"
+       _="on click toggle .hidden on next .incident-comment-edit ">🛈</div>
+  <div class="absolute incident-comment-edit hidden bg-base-100 border-primary border p-2 rounded-lg top-6 -left-64 z-10"
+       _="on keyup[key is 'Escape'] add .hidden to me">
+    <form method="post"
+          action="{% url 'geant-incidents:update-comment' incident.pk %}"
+          hx-post="{% url 'geant-incidents:update-comment' incident.pk %}"
+          class="flex flex-row gap-2 htmx-indicator-hidden">
+      {% csrf_token %}
+      <input name="comment"
+             autocomplete="off"
+             class="input input-xs w-64 input-accent"
+             value="{{ incident.metadata.comment|default:'' }}">
+      <button type=submit class="btn btn-xs btn-primary htmx-loading-hidden">Update</button>
+      <div class="htmx-indicator loading loading-spinner loading-xs text-primary"></div>
+    </form>
+  </div>
+</div>

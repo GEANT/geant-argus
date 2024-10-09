@@ -4,6 +4,7 @@
   <div id="incident-{{ incident.pk }}-{{ group }}-ack"
        class="flex items-center ack-checkbox {% if incident|must_ack %}animate-blink{% endif %}">
     <input type="checkbox"
+           autocomplete="off"
            class="checkbox checkbox-sm checkbox-primary border {% if incident|must_ack %}checkbox-error disabled:bg-error/60{% endif %}"
            {% if incident|is_acked_by:group %}checked disabled{% elif not user|has_group:group %}disabled{% elif not incident|can_ack %}disabled{% endif %}
            hx-post="{% url 'geant-incidents:ack-incident' pk=incident.pk %}?group={{ group }}"

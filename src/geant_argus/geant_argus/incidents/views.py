@@ -1,13 +1,11 @@
 from argus.incident.models import Incident
 from django import forms
-from django.db.models import Q
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpRequest, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_POST
 from django_htmx.middleware import HtmxDetails
-
-ACK_GROUPS = ("noc", "servicedesk")
+from django_htmx.http import HttpResponseClientRefresh
 
 
 class HtmxHttpRequest(HttpRequest):
@@ -15,38 +13,40 @@ class HtmxHttpRequest(HttpRequest):
 
 
 class AckForm(forms.Form):
-    group = forms.ChoiceField(choices=list(zip(ACK_GROUPS, ACK_GROUPS)), required=False)
+    group = forms.ChoiceField(
+        choices=(("noc", "noc"), ("servicedesk", "servicedesk")), required=True
+    )
 
 
-def can_ack(user, group=None):
-    where = Q(name__in=ACK_GROUPS) if group is None else Q(name=group)
-    return user.groups.filter(where).exists()
+def refresh(request: HtmxHttpRequest, target):
+    redirect_to = reverse(target)
+    if request.htmx:
+        return HttpResponseClientRefresh()
+    return redirect(redirect_to)
 
 
 @require_POST
 def acknowledge_incident(request: HtmxHttpRequest, pk: int):
-    form = AckForm(request.POST)
+    form = AckForm(request.GET)
     if not form.is_valid():
-        return HttpResponseBadRequest("Bad request")
+        return HttpResponseBadRequest("invalid group")
 
-    group = form.cleaned_data.get("group")
+    group = form.cleaned_data["group"]
     incident = get_object_or_404(Incident, id=pk)
 
     is_group_member = request.user.groups.filter(name=group).exists()
     if is_group_member:
         incident.create_ack(request.user, description="Acknowledged using the UI")
 
-    redirect_to = reverse("htmx:incident-list")
-    if request.htmx:
-        redirect_to = request.htmx.current_url_abs_path or redirect_to
-        return HttpResponse(headers={"HX-Redirect": redirect_to})
-    return redirect(redirect_to)
+    return refresh("htmx:incident-list")
 
 
-@require_GET
-def begin_comment(request: HtmxHttpRequest, pk: int):
-    return render(
-        request,
-        "htmx/incidents/_incident_comment_ack.html",
-        context={"is_editing": True, "pk": pk},
-    )
+@require_POST
+def update_comment(request: HtmxHttpRequest, pk: int):
+    comment = request.POST.get("comment")
+    if comment is not None:
+        incident = get_object_or_404(Incident, id=pk)
+        incident.metadata["comment"] = comment
+        incident.metadata["dirty"] = True
+        incident.save()
+    return refresh(request, "htmx:incident-list")
