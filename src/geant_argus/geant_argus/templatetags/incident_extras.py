@@ -1,9 +1,8 @@
 import datetime
 import json
-from typing import Optional
 
 from argus.auth.models import User
-from argus.incident.models import Acknowledgement, Incident
+from argus.incident.models import Incident
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import stringfilter
@@ -93,15 +92,6 @@ def has_group(user: User, group):
 @register.filter
 def is_acked(incident, group: str) -> bool:
     return bool(getattr(incident, f"{group}_ack", None))
-
-
-@register.filter
-def ack_description(incident: Incident, ack: Optional[Acknowledgement] = None):
-    if ack:
-        return ack.event.description
-    for ack in incident.acks:
-        if desc := ack.event.description:
-            return desc
 
 
 MUST_ACK_TIMEDELTA = datetime.timedelta(minutes=10)
