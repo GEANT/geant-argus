@@ -9,7 +9,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils import timezone
 
 from ..incidents.severity import IncidentSeverity
-from .template_utils import get_item, dateparse
+from .template_utils import dateparse, get_item
 
 register = template.Library()
 
