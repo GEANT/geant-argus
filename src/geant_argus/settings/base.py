@@ -94,16 +94,9 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_ticket_ref.html",
     ),
     IncidentTableColumn(
-        "noc_ack",
-        label="NOC Ack",
-        cell_template="htmx/incidents/_incident_group_ack.html",
-        context={"group": "noc"},
-    ),
-    IncidentTableColumn(
-        "sd_ack",
-        label="SD Ack",
-        cell_template="htmx/incidents/_incident_group_ack.html",
-        context={"group": "servicedesk"},
+        "ack",
+        label="Ack",
+        cell_template="htmx/incidents/_incident_ack.html",
     ),
     IncidentTableColumn(
         "comment",
