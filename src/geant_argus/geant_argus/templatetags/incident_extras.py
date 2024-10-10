@@ -1,7 +1,6 @@
 import datetime
 import json
 
-from argus.auth.models import User
 from argus.incident.models import Incident
 from django import template
 from django.conf import settings
@@ -9,7 +8,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils import timezone
 
 from ..incidents.severity import IncidentSeverity
-from .template_utils import _get_item, dateparse
+from .template_utils import dateparse, get_item
 
 register = template.Library()
 
@@ -85,11 +84,6 @@ def upperfirst(value: str):
 
 
 @register.filter
-def has_group(user: User, group):
-    return user.groups.filter(name=group).exists()
-
-
-@register.filter
 def is_acked(incident, group: str) -> bool:
     return bool(getattr(incident, f"{group}_ack", None))
 
@@ -102,9 +96,8 @@ def must_ack(incident: Incident):
     must_ack_timedelta = None
     if (must_ack_within_minutes := getattr(settings, "MUST_ACK_WITHIN_MINUTES", None)) is not None:
         must_ack_timedelta = datetime.timedelta(minutes=must_ack_within_minutes)
-    is_ack = is_acked(incident, group="any")
     return (
-        not is_ack
+        not getattr(incident, "ack", True)
         and can_ack(incident)
         and must_ack_timedelta is not None
         and timezone.now() > incident.start_time + must_ack_timedelta
@@ -146,7 +139,7 @@ def duration(incident: Incident):
 @register.filter
 def get_quick_glance_item(obj, item):
     key = item["cell_lookup_key"]
-    value = _get_item(obj, *key.split("."))
+    value = get_item(obj, key.split("."))
 
     if isinstance(value, list):
         return " - ".join(str(v) for v in value)

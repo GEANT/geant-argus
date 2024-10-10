@@ -53,12 +53,12 @@ INCIDENT_TABLE_COLUMNS = [
     "row_select",
     IncidentTableColumn(
         "timestamp",
-        label="Timestamp",
+        label="Start Time (UTC)",
         cell_template="htmx/incidents/_incident_start_time.html",
     ),
     IncidentTableColumn(
         "endpoint_count",
-        label="Flaps",
+        label="#",
         cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
@@ -94,16 +94,9 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_ticket_ref.html",
     ),
     IncidentTableColumn(
-        "noc_ack",
-        label="NOC Ack",
-        cell_template="htmx/incidents/_incident_group_ack.html",
-        context={"group": "noc"},
-    ),
-    IncidentTableColumn(
-        "sd_ack",
-        label="SD Ack",
-        cell_template="htmx/incidents/_incident_group_ack.html",
-        context={"group": "servicedesk"},
+        "ack",
+        label="Ack",
+        cell_template="htmx/incidents/_incident_ack.html",
     ),
     IncidentTableColumn(
         "comment",
@@ -126,7 +119,6 @@ TAILWIND_CONFIG_TEMPLATE = "tailwind/tailwind.config.js"
 STATUS_CHECKER_ENABLED = True
 STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
 STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
-STATUS_CHECKER_UPDATE_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_UPDATE_INPROV_URL")
 
 # Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
 # on the incident listing
