@@ -57,11 +57,6 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_start_time.html",
     ),
     IncidentTableColumn(
-        "endpoint_count",
-        label="#",
-        cell_template="htmx/incidents/_incident_endpoint_count.html",
-    ),
-    IncidentTableColumn(
         "status",
         label="Status",
         cell_template="htmx/incidents/_incident_status.html",
@@ -102,6 +97,12 @@ INCIDENT_TABLE_COLUMNS = [
         "comment",
         label="Comment",
         cell_template="htmx/incidents/_incident_comment.html",
+    ),
+    IncidentTableColumn(
+        "endpoint_count",
+        label="#",
+        header_template="htmx/incidents/_incident_endpoint_count_header.html",
+        cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
         "details",
