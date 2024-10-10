@@ -32,7 +32,7 @@ TEMPLATES[0]["DIRS"] = []  # noqa: F405
 # Theming
 DEFAULT_THEME = "geant"
 DEFAULT_TW_CSS = "geant.css"
-# DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
+DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
 
 # context processors customization
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
