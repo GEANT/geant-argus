@@ -35,15 +35,9 @@
     -moz-appearance: textfield;
   }
 
-  /*Ack checkboxes get an indicator spinner while processing an htmx ack request */
+  /*Ack checkboxes need to stop blinking after firing an htmx request */
   .ack-checkbox.htmx-request {
     animation: none;
-  }
-  .ack-checkbox.htmx-request input {
-    display: none;
-  }
-  .ack-checkbox:not(.htmx-request) .htmx-indicator {
-    display: none;
   }
 
   .htmx-indicator-hidden:not(.htmx-request) > .htmx-indicator {

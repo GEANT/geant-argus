@@ -1,6 +1,6 @@
 <div class="relative">
   <div {% if incident.metadata.comment %}title="{{ incident.metadata.comment }}"{% endif %}
-       class="{% if incident.metadata.comment %}text-primary{% else %}text-primary/30{% endif %} -mt-[3px] text-xl/5 cursor-pointer"
+       class="{% if incident.metadata.comment %}text-primary{% else %}text-primary/20{% endif %} -mt-[3px] text-xl/5 cursor-pointer"
        _="on click toggle .hidden on next .incident-comment-edit ">🛈</div>
   <div class="absolute incident-comment-edit hidden bg-base-100 border-primary border p-2 rounded-lg top-6 -left-64 z-10"
        _="on keyup[key is 'Escape'] from body add .hidden to me">

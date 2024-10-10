@@ -1,6 +1,5 @@
 from argus.incident.models import Incident
-from django import forms
-from django.http import HttpRequest, HttpResponseBadRequest
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -12,12 +11,6 @@ class HtmxHttpRequest(HttpRequest):
     htmx: HtmxDetails
 
 
-class AckForm(forms.Form):
-    group = forms.ChoiceField(
-        choices=(("noc", "noc"), ("servicedesk", "servicedesk")), required=True
-    )
-
-
 def refresh(request: HtmxHttpRequest, target):
     redirect_to = reverse(target)
     if request.htmx:
@@ -27,18 +20,9 @@ def refresh(request: HtmxHttpRequest, target):
 
 @require_POST
 def acknowledge_incident(request: HtmxHttpRequest, pk: int):
-    form = AckForm(request.GET)
-    if not form.is_valid():
-        return HttpResponseBadRequest("invalid group")
-
-    group = form.cleaned_data["group"]
     incident = get_object_or_404(Incident, id=pk)
-
-    is_group_member = request.user.groups.filter(name=group).exists()
-    if is_group_member:
-        incident.create_ack(request.user, description="Acknowledged using the UI")
-
-    return refresh("htmx:incident-list")
+    incident.create_ack(request.user, description="Acknowledged using the UI")
+    return refresh(request, "htmx:incident-list")
 
 
 @require_POST
