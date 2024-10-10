@@ -1,5 +1,22 @@
 from django.conf import settings
 
+INCIDENT_DETAILS_COMMON_COLUMNS = [
+    {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
+    {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
+    {
+        "name": "Init Time (UTC)",
+        "cell_template": "htmx/incident_details/event_init_time.html",
+    },
+    {
+        "name": "Clear Time (UTC)",
+        "cell_template": "htmx/incident_details/event_clear_time.html",
+    },
+    {
+        "name": "Properties",
+        "cell_template": "htmx/incident_details/event_properties.html",
+    },
+]
+
 
 def geant_theme(request):
     """Additional context variables specific to Geant"""
@@ -27,20 +44,7 @@ def geant_theme(request):
                     "cell_template": "htmx/incident_details/bgp_remote_peer.html",
                     "is_endpoint_column": True,
                 },
-                {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
-                {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
-                {
-                    "name": "Init Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_init_time.html",
-                },
-                {
-                    "name": "Clear Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_clear_time.html",
-                },
-                {
-                    "name": "Properties",
-                    "cell_template": "htmx/incident_details/event_properties.html",
-                },
+                *INCIDENT_DETAILS_COMMON_COLUMNS,
             ],
             "link": [
                 {
@@ -53,20 +57,7 @@ def geant_theme(request):
                     "cell_template": "htmx/incident_details/link_interface.html",
                     "is_endpoint_column": True,
                 },
-                {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
-                {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
-                {
-                    "name": "Init Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_init_time.html",
-                },
-                {
-                    "name": "Clear Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_clear_time.html",
-                },
-                {
-                    "name": "Properties",
-                    "cell_template": "htmx/incident_details/event_properties.html",
-                },
+                *INCIDENT_DETAILS_COMMON_COLUMNS,
             ],
             "coriant": [
                 {
@@ -79,20 +70,7 @@ def geant_theme(request):
                     "cell_template": "htmx/incident_details/optical_port.html",
                     "is_endpoint_column": True,
                 },
-                {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
-                {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
-                {
-                    "name": "Init Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_init_time.html",
-                },
-                {
-                    "name": "Clear Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_clear_time.html",
-                },
-                {
-                    "name": "Properties",
-                    "cell_template": "htmx/incident_details/event_properties.html",
-                },
+                *INCIDENT_DETAILS_COMMON_COLUMNS,
             ],
             "infinera": [
                 {
@@ -105,20 +83,20 @@ def geant_theme(request):
                     "cell_template": "htmx/incident_details/optical_port.html",
                     "is_endpoint_column": True,
                 },
-                {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
-                {"name": "Status", "cell_template": "htmx/incident_details/event_status.html"},
+                *INCIDENT_DETAILS_COMMON_COLUMNS,
+            ],
+            "fiberlink": [
                 {
-                    "name": "Init Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_init_time.html",
+                    "name": "NE A",
+                    "cell_template": "htmx/incident_details/fiberlink_ne_a.html",
+                    "is_endpoint_column": True,
                 },
                 {
-                    "name": "Clear Time (UTC)",
-                    "cell_template": "htmx/incident_details/event_clear_time.html",
+                    "name": "NE B",
+                    "cell_template": "htmx/incident_details/fiberlink_ne_b.html",
+                    "is_endpoint_column": True,
                 },
-                {
-                    "name": "Properties",
-                    "cell_template": "htmx/incident_details/event_properties.html",
-                },
+                *INCIDENT_DETAILS_COMMON_COLUMNS,
             ],
         },
         "incident_description_glance_table": [

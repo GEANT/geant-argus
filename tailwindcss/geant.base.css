@@ -35,14 +35,15 @@
     -moz-appearance: textfield;
   }
 
-  /*Ack checkboxes get an indicator spinner while processing an htmx ack request */
+  /*Ack checkboxes need to stop blinking after firing an htmx request */
   .ack-checkbox.htmx-request {
     animation: none;
   }
-  .ack-checkbox.htmx-request input {
+
+  .htmx-indicator-hidden:not(.htmx-request) > .htmx-indicator {
     display: none;
   }
-  .ack-checkbox:not(.htmx-request) .htmx-indicator {
+  .htmx-indicator-hidden.htmx-request > .htmx-loading-hidden {
     display: none;
   }
 
@@ -89,10 +90,10 @@
 
   /*
   Currently every endpoints table has the same number of columns and relative column width. If
-  we want a endpoints table with a different number of column or relative widths (ie custom 
+  we want a endpoints table with a different number of column or relative widths (ie custom
   grid-template-columns setting, we should select on the #<endpoint_type>-endpoints-table id
   that is assigned to that table eg:
-  
+
   #bgp-endpoints-table.endpoints-table .headers,
   #bgp-endpoints-table.endpoints-table .table-row {
     grid-template-columns: 1fr 2fr 3fr;

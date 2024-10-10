@@ -17,7 +17,7 @@ from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # n
 from argus.filter.filters import Filter
 from argus.incident.models import Event
 from django import forms
-from django.db.models import OuterRef, Exists, Case, When, Value
+from django.db.models import OuterRef, Exists, Case, When, Value, Subquery
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
@@ -173,19 +173,15 @@ class IncidentFilterForm(forms.Form):
 
     def _annotate_acks(self, queryset):
         return queryset.annotate(
-            any_ack=Case(
+            ack_or_closed=Case(
                 When(metadata__status="CLOSED", then=Value(True)),
                 default=Exists(Event.objects.filter(incident=OuterRef("pk"), type="ACK")),
             ),
-            noc_ack=Exists(
-                Event.objects.filter(
-                    incident=OuterRef("pk"), type="ACK", actor__groups__name="noc"
-                )
-            ),
-            servicedesk_ack=Exists(
-                Event.objects.filter(
-                    incident=OuterRef("pk"), type="ACK", actor__groups__name="servicedesk"
-                )
+            ack=Exists(Event.objects.filter(incident=OuterRef("pk"), type="ACK")),
+            ack_user=Subquery(
+                Event.objects.filter(incident=OuterRef("pk"), type="ACK")
+                .order_by("-timestamp")
+                .values("actor__username")[:1]
             ),
         )
 
@@ -194,7 +190,7 @@ class IncidentFilterForm(forms.Form):
             return queryset.order_by("-start_time")
         # Here we are lucky that statuses 'active', 'clear', 'closed' are alphabetically
         # in that order, so it's easy to sort
-        return queryset.order_by("any_ack", "metadata__status", "level", "-start_time")
+        return queryset.order_by("ack_or_closed", "metadata__status", "level", "-start_time")
 
 
 class _FilterBlobExtension(OpenApiSerializerExtension):
