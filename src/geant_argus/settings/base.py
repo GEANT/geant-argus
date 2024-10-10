@@ -119,7 +119,6 @@ TAILWIND_CONFIG_TARGET = "tailwindcss/tailwind.config.js"
 STATUS_CHECKER_ENABLED = True
 STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
 STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
-STATUS_CHECKER_UPDATE_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_UPDATE_INPROV_URL")
 
 # Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
 # on the incident listing
