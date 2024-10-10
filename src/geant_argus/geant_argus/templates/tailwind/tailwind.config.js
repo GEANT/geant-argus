@@ -33,7 +33,7 @@ const incidentColors = {
 
 module.exports = {
     content: [
-{{ tailwind_content }}
+{{ projectpaths }}
         'src/geant_argus/geant_argus/templatetags/**/*.py',
     ],
     theme: {
@@ -77,6 +77,7 @@ module.exports = {
         {
             pattern: /bg-(success|warning|error|slate-300)/,
         },
+        "htmx-request"
     ],
     daisyui: {
         themes: [{
@@ -155,7 +156,6 @@ module.exports = {
       },
 
     plugins: [
-        require('@tailwindcss/aspect-ratio'),
         require('daisyui')
     ],
 }

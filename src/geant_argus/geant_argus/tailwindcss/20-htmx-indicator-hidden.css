@@ -1,0 +1,8 @@
+@layer components {
+  .htmx-indicator-hidden:not(.htmx-request) > .htmx-indicator {
+    display: none;
+  }
+  .htmx-indicator-hidden.htmx-request > .htmx-loading-hidden {
+    display: none;
+  }
+}

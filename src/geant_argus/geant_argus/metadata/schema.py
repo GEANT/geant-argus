@@ -233,6 +233,7 @@ METADATA_V0A5_SCHEMA = {
                     }
                 ),
             },
+            "required": ["hostname", "remote_peer", "events"],
         },
         "link_endpoint": {
             "type": "object",
@@ -264,6 +265,7 @@ METADATA_V0A5_SCHEMA = {
                     }
                 ),
             },
+            "required": ["hostname", "interface", "events"],
         },
         "coriant_endpoint": {
             "type": "object",
@@ -281,6 +283,7 @@ METADATA_V0A5_SCHEMA = {
                     }
                 ),
             },
+            "required": ["ne_name", "port", "events"],
         },
         "infinera_endpoint": {
             "type": "object",
@@ -299,6 +302,26 @@ METADATA_V0A5_SCHEMA = {
                     }
                 ),
             },
+            "required": ["ne_name", "port", "events"],
+        },
+        "fiberlink_endpoint": {
+            "type": "object",
+            "properties": {
+                "ne_a": {"type": "string"},
+                "ne_b": {"type": "string"},
+                "events": v0a5_endpoint_event(
+                    {
+                        "id": {"type": "integer"},
+                        "status": {"type": ["string", "null"]},
+                        "equipment_name": {"type": ["string", "null"]},
+                        "object_name": {"type": ["string", "null"]},
+                        "object_type": {"type": ["string", "null"]},
+                        "probable_cause": {"type": ["string", "null"]},
+                        "severity": {"type": ["string", "null"]},
+                    }
+                ),
+            },
+            "required": ["ne_a", "ne_b", "events"],
         },
         "blacklist_info": {
             "type": "object",
@@ -307,11 +330,11 @@ METADATA_V0A5_SCHEMA = {
                 "message": {"type": "string"},
                 "original_severity": {"type": "string"},
             },
-            "additionalProperties": False,
         },
     },
     "properties": {
         "version": {"const": "v0a5"},
+        "dirty": {"type": "boolean"},
         "init_time": {"type": ["string", "null"]},
         "clear_time": {"type": ["string", "null"]},
         "blacklist": {"$ref": "#/definitions/blacklist_info"},
@@ -341,9 +364,11 @@ METADATA_V0A5_SCHEMA = {
                     "type": "array",
                     "items": {"$ref": "#/definitions/infinera_endpoint"},
                 },
+                "fiberlink": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/fiberlink_endpoint"},
+                },
             },
-            "required": ["bgp", "link", "coriant", "infinera"],
-            "additionalProperties": False,
         },
         "description": {"type": "string"},
         "short_lived": {"type": "boolean"},
@@ -359,6 +384,7 @@ METADATA_V0A5_SCHEMA = {
         "short_lived",
         "blacklist",
         "endpoint_count",
+        "comment",
     ],
 }
 
