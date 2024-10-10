@@ -1,0 +1,6 @@
+@layer components {
+  /*Ack checkboxes need to stop blinking after firing an htmx request */
+  .ack-checkbox.htmx-request {
+    animation: none;
+  }
+}

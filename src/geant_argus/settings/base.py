@@ -111,8 +111,8 @@ INCIDENT_TABLE_COLUMNS = [
 ]
 
 # Tailwind config template relative to the repository root directory
-TAILWIND_CONFIG_TEMPLATE = "tailwindcss/tailwind.config.template.js"
 TAILWIND_CONFIG_TARGET = "tailwindcss/tailwind.config.js"
+TAILWIND_CSS_TARGET = "tailwindcss/geant.base.css"
 
 
 # Status checker widget
