@@ -3,7 +3,14 @@
   {% with field=model.fields_by_name|get_item:rule.field %}
     <div class="rule-atom mt-2 p-1 border border-black/10 rounded-lg bg-black/5">
       {% include "./_filter_selector.html" with key="field" selected=rule.field %}
-      <select name="{{ prefix }}op" class="select select-bordered max-w-xs" autocomplete="off" hx-post={{ request.path }} hx-include="#filter_edit_root" hx-trigger="change" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-target="#filter_edit_root">
+      <select name="{{ prefix }}op"
+              class="select select-bordered max-w-xs"
+              autocomplete="off"
+              hx-post="{{ request.path }}"
+              hx-include="#filter_edit_root"
+              hx-trigger="change"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              hx-target="#filter_edit_root">
         {% for op in field.operators %}
           <option value="{{ op.name }}"
                   {% if rule.operator == op.name %}selected{% endif %}>{{ op.display_name }}</option>

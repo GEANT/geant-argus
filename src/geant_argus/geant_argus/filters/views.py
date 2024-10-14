@@ -17,10 +17,6 @@ def get_all_filters():
     return Filter.objects.select_related("user")
 
 
-def default_context():
-    return {"name": "", "model": FILTER_MODEL}
-
-
 @require_GET
 def list_filters(request):
     # Load incidents
@@ -46,6 +42,10 @@ def list_filters(request):
     }
 
     return render(request, base_template, context=context)
+
+
+def default_context():
+    return {"name": "", "model": FILTER_MODEL}
 
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
