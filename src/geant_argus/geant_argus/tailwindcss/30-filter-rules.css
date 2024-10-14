@@ -1,0 +1,15 @@
+/* source: https://github.com/Ahnfelt/rulebuilder */
+
+.rule-buttons button:not(:hover),
+.rule-buttons button[disabled] {
+  opacity: 0.5;
+}
+
+.rule-buttons {
+  visibility: hidden;
+}
+
+.rule-atom:hover .rule-buttons,
+.rule-group:hover .rule-buttons {
+  visibility: visible;
+}
