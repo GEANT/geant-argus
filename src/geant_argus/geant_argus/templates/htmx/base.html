@@ -11,6 +11,10 @@
   <li>
     <a href="{% url 'geant-filters:filter-list' %}">Filters</a>
   </li>
+  <li>
+    <a href="{% url 'geant-blacklists:blacklist-list' %}"
+       title="Blacklist list view">Blacklists</a>
+  </li>
   {% if request.user.is_staff %}
     <li>
       <a href="{% url 'admin:index' %}">Admin</a>

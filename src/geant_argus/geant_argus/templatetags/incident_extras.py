@@ -25,9 +25,14 @@ def level_to_severity(value):
     return _level_to_severity(value).name
 
 
+@register.filter(name="incidentlevelbadge")
+def incident_level_to_badge(incident: Incident):
+    return level_to_badge(incident.level, incident.open)
+
+
 @register.filter(name="levelbadge")
-def level_to_badge(incident: Incident):
-    severity = _level_to_severity(incident.level)
+def level_to_badge(level: int, is_open=True):
+    severity = _level_to_severity(level)
     match severity:
         case IncidentSeverity.CRITICAL:
             classes = ["incident-critical"]
@@ -38,7 +43,7 @@ def level_to_badge(incident: Incident):
             classes = ["incident-minor"]
         case _:
             classes = ["incident-default"]
-    if not incident.open:
+    if not is_open:
         classes.append("incident-closed")
     return " ".join(classes)
 

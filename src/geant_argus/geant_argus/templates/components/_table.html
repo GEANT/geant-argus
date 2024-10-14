@@ -1,0 +1,117 @@
+{% load template_utils %}
+<table id="{{ table.object_id|default:'obj' }}-table"
+       class="table border border-separate border-spacing-1 border-primary mt-2">
+  <thead>
+    <tr class="border-b border-primary">
+      {% for column in table.columns %}
+        <th class="border-b border-primary">
+          {% if column.header_template %}
+            {% include column.header_template %}
+          {% else %}
+            {{ column.header }}
+          {% endif %}
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody id="table-body">
+    {% block table_rows %}
+      {% for object in page.object_list %}
+        {% block object %}
+          <tr id="{{ table.object_id|default:'obj' }}-{{ object.pk }}-row"
+              class="hover">
+            {% for column in table.columns %}
+              <td>
+                {% if column.cell_template %}
+                  {% include column.cell_template %}
+                {% elif column.lookup_key %}
+                  {{ object|get_item:column.lookup_key }}
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endblock object %}
+      {% empty %}
+        <tr>
+          <td colspan="{{ table.columns|length }}">No items on this page.</td>
+        </tr>
+      {% endfor %}
+    {% endblock table_rows %}
+  </tbody>
+  <tfoot>
+    {% block table_footer %}
+      <tr>
+        <td colspan="{{ table.columns|length }}" class="border-t border-primary">
+          <div class="flex justify-between items-center">
+            <div class="join">
+              <dl class="join-item stats stats-horizontal shadow leading-none overflow-x-auto font-medium bg-neutral text-neutral-content">
+                <div class="stat py-1">
+                  <dt class="stat-title text-neutral-content/80">Total</dt>
+                  <dd class="stat-value text-2xl text-base">
+                    {{ count }}
+                  </dd>
+                </div>
+              </dl>
+              <a class="btn btn-primary join-item h-full rounded-box"
+                 href="{% url table.add_button.url %}">{{ table.add_button.text }}</a>
+            </div>
+            <!--
+                The htmx attributes set on the nav here are inherited by the child links.
+                hx-target tells where htmx to swap the fetched content in, and hx-swap
+                tells it how to swap it - by replacing the 'outerHTML' attribute of the
+                target, i.e. replacing the target's actual DOM node. hx-push-url tells
+                htmx to push the fetched URL into the browser history, so we can use
+                the backwards/forwards buttons to navigate these subpages.
+                -->
+            <ul class="join round-xl"
+                hx-target="#{{ table.object_id|default:'obj' }}-table"
+                hx-swap="outerHTML"
+                hx-push-url="true">
+              {% if page.number != 1 %}
+                <li>
+                  <!--
+                              For each link we use hx-get to tell htmx to fetch that URL and
+                              swap it in. We also repeat the URL in the href attribute so the
+                              page works without JavaScript, and to ensure the link is
+                              displayed as clickable.
+                            -->
+                  <a hx-get="?page=1" href="?page=1" class="join-item btn btn-neutral">&laquo; First</a>
+                </li>
+              {% endif %}
+              {% if page.has_previous %}
+                <li>
+                  <a hx-get="?page={{ page.previous_page_number }}"
+                     href="?page={{ page.previous_page_number }}"
+                     class="join-item btn btn-neutral">{{ page.previous_page_number }}</a>
+                </li>
+              {% endif %}
+              {% if page.paginator.num_pages > 1 %}
+                <li>
+                  <button class="join-item btn btn-active btn-neutral">{{ page.number }}</button>
+                </li>
+              {% else %}
+                <li>
+                  <button class="btn btn-active btn-neutral">{{ page.number }}</button>
+                </li>
+              {% endif %}
+              {% if page.has_next %}
+                <li>
+                  <a hx-get="?page={{ page.next_page_number }}"
+                     href="?page={{ page.next_page_number }}"
+                     class="join-item btn btn-neutral">{{ page.next_page_number }}</a>
+                </li>
+              {% endif %}
+              {% if page.number != page.paginator.num_pages %}
+                <li>
+                  <a hx-get="?page={{ page.paginator.num_pages }}"
+                     href="?page={{ page.paginator.num_pages }}"
+                     class="join-item btn btn-neutral">&raquo; Last</a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </td>
+      </tr>
+    {% endblock table_footer %}
+  </tfoot>
+</table>
