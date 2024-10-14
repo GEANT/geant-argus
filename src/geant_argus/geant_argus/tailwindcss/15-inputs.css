@@ -1,0 +1,16 @@
+@layer components {
+  .input,
+  .checkbox,
+  .select,
+  .radio {
+    background-color: white;
+  }
+
+  /* Hide default +/- buttons on numberinputs with .hide-buttons class*/
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button.hide-buttons,
+  input::-webkit-inner-spin-button.hide-buttons {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

@@ -1,0 +1,14 @@
+@layer components {
+  :root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
+    overflow: unset;
+    scrollbar-gutter: unset;
+  }
+
+  #table {
+    @apply border-spacing-0;
+  }
+
+  .htmx-loading-pulse.htmx-request {
+    @apply animate-pulse;
+  }
+}

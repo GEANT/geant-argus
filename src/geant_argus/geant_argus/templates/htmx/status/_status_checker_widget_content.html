@@ -1,6 +1,6 @@
 <script>
   // this is written in such a way as to minimize garbage and allow garbage collection of any
-  // timers when this script snippet is autoreloaded by htmx to prevent memory leaks.
+  // timers when this script snippet is autoreloaded by htmx, to prevent memory leaks.
 
   window.setCounter = function() {
     let counter = document.getElementById('refresh-counter')
@@ -16,38 +16,47 @@
   }
   setTimeout(window.setCounter, 100)
 </script>
-<dl class="stats stats-horizontal shadow leading-none overflow-x-auto text-xs bg-neutral mb-2 w-full">
-  <div class="stat py-1">
+<dl class="stats stats-horizontal shadow leading-none overflow-x-auto text-xs bg-neutral w-full">
+  <div class="stat pr-2 py-1">
     <dt class="stat-title text-neutral-content">Last refresh</dt>
     <dd class="stat-value text-sm text-neutral-content">
       <span id="refresh-counter" class="pl-0.5">0</span>s
     </dd>
   </div>
-  <div class="stat py-1">
+  <div class="stat px-2 py-1">
     <dt class="stat-title text-neutral-content">Trap last correlated</dt>
     <dd class="stat-value text-sm text-neutral-content">
       {{ last_correlated }}
     </dd>
   </div>
-  <div class="stat py-1">
+  <div class="stat px-2 py-1">
     <div>
       <dt class="stat-title text-neutral-content">Inventory last updated</dt>
       <dd class="stat-value text-sm text-neutral-content">
         {{ inventory.last_update|date:datetime_format|default:"?" }}
-        <span class="text-base cursor-pointer htmx-loading-pulse"
-              hx-post="{% url 'geant-status:update' %}"
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-              hx-push-url="false"
-              hx-target="#service-status"
-              {% if pending %}disabled{% endif %}>
-          {% if pending %}
-            !
-          {% else %}
-            ⟳
-          {% endif %}
-        </span>
       </dd>
     </div>
+  </div>
+  <div class="stat pl-2 py-1 flex gap-2 items-center">
+    <span class="text-neutral-content text-2xl font-bold cursor-pointer htmx-loading-pulse"
+          title="Update inventory"
+          hx-post="{% url 'geant-status:update' %}"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-push-url="false"
+          hx-target="#service-status"
+          {% if pending %}disabled{% endif %}>
+      {% if pending %}
+        !
+      {% else %}
+        ⭯
+      {% endif %}
+    </span>
+    <span>
+      <a href="{{ inventory_ui_url }}" target="_blank" rel="noreferrer">
+        <button class="btn btn-xs btn-neutral-content bg-transparent text-neutral-content text-bold"
+                title="Inventory UI">UI</button>
+      </a>
+    </span>
   </div>
 </dl>
 <dl class="stats stats-horizontal shadow leading-none overflow-x-auto text-xs bg-neutral w-full">

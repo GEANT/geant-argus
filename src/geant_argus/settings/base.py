@@ -53,13 +53,8 @@ INCIDENT_TABLE_COLUMNS = [
     "row_select",
     IncidentTableColumn(
         "timestamp",
-        label="Timestamp",
+        label="Start Time (UTC)",
         cell_template="htmx/incidents/_incident_start_time.html",
-    ),
-    IncidentTableColumn(
-        "endpoint_count",
-        label="Flaps",
-        cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
         "status",
@@ -70,11 +65,6 @@ INCIDENT_TABLE_COLUMNS = [
         "level",
         label="Severity",
         cell_template="htmx/incidents/_incident_level.html",
-    ),
-    IncidentTableColumn(
-        "alarm_id",
-        label="Alarm ID",
-        cell_template="htmx/incidents/_incident_source_incident_id.html",
     ),
     IncidentTableColumn(
         "location",
@@ -99,16 +89,20 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_ticket_ref.html",
     ),
     IncidentTableColumn(
-        "noc_ack",
-        label="NOC Ack",
-        cell_template="htmx/incidents/_incident_group_ack.html",
-        context={"group": "noc"},
+        "ack",
+        label="Ack",
+        cell_template="htmx/incidents/_incident_ack.html",
     ),
     IncidentTableColumn(
-        "sd_ack",
-        label="SD Ack",
-        cell_template="htmx/incidents/_incident_group_ack.html",
-        context={"group": "servicedesk"},
+        "comment",
+        label="Comment",
+        cell_template="htmx/incidents/_incident_comment.html",
+    ),
+    IncidentTableColumn(
+        "endpoint_count",
+        label="#",
+        header_template="htmx/incidents/_incident_endpoint_count_header.html",
+        cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
         "details",
@@ -118,15 +112,14 @@ INCIDENT_TABLE_COLUMNS = [
 ]
 
 # Tailwind config template relative to the repository root directory
-TAILWIND_CONFIG_TEMPLATE = "tailwindcss/tailwind.config.template.js"
 TAILWIND_CONFIG_TARGET = "tailwindcss/tailwind.config.js"
+TAILWIND_CSS_TARGET = "tailwindcss/geant.base.css"
 
 
 # Status checker widget
 STATUS_CHECKER_ENABLED = True
 STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
 STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
-STATUS_CHECKER_UPDATE_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_UPDATE_INPROV_URL")
 
 # Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
 # on the incident listing

@@ -5,6 +5,19 @@ import jsonschema
 from .schema import METADATA_SCHEMAS
 
 
+def validate_metadata(metadata: dict):
+    if metadata.get("version") not in METADATA_SCHEMAS:
+        return {
+            "message": (f"metadata must be one of version: {', '.join(METADATA_SCHEMAS.keys())}")
+        }
+    schema = METADATA_SCHEMAS[metadata["version"]]
+
+    try:
+        jsonschema.validate(metadata, schema)
+    except jsonschema.ValidationError as e:
+        return {e.json_path.replace("$", "metadata", 1): e.message}
+
+
 class MetadataValidationMiddleware:
     def __init__(self, get_response) -> None:
         self.get_response = get_response
@@ -29,18 +42,6 @@ class MetadataValidationMiddleware:
 
         if not isinstance(payload, dict) or "metadata" not in payload:
             return
-
-        if payload["metadata"].get("version") not in METADATA_SCHEMAS:
-            return JsonResponse(
-                {
-                    "message": (
-                        f"metadata must be one of version: {', '.join(METADATA_SCHEMAS.keys())}"
-                    )
-                },
-                status=400,
-            )
-        schema = METADATA_SCHEMAS[payload["metadata"]["version"]]
-        try:
-            jsonschema.validate(payload["metadata"], schema)
-        except jsonschema.ValidationError as e:
-            return JsonResponse({e.json_path.replace("$", "metadata", 1): e.message}, status=400)
+        error_message = validate_metadata(payload["metadata"])
+        if error_message:
+            return JsonResponse(error_message, status=400)

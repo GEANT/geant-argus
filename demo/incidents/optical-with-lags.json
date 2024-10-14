@@ -1,0 +1,201 @@
+{
+  "phase": "FINALIZED",
+  "status": "ACTIVE",
+  "version": "v0a5",
+  "severity": "MAJOR",
+  "init_time": "2024-08-29T21:00:00",
+  "endpoints": {
+    "bgp": [],
+    "link": [
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:00",
+            "clear_time": null,
+            "properties": {
+              "id": 15463079,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:00:00",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.bud.hu.geant.net",
+              "interface_name": "ae7",
+              "oper_down_time": "2024-08-29T21:00:00",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.bud.hu.geant.net",
+        "interface": "ae7"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:00",
+            "clear_time": null,
+            "properties": {
+              "id": 15463109,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:00:00",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.bud.hu.geant.net",
+              "interface_name": "et-9/0/2",
+              "oper_down_time": "2024-08-29T21:00:00",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.bud.hu.geant.net",
+        "interface": "et-9/0/2"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:00",
+            "clear_time": null,
+            "properties": {
+              "id": 15463124,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:00:00",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.bud.hu.geant.net",
+              "interface_name": "et-9/0/5",
+              "oper_down_time": "2024-08-29T21:00:00",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.bud.hu.geant.net",
+        "interface": "et-9/0/5"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:28",
+            "clear_time": null,
+            "properties": {
+              "id": 15463129,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:00:28",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.buc.ro.geant.net",
+              "interface_name": "ae7",
+              "oper_down_time": "2024-08-29T21:00:28",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.buc.ro.geant.net",
+        "interface": "ae7"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:29",
+            "clear_time": null,
+            "properties": {
+              "id": 15463134,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:00:29",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.buc.ro.geant.net",
+              "interface_name": "et-1/1/5",
+              "oper_down_time": "2024-08-29T21:00:29",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.buc.ro.geant.net",
+        "interface": "et-1/1/5"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:29",
+            "clear_time": null,
+            "properties": {
+              "id": 15463139,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-29T21:00:29",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.buc.ro.geant.net",
+              "interface_name": "et-1/0/5",
+              "oper_down_time": "2024-08-29T21:00:29",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.buc.ro.geant.net",
+        "interface": "et-1/0/5"
+      }
+    ],
+    "coriant": [
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:02",
+            "clear_time": null,
+            "properties": {
+              "id": 109754,
+              "status": "Raised",
+              "severity": "major",
+              "entity_string": "1-1.4-Optical-100GbE-TTP",
+              "equipment_name": "BUD01-GRV5",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "BUD01-GRV5",
+        "port": "1-1.4-Optical-100GbE-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-29T21:00:02",
+            "clear_time": null,
+            "properties": {
+              "id": 109759,
+              "status": "Raised",
+              "severity": "major",
+              "entity_string": "1-1.3-Optical-100GbE-TTP",
+              "equipment_name": "BUD01-GRV5",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "BUD01-GRV5",
+        "port": "1-1.3-Optical-100GbE-TTP"
+      }
+    ],
+    "infinera": []
+  },
+  "description": "Loss of Optical Service (BUC-BUD-IPTRUNK)",
+  "location": ["BUCHAREST 2","BUDAPEST"],
+	"equipment": ["RT1.BUC.RO","BUD01-GRV5"],
+    "short_lived": false,
+  "endpoint_count": 8,
+  "blacklist": {
+    "applied": true,
+    "original_severity": "MINOR",
+    "message": "This is a very major incident"
+  }
+}
