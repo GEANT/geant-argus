@@ -10,33 +10,26 @@ from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 from .filters import FILTER_MODEL
 
+PER_PAGE = 20
+
 
 def get_all_filters():
     return Filter.objects.select_related("user")
 
 
-def list_filter_context(request):
-    # Load incidents
-    qs = get_all_filters().order_by("name")
-
-    # Standard Django pagination
-    page_num = request.GET.get("page", "1")
-    page = Paginator(object_list=qs, per_page=3).get_page(page_num)
-
-    return {
-        "column_count": 3,
-        "count": qs.count(),
-        "page_title": "Filters",
-        "page": page,
-    }
-
-
-def default_edit_context():
+def default_context():
     return {"name": "", "model": FILTER_MODEL}
 
 
 @require_GET
 def list_filters(request):
+    # Load incidents
+    qs = get_all_filters().order_by("name")
+
+    # Standard Django pagination
+    page_num = request.GET.get("page", "1")
+    page = Paginator(object_list=qs, per_page=PER_PAGE).get_page(page_num)
+
     # The htmx magic - use a different, minimal base template for htmx
     # requests, allowing us to skip rendering the unchanging parts of the
     # template.
@@ -45,18 +38,18 @@ def list_filters(request):
     else:
         base_template = "geant/filters/filter_list.html"
 
-    context = list_filter_context(request)
+    context = {
+        "column_count": 3,
+        "count": qs.count(),
+        "page_title": "Filters",
+        "page": page,
+    }
+
     return render(request, base_template, context=context)
 
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
-    edit_url = (
-        reverse("geant-filters:edit-filter", args=(pk,))
-        if pk is not None
-        else reverse("geant-filters:new-filter")
-    )
-
     if request.method == "GET":
         if pk:
             filter = get_object_or_404(Filter, pk=pk)
@@ -65,8 +58,7 @@ def edit_filter(request, pk: Optional[int] = None):
             filter = None
             filter_dict = FILTER_MODEL.default_rule()
         context = {
-            **list_filter_context(request),
-            **default_edit_context(),
+            **default_context(),
             "filter_dict": filter_dict,
             "filter": filter,
             "pk": pk,
@@ -75,7 +67,6 @@ def edit_filter(request, pk: Optional[int] = None):
                 if request.htmx
                 else "geant/filters/_filter_edit_regular_buttons.html"
             ),
-            "edit_url": edit_url,
         }
         template = (
             "geant/filters/_filter_edit_content.html"
@@ -89,10 +80,9 @@ def edit_filter(request, pk: Optional[int] = None):
             return HttpResponseBadRequest("only htmx supported")
         filter_dict = update_filter(request.POST, request.GET)
         context = {
-            **default_edit_context(),
+            **default_context(),
             "filter_dict": filter_dict,
             "is_root": True,
-            "edit_url": edit_url,
         }
         return render(request, "geant/filters/_filter_item.html", context=context)
 
@@ -110,7 +100,7 @@ def save_filter(request, pk: Optional[int] = None):
     name = request.POST.get("name")
     if not re.match(r"^[a-zA-Z0-9_-]+$", name):
         context = {
-            **default_edit_context(),
+            **default_context(),
             "errors": {"name": "Name can only contain letters, numbers, - or _"},
             "filter_dict": result,
             "name": name,

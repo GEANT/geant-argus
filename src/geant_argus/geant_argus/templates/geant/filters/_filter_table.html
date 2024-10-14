@@ -21,7 +21,7 @@
             <td>
               <div class="flex w-full justify-center">
                 <button type="button"
-                        class="btn btn-xs {% if pk == object.pk %}text-primary-content hover:btn-error{% else %}btn-error{% endif %} btn-outline"
+                        class="btn btn-xs btn-error btn-outline"
                         hx-delete="{% url 'geant-filters:edit-filter' object.pk %}"
                         hx-confirm="Are you sure you want to delete filter {{ object.name }}"
                         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

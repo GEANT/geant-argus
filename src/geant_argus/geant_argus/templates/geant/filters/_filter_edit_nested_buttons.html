@@ -3,7 +3,6 @@
         hx-target="#filter-form"
         hx-include="#filter-form"
         hx-swap="outerHTML">Save</button>
-<a class="btn btn-primary join-item h-full"
-   href="{% if pk %}{% url 'geant-filters:edit-filter' pk %}{% else %}{% url 'geant-filters:new-filter' %}{% endif %}">Expand</a>
+<a class="btn btn-primary join-item h-full" href="{{ request.path }}">Expand</a>
 <button class="btn btn-primary join-item h-full"
         _="on click remove <#filter-edit > */>">Cancel</button>

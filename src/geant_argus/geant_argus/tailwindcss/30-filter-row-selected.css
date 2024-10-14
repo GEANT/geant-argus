@@ -3,6 +3,9 @@
     @apply bg-primary;
     @apply text-primary-content;
   }
+  .filter-row.filter-row-selected .btn {
+    @apply text-primary-content;
+  }
   .filter-row:not(.filter-row-selected) {
     @apply hover;
 
