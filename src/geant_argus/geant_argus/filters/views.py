@@ -50,7 +50,13 @@ def list_filters(request):
 
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
-def edit_filter(request, pk: Optional[int] = None, create=False):
+def edit_filter(request, pk: Optional[int] = None):
+    edit_url = (
+        reverse("geant-filters:edit-filter", args=(pk,))
+        if pk is not None
+        else reverse("geant-filters:new-filter")
+    )
+
     if request.method == "GET":
         if pk:
             filter = get_object_or_404(Filter, pk=pk)
@@ -64,12 +70,12 @@ def edit_filter(request, pk: Optional[int] = None, create=False):
             "filter_dict": filter_dict,
             "filter": filter,
             "pk": pk,
-            "create": create,
             "buttons_template": (
                 "geant/filters/_filter_edit_nested_buttons.html"
                 if request.htmx
                 else "geant/filters/_filter_edit_regular_buttons.html"
             ),
+            "edit_url": edit_url,
         }
         template = (
             "geant/filters/_filter_edit_content.html"
@@ -86,6 +92,7 @@ def edit_filter(request, pk: Optional[int] = None, create=False):
             **default_edit_context(),
             "filter_dict": filter_dict,
             "is_root": True,
+            "edit_url": edit_url,
         }
         return render(request, "geant/filters/_filter_item.html", context=context)
 
