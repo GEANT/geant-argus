@@ -1,0 +1,9 @@
+<button class="btn btn-primary join-item h-full"
+        hx-post="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
+        hx-target="#filter-form"
+        hx-include="#filter-form"
+        hx-swap="outerHTML">Save</button>
+<a class="btn btn-primary join-item h-full"
+   href="{% if pk %}{% url 'geant-filters:edit-filter' pk %}{% else %}{% url 'geant-filters:new-filter' %}{% endif %}">Expand</a>
+<button class="btn btn-primary join-item h-full"
+        _="on click remove <#filter-edit > */>">Cancel</button>

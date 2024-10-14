@@ -19,7 +19,7 @@
       {% with operator=field.operators_by_name|get_item:rule.operator %}
         {% include operator.template with prefix=prefix rule=rule operator=operator %}
         {% if not is_root %}
-          {% include "./_filter_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
+          {% include "./_filter_item_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
         {% endif %}
       {% endwith %}
     </div>

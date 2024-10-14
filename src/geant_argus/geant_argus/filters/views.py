@@ -8,7 +8,6 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAll
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-
 from .filters import FILTER_MODEL
 
 
@@ -22,7 +21,7 @@ def list_filter_context(request):
 
     # Standard Django pagination
     page_num = request.GET.get("page", "1")
-    page = Paginator(object_list=qs, per_page=10).get_page(page_num)
+    page = Paginator(object_list=qs, per_page=3).get_page(page_num)
 
     return {
         "column_count": 3,
@@ -66,11 +65,16 @@ def edit_filter(request, pk: Optional[int] = None, create=False):
             "filter": filter,
             "pk": pk,
             "create": create,
+            "buttons_template": (
+                "geant/filters/_filter_edit_nested_buttons.html"
+                if request.htmx
+                else "geant/filters/_filter_edit_regular_buttons.html"
+            ),
         }
         template = (
             "geant/filters/_filter_edit_content.html"
             if request.htmx
-            else "geant/filters/filter_list.html"
+            else "geant/filters/filter_edit.html"
         )
         return render(request, template, context=context)
 

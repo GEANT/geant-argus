@@ -1,0 +1,10 @@
+@layer components {
+  .filter-row.filter-row-selected {
+    @apply bg-primary;
+    @apply text-primary-content;
+  }
+  .filter-row:not(.filter-row-selected) {
+    @apply hover;
+
+  }
+}

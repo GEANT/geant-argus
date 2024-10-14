@@ -1,26 +1,4 @@
 {% extends "htmx/base.html" %}
-{% block head %}
-  {{ block.super }}
-  <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-  <style>
-    // source: https://github.com/Ahnfelt/rulebuilder
-
-
-    .rule-buttons button:not(:hover),
-    .rule-buttons button[disabled] {
-      opacity: 0.50;
-    }
-
-    .rule-buttons {
-      visibility: hidden;
-    }
-
-    .rule-atom:hover .rule-buttons,
-    .rule-group:hover .rule-buttons {
-      visibility: visible;
-    }
-  </style>
-{% endblock head %}
 {% block main %}
   <div class="flex flex-col lg:flex-row gap-4 mt-2">
     <section class="overflow-x-auto md:w-full lg:w-1/3 xl:w-2/5">

@@ -1,25 +1,4 @@
 {% extends "htmx/base.html" %}
-{% block head %}
-  {{ block.super }}
-  <style>
-    // source: https://github.com/Ahnfelt/rulebuilder
-
-
-    .rule-buttons button:not(:hover),
-    .rule-buttons button[disabled] {
-      opacity: 0.50;
-    }
-
-    .rule-buttons {
-      visibility: hidden;
-    }
-
-    .rule-atom:hover .rule-buttons,
-    .rule-group:hover .rule-buttons {
-      visibility: visible;
-    }
-  </style>
-{% endblock head %}
 {% block main %}
   {% include "./_filter_edit_content.html" %}
 {% endblock main %}
