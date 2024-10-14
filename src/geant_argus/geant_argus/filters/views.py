@@ -8,8 +8,9 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAll
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-
 from .filters import FILTER_MODEL
+
+PER_PAGE = 20
 
 
 def get_all_filters():
@@ -23,7 +24,7 @@ def list_filters(request):
 
     # Standard Django pagination
     page_num = request.GET.get("page", "1")
-    page = Paginator(object_list=qs, per_page=10).get_page(page_num)
+    page = Paginator(object_list=qs, per_page=PER_PAGE).get_page(page_num)
 
     # The htmx magic - use a different, minimal base template for htmx
     # requests, allowing us to skip rendering the unchanging parts of the
@@ -49,12 +50,31 @@ def default_context():
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
-    if request.method == "DELETE":
-        if not pk:
-            return HttpResponseNotAllowed(permitted_methods=["HEAD", "GET", "POST"])
-        filter = get_object_or_404(Filter, pk=pk)
-        filter.delete()
-        return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
+    if request.method == "GET":
+        if pk:
+            filter = get_object_or_404(Filter, pk=pk)
+            filter_dict = filter.filter
+        else:
+            filter = None
+            filter_dict = FILTER_MODEL.default_rule()
+        context = {
+            **default_context(),
+            "filter_dict": filter_dict,
+            "filter": filter,
+            "pk": pk,
+            "buttons_template": (
+                "geant/filters/_filter_edit_nested_buttons.html"
+                if request.htmx
+                else "geant/filters/_filter_edit_regular_buttons.html"
+            ),
+        }
+        template = (
+            "geant/filters/_filter_edit_content.html"
+            if request.htmx
+            else "geant/filters/filter_edit.html"
+        )
+        return render(request, template, context=context)
+
     if request.method == "POST":
         if not request.htmx:
             return HttpResponseBadRequest("only htmx supported")
@@ -66,19 +86,12 @@ def edit_filter(request, pk: Optional[int] = None):
         }
         return render(request, "geant/filters/_filter_item.html", context=context)
 
-    if pk:
+    if request.method == "DELETE":
+        if not pk:
+            return HttpResponseNotAllowed(permitted_methods=["HEAD", "GET", "POST"])
         filter = get_object_or_404(Filter, pk=pk)
-        filter_dict = filter.filter
-    else:
-        filter = None
-        filter_dict = FILTER_MODEL.default_rule()
-    context = {
-        **default_context(),
-        "filter_dict": filter_dict,
-        "filter": filter,
-        "pk": pk,
-    }
-    return render(request, "geant/filters/filter_edit.html", context=context)
+        filter.delete()
+        return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
 
 
 @require_POST
