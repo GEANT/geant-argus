@@ -94,7 +94,6 @@ def edit_filter(request):
     data = form.cleaned_data
 
     filter_pk = data.get("filter")
-
     return render_edit_filter(
         request,
         "geant/blacklists/_blacklist_edit_filter.html",
@@ -103,7 +102,7 @@ def edit_filter(request):
             "edit_url": reverse(
                 "geant-filters:edit-filter", args=(filter_pk,) if filter_pk else ()
             ),
-            "read_only": data["read_only"],
+            "read_only": filter_pk and data["read_only"],
         },
     )
 
