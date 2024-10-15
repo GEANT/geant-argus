@@ -68,7 +68,6 @@ def render_edit_filter(request, template, pk: Optional[int] = None, context=None
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
-
     if request.method == "GET":
         template = (
             "geant/filters/_filter_edit_content.html"
@@ -100,6 +99,7 @@ def edit_filter(request, pk: Optional[int] = None):
 def save_filter(request, pk: Optional[int] = None):
     result = save_filter_from_request(request, pk)
     if isinstance(result, HttpResponse):
+        # result may be an error response
         return result
     return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
 

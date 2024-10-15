@@ -17,6 +17,11 @@ class CreateBlacklistForm(ModelForm):
         fields = ["name", "filter", "level", "message"]
 
 
+class EditFilterForBlacklistForm(forms.Form):
+    filter = forms.IntegerField(required=False)
+    read_only = forms.BooleanField(required=False)
+
+
 def get_all_blacklists():
     return Blacklist.objects.select_related("filter")
 
@@ -39,7 +44,7 @@ BLACKLISTS_TABLE = {
         },
     ],
     "add_button": {
-        "url": "geant-blacklists:new-blacklist",
+        "url": "geant-blacklists:edit-blacklist",
         "text": "Create new blacklist",
     },
 }
@@ -81,11 +86,6 @@ def edit_blacklist(request, pk=None):
     return redirect(request, target="geant-blacklists:blacklist-list")
 
 
-class EditFilterForBlacklistForm(forms.Form):
-    filter = forms.IntegerField(required=False)
-    read_only = forms.BooleanField(required=False)
-
-
 @require_GET
 def edit_filter(request):
     form = EditFilterForBlacklistForm(request.GET)
@@ -117,7 +117,9 @@ def save_filter(request):
     filter_pk = data.get("filter")
     result = save_filter_from_request(request, pk=filter_pk)
     if isinstance(result, HttpResponse):
+        # result may be an error response
         return result
+
     return render_edit_filter(
         request,
         "geant/blacklists/_blacklist_edit_filter.html",
