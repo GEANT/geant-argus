@@ -2,7 +2,6 @@
 <select name="{{ prefix }}{{ key }}"
         autocomplete="off"
         class="select select-bordered max-w-xs"
-        {% if read_only %}disabled{% endif %}
         hx-post="{{ edit_url|default:request.path }}"
         hx-include="#filter_edit_root"
         hx-trigger="change"

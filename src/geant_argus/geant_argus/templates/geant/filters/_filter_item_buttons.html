@@ -1,28 +1,27 @@
 <span class="rule-buttons">
   <button type="button"
-          class="btn btn-sm btn-ghost disabled:bg-transparent font-black"
-          {% if read_only or not can_delete %}disabled{% endif %}
+          class="btn btn-sm btn-ghost disabled:bg-transparent disabled:opacity-50 font-black"
+          {% if not can_delete %}disabled{% endif %}
           hx-post="{{ edit_url|default:request.path }}?delete={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-target="#filter_edit_root">🗑</button>
   <button type="button"
-          class="btn btn-sm btn-ghost disabled:bg-transparent font-black text-lg"
-          {% if read_only %}disabled{% endif %}
+          class="btn btn-sm btn-ghost disabled:bg-transparent disabled:opacity-50 font-black text-lg"
           hx-post="{{ edit_url|default:request.path }}?create_after={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-target="#filter_edit_root">+</button>
   <button type="button"
-          {% if read_only or is_top %}disabled{% endif %}
-          class="btn btn-sm btn-ghost disabled:bg-transparent font-black text-lg"
+          {% if is_top %}disabled{% endif %}
+          class="btn btn-sm btn-ghost disabled:bg-transparent disabled:opacity-50 font-black text-lg"
           hx-post="{{ edit_url|default:request.path }}?move_up={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-target="#filter_edit_root">↑</button>
   <button type="button"
-          {% if read_only or is_bottom %}disabled{% endif %}
-          class="btn btn-sm btn-ghost disabled:bg-transparent font-black text-lg"
+          {% if is_bottom %}disabled{% endif %}
+          class="btn btn-sm btn-ghost disabled:bg-transparent disabled:opacity-50 font-black text-lg"
           hx-post="{{ edit_url|default:request.path }}?move_down={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

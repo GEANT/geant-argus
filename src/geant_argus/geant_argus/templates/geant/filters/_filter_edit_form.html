@@ -3,13 +3,12 @@
     <span class="label-text">Name:</span>
     <input type="text"
            class="input input-bordered w-full max-w-xs {% if errors.name %}border-error{% endif %}"
-           {% if read_only %}disabled{% endif %}
            name="name"
            value="{{ filter.name|default:name }}" />
     {% if errors.name %}<div class="text-xs text-error">{{ errors.name }}</div>{% endif %}
   </label>
   <div id="filter_edit_root"
-       class="bg-gray-100 border rounded-lg px-2 pb-2 mt-2 mb-3 mr-2">
+       class="border border-primary rounded-lg pl-3 pr-4 pb-2 mt-2 mb-2">
     {% include "./_filter_item.html" with is_root=True %}
   </div>
   {% csrf_token %}
