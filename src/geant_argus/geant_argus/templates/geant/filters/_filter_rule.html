@@ -1,11 +1,10 @@
 {% load template_utils %}
 {% if rule.field in model.fields_by_name %}
   {% with field=model.fields_by_name|get_item:rule.field %}
-    <div class="rule-atom mt-2 p-1 border border-black/10 rounded-lg bg-black/5">
+    <div class="rule-atom">
       {% include "./_filter_selector.html" with key="field" selected=rule.field %}
       <select name="{{ prefix }}op"
               class="select select-bordered max-w-xs"
-              {% if read_only %}disabled{% endif %}
               autocomplete="off"
               hx-post="{{ edit_url|default:request.path }}"
               hx-include="#filter_edit_root"
