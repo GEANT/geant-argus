@@ -79,7 +79,8 @@ def edit_filter(request, pk: Optional[int] = None):
     if request.method == "POST":
         if not request.htmx:
             return HttpResponseBadRequest("only htmx supported")
-        filter_dict = update_filter(request.POST, request.GET)
+        filter_dict = parse_filter_form_data(request.POST)
+        filter_dict = update_filter(filter_dict, request.GET)
         context = {
             **default_context(),
             "filter_dict": filter_dict,
@@ -135,12 +136,17 @@ def save_filter_from_request(request, pk: Optional[int] = None):
     return filter
 
 
-def update_filter(form_data, commands):
-    filter_dict = parse_filter_form_data(form_data)
-
+def update_filter(filter_dict, commands):
     if create_after := commands.get("create_after"):
-        items, idx = _get_items_list(filter_dict, create_after)
-        items.insert(idx + 1, FILTER_MODEL.default_rule())
+        if create_after == "root" and filter_dict["type"] == "rule":
+            filter_dict.pop("version", None)
+            filter_dict = FILTER_MODEL.with_version(
+                FILTER_MODEL.default_group(items=[filter_dict, FILTER_MODEL.default_rule()])
+            )
+
+        else:
+            items, idx = _get_items_list(filter_dict, create_after)
+            items.insert(idx + 1, FILTER_MODEL.default_rule())
 
     if delete := commands.get("delete"):
         items, idx = _get_items_list(filter_dict, delete)

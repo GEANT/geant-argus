@@ -8,8 +8,8 @@
     {% if errors.name %}<div class="text-xs text-error">{{ errors.name }}</div>{% endif %}
   </label>
   <div id="filter_edit_root"
-       class="border border-primary rounded-lg pl-3 pr-4 pb-2 mt-2 mb-2">
-    {% include "./_filter_item.html" with is_root=True %}
+       class="border border-primary rounded-lg pl-3 pr-4 pb-2 my-2">
+    {% include "./_filter_item.html" with is_top=True is_bottom=True %}
   </div>
   {% csrf_token %}
 </form>

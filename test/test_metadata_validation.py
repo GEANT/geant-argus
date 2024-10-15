@@ -42,5 +42,6 @@ def test_link_alarm_none_fields():
             "infinera": [],
         },
         "description": "",
+        "blacklist": {"applied": False},
     }
     validate({"metadata": metadata})
