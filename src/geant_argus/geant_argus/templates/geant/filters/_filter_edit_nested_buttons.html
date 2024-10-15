@@ -3,6 +3,7 @@
         hx-target="#filter-form"
         hx-include="#filter-form"
         hx-swap="outerHTML">Save</button>
-<a class="btn btn-primary join-item h-full" href="{{ request.path }}">Expand</a>
+<a class="btn btn-primary join-item h-full"
+   href="{{ edit_url|default:request.path }}">Expand</a>
 <button class="btn btn-primary join-item h-full"
         _="on click remove <#filter-edit > */>">Cancel</button>

@@ -1,6 +1,15 @@
-<div class="h-full flex flex-col">
-  <div class="grow border border-primary rounded-t-2xl p-2">{% include "./_filter_edit_form.html" %}</div>
-  <div class="border border-primary rounded-b-2xl border-t-0 px-4 py-3">
-    <div class="join h-13 rounded-box">{% include buttons_template %}</div>
-  </div>
-</div>
+{% extends 'components/_form_with_buttons.html' %}
+{% block form %}
+  {% include "./_filter_edit_form.html" %}
+{% endblock form %}
+{% block buttons %}
+  <button class="btn btn-primary join-item h-full"
+          hx-post="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
+          hx-target="#filter-form"
+          hx-include="#filter-form"
+          hx-swap="outerHTML">Save</button>
+  <a class="btn btn-primary join-item h-full"
+     href="{{ edit_url|default:request.path }}">Expand</a>
+  <button class="btn btn-primary join-item h-full"
+          _="on click remove <#filter-edit > */>">Cancel</button>
+{% endblock buttons %}

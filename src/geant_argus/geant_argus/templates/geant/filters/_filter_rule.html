@@ -5,8 +5,9 @@
       {% include "./_filter_selector.html" with key="field" selected=rule.field %}
       <select name="{{ prefix }}op"
               class="select select-bordered max-w-xs"
+              {% if read_only %}disabled{% endif %}
               autocomplete="off"
-              hx-post="{{ request.path }}"
+              hx-post="{{ edit_url|default:request.path }}"
               hx-include="#filter_edit_root"
               hx-trigger="change"
               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'

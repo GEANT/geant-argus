@@ -1,5 +1,6 @@
 <select name="{{ prefix }}val:bool"
         class="select select-bordered max-w-xs"
+        {% if read_only %}disabled{% endif %}
         autocomplete="off">
   <option value="true" {% if rule.value %}selected{% endif %}>True</option>
   <option value="false" {% if not rule.value %}selected{% endif %}>False</option>

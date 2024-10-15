@@ -2,7 +2,8 @@
 <select name="{{ prefix }}{{ key }}"
         autocomplete="off"
         class="select select-bordered max-w-xs"
-        hx-post="{{ request.path }}"
+        {% if read_only %}disabled{% endif %}
+        hx-post="{{ edit_url|default:request.path }}"
         hx-include="#filter_edit_root"
         hx-trigger="change"
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
