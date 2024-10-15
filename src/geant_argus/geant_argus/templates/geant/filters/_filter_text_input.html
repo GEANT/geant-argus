@@ -1,4 +1,5 @@
 <input name="{{ prefix }}val:str"
        type="text"
+       {% if read_only %}disabled{% endif %}
        value="{{ rule.value }}"
        class="input input-bordered w-full max-w-xs">

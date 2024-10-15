@@ -26,7 +26,14 @@ class Migration(migrations.Migration):
                 (
                     "level",
                     models.IntegerField(
-                        choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")], default=5
+                        choices=[
+                            (1, "CRITICAL"),
+                            (2, "MAJOR"),
+                            (3, "MINOR"),
+                            (4, "WARNING"),
+                            (5, "HIDE"),
+                        ],
+                        default=5,
                     ),
                 ),
                 (

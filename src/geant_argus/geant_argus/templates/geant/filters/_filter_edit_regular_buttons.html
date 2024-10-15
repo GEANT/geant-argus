@@ -11,5 +11,7 @@
           class="btn btn-primary join-item h-full"
           hx-delete="."
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-          hx-confirm="Are you sure you want to delete this filter?">Delete</button>
+          hx-confirm="Are you sure you want to delete this filter? This will also delete any blacklists based on this filter">
+    Delete
+  </button>
 {% endif %}

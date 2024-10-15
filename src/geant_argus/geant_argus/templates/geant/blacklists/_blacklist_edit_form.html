@@ -1,0 +1,46 @@
+{% extends 'components/_form_with_buttons.html' %}
+{% load widget_tweaks %}
+{% block form %}
+  <form id=blacklist-edit method="post">
+    <fieldset>
+      <label class="label">
+        <span class="label-text w-40">Name:</span>
+        {{ form.name|add_class:"input input-accent input-bordered border w-60" }}
+      </label>
+      <label class="label"
+             hx-get="{% url 'geant-blacklists:edit-filter' %}?read_only=1"
+             hx-trigger="change"
+             hx-include="#id_filter"
+             hx-target="#filter-edit">
+        <span class="label-text w-40">Filter:</span>
+        <div class="flex flex-row gap-2">
+          <button type="button"
+                  class="btn btn-primary"
+                  hx-get="{% url 'geant-blacklists:edit-filter' %}"
+                  hx-params="none"
+                  hx-target="#filter-edit">New filter</button>
+          <div id="blacklist-filter-select">{{ form.filter|add_class:"select select-accent border w-60" }}</div>
+        </div>
+      </label>
+      <label class="label">
+        <span class="label-text w-40">Blacklist Severity:</span>
+        {{ form.level|add_class:"select select-accent border w-60" }}
+      </label>
+      <label class="label">
+        <span class="label-text w-40">Message:</span>
+        {{ form.message|add_class:"input input-accent input-bordered border w-full" }}
+      </label>
+      {% csrf_token %}
+    </fieldset>
+  </form>
+{% endblock form %}
+{% block buttons %}
+  <div class="join">
+    <input type="submit"
+           form="blacklist-edit"
+           class="btn btn-primary h-full join-item"
+           value="Save">
+    <a class="btn btn-primary h-full join-item"
+       href="{% url 'geant-blacklists:blacklist-list' %}">Cancel</a>
+  </div>
+{% endblock buttons %}

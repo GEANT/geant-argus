@@ -34,7 +34,7 @@ const incidentColors = {
 module.exports = {
     content: [
 {{ projectpaths }}
-        'src/geant_argus/geant_argus/templatetags/**/*.py',
+        'src/geant_argus/geant_argus/**/*.py',
     ],
     theme: {
         borderWidth: {

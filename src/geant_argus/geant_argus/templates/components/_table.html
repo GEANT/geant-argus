@@ -1,10 +1,10 @@
 {% load template_utils %}
 <table id="{{ table.object_id|default:'obj' }}-table"
-       class="table border border-separate border-spacing-1 border-primary mt-2">
+       class="table border border-separate border-spacing-0 border-primary">
   <thead>
     <tr class="border-b border-primary">
       {% for column in table.columns %}
-        <th class="border-b border-primary">
+        <th class="border-b border-primary {{ column.width }}">
           {% if column.header_template %}
             {% include column.header_template %}
           {% else %}
@@ -21,7 +21,7 @@
           <tr id="{{ table.object_id|default:'obj' }}-{{ object.pk }}-row"
               class="hover">
             {% for column in table.columns %}
-              <td>
+              <td class="{{ column.width }}">
                 {% if column.cell_template %}
                   {% include column.cell_template %}
                 {% elif column.lookup_key %}

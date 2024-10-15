@@ -48,32 +48,34 @@ def default_context():
     return {"name": "", "model": FILTER_MODEL}
 
 
+def render_edit_filter(request, template, pk: Optional[int] = None, context=None):
+    context = context or {}
+    if pk:
+        filter = get_object_or_404(Filter, pk=pk)
+        filter_dict = filter.filter
+    else:
+        filter = None
+        filter_dict = FILTER_MODEL.default_rule()
+    context = {
+        **default_context(),
+        "filter_dict": filter_dict,
+        "filter": filter,
+        "pk": pk,
+        **context,
+    }
+    return render(request, template, context=context)
+
+
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
+
     if request.method == "GET":
-        if pk:
-            filter = get_object_or_404(Filter, pk=pk)
-            filter_dict = filter.filter
-        else:
-            filter = None
-            filter_dict = FILTER_MODEL.default_rule()
-        context = {
-            **default_context(),
-            "filter_dict": filter_dict,
-            "filter": filter,
-            "pk": pk,
-            "buttons_template": (
-                "geant/filters/_filter_edit_nested_buttons.html"
-                if request.htmx
-                else "geant/filters/_filter_edit_regular_buttons.html"
-            ),
-        }
         template = (
             "geant/filters/_filter_edit_content.html"
             if request.htmx
             else "geant/filters/filter_edit.html"
         )
-        return render(request, template, context=context)
+        return render_edit_filter(request, template, pk)
 
     if request.method == "POST":
         if not request.htmx:
@@ -96,6 +98,13 @@ def edit_filter(request, pk: Optional[int] = None):
 
 @require_POST
 def save_filter(request, pk: Optional[int] = None):
+    result = save_filter_from_request(request, pk)
+    if isinstance(result, HttpResponse):
+        return result
+    return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
+
+
+def save_filter_from_request(request, pk: Optional[int] = None):
     result = parse_filter_form_data(request.POST)
     name = request.POST.get("name")
     if not re.match(r"^[a-zA-Z0-9_-]+$", name):
@@ -105,7 +114,10 @@ def save_filter(request, pk: Optional[int] = None):
             "filter_dict": result,
             "name": name,
         }
-        return render(request, "geant/filters/_filter_edit_form.html", context=context)
+        response = render(request, "geant/filters/_filter_edit_form.html", context=context)
+        response.headers["HX-Retarget"] = "#filter-form"
+        response.headers["HX-Reswap"] = "outerHTML"
+        return response
     user = request.user
 
     # WARNING: COMPLETE HACK FOR DEMO PURPOSES
@@ -114,13 +126,13 @@ def save_filter(request, pk: Optional[int] = None):
         user = User.objects.first()
 
     if pk is None:
-        Filter(name=name, user=user, filter=result).save()
+        filter = Filter(name=name, user=user, filter=result)
     else:
         filter = Filter.objects.get(pk=pk)
         filter.name = name
         filter.filter = result
-        filter.save()
-    return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
+    filter.save()
+    return filter
 
 
 def update_filter(form_data, commands):

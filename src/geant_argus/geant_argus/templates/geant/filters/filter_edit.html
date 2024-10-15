@@ -1,4 +1,27 @@
 {% extends "htmx/base.html" %}
 {% block main %}
-  {% include "./_filter_edit_content.html" %}
+  <div class="h-full flex flex-col">
+    <div class="grow border border-primary rounded-t-2xl p-2">{% include "./_filter_edit_form.html" %}</div>
+    <div class="border border-primary rounded-b-2xl border-t-0 px-4 py-3">
+      <div class="join h-13 rounded-box">
+        <button class="btn btn-primary join-item h-full"
+                hx-post="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
+                hx-target="#filter-form"
+                hx-include="#filter-form"
+                hx-swap="outerHTML">Save</button>
+        <a href="{% url 'geant-filters:filter-list' %}">
+          <button class="btn btn-primary join-item h-full">Cancel</button>
+        </a>
+        {% if pk %}
+          <button type="button"
+                  class="btn btn-primary join-item h-full"
+                  hx-delete="."
+                  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                  hx-confirm="Are you sure you want to delete this filter? This will also delete any blacklists based on this filter.">
+            Delete
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 {% endblock main %}

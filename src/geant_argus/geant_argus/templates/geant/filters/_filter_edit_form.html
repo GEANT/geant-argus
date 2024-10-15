@@ -3,6 +3,7 @@
     <span class="label-text">Name:</span>
     <input type="text"
            class="input input-bordered w-full max-w-xs {% if errors.name %}border-error{% endif %}"
+           {% if read_only %}disabled{% endif %}
            name="name"
            value="{{ filter.name|default:name }}" />
     {% if errors.name %}<div class="text-xs text-error">{{ errors.name }}</div>{% endif %}

@@ -1,5 +1,4 @@
-<table id="table"
-       class="table border border-separate border-spacing-1 border-primary">
+<table class="table border border-separate border-primary border-spacing-0">
   <thead>
     <tr class="border-b border-primary">
       <th class="border-b border-primary">Name</th>
@@ -23,7 +22,7 @@
                 <button type="button"
                         class="btn btn-xs btn-error btn-outline"
                         hx-delete="{% url 'geant-filters:edit-filter' object.pk %}"
-                        hx-confirm="Are you sure you want to delete filter {{ object.name }}"
+                        hx-confirm="Are you sure you want to delete filter {{ object.name }}? This will also delete any blacklists based on this filter."
                         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
                         _="on click halt">Delete</button>
               </div>
@@ -51,8 +50,8 @@
               </div>
             </dl>
             <a class="join-item btn btn-primary rounded-box h-full"
-               href="{% url 'geant-filters:new-filter' %}"
-               hx-get="{% url 'geant-filters:new-filter' %}"
+               href="{% url 'geant-filters:edit-filter' %}"
+               hx-get="{% url 'geant-filters:edit-filter' %}"
                hx-target="#filter-edit">Create new filter</a>
           </div>
           <!--
