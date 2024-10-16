@@ -8,5 +8,6 @@ urlpatterns = [
     path("geant/incidents/", include("geant_argus.geant_argus.incidents.urls")),
     path("geant/status/", include("geant_argus.geant_argus.status.urls")),
     path("filters/", include("geant_argus.geant_argus.filters.urls")),
+    path("blacklists/", include("geant_argus.geant_argus.blacklists.urls")),
     path("", include("argus_htmx.urls")),
 ]

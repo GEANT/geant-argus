@@ -8,9 +8,12 @@
 
   /* Hide default +/- buttons on numberinputs with .hide-buttons class*/
   /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button.hide-buttons,
-  input::-webkit-inner-spin-button.hide-buttons {
+  input.hide-buttons::-webkit-outer-spin-button,
+  input.hide-buttons::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    margin: 0;
+    margin: 1em;
+  }
+  input[type="number"].hide-buttons {
+    -moz-appearance: textfield;
   }
 }

@@ -1,0 +1,17 @@
+/* source: https://github.com/Ahnfelt/rulebuilder */
+
+.rule-buttons {
+  visibility: hidden;
+}
+
+.read-write .rule-atom:hover .rule-buttons,
+.read-write .rule-group:hover .rule-buttons {
+  visibility: visible;
+}
+
+.read-only input,
+.read-only select,
+.read-only button {
+  pointer-events: none;
+  @apply bg-gray-100;
+}

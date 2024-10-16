@@ -1,21 +1,8 @@
 from argus.incident.models import Incident
-from django.http import HttpRequest
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-from django_htmx.middleware import HtmxDetails
-from django_htmx.http import HttpResponseClientRefresh
 
-
-class HtmxHttpRequest(HttpRequest):
-    htmx: HtmxDetails
-
-
-def refresh(request: HtmxHttpRequest, target):
-    redirect_to = reverse(target)
-    if request.htmx:
-        return HttpResponseClientRefresh()
-    return redirect(redirect_to)
+from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, refresh
 
 
 @require_POST

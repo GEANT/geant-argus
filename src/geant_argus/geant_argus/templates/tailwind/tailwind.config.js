@@ -1,12 +1,12 @@
 const alertColors = {
     'info': '#0073e5',
-    'info-content': '#204766',
+    'info-content': '#ffffff',
     'success': '#50c878',
-    'success-content': '#609978',
+    'success-content': '#141516',
     'warning': '#eec200',
-    'warning-content': '#907900',
+    'warning-content': '#141516',
     'error': '#f04343',
-    'error-content': '#b03232',
+    'error-content': '#ffffff',
 }
 const baseArgusColors = {
     'primary': '#006d91',
@@ -34,7 +34,7 @@ const incidentColors = {
 module.exports = {
     content: [
 {{ projectpaths }}
-        'src/geant_argus/geant_argus/templatetags/**/*.py',
+        'src/geant_argus/geant_argus/**/*.py',
     ],
     theme: {
         borderWidth: {
@@ -54,6 +54,9 @@ module.exports = {
                 'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
                 'incident-warning': 'oklch(var(--b1)/<alpha-value>)', // same as base-100
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
+            },
+            height: {
+                '13': '3.25rem',
             },
             lineHeight: {
                 '2': '0.5rem',
