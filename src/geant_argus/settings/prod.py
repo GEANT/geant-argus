@@ -35,3 +35,4 @@ LOGGING = {
     },
 }
 DEFAULT_TW_CSS = "geant.min.css"
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 15  # 15MB
