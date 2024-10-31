@@ -124,3 +124,6 @@ STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
 # Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
 # on the incident listing
 MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=None)
+
+# Dashboard Alarms API
+DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
