@@ -34,6 +34,13 @@ INDELIBLE_INCIDENTS = False
 # geant_argus/argus_site/apps.py
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
+#  Authentication
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
 # Theming
 DEFAULT_THEME = "geant"
 DEFAULT_TW_CSS = "geant.css"
