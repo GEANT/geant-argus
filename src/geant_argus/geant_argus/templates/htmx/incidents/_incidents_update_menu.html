@@ -1,0 +1,7 @@
+{% extends 'htmx/incidents/_incidents_update_menu.html' %}
+{% block update_menu_content %}
+  {% with action_type="bulk-update" endpoint="htmx:incidents-update" %}
+    {% include "htmx/incidents/_incident_update_menu_acknowlegde.html" with action="ack" dialog_id="create-acknowledgment-dialog" %}
+    {% include "htmx/incidents/_incident_update_menu_close.html" with action="close" dialog_id="close-incident-dialog" %}
+  {% endwith %}
+{% endblock update_menu_content %}
