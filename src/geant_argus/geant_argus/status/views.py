@@ -6,6 +6,7 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from argus.util.datetime_utils import make_aware
 import requests
+from django.contrib import messages
 
 CORRELATOR_REL_TIME = [
     [300, ">5 min"],
@@ -18,6 +19,7 @@ CORRELATOR_REL_TIME = [
 
 @require_GET
 def service_status(request: HttpRequest):
+    messages.info(request, f"{datetime.now().isoformat()}")
     return render(
         request, "htmx/status/_status_checker_widget_content.html", context=get_service_info()
     )

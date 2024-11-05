@@ -16,9 +16,14 @@ ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
+    "argus_htmx.middleware.HtmxMessageMiddleware",
 ]
 if "DATABASES" in globals():
     DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
 
 MEDIA_PLUGINS = [
     "argus.notificationprofile.media.email.EmailNotification",
@@ -127,3 +132,29 @@ MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=N
 
 # Dashboard Alarms API
 DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.open_id_connect.OpenIdConnectAuth",
+]
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+SOCIAL_AUTH_PIPELINE = (
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.social_auth.associate_user",
+    "geant_argus.auth.get_userdata",
+    # Here we deviate from the default pipeline to support whitelisting users
+    "geant_argus.auth.require_existing_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+)
+
+SOCIAL_AUTH_LOGIN_ERROR_URL = "/accounts/login"
+
+ARGUS_OIDC_METHOD_NAME = "Geant AAI"
+SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = get_str_env("ARGUS_OIDC_URL")
+SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
+SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
