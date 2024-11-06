@@ -1,0 +1,10 @@
+{% extends "htmx/incidents/_base_incident_update_modal.html" %}
+{% block dialogform %}
+  <label class="input input-bordered flex items-center gap-2 w-full">
+    <input name="timestamp"
+           autocomplete="off"
+           type="datetime-local"
+           placeholder="Clear time"
+           class="grow border-none" />
+  </label>
+{% endblock dialogform %}
