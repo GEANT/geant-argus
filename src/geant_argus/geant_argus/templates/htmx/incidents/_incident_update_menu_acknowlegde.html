@@ -1,7 +1,0 @@
-<form id="{{ dialog_id }}-form"
-      hx-post="{% url endpoint|default:'htmx:incidents-update' action=action %}"
-      hx-include="[name='incident_ids']">
-    {% csrf_token %}
-    <input type='hidden' name='description' value='acknowledged through the ui'>
-    <button type="submit" class="btn btn-accent">Acknowledge</button>
-</form>
