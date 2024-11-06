@@ -1,0 +1,8 @@
+<form id="{{ dialog_id }}-form"
+      hx-post="{% url endpoint|default:'htmx:incidents-update' action=action %}"
+      hx-include="[name='incident_ids']">
+  {% csrf_token %}
+  {% block form_fields %}
+  {% endblock form_fields %}
+  <button type="submit" class="btn btn-accent">{{ button_title }}</button>
+</form>
