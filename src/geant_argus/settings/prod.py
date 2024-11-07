@@ -1,4 +1,4 @@
-from argus.site.settings.prod import *  # noqa: F401, F403
+from argus.site.settings.backend import *  # noqa: F401, F403
 from .base import *  # noqa: F401, F403
 
 STORAGES["staticfiles"][
