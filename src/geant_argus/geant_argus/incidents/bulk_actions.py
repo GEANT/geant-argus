@@ -1,3 +1,4 @@
+import itertools
 from typing import Any, Dict
 from argus_htmx.utils import bulk_close_queryset
 from django import forms
@@ -28,8 +29,36 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
     for incident in incidents:
         if not clear_alarm(incident.source_incident_id, {"clear_time": clear_time}):
             raise HttpResponseServerError("Error while clearing incident")
-        incident.metadata["status"] = "CLEAR"
-        incident.metadata["clear_time"] = clear_time
+        clear_incident_in_metadata(incident.metadata)
         incident.save()
 
     return incidents
+
+
+def clear_incident_in_metadata(metadata: dict, clear_time: str):
+    metadata["status"] = "CLEAR"
+    metadata["clear_time"] = clear_time
+
+    # Iteration masturbation. We want to iterate over every endpoint and also get it's endpoint
+    # type. Could do nested for loops, but this is more "functional" and has less indentation.
+    endpoints = itertools.chain.from_iterable(
+        zip(itertools.repeat(ept_type), endpoints)
+        for ept_type, endpoints in metadata["endpoints"].items()
+    )
+    events = itertools.chain.from_iterable(
+        zip(itertools.repeat(ept_type), endpoint["events"]) for ept_type, endpoint in endpoints
+    )
+
+    down_events = (evt for evt in events if not evt[1]["is_up"])
+    for endpoint_type, event in down_events:
+        event["is_up"] = True
+        event["clear_time"] = clear_time
+        properties = event["properties"]
+        if endpoint_type == "bgp":
+            properties["establish_time"] = clear_time
+            properties["status"] = "established"
+        elif endpoint_type == "link":
+            properties["oper_up_time"] = clear_time
+            properties["oper_status"] = "up"
+        elif endpoint_type in ("coriant", "infinera", "fiberlink"):
+            properties["status"] = "Clear"
