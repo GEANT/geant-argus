@@ -1,7 +1,7 @@
 {% load incident_extras %}
 {% with blacklist=incident.metadata.blacklist %}
   <div class="w-20 flex flex-row gap-x-1 items-center">
-    <span class="badge {{ incident|levelbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
+    <span class="badge {{ incident|incidentlevelbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
       {{ incident.level|to_severity }}
     </span>
     {% if blacklist.applied %}

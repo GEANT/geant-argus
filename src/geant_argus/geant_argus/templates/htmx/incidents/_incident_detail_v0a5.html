@@ -24,12 +24,18 @@
                             <div class="py-2">{% include column.cell_template with event=event %}</div>
                             {% if forloop.last %}
                               {% if endpoint.events|length > 1 %}
-                                <div class="py-2">
+                                <div class="py-2 flex flex-row align-center gap-1">
                                   <button type="button"
                                           class="row-collapse-btn btn btn-xs btn-primary btn-outline"
                                           _="on click toggle .open on closest parent .row-collapse">
                                     +{{ endpoint.events|slice:":-1"|length }}
                                   </button>
+                                  {% if endpoint.has_more_events %}
+                                    <div class="text-primary text-xl/5 cursor-default"
+                                         title="Showing only the latest {{ endpoint.events|length }} of {{ endpoint.event_count }} events">
+                                      🛈
+                                    </div>
+                                  {% endif %}
                                 </div>
                               {% else %}
                                 <div></div>

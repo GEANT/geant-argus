@@ -1,0 +1,8 @@
+{% extends 'htmx/incidents/_incidents_update_menu.html' %}
+{% block update_menu_content %}
+  {% with action_type="bulk-update" endpoint="htmx:incidents-update" %}
+    {% include "htmx/incidents/_incident_update_button_acknowlegde.html" with action="ack" button_title="Acknowledge" dialog_id="create-acknowledgment-dialog" %}
+    {% include "htmx/incidents/_incident_clear_modal.html" with action="clear" dialog_id="clear-incident-dialog" button_class="btn-accent" button_title="Clear" header="Clear incident" explanation="Set clear time (optional)" cancel_text="Cancel" submit_text="Submit" %}
+    {% include "htmx/incidents/_incident_update_button.html" with action="close" button_title="Close" dialog_id="close-incident-dialog" %}
+  {% endwith %}
+{% endblock update_menu_content %}

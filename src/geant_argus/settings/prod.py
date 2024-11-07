@@ -1,4 +1,4 @@
-from argus.site.settings.prod import *  # noqa: F401, F403
+from argus.site.settings.backend import *  # noqa: F401, F403
 from .base import *  # noqa: F401, F403
 
 STORAGES["staticfiles"][
@@ -35,3 +35,4 @@ LOGGING = {
     },
 }
 DEFAULT_TW_CSS = "geant.min.css"
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 15  # 15MB

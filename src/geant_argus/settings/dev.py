@@ -18,8 +18,5 @@ STATUS_CHECKER_HEALTH_URL = get_str_env(
     "https://uat-dashboardv3-monitoring.geant.org:4443/api/health",
 )
 STATUS_CHECKER_INPROV_URL = get_str_env(
-    "ARGUS_STATUS_CHECKER_INPROV_URL", "https://uat-inprov01.geant.org/version"
-)
-STATUS_CHECKER_UPDATE_INPROV_URL = get_str_env(
-    "STATUS_CHECKER_UPDATE_INPROV_URL", "https://uat-inprov01.geant.org/jobs/update"
+    "ARGUS_STATUS_CHECKER_INPROV_URL", "https://uat-inprov01.geant.org"
 )

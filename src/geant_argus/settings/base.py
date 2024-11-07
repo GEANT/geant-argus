@@ -29,6 +29,13 @@ INDELIBLE_INCIDENTS = False
 # geant_argus/argus_site/apps.py
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
+#  Authentication
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
 # Theming
 DEFAULT_THEME = "geant"
 DEFAULT_TW_CSS = "geant.css"
@@ -55,11 +62,6 @@ INCIDENT_TABLE_COLUMNS = [
         "timestamp",
         label="Start Time (UTC)",
         cell_template="htmx/incidents/_incident_start_time.html",
-    ),
-    IncidentTableColumn(
-        "endpoint_count",
-        label="#",
-        cell_template="htmx/incidents/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
         "status",
@@ -104,6 +106,12 @@ INCIDENT_TABLE_COLUMNS = [
         cell_template="htmx/incidents/_incident_comment.html",
     ),
     IncidentTableColumn(
+        "endpoint_count",
+        label="#",
+        header_template="htmx/incidents/_incident_endpoint_count_header.html",
+        cell_template="htmx/incidents/_incident_endpoint_count.html",
+    ),
+    IncidentTableColumn(
         "details",
         label="Details",
         cell_template="htmx/incidents/_incident_details_button.html",
@@ -111,16 +119,18 @@ INCIDENT_TABLE_COLUMNS = [
 ]
 
 # Tailwind config template relative to the repository root directory
-TAILWIND_CONFIG_TEMPLATE = "tailwindcss/tailwind.config.template.js"
 TAILWIND_CONFIG_TARGET = "tailwindcss/tailwind.config.js"
+TAILWIND_CSS_TARGET = "tailwindcss/geant.base.css"
 
 
 # Status checker widget
 STATUS_CHECKER_ENABLED = True
 STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
 STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
-STATUS_CHECKER_UPDATE_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_UPDATE_INPROV_URL")
 
 # Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
 # on the incident listing
 MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=None)
+
+# Dashboard Alarms API
+DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
