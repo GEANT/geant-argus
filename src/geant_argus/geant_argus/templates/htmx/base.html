@@ -1,10 +1,14 @@
 {% extends "htmx/base.html" %}
+{% load static %}
 {% block navlinks %}
   <li>
     <a href="{% url 'htmx:incident-list' %}">Incidents</a>
   </li>
   <li>
     <a href="{% url 'geant-filters:filter-list' %}">Filters</a>
+  </li>
+  <li>
+    <a href="{% url 'geant-blacklists:blacklist-list' %}">Blacklists</a>
   </li>
   {% if request.user.is_staff %}
     <li>

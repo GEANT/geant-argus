@@ -1,0 +1,402 @@
+{
+  "phase": "FINALIZED",
+  "status": "ACTIVE",
+  "version": "v0a5",
+  "severity": "CRITICAL",
+  "init_time": "2024-08-30T15:53:30",
+  "endpoints": {
+    "bgp": [],
+    "link": [
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-30T15:53:26",
+            "clear_time": null,
+            "properties": {
+              "id": 15464455,
+              "oper_status": "down",
+              "admin_status": "up",
+              "oper_up_time": null,
+              "admin_up_time": "2024-08-30T15:53:26",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.ham.de.geant.net",
+              "interface_name": "ae4",
+              "oper_down_time": "2024-08-30T15:53:26",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "ae4"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:27",
+            "clear_time": "2024-08-30T18:00:53",
+            "properties": {
+              "id": 15464440,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T18:00:53",
+              "admin_up_time": "2024-08-30T15:53:27",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.ham.de.geant.net",
+              "interface_name": "et-2/0/5",
+              "oper_down_time": "2024-08-30T15:53:27",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "et-2/0/5"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:27",
+            "clear_time": "2024-08-30T18:00:53",
+            "properties": {
+              "id": 15464445,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T18:00:53",
+              "admin_up_time": "2024-08-30T15:53:27",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.ham.de.geant.net",
+              "interface_name": "et-2/0/2",
+              "oper_down_time": "2024-08-30T15:53:27",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "et-2/0/2"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:27",
+            "clear_time": "2024-08-30T18:00:53",
+            "properties": {
+              "id": 15464450,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T18:00:53",
+              "admin_up_time": "2024-08-30T15:53:27",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.ham.de.geant.net",
+              "interface_name": "et-2/1/2",
+              "oper_down_time": "2024-08-30T15:53:27",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.ham.de.geant.net",
+        "interface": "et-2/1/2"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:57",
+            "clear_time": "2024-08-30T18:00:53",
+            "properties": {
+              "id": 15464460,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T18:00:53",
+              "admin_up_time": "2024-08-30T15:53:57",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.poz.pl.geant.net",
+              "interface_name": "et-7/1/2",
+              "oper_down_time": "2024-08-30T15:53:57",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "et-7/1/2"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:57",
+            "clear_time": "2024-08-30T18:00:53",
+            "properties": {
+              "id": 15464465,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T18:00:53",
+              "admin_up_time": "2024-08-30T15:53:57",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.poz.pl.geant.net",
+              "interface_name": "et-7/1/5",
+              "oper_down_time": "2024-08-30T15:53:57",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "et-7/1/5"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:56",
+            "clear_time": "2024-08-30T18:01:09",
+            "properties": {
+              "id": 15464470,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T18:01:09",
+              "admin_up_time": "2024-08-30T15:53:56",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.poz.pl.geant.net",
+              "interface_name": "ae4",
+              "oper_down_time": "2024-08-30T15:53:56",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "ae4"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:57",
+            "clear_time": "2024-08-30T18:00:53",
+            "properties": {
+              "id": 15464475,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-30T18:00:53",
+              "admin_up_time": "2024-08-30T15:53:57",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "mx1.poz.pl.geant.net",
+              "interface_name": "et-7/0/5",
+              "oper_down_time": "2024-08-30T15:53:57",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "mx1.poz.pl.geant.net",
+        "interface": "et-7/0/5"
+      }
+    ],
+    "coriant": [
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-30T15:53:30",
+            "clear_time": null,
+            "properties": {
+              "id": 109940,
+              "status": "Raised",
+              "severity": "major",
+              "entity_string": "1-1.5-Optical-100GbE-TTP",
+              "equipment_name": "HAM01-GRV2",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.5-Optical-100GbE-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-30T15:53:30",
+            "clear_time": null,
+            "properties": {
+              "id": 109900,
+              "status": "Raised",
+              "severity": "major",
+              "entity_string": "1-1.3-Optical-100GbE-TTP",
+              "equipment_name": "POZ01-GRV3",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.3-Optical-100GbE-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": false,
+            "init_time": "2024-08-30T15:53:30",
+            "clear_time": null,
+            "properties": {
+              "id": 109910,
+              "status": "Raised",
+              "severity": "critical",
+              "entity_string": "1-1.1-Optical-TTP",
+              "equipment_name": "HAM01-GRV2",
+              "probable_cause": "los"
+            }
+          }
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.1-Optical-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:31",
+            "clear_time": "2024-08-30T18:00:30",
+            "properties": {
+              "id": 109915,
+              "status": "Clear",
+              "severity": "major",
+              "entity_string": "1-1.5-Optical-100GbE-TTP",
+              "equipment_name": "POZ01-GRV3",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.5-Optical-100GbE-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:30",
+            "clear_time": "2024-08-30T18:00:30",
+            "properties": {
+              "id": 109920,
+              "status": "Clear",
+              "severity": "major",
+              "entity_string": "1-1.4-Optical-100GbE-TTP",
+              "equipment_name": "POZ01-GRV3",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.4-Optical-100GbE-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:31",
+            "clear_time": "2024-08-30T18:01:10",
+            "properties": {
+              "id": 109925,
+              "status": "Clear",
+              "severity": "major",
+              "entity_string": "1-1.4-Optical-100GbE-TTP",
+              "equipment_name": "HAM01-GRV2",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.4-Optical-100GbE-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:31",
+            "clear_time": "2024-08-30T18:01:10",
+            "properties": {
+              "id": 109930,
+              "status": "Clear",
+              "severity": "major",
+              "entity_string": "1-1.3-Optical-100GbE-TTP",
+              "equipment_name": "HAM01-GRV2",
+              "probable_cause": "remoteFault"
+            }
+          }
+        ],
+        "ne_name": "HAM01-GRV2",
+        "port": "1-1.3-Optical-100GbE-TTP"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:30",
+            "clear_time": "2024-08-30T18:00:29",
+            "properties": {
+              "id": 109935,
+              "status": "Clear",
+              "severity": "critical",
+              "entity_string": "1-1.1-Optical-TTP",
+              "equipment_name": "POZ01-GRV3",
+              "probable_cause": "los"
+            }
+          }
+        ],
+        "ne_name": "POZ01-GRV3",
+        "port": "1-1.1-Optical-TTP"
+      }
+    ],
+    "infinera": [
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:29",
+            "clear_time": "2024-08-30T18:00:57",
+            "properties": {
+              "id": 219040,
+              "status": "Clear",
+              "severity": "Critical",
+              "object_name": "2-A-1-S1-1",
+              "object_type": "LOCAL_OPTICAL_SNC",
+              "equipment_name": "HAM01-MTC6-1",
+              "probable_cause": "Signaled SNC failure (COM0038)"
+            }
+          }
+        ],
+        "ne_name": "HAM01-MTC6-1",
+        "port": "2-A-1-S1-1"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-30T15:53:30",
+            "clear_time": "2024-08-30T18:00:55",
+            "properties": {
+              "id": 219045,
+              "status": "Clear",
+              "severity": "Critical",
+              "object_name": "2-A-1-S1-1",
+              "object_type": "REMOTE_OPTICAL_SNC",
+              "equipment_name": "POZ01-MTC6-1",
+              "probable_cause": "Signaled SNC failure (COM0038)"
+            }
+          }
+        ],
+        "ne_name": "POZ01-MTC6-1",
+        "port": "2-A-1-S1-1"
+      }
+    ]
+  },
+  "description": "Loss of Optical Service (HAM-POZ-IPTRUNK)",
+  "location": ["HAMBURG (SÜDERSTRASSE)","POZNAN 1"],
+	"equipment": ["RT1.HAM.DE", "MX1.POZ.PL"],
+  "ticket_ref": "942078",
+  "ticket_url": "https://tts.geant.net/otrs/index.pl?Action=AgentTicketZoom;TicketID=942078",
+  "short_lived": false,
+  "endpoint_count": 18,
+  "blacklist": {
+    "applied": false
+  }
+}

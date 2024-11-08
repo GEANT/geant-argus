@@ -1,0 +1,69 @@
+{
+  "phase": "FINALIZED",
+  "status": "CLEAR",
+  "version": "v0a5",
+  "severity": "WARNING",
+  "init_time": "2024-08-29T07:19:05",
+  "clear_time": "2024-08-29T07:30:30",
+  "endpoints": {
+    "bgp": [],
+    "link": [
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T07:19:05",
+            "clear_time": "2024-08-29T07:30:30",
+            "properties": {
+              "id": 15448074,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-29T07:30:30",
+              "admin_up_time": "2024-08-29T07:19:05",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.rig.lv.geant.net",
+              "interface_name": "ae3",
+              "oper_down_time": "2024-08-29T07:19:05",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.rig.lv.geant.net",
+        "interface": "ae3"
+      },
+      {
+        "events": [
+          {
+            "is_up": true,
+            "init_time": "2024-08-29T07:19:05",
+            "clear_time": "2024-08-29T07:30:27",
+            "properties": {
+              "id": 15448084,
+              "oper_status": "up",
+              "admin_status": "up",
+              "oper_up_time": "2024-08-29T07:30:27",
+              "admin_up_time": "2024-08-29T07:19:05",
+              "snmp_trap_oid": "IF-MIB::linkDown",
+              "equipment_name": "rt1.rig.lv.geant.net",
+              "interface_name": "xe-0/1/0",
+              "oper_down_time": "2024-08-29T07:19:05",
+              "admin_down_time": null
+            }
+          }
+        ],
+        "hostname": "rt1.rig.lv.geant.net",
+        "interface": "xe-0/1/0"
+      }
+    ],
+    "coriant": [],
+    "infinera": []
+  },
+  "description": "DCN-MANAGEMENT-RIG1-LV-, EX4300-MANAGEMENT-RIG-LV (interface ae3) Incident",
+  "location":["RIGA"],
+  "equipment": ["RT1.RIG.LV"],
+  "short_lived": false,
+  "endpoint_count": 2,
+  "blacklist": {
+    "applied": false
+  }
+}

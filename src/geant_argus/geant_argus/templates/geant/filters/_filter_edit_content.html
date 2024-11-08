@@ -1,0 +1,17 @@
+{% extends 'components/_form_with_buttons.html' %}
+{% block form %}
+  <div class="mx-1 {% if read_only %}read-only{% else %}read-write{% endif %}">
+    {% include "./_filter_edit_form.html" %}
+  </div>
+{% endblock form %}
+{% block buttons %}
+  <button class="btn btn-primary join-item h-full"
+          hx-post="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
+          hx-target="#filter-form"
+          hx-include="#filter-form"
+          hx-swap="outerHTML">Save</button>
+  <a class="btn btn-primary join-item h-full"
+     href="{{ edit_url|default:request.path }}">Expand</a>
+  <button class="btn btn-primary join-item h-full"
+          _="on click remove <#filter-edit > */>">Cancel</button>
+{% endblock buttons %}

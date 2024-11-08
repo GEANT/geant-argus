@@ -180,16 +180,20 @@ class ComplexFilter:
         field = self.fields[0]
         return field.default_rule()
 
+    def default_group(self, operator="or", items=None):
+        items = items or [self.default_rule()]
+        return {"type": "group", "operator": operator, "items": items}
+
+    def with_version(self, filter_dict: dict):
+        return {"version": self.version, **filter_dict}
+
     def parse_form_data(self, form_data: dict) -> dict:
-        return {
-            "version": self.version,
-            **self._parse_formdata_helper(form_data, prefix=""),
-        }
+        return self.with_version(self._parse_formdata_helper(form_data, prefix=""))
 
     def _parse_formdata_helper(self, form_data: dict, prefix: str) -> dict:
         if try_field := form_data.get(prefix + "field"):
             if try_field in ("or", "and"):
-                return {"type": "group", "operator": try_field, "items": [self.default_rule()]}
+                return self.default_group(operator=try_field)
             field = self.fields_by_name.get(try_field, self.fields[0])
             return field.parse_form_data(form_data, prefix=prefix)
 
@@ -277,10 +281,10 @@ FILTER_MODEL = ComplexFilter(
             "start_time",
             "Start Time",
             operators=[
-                DateTimeOperator("before_abs", "before (absolute)"),
-                DateTimeOperator("after_abs", "after (absolute)"),
-                TimeDeltaOperator("before_rel", "before (relative)"),
-                TimeDeltaOperator("after_rel", "after (relative)"),
+                DateTimeOperator("after_abs", "earliest"),
+                DateTimeOperator("before_abs", "latest"),
+                TimeDeltaOperator("after_rel", "younger"),
+                TimeDeltaOperator("before_rel", "older"),
             ],
             db_fields=["start_time"],
         ),
