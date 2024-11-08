@@ -1,15 +1,15 @@
 {% load template_utils %}
 <button type="button"
-        class="bg-accent hover:bg-neutral text-accent-content py-1 px-2 rounded"
-        onclick="modal_{{ event.properties.id }}.showModal()">See more</button>
+        class="btn btn-xs btn-primary btn-outline"
+        onclick="modal_{{ event.properties.id }}.showModal()">Details</button>
 <dialog id="modal_{{ event.properties.id }}" class="modal">
   <div class="modal-box bg-base-200">
-    <h3 class="text-lg font-bold">Additional properties</h3>
+    <h3 class="text-lg font-bold">Additional details</h3>
     <table class="table">
       <tbody>
         {% for key, value in event.properties.items %}
           <tr>
-            <th>{{ key|underscores_to_spaces }}</th>
+            <th>{{ key|underscores_to_spaces|utc_time_header }}</th>
             <td>{{ value|dateparse|date:datetime_format|default:value }}</td>
           </tr>
         {% endfor %}

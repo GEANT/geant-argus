@@ -1,37 +1,26 @@
 from argus.incident.models import Incident
-from django import forms
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.http import HttpResponseServerError
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-from django_htmx.middleware import HtmxDetails
 
-
-class HtmxHttpRequest(HttpRequest):
-    htmx: HtmxDetails
-
-
-class AckForm(forms.Form):
-    group = forms.ChoiceField(
-        choices=(("noc", "noc"), ("servicedesk", "servicedesk")), required=True
-    )
+from geant_argus.geant_argus.dashboard_alarms import update_alarm
+from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, refresh
 
 
 @require_POST
 def acknowledge_incident(request: HtmxHttpRequest, pk: int):
-    form = AckForm(request.GET)
-    if not form.is_valid():
-        return HttpResponseBadRequest("invalid group")
-
-    group = form.cleaned_data["group"]
     incident = get_object_or_404(Incident, id=pk)
+    incident.create_ack(request.user, description="Acknowledged using the UI")
+    return refresh(request, "htmx:incident-list")
 
-    is_group_member = request.user.groups.filter(name=group).exists()
-    if is_group_member:
-        incident.create_ack(request.user, description="Acknowledged using the UI")
 
-    redirect_to = reverse("htmx:incident-list")
-    if request.htmx:
-        redirect_to = request.htmx.current_url_abs_path or redirect_to
-        return HttpResponse(headers={"HX-Redirect": redirect_to})
-    return redirect(redirect_to)
+@require_POST
+def update_comment(request: HtmxHttpRequest, pk: int):
+    comment = request.POST.get("comment")
+    if comment is not None:
+        incident = get_object_or_404(Incident, id=pk)
+        if not update_alarm(incident.source_incident_id, {"comment": comment}):
+            return HttpResponseServerError("Error while updating incident")
+        incident.metadata["comment"] = comment
+        incident.save()
+    return refresh(request, "htmx:incident-list")

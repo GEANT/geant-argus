@@ -45,6 +45,7 @@ def get_service_info():
             health.get("correlator", {}).get("timestamp", 0)
         ),
         "inventory": get_inventory_update_status(inprov_status.get("latch")),
+        "inventory_ui_url": settings.STATUS_CHECKER_INPROV_URL + "/static/update.html",
     }
 
 
@@ -53,11 +54,11 @@ def get_services_health():
 
 
 def get_inprov_status():
-    return _get_or_empty(settings.STATUS_CHECKER_INPROV_URL)
+    return _get_or_empty(settings.STATUS_CHECKER_INPROV_URL + "/version")
 
 
 def send_update_inprov():
-    return _get_or_empty(settings.STATUS_CHECKER_UPDATE_INPROV_URL)
+    return _get_or_empty(settings.STATUS_CHECKER_INPROV_URL + "/jobs/update")
 
 
 def _get_or_empty(*args, timeout=10, **kwargs):

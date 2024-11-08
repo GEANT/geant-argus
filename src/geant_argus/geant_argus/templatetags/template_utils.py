@@ -1,19 +1,33 @@
+import datetime
+from typing import Iterable, Union
 from django import template
 from django.utils.dateparse import parse_datetime
+
 
 register = template.Library()
 
 
 @register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
+def get_item(obj, key: Union[str, Iterable]):
+    if obj is None:
+        return None
+    if isinstance(key, str):
+        key = [key]
+    if not len(key):
+        return None
+    key, *rest = key
+    result = obj.get(key, None) if isinstance(obj, dict) else getattr(obj, key, None)
+    if not rest:
+        return result
+    return get_item(result, rest)
 
 
 @register.filter
-def dateparse(datestr):
-    if not isinstance(datestr, str):
-        return None
-    return parse_datetime(datestr)
+def dateparse(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj
+    if isinstance(obj, str):
+        return parse_datetime(obj)
 
 
 @register.filter
@@ -46,3 +60,10 @@ def underscores_to_spaces(value):
     if not isinstance(value, str):
         return value
     return value.replace("_", " ")
+
+
+@register.filter
+def utc_time_header(value: str):
+    if value.endswith("time"):
+        return value + " (UTC)"
+    return value

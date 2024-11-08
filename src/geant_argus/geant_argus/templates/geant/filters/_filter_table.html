@@ -1,23 +1,31 @@
-<table id="table"
-       class="table border border-separate border-spacing-1 border-primary mt-2">
+<table class="table border border-separate border-primary border-spacing-0">
   <thead>
     <tr class="border-b border-primary">
       <th class="border-b border-primary">Name</th>
       <th class="border-b border-primary">User</th>
-      <th class="border-b border-primary">Edit</th>
+      <th class="border-b border-primary w-20">Actions</th>
     </tr>
   </thead>
   <tbody id="table-body">
     {% block incident_rows %}
       {% for object in page.object_list %}
         {% block object %}
-          <tr id="obj-{{ object.pk }}-row" class="hover">
+          <tr id="obj-{{ object.pk }}-row"
+              class="filter-row cursor-pointer"
+              hx-get="{% url 'geant-filters:edit-filter' object.pk %}"
+              hx-target="#filter-edit"
+              _="on click remove  .filter-row-selected from <#table-body > tr/> add .filter-row-selected to me">
             <td>{{ object.name }}</td>
             <td>{{ object.user.username }}</td>
             <td>
-              <a href="{% url 'geant-filters:edit-filter' object.pk %}">
-                <button type="button" class="btn btn-sm btn-ghost">Edit</button>
-              </a>
+              <div class="flex w-full justify-center">
+                <button type="button"
+                        class="btn btn-xs btn-error btn-outline"
+                        hx-delete="{% url 'geant-filters:edit-filter' object.pk %}"
+                        hx-confirm="Are you sure you want to delete filter {{ object.name }}? This will also delete any blacklists based on this filter."
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                        _="on click halt">Delete</button>
+              </div>
             </td>
           </tr>
         {% endblock object %}
@@ -32,19 +40,20 @@
     <tr>
       <td colspan="{{ column_count }}" class="border-t border-primary">
         <div class="flex justify-between items-center">
-          <dl class="stats stats-horizontal shadow leading-none overflow-x-auto font-medium bg-neutral text-neutral-content">
-            <div class="stat py-2">
-              <dt class="stat-title text-neutral-content/80">Total</dt>
-              <dd class="stat-value text-2xl text-base">
-                {{ count }}
-              </dd>
-            </div>
-            <div class="stat py-0 px-1">
-              <a href="{% url 'geant-filters:new-filter' %}">
-                <button class="btn btn-ghost">Create new filter</button>
-              </a>
-            </div>
-          </dl>
+          <div class="join h-13">
+            <dl class="join-item stats stats-horizontal shadow leading-none overflow-x-auto font-medium bg-neutral text-neutral-content">
+              <div class="stat py-2">
+                <dt class="stat-title text-neutral-content/80">Total</dt>
+                <dd class="stat-value text-2xl text-base">
+                  {{ count }}
+                </dd>
+              </div>
+            </dl>
+            <a class="join-item btn btn-primary rounded-box h-full"
+               href="{% url 'geant-filters:edit-filter' %}"
+               hx-get="{% url 'geant-filters:edit-filter' %}"
+               hx-target="#filter-edit">Create new filter</a>
+          </div>
           <!--
                 The htmx attributes set on the nav here are inherited by the child links.
                 hx-target tells where htmx to swap the fetched content in, and hx-swap
@@ -53,7 +62,7 @@
                 htmx to push the fetched URL into the browser history, so we can use
                 the backwards/forwards buttons to navigate these subpages.
                 -->
-          <ul class="join"
+          <ul class="join h-13"
               hx-target="#table"
               hx-swap="outerHTML"
               hx-push-url="true">
@@ -65,37 +74,35 @@
                               page works without JavaScript, and to ensure the link is
                               displayed as clickable.
                             -->
-                <a hx-get="?page=1" href="?page=1" class="join-item btn btn-neutral">&laquo; First</a>
+                <a href="{% url 'geant-filters:filter-list' %}?page=1"
+                   class="join-item btn btn-neutral h-full rounded-box">&laquo; First</a>
               </li>
             {% endif %}
             {% if page.has_previous %}
               <li>
-                <a hx-get="?page={{ page.previous_page_number }}"
-                   href="?page={{ page.previous_page_number }}"
-                   class="join-item btn btn-neutral">{{ page.previous_page_number }}</a>
+                <a href="{% url 'geant-filters:filter-list' %}?page={{ page.previous_page_number }}"
+                   class="join-item btn btn-neutral h-full rounded-box">{{ page.previous_page_number }}</a>
               </li>
             {% endif %}
             {% if page.paginator.num_pages > 1 %}
               <li>
-                <button class="join-item btn btn-active btn-neutral">{{ page.number }}</button>
+                <button class="join-item btn btn-active btn-neutral h-full rounded-box">{{ page.number }}</button>
               </li>
             {% else %}
               <li>
-                <button class="btn btn-active btn-neutral">{{ page.number }}</button>
+                <button class="btn btn-active btn-neutral h-full rounded-box">{{ page.number }}</button>
               </li>
             {% endif %}
             {% if page.has_next %}
               <li>
-                <a hx-get="?page={{ page.next_page_number }}"
-                   href="?page={{ page.next_page_number }}"
-                   class="join-item btn btn-neutral">{{ page.next_page_number }}</a>
+                <a href="{% url 'geant-filters:filter-list' %}?page={{ page.next_page_number }}"
+                   class="join-item btn btn-neutral h-full rounded-box">{{ page.next_page_number }}</a>
               </li>
             {% endif %}
             {% if page.number != page.paginator.num_pages %}
               <li>
-                <a hx-get="?page={{ page.paginator.num_pages }}"
-                   href="?page={{ page.paginator.num_pages }}"
-                   class="join-item btn btn-neutral">&raquo; Last</a>
+                <a href="{% url 'geant-filters:filter-list' %}?page={{ page.paginator.num_pages }}"
+                   class="join-item btn btn-neutral h-full rounded-box">&raquo; Last</a>
               </li>
             {% endif %}
           </ul>

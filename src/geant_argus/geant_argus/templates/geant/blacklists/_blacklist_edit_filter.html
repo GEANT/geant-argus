@@ -1,0 +1,24 @@
+{% extends "geant/filters/_filter_edit_content.html" %}
+{% load widget_tweaks %}
+{% block buttons %}
+  {% if read_only %}
+    <button class="btn btn-primary h-full"
+            hx-get="{% url 'geant-blacklists:edit-filter' %}?filter={{ pk }}"
+            hx-target="#filter-edit">Enable editing</button>
+  {% else %}
+    <div class="flex flex-row gap-2 items-center">
+      <button class="btn btn-secondary h-full"
+              hx-post="{% url 'geant-blacklists:save-filter' %}{% if pk is not None %}?filter={{ pk }}{% endif %}"
+              hx-target="#filter-edit"
+              hx-include="#filter-form">Save</button>
+      <div class="text-secondary font-bold">Don't forget to save the filter before saving the blacklist!</div>
+    </div>
+  {% endif %}
+{% endblock buttons %}
+{% block oob %}
+  {% if form %}
+    <div id="blacklist-filter-select" hx-swap-oob="true">
+      {{ form.filter|add_class:"select select-accent border w-60" }}
+    </div>
+  {% endif %}
+{% endblock oob %}

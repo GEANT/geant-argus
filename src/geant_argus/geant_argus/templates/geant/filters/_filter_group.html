@@ -1,15 +1,13 @@
 {% load filter_extras %}
-<div class="mt-2 p-1 border border-black/10 rounded-lg bg-black/5">
-  <div class="rule-group">
-    {% include "./_filter_selector.html" with key="op" selected=group.operator %}
-    <span class="ml-1">of the following are true</span>
-    {% if not is_root %}
-      {% include "./_filter_buttons.html" with can_delete=can_delete is_top=is_top is_bottom=is_bottom prefix=prefix %}
-    {% endif %}
-  </div>
-  <div class="rule-operands ml-2 mr-1 mb-1 mt-2">
-    {% for item in group.items %}
-      {% include "./_filter_item.html" with filter_dict=item is_root=False is_top=forloop.first is_bottom=forloop.last prefix=prefix|concat_underscore:forloop.counter0 can_delete=group.items|is_multiple %}
-    {% endfor %}
-  </div>
+<div class="rule-group ml-1">
+  {% include "./_filter_selector.html" with key="op" selected=group.operator %}
+  <span class="ml-1">of the following are true</span>
+  {% if not is_root %}
+    {% include "./_filter_item_buttons.html" with can_delete=can_delete is_top=is_top is_bottom=is_bottom prefix=prefix %}
+  {% endif %}
+</div>
+<div class="rule-operands ml-2 mb-1 mt-2">
+  {% for item in group.items %}
+    {% include "./_filter_item.html" with filter_dict=item is_root=False is_top=forloop.first is_bottom=forloop.last prefix=prefix|concat_underscore:forloop.counter0 can_delete=group.items|is_multiple %}
+  {% endfor %}
 </div>

@@ -1,12 +1,12 @@
 {% load template_utils %}
 {% if rule.field in model.fields_by_name %}
   {% with field=model.fields_by_name|get_item:rule.field %}
-    <div class="rule-atom mt-2 p-1 border border-black/10 rounded-lg bg-black/5">
+    <div class="rule-atom">
       {% include "./_filter_selector.html" with key="field" selected=rule.field %}
       <select name="{{ prefix }}op"
               class="select select-bordered max-w-xs"
               autocomplete="off"
-              hx-post="."
+              hx-post="{{ edit_url|default:request.path }}"
               hx-include="#filter_edit_root"
               hx-trigger="change"
               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
@@ -18,9 +18,7 @@
       </select>
       {% with operator=field.operators_by_name|get_item:rule.operator %}
         {% include operator.template with prefix=prefix rule=rule operator=operator %}
-        {% if not is_root %}
-          {% include "./_filter_buttons.html" with is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
-        {% endif %}
+        {% include "./_filter_item_buttons.html" with is_root=is_root is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
       {% endwith %}
     </div>
   {% endwith %}
