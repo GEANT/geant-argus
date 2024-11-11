@@ -31,7 +31,6 @@ INDELIBLE_INCIDENTS = False
 # geant_argus/argus_site/apps.py
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
-
 #  Authentication
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
