@@ -15,6 +15,7 @@ INSTALLED_APPS = [
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
+    "argus_htmx.middleware.HtmxMessageMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
 if "DATABASES" in globals():
