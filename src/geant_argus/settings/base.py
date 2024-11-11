@@ -15,8 +15,9 @@ INSTALLED_APPS = [
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
-    "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
+    "argus_htmx.middleware.LoginRequiredMiddleware",
     "argus_htmx.middleware.HtmxMessageMiddleware",
+    "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
 if "DATABASES" in globals():
     DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
@@ -45,21 +46,27 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_uid",
     "social_core.pipeline.social_auth.auth_allowed",
     "social_core.pipeline.social_auth.social_user",
-    "social_core.pipeline.social_auth.associate_user",
-    "geant_argus.auth.get_userdata",
-    # Here we deviate from the default pipeline to support whitelisting users
+    # Here we deviate from the default pipeline to support whitelisting users by email addresss
+    "social_core.pipeline.social_auth.associate_by_email",
     "geant_argus.auth.require_existing_user",
+    "social_core.pipeline.social_auth.associate_user",
     "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.user.user_details",
 )
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = "/accounts/login"
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
-ARGUS_OIDC_METHOD_NAME = "Geant AAI"
+ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
 SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = get_str_env("ARGUS_OIDC_URL")
 SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
 SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
 
+PUBLIC_URLS = [
+    "/accounts/login/",
+    "/api/",
+    "/oidc/",
+]
 
 # Theming
 DEFAULT_THEME = "geant"
