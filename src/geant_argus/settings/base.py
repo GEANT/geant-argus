@@ -76,7 +76,7 @@ DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", 
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
     [
         "geant_argus.geant_argus.context_processors.geant_theme",
-        "argus_htmx.context_processors.datetime_format_via_session",
+        "argus.auth.context_processors.preferences",
     ]
 )
 
