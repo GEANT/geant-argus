@@ -11,4 +11,5 @@ urlpatterns = [
     path("filters/", include("geant_argus.geant_argus.filters.urls")),
     path("blacklists/", include("geant_argus.geant_argus.blacklists.urls")),
     path("", include("argus_htmx.urls")),
+    path("", include("geant_argus.blacklist.urls")),
 ]
