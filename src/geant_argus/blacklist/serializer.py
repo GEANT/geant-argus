@@ -1,10 +1,15 @@
 from rest_framework import serializers
 from .models import Blacklist
-from argus.filter.serializers import FilterSerializer
+from argus.filter.serializers import FilterBlobSerializer
+
+
+class BlacklistFilter(serializers.RelatedField):
+    def to_representation(self, value):
+        return FilterBlobSerializer().to_representation(value.filter)
 
 
 class BlacklistSerializer(serializers.ModelSerializer):
-    filter = FilterSerializer()
+    filter = BlacklistFilter(read_only=True)
 
     class Meta:
         model = Blacklist
