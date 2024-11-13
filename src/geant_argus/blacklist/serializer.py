@@ -3,20 +3,22 @@ from .models import Blacklist
 from argus.filter.serializers import FilterBlobSerializer
 
 
-class BlacklistFilter(serializers.RelatedField):
+class BlacklistFilterField(serializers.RelatedField):
     def to_representation(self, value):
         return FilterBlobSerializer().to_representation(value.filter)
 
 
 class BlacklistSerializer(serializers.ModelSerializer):
-    filter = BlacklistFilter(read_only=True)
+    filter = BlacklistFilterField(read_only=True)
+    severity = serializers.CharField()
 
     class Meta:
         model = Blacklist
-        fields = [
+        fields = (
             "pk",
             "name",
-            "message",
             "level",
+            "severity",
+            "message",
             "filter",
-        ]
+        )

@@ -27,6 +27,11 @@ class Migration(migrations.Migration):
                 filter_id
             FROM
                 geant_argus_blacklist;
+            SELECT setval(
+                pg_get_serial_sequence('"blacklist_blacklist"','id'),
+                coalesce(max("id"), 1),
+                max("id") IS NOT null)
+            FROM "blacklist_blacklist";
         """,
             reverse_sql="""
             INSERT INTO geant_argus_blacklist (
@@ -46,6 +51,11 @@ class Migration(migrations.Migration):
             FROM
                 blacklist_blacklist;
             TRUNCATE blacklist_blacklist;
+            SELECT setval(
+                pg_get_serial_sequence('"blacklist_blacklist"','id'),
+                coalesce(max("id"), 1),
+                max("id") IS NOT null)
+            FROM "blacklist_blacklist";
         """,
         )
     ]

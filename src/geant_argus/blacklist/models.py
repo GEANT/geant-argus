@@ -1,12 +1,16 @@
 from django.db import models
 from argus.incident.constants import Level
-from argus.notificationprofile.models import Filter
+from argus.notificationprofile.models import Filter as ArgusFilter
 
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
 
-# We should probably do this fancier with a subclass that's Meta.proxy=True
-Filter.__str__ = lambda self: self.name
+class Filter(ArgusFilter):
+    class Meta:
+        proxy = True
+
+    def __str__(self):
+        return self.name
 
 
 class BlacklistManager(models.Manager):
@@ -23,3 +27,7 @@ class Blacklist(models.Model):
     filter = models.ForeignKey(to=Filter, on_delete=models.CASCADE, related_name="blacklists")
 
     objects = BlacklistManager()
+
+    @property
+    def severity(self):
+        return IncidentSeverity(self.level).name
