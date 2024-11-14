@@ -12,6 +12,10 @@ from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, refresh
 TICKET_URL_BASE = getattr(settings, "TICKET_URL_BASE", "")
 
 
+class EmptyStringAllowedCharField(forms.CharField):
+    empty_values = (None,)  # empty string '' should not be considered an empty value
+
+
 @require_POST
 def acknowledge_incident(request: HtmxHttpRequest, pk: int):
     incident = get_object_or_404(Incident, id=pk)
@@ -20,8 +24,8 @@ def acknowledge_incident(request: HtmxHttpRequest, pk: int):
 
 
 class UpdateIncidentForm(forms.Form):
-    comment = forms.CharField(max_length=255, empty_value=None, required=False)
-    ticket_ref = forms.CharField(max_length=75, empty_value=None, required=False)
+    comment = EmptyStringAllowedCharField(max_length=255, empty_value=None, required=False)
+    ticket_ref = EmptyStringAllowedCharField(max_length=75, empty_value=None, required=False)
 
 
 @require_POST
