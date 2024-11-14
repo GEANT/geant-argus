@@ -20,8 +20,8 @@ def acknowledge_incident(request: HtmxHttpRequest, pk: int):
 
 
 class UpdateIncidentForm(forms.Form):
-    comment = forms.CharField(max_length=255, required=False)
-    ticket_ref = forms.CharField(max_length=75, required=False)
+    comment = forms.CharField(max_length=255, empty_value=None, required=False)
+    ticket_ref = forms.CharField(max_length=75, empty_value=None, required=False)
 
 
 @require_POST
