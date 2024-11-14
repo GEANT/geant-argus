@@ -1,2 +1,2 @@
 {% load template_utils %}
-{{ event.init_time|dateparse|date:datetime_format }}
+{{ event.init_time|dateparse|date:preferences.argus_htmx.datetime_format }}

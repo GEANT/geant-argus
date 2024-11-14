@@ -1,6 +1,6 @@
 {% load template_utils %}
 {% if event.clear_time %}
-  {{ event.clear_time|dateparse|date:datetime_format }}
+  {{ event.clear_time|dateparse|date:preferences.argus_htmx.datetime_format }}
 {% else %}
   -
 {% endif %}

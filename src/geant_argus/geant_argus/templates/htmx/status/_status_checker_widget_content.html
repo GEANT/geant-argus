@@ -33,7 +33,7 @@
     <div>
       <dt class="stat-title text-neutral-content">Inventory last updated</dt>
       <dd class="stat-value text-sm text-neutral-content">
-        {{ inventory.last_update|date:datetime_format|default:"?" }}
+        {{ inventory.last_update|date:preferences.argus_htmx.datetime_format|default:"?" }}
       </dd>
     </div>
   </div>

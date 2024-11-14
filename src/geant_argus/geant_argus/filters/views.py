@@ -114,6 +114,7 @@ def save_filter_from_request(request, pk: Optional[int] = None):
             "errors": {"name": "Name can only contain letters, numbers, - or _"},
             "filter_dict": result,
             "name": name,
+            "edit_url": reverse("geant-filters:edit-filter", args=(pk,) if pk else ()),
         }
         response = render(request, "geant/filters/_filter_edit_form.html", context=context)
         response.headers["HX-Retarget"] = "#filter-form"

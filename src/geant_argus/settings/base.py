@@ -15,6 +15,8 @@ INSTALLED_APPS = [
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
+    "argus_htmx.middleware.LoginRequiredMiddleware",
+    "argus_htmx.middleware.HtmxMessageMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
 if "DATABASES" in globals():
@@ -32,20 +34,79 @@ TEMPLATES[0]["DIRS"] = []  # noqa: F405
 #  Authentication
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.open_id_connect.OpenIdConnectAuth",
 ]
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+# fmt: off
+SOCIAL_AUTH_PIPELINE = (
+    # Get the information we can about the user and return it in a simple
+    # format to create the user instance later. In some cases the details are
+    # already part of the auth response from the provider, but sometimes this
+    # could hit a provider API.
+    "social_core.pipeline.social_auth.social_details",
+
+    # Get the social uid from whichever service we"re authing thru. The uid is
+    # the unique identifier of the given user in the provider.
+    "social_core.pipeline.social_auth.social_uid",
+
+    # Verifies that the current auth process is valid within the current
+    # project, this is where emails and domains whitelists are applied (if
+    # defined).
+    "social_core.pipeline.social_auth.auth_allowed",
+
+    # Checks if the current social-account is already associated in the site.
+    "social_core.pipeline.social_auth.social_user",
+
+    # Make up a username for this person, appends a random string at the end if
+    # there's any collision.
+    "social_core.pipeline.user.get_username",
+
+    # Associates the current social details with another user account with
+    # a similar email address. Disabled by default.
+    "social_core.pipeline.social_auth.associate_by_email",
+
+    # Create a user account if we haven"t found one yet.
+    "social_core.pipeline.user.create_user",
+
+    # Create the record that associates the social account with the user.
+    "social_core.pipeline.social_auth.associate_user",
+
+    # Populate the extra_data field in the social record with the values
+    # specified by settings (and the default ones like access_token, etc).
+    "social_core.pipeline.social_auth.load_extra_data",
+
+    # Update the user record with any changed info from the auth service.
+    "social_core.pipeline.user.user_details",
+)
+# fmt: on
+
+SOCIAL_AUTH_LOGIN_ERROR_URL = "/accounts/login"
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
+SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = get_str_env("ARGUS_OIDC_URL")
+SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
+SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
+
+PUBLIC_URLS = [
+    "/accounts/login/",
+    "/api/",
+    "/oidc/",
+]
+
 # Theming
-DEFAULT_THEME = "geant"
-DEFAULT_TW_CSS = "geant.css"
+THEME_DEFAULT = "geant"
+STYLESHEET_PATH = "geant.css"
 DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
 
 # context processors customization
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
     [
         "geant_argus.geant_argus.context_processors.geant_theme",
-        "argus_htmx.context_processors.datetime_format_via_session",
+        "argus.auth.context_processors.preferences",
     ]
 )
 
@@ -134,3 +195,6 @@ MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=N
 
 # Dashboard Alarms API
 DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
+
+# TTS
+TICKET_URL_BASE = os.getenv("ARGUS_TICKET_URL_BASE")
