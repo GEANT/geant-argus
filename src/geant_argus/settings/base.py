@@ -98,7 +98,7 @@ PUBLIC_URLS = [
 ]
 
 # Theming
-DEFAULT_THEME = "geant"
+THEME_DEFAULT = "geant"
 STYLESHEET_PATH = "geant.css"
 DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
 
