@@ -10,7 +10,7 @@
         {% for key, value in event.properties.items %}
           <tr>
             <th>{{ key|underscores_to_spaces|utc_time_header }}</th>
-            <td>{{ value|dateparse|date:datetime_format|default:value }}</td>
+            <td>{{ value|dateparse|date:preferences.argus_htmx.datetime_format|default:value }}</td>
           </tr>
         {% endfor %}
       </tbody>

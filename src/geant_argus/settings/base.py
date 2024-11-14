@@ -15,6 +15,8 @@ INSTALLED_APPS = [
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
     "django_htmx.middleware.HtmxMiddleware",
+    "argus_htmx.middleware.LoginRequiredMiddleware",
+    "argus_htmx.middleware.HtmxMessageMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
 if "DATABASES" in globals():
@@ -32,9 +34,38 @@ TEMPLATES[0]["DIRS"] = []  # noqa: F405
 #  Authentication
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.open_id_connect.OpenIdConnectAuth",
 ]
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+SOCIAL_AUTH_PIPELINE = (
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    # Here we deviate from the default pipeline to support whitelisting users by email addresss
+    "social_core.pipeline.social_auth.associate_by_email",
+    "geant_argus.auth.require_existing_user",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+)
+
+SOCIAL_AUTH_LOGIN_ERROR_URL = "/accounts/login"
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
+SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = get_str_env("ARGUS_OIDC_URL")
+SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
+SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
+
+PUBLIC_URLS = [
+    "/accounts/login/",
+    "/api/",
+    "/oidc/",
+]
 
 # Theming
 DEFAULT_THEME = "geant"
@@ -45,7 +76,7 @@ DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", 
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
     [
         "geant_argus.geant_argus.context_processors.geant_theme",
-        "argus_htmx.context_processors.datetime_format_via_session",
+        "argus.auth.context_processors.preferences",
     ]
 )
 
@@ -135,3 +166,6 @@ MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=N
 
 # Dashboard Alarms API
 DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
+
+# TTS
+TICKET_URL_BASE = os.getenv("ARGUS_TICKET_URL_BASE")
