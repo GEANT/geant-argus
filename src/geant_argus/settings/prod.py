@@ -5,6 +5,10 @@ STORAGES["staticfiles"][
     "BACKEND"
 ] = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
+# Django settings for ensuring that we correctly identify https being used
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 DEBUG = False
 ALLOWED_HOSTS = [".geant.org"]
 if FRONTEND_URL:
