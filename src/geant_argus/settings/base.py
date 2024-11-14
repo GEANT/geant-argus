@@ -99,7 +99,7 @@ PUBLIC_URLS = [
 
 # Theming
 DEFAULT_THEME = "geant"
-DEFAULT_TW_CSS = "geant.css"
+STYLESHEET_PATH = "geant.css"
 DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
 
 # context processors customization
