@@ -74,6 +74,7 @@ class IncidentFilterForm(forms.Form):
         widget=DaisyCheckboxSelectMultiple,
     )
     description = forms.CharField(max_length=255, required=False)
+    description.in_header = True
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
