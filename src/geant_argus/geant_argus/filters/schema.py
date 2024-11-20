@@ -7,8 +7,9 @@ FILTER_SCHEMA_V1 = {
             "properties": {
                 "type": {"const": "rule"},
                 "field": {"type": "string"},
+                "invert": {"type": "boolean"},
                 "operator": {"type": "string"},
-                "value": {"type": "string"},
+                "value": {"type": ["string", "boolean", "number"]},
                 "unit": {"type": "string"},
             },
             "required": ["type", "field", "operator", "value"],
@@ -17,7 +18,7 @@ FILTER_SCHEMA_V1 = {
             "type": "object",
             "properties": {
                 "type": {"const": "group"},
-                "operator": {"type": "string", "enum": ["and", "or"]},
+                "operator": {"type": "string", "enum": ["and", "or", "none"]},
                 "items": {
                     "type": "array",
                     "items": {
@@ -35,8 +36,8 @@ FILTER_SCHEMA_V1 = {
         "version": {"const": "v1"},
     },
     "anyOf": [
-        {"$ref": "#/definitions/filter-rule"},
         {"$ref": "#/definitions/filter-group"},
+        {"$ref": "#/definitions/filter-rule"},
     ],
     "required": ["version"],
 }

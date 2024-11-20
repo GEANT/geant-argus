@@ -125,6 +125,7 @@ class FilterField:
     display_name: str
     operators: list[Operator]
     db_fields: list[str]
+    invertable: bool = False
 
     def __post_init__(self):
         assert self.db_fields, "db_fields must have at least one item"
@@ -152,10 +153,12 @@ class FilterField:
             }
 
         op = self.operators_by_name[op_str]
+        invert = {"invert": True} if (self.invertable and form_data.get(prefix + "invert")) else {}
         return {
             "type": "rule",
             "field": self.name,
             "operator": op.name,
+            **invert,
             **op.parse_formdata(form_data, prefix=prefix),
         }
 
@@ -171,6 +174,7 @@ class FilterField:
 
 class ComplexFilter:
     version = "v1"
+    VALID_GROUP_OPERATORS = ("or", "and", "none")
 
     def __init__(self, fields: list[FilterField]):
         self.fields = fields
@@ -180,7 +184,7 @@ class ComplexFilter:
         field = self.fields[0]
         return field.default_rule()
 
-    def default_group(self, operator="or", items=None):
+    def default_group(self, operator=VALID_GROUP_OPERATORS[0], items=None):
         items = items or [self.default_rule()]
         return {"type": "group", "operator": operator, "items": items}
 
@@ -192,13 +196,13 @@ class ComplexFilter:
 
     def _parse_formdata_helper(self, form_data: dict, prefix: str) -> dict:
         if try_field := form_data.get(prefix + "field"):
-            if try_field in ("or", "and"):
+            if try_field in self.VALID_GROUP_OPERATORS:
                 return self.default_group(operator=try_field)
             field = self.fields_by_name.get(try_field, self.fields[0])
             return field.parse_form_data(form_data, prefix=prefix)
 
         if (try_field := form_data.get(prefix + "op")) is not None:
-            if try_field not in ("or", "and"):
+            if try_field not in self.VALID_GROUP_OPERATORS:
                 field = self.fields_by_name.get(try_field, self.fields[0])
                 return field.default_rule()
             result = {"type": "group", "operator": try_field, "items": []}
@@ -227,12 +231,21 @@ class ComplexFilter:
         raise ValueError("invalid item type")
 
     def _parse_filter_group(self, group: dict):
-        op = operator.ior if group["operator"] == "or" else operator.iand
-        return functools.reduce(op, (self._parse_filter_item(i) for i in group["items"]))
+        op = group["operator"]
+        # "none" operator is first taken as "or" and then inverted resulting in a 'not any'
+        # operation
+        op_func = operator.iand if group["operator"] == "and" else operator.ior
+        result = functools.reduce(op_func, (self._parse_filter_item(i) for i in group["items"]))
+        if op == "none":
+            result = ~result
+        return result
 
     def _parse_filter_rule(self, rule: dict):
         field = self.fields_by_name[rule["field"]]
-        return field.to_sql(rule)
+        result = field.to_sql(rule)
+        if rule.get("invert"):
+            result = ~result
+        return result
 
 
 FILTER_MODEL = ComplexFilter(
@@ -244,6 +257,7 @@ FILTER_MODEL = ComplexFilter(
                 TextOperator("contains"),
             ],
             db_fields=["description"],
+            invertable=True,
         ),
         # Comment field not yet supported
         # FilterField(
@@ -260,6 +274,7 @@ FILTER_MODEL = ComplexFilter(
                 TextOperator("contains"),
             ],
             db_fields=["metadata__location"],
+            invertable=True,
         ),
         FilterField(
             "sd_ack",
