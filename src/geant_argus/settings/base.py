@@ -6,6 +6,7 @@ from argus_htmx.settings import *  # noqa: F403
 
 INSTALLED_APPS = [
     "geant_argus.geant_argus",
+    "geant_argus.blacklist",
     "geant_argus.argus_site",
     *INSTALLED_APPS,  # noqa: F405
     "django_htmx",

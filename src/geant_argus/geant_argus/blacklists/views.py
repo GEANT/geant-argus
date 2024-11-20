@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from geant_argus.geant_argus.filters.views import render_edit_filter, save_filter_from_request
-from geant_argus.geant_argus.models import Blacklist
+from geant_argus.blacklist.models import Blacklist
 from geant_argus.geant_argus.view_helpers import redirect
 
 
