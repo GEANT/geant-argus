@@ -1,8 +1,11 @@
 {% load template_utils %}
 {% if rule.field in model.fields_by_name %}
   {% with field=model.fields_by_name|get_item:rule.field %}
-    <div class="rule-atom">
+    <div class="flex items-center gap-1 rule-atom">
       {% include "./_filter_selector.html" with key="field" selected=rule.field %}
+      {% if field.invertable %}
+        {% include "./_filter_invert_checkbox.html" with invert=rule.invert %}
+      {% endif %}
       <select name="{{ prefix }}op"
               class="select select-bordered max-w-xs"
               autocomplete="off"
