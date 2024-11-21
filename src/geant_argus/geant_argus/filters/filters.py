@@ -3,11 +3,20 @@ import datetime
 import functools
 import itertools
 import operator
+from typing import Union
 
-from django.db.models import Q, QuerySet
+from django.db.models import JSONField, Q, QuerySet, Value
 
 
 @dataclasses.dataclass
+class DBField:
+    name: str
+    is_json: bool = False
+
+    def __str__(self):
+        return self.name
+
+
 class Operator:
     template: str
 
@@ -15,13 +24,17 @@ class Operator:
         self.name = name
         self.display_name = display_name if display_name is not None else name
 
+    @staticmethod
+    def is_json_null(field: DBField):
+        return Q(**{f"{field}": Value(None, JSONField())}) if field.is_json else Q()
+
     def initial_value(self):
         raise NotImplementedError
 
     def parse_formdata(self, form_data: dict, prefix: str):
         raise NotImplementedError
 
-    def to_sql(self, db_field: str, op: str, rule: dict):
+    def to_sql(self, db_field: DBField, op: str, rule: dict):
         raise NotImplementedError
 
 
@@ -34,11 +47,13 @@ class TextOperator(Operator):
     def parse_formdata(self, form_data: dict, prefix):
         return {"value": form_data.get(prefix + "val:str", "")[:100]}
 
-    def to_sql(self, db_field: str, op: str, rule: dict):
+    def to_sql(self, db_field: DBField, op: str, rule: dict):
+        not_null = ~self.is_json_null(db_field)
+
         if op == "contains":
-            return Q(**{f"{db_field}__icontains": rule["value"]})
+            return not_null & Q(**{f"{db_field}__icontains": rule["value"]})
         if op == "equals":
-            return Q(**{f"{db_field}": rule["value"]})
+            return not_null & Q(**{f"{db_field}": rule["value"]})
 
 
 class BooleanOperator(Operator):
@@ -51,12 +66,27 @@ class BooleanOperator(Operator):
         raw = form_data.get(prefix + "val:bool", "true")
         return {"value": raw == "true"}
 
-    def to_sql(self, db_field: str, op: str, rule: dict):
+    def to_sql(self, db_field: DBField, op: str, rule: dict):
         if op != "is":
             return None
+        return Q(**{f"{db_field}": rule["value"]})
 
-        # TODO: implement for acks
-        return None
+
+class ExistsOperator(Operator):
+    template = "geant/filters/_filter_exists.html"
+
+    def initial_value(self):
+        return {"value": True}
+
+    def parse_formdata(self, form_data: dict, prefix: str):
+        return self.initial_value()
+
+    def to_sql(self, db_field: DBField, op: str, rule: dict):
+        if op != "exists":
+            return None
+        is_null = self.is_json_null(db_field)
+
+        return ~(is_null | Q(**{f"{db_field}": ""}))
 
 
 class DateTimeOperator(Operator):
@@ -74,7 +104,7 @@ class DateTimeOperator(Operator):
             raw = datetime.datetime.now().strftime(self.NORMALIZED_DATETIME)
         return {"value": raw}
 
-    def to_sql(self, db_field: str, op: str, rule: dict):
+    def to_sql(self, db_field: DBField, op: str, rule: dict):
         if op == "before_abs":
             return Q(**{f"{db_field}__lt": rule["value"]})
         if op == "after_abs":
@@ -100,7 +130,7 @@ class TimeDeltaOperator(Operator):
 
         return {"value": amount, "unit": unit}
 
-    def to_sql(self, db_field: str, op: str, rule: dict):
+    def to_sql(self, db_field: DBField, op: str, rule: dict):
         target_dt = datetime.datetime.now(tz=datetime.timezone.utc) - self.rule_to_timedelta(rule)
         if op == "before_rel":
             return Q(**{f"{db_field}__lt": target_dt})
@@ -124,13 +154,19 @@ class FilterField:
     name: str
     display_name: str
     operators: list[Operator]
-    db_fields: list[str]
+    db_fields: list[Union[str, DBField]]
     invertable: bool = False
 
     def __post_init__(self):
         assert self.db_fields, "db_fields must have at least one item"
         assert self.operators, "operators must have at least one item"
         self.operators_by_name = {op.name: op for op in self.operators}
+
+    @staticmethod
+    def as_dbfield(field: Union[str, DBField]):
+        if isinstance(field, DBField):
+            return field
+        return DBField(field)
 
     def default_rule(self):
         operator = self.operators[0]
@@ -168,7 +204,8 @@ class FilterField:
             return Q()
 
         return functools.reduce(
-            operator.ior, (op.to_sql(f, op_str, rule) or Q() for f in self.db_fields)
+            operator.ior,
+            (op.to_sql(self.as_dbfield(f), op_str, rule) or Q() for f in self.db_fields),
         )
 
 
@@ -259,38 +296,33 @@ FILTER_MODEL = ComplexFilter(
             db_fields=["description"],
             invertable=True,
         ),
-        # Comment field not yet supported
-        # FilterField(
-        #     "comment",
-        #     "Comment",
-        #     operators=[
-        #         TextOperator("contains"),
-        #     ],
-        # ),
+        FilterField(
+            "comment",
+            "Comment",
+            operators=[
+                TextOperator("contains"),
+                ExistsOperator("exists"),
+            ],
+            db_fields=[DBField("metadata__comment", is_json=True)],
+            invertable=True,
+        ),
         FilterField(
             "location",
             "Location",
             operators=[
                 TextOperator("contains"),
             ],
-            db_fields=["metadata__location"],
+            db_fields=[DBField("metadata__location", is_json=True)],
             invertable=True,
         ),
         FilterField(
-            "sd_ack",
-            "Ack (SD)",
+            "ack",
+            "Acked",
             operators=[
                 BooleanOperator("is"),
+                ExistsOperator("exists"),
             ],
-            db_fields=["acks"],
-        ),
-        FilterField(
-            "noc_ack",
-            "Ack (NOC)",
-            operators=[
-                BooleanOperator("is"),
-            ],
-            db_fields=["acks"],
+            db_fields=["ack"],
         ),
         FilterField(
             "start_time",
