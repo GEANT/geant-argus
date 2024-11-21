@@ -322,6 +322,7 @@ FILTER_MODEL = ComplexFilter(
                 ExistsOperator("exists"),
             ],
             db_fields=["ack"],
+            invertable=True,
         ),
         FilterField(
             "start_time",
