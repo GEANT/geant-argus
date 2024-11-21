@@ -319,7 +319,6 @@ FILTER_MODEL = ComplexFilter(
             "ack",
             "Ack",
             operators=[
-                BooleanOperator("is"),
                 ExistsOperator("exists"),
             ],
             db_fields=["ack"],
