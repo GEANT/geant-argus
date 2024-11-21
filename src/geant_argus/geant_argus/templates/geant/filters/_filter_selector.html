@@ -6,7 +6,8 @@
         hx-include="#filter_edit_root"
         hx-trigger="change"
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-        hx-target="#filter_edit_root">
+        hx-target="#filter_edit_root"
+        hx-indicator="#filter-form ~ .htmx-indicator">
   <option value="and" {% if selected == "and" %}selected{% endif %}>All</option>
   <option value="or" {% if selected == "or" %}selected{% endif %}>Any</option>
   <option value="none" {% if selected == "none" %}selected{% endif %}>None</option>
