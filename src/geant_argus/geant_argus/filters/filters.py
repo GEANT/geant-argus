@@ -53,7 +53,7 @@ class TextOperator(Operator):
         if op == "contains":
             return not_null & Q(**{f"{db_field}__icontains": rule["value"]})
         if op == "equals":
-            return not_null & Q(**{f"{db_field}": rule["value"]})
+            return not_null & Q(**{str(db_field): rule["value"]})
 
 
 class BooleanOperator(Operator):
@@ -69,7 +69,7 @@ class BooleanOperator(Operator):
     def to_sql(self, db_field: DBField, op: str, rule: dict):
         if op != "is":
             return None
-        return Q(**{f"{db_field}": rule["value"]})
+        return Q(**{str(db_field): rule["value"]})
 
 
 class ExistsOperator(Operator):
@@ -86,7 +86,7 @@ class ExistsOperator(Operator):
             return None
         is_null = self.is_json_null(db_field)
 
-        return ~(is_null | Q(**{f"{db_field}": ""}))
+        return ~(is_null | Q(**{str(db_field): ""}))
 
 
 class DateTimeOperator(Operator):
