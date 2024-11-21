@@ -26,7 +26,7 @@ class Operator:
 
     @staticmethod
     def is_json_null(field: DBField):
-        return Q(**{f"{field}": Value(None, JSONField())}) if field.is_json else Q()
+        return Q(**{str(field): Value(None, JSONField())}) if field.is_json else Q()
 
     def initial_value(self):
         raise NotImplementedError
