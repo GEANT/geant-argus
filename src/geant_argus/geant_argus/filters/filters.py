@@ -317,7 +317,7 @@ FILTER_MODEL = ComplexFilter(
         ),
         FilterField(
             "ack",
-            "Acked",
+            "Ack",
             operators=[
                 BooleanOperator("is"),
                 ExistsOperator("exists"),
