@@ -81,16 +81,23 @@ SOCIAL_AUTH_PIPELINE = (
 
     # Update the user record with any changed info from the auth service.
     "social_core.pipeline.user.user_details",
+
+    # Update the user's authorization
+    "geant_argus.auth.update_groups"
 )
 # fmt: on
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = "/accounts/login"
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
-ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
 SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = get_str_env("ARGUS_OIDC_URL")
 SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
 SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
+SOCIAL_AUTH_OIDC_SCOPE = ["entitlements"]
+
+ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
+ARGUS_OIDC_ENTITLEMENTS_PATTERN = get_str_env("ARGUS_OIDC_ENTITLEMENTS_PATTERN")
+ARGUS_OIDC_SUPERUSER_GROUP = "admin"
 
 PUBLIC_URLS = [
     "/accounts/login/",
