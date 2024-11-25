@@ -112,7 +112,6 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_description(queryset)
         queryset = self._filter_by_severity(queryset)
         queryset = self._order_by_newest_first(queryset)
-        print(queryset.query)
         return queryset
 
     def _filter_by_pk(self, queryset):
