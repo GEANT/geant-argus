@@ -316,6 +316,15 @@ FILTER_MODEL = ComplexFilter(
             invertable=True,
         ),
         FilterField(
+            "equipment",
+            "Equipment",
+            operators=[
+                TextOperator("contains"),
+            ],
+            db_fields=[DBField("metadata__equipment", is_json=True)],
+            invertable=True,
+        ),
+        FilterField(
             "ack",
             "Ack",
             operators=[
