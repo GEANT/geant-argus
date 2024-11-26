@@ -25,7 +25,7 @@
                 {% if column.cell_template %}
                   {% include column.cell_template %}
                 {% elif column.lookup_key %}
-                  {{ object|get_item:column.lookup_key }}
+                  {% with default=column.default|default:'-' %}{{ object|get_item:column.lookup_key|default:default }}{% endwith %}
                 {% endif %}
               </td>
             {% endfor %}

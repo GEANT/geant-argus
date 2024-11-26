@@ -14,7 +14,8 @@ from geant_argus.geant_argus.view_helpers import redirect
 class CreateBlacklistForm(ModelForm):
     class Meta:
         model = Blacklist
-        fields = ["name", "filter", "level", "message"]
+        fields = ["name", "filter", "level", "message", "enabled", "priority", "review_date"]
+        widgets = {"review_date": forms.DateInput(attrs={"type": "date"})}
 
 
 class EditFilterForBlacklistForm(forms.Form):
@@ -35,8 +36,19 @@ BLACKLISTS_TABLE = {
             "width": "w-24",
             "cell_template": "geant/blacklists/_blacklist_level.html",
         },
-        {"header": "Filter", "width": "w-1/6", "lookup_key": "filter"},
+        {"header": "Filter", "width": "w-[12%]", "lookup_key": "filter"},
         {"header": "Message", "lookup_key": "message"},
+        {
+            "header": "Enabled",
+            "cell_template": "geant/blacklists/_blacklist_enabled.html",
+            "width": "w-[5%]",
+        },
+        {"header": "Priority", "lookup_key": "priority", "width": "w-[5%]"},
+        {
+            "header": "Review Date",
+            "cell_template": "geant/blacklists/_blacklist_review_date.html",
+            "width": "w-[12%]",
+        },
         {
             "header": "Actions",
             "width": "w-32",

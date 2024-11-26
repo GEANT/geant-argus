@@ -182,7 +182,7 @@ class _FilterBlobExtension(OpenApiSerializerExtension):
             "type": "object",
             "properties": {
                 "type": {"type": "string", "enum": ["rule", "group"], "example": "rule"},
-                "operator": {"type": "string", "example": "equals"},
+                "operator": {"type": "string", "example": "contains"},
                 "field": {"type": "string", "example": "description"},
                 "value": {"type": "string", "example": "IP TRUNK"},
             },
