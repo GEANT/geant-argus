@@ -21,10 +21,13 @@ class BlacklistManager(models.Manager):
 class Blacklist(models.Model):
     LEVEL_CHOICES = tuple((item.value, item.name) for item in IncidentSeverity)
 
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=120, unique=True)
     message = models.CharField(max_length=255)
     level = models.IntegerField(choices=LEVEL_CHOICES, default=max(Level).value)
     filter = models.ForeignKey(to=Filter, on_delete=models.CASCADE, related_name="blacklists")
+    priority = models.IntegerField(db_default=10, default=10)
+    enabled = models.BooleanField(db_default=True, default=True)
+    review_date = models.DateField(blank=True, null=True)
 
     objects = BlacklistManager()
 

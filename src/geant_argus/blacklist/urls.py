@@ -5,6 +5,7 @@ from . import views
 
 router = routers.SimpleRouter()
 router.register(r"blacklists", views.BlacklistViewSet)
+router.register(r"filters", views.FilterViewSet)
 
 app_name = "blacklist"
 

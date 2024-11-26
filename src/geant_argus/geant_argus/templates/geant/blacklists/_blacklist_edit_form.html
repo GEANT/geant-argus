@@ -1,7 +1,7 @@
-{% extends 'components/_form_with_buttons.html' %}
+{% extends "components/_form_with_buttons.html" %}
 {% load widget_tweaks %}
 {% block form %}
-  <form id=blacklist-edit method="post">
+  <form id="blacklist-edit" method="post">
     <fieldset>
       <label class="label">
         <span class="label-text w-40">Name:</span>
@@ -29,6 +29,20 @@
       <label class="label">
         <span class="label-text w-40">Message:</span>
         {{ form.message|add_class:"input input-accent input-bordered border w-full" }}
+      </label>
+      <label class="label">
+        <span class="label-text">Priority (1 → High, 1000 → Low):</span>
+        {{ form.priority|add_class:"input input-accent input-bordered border w-40" }}
+      </label>
+      <label class="label">
+        <span class="label-text w-40">Enabled:</span>
+        {{ form.enabled|add_class:"checkbox checkbox-primary" }}
+      </label>
+      <label class="label">
+        <span class="label-text w-40">Review date:</span>
+        <div class="input input-accent input-bordered border flex item-center w-40">
+          {{ form.review_date|add_class:"appearance-none grow border-none" }}
+        </div>
       </label>
       {% csrf_token %}
     </fieldset>
