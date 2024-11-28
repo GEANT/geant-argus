@@ -1,8 +1,11 @@
-from django.db import models
 from argus.incident.constants import Level
 from argus.notificationprofile.models import Filter as ArgusFilter
+from django.contrib.auth import get_user_model
+from django.db import models
 
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
+
+User = get_user_model()
 
 
 class Filter(ArgusFilter):
@@ -21,6 +24,7 @@ class BlacklistManager(models.Manager):
 class Blacklist(models.Model):
     LEVEL_CHOICES = tuple((item.value, item.name) for item in IncidentSeverity)
 
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="blacklists")
     name = models.CharField(max_length=120, unique=True)
     message = models.CharField(max_length=255)
     level = models.IntegerField(choices=LEVEL_CHOICES, default=max(Level).value)
