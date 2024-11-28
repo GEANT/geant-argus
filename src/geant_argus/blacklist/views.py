@@ -32,6 +32,9 @@ class BlacklistViewSet(rw_viewsets.ModelViewSet):
     read_serializer_class = BlacklistSerializer
     write_serializer_class = CreateBlacklistSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 @extend_schema_view(
     list=extend_schema(description="List My Blacklists", responses=BlacklistSerializer),

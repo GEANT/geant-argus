@@ -24,4 +24,4 @@ class BlacklistSerializer(serializers.ModelSerializer):
 class CreateBlacklistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blacklist
-        fields = "__all__"
+        exclude = ("user",)

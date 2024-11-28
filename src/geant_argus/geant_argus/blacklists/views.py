@@ -98,7 +98,8 @@ def edit_blacklist(request, pk=None):
     elif request.method == "POST":
         form = CreateBlacklistForm(request.POST, instance=instance)
         blacklist = form.save(commit=False)
-        blacklist.user = request.user
+        if not instance:
+            blacklist.user = request.user
         blacklist.save()
 
     elif request.method == "DELETE" and instance is not None:
