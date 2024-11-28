@@ -1,10 +1,9 @@
-from rest_framework import permissions
+from drf_rw_serializers import viewsets as rw_viewsets
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import permissions, viewsets
 
 from geant_argus.blacklist.models import Blacklist
 from geant_argus.blacklist.serializer import BlacklistSerializer, CreateBlacklistSerializer
-from drf_spectacular.utils import extend_schema, extend_schema_view
-from drf_rw_serializers import viewsets as rw_viewsets
-from argus.notificationprofile.views import FilterViewSet as ArgusFilterViewSet, Filter
 
 
 @extend_schema_view(
@@ -34,10 +33,13 @@ class BlacklistViewSet(rw_viewsets.ModelViewSet):
     write_serializer_class = CreateBlacklistSerializer
 
 
-class FilterViewSet(ArgusFilterViewSet):
-    """
-    API endpoint that allows filters to be viewed or edited.
-    """
+@extend_schema_view(
+    list=extend_schema(description="List My Blacklists", responses=BlacklistSerializer),
+)
+class MyBlacklistViewset(viewsets.ReadOnlyModelViewSet):
+    serializer_class = BlacklistSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Blacklist.objects.none()
 
     def get_queryset(self):
-        return Filter.objects.all().order_by("id")
+        return self.request.user.blacklists.all()
