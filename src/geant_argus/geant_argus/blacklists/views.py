@@ -36,7 +36,11 @@ BLACKLISTS_TABLE = {
             "width": "w-24",
             "cell_template": "geant/blacklists/_blacklist_level.html",
         },
-        {"header": "Filter", "width": "w-[12%]", "lookup_key": "filter"},
+        {
+            "header": "Filter",
+            "cell_template": "geant/blacklists/_blacklist_filter.html",
+            "width": "w-[12%]",
+        },
         {"header": "Message", "lookup_key": "message"},
         {
             "header": "Enabled",
@@ -47,8 +51,9 @@ BLACKLISTS_TABLE = {
         {
             "header": "Review Date",
             "cell_template": "geant/blacklists/_blacklist_review_date.html",
-            "width": "w-[12%]",
+            "width": "w-24",
         },
+        {"header": "User", "lookup_key": "user"},
         {
             "header": "Actions",
             "width": "w-32",
@@ -92,7 +97,10 @@ def edit_blacklist(request, pk=None):
         return render(request, "geant/blacklists/blacklist_edit.html", context=context)
     elif request.method == "POST":
         form = CreateBlacklistForm(request.POST, instance=instance)
-        form.save()
+        blacklist = form.save(commit=False)
+        blacklist.user = request.user
+        blacklist.save()
+
     elif request.method == "DELETE" and instance is not None:
         instance.delete()
     return redirect(request, target="geant-blacklists:blacklist-list")

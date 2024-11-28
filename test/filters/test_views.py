@@ -29,12 +29,13 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data, update
             },
         ),
         (
-            {"field": "sd_ack", "op": "is", "val:bool": "true", "invert": "on"},
+            {"field": "ack", "op": "exists", "val:bool": "true", "invert": "on"},
             {
                 "version": "v1",
                 "type": "rule",
-                "field": "sd_ack",
-                "operator": "is",
+                "field": "ack",
+                "operator": "exists",
+                "invert": True,
                 "value": True,
             },
         ),
