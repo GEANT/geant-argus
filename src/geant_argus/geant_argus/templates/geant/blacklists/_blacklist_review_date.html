@@ -1,0 +1,6 @@
+{% load template_utils %}
+{% if object.review_date %}
+  {{ object.review_date|dateparse|date:'Y-m-d' }}
+{% else %}
+  -
+{% endif %}

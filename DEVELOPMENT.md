@@ -26,7 +26,7 @@ site is a collection of one of more Apps. Which Apps are loaded is indicated in 
 - `argus_site` a references to the `argus.site` package as an app (required for some template
   overriding)
 - `django_htmx` the generic package that implements htmx for a django Site
-- `argus_htmx` the (new) Argus front-end using htmx
+- `argus.htmx` the (new) Argus front-end using htmx
 
 Some of our extra Apps are appended to the default `INSTALLED_APPS` setting, while others are
 prepended. When resolving a certain resource, such as a template, Django traverses the installed
@@ -42,7 +42,7 @@ identified by a their relative path in valid `templates/` directories. Because e
 their own `templates/` directory, it is possible to override an existing template by creating a
 new file with the same name in another App `templates/` directory. We use this for example for
 implementation of the incidents details page `htmx/incidents/incident_detail.html` which overrides
-a template from the `argus_htmx` App.
+a template from the `argus.htmx` App.
 
 _note_ Argus has a default setting `TEMPLATES[0]["DIRS"]` that disables Django's behaviour of
 resolving templates in the apps' directories. We reset this setting in our `base.py` settings file
@@ -140,7 +140,7 @@ for an example.
 The incident listing table has a default set of columns. For geant-argus we want to customize
 these columns to show information that is relevant to Geant for every incident. This can be done
 by overriding or extending the `INCIDENT_TABLE_COLUMNS` setting. See also
-`argus_htmx.settings.INCIDENT_TABLE_COLUMNS`
+`argus.htmx.settings.INCIDENT_TABLE_COLUMNS`
 
 ### Filter backend
 

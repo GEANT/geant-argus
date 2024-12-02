@@ -1,15 +1,18 @@
-<form id="filter-form">
-  <label class="form-control w-full max-w-xs">
-    <span class="label-text">Name:</span>
-    <input type="text"
-           class="input input-bordered w-full max-w-xs {% if errors.name %}border-error{% endif %}"
-           name="name"
-           value="{{ filter.name|default:name }}" />
-    {% if errors.name %}<div class="text-xs text-error">{{ errors.name }}</div>{% endif %}
-  </label>
-  <div id="filter_edit_root"
-       class="border border-primary rounded-lg pl-3 pr-4 pb-2 my-2">
-    {% include "./_filter_item.html" with is_top=True is_bottom=True %}
-  </div>
-  {% csrf_token %}
-</form>
+<div class="loading-box">
+  <form id="filter-form" class="w-full">
+    <label class="form-control w-full max-w-xs">
+      <span class="label-text">Name:</span>
+      <input type="text"
+             class="input input-bordered w-full max-w-xs {% if errors.name %}border-error{% endif %}"
+             name="name"
+             value="{{ filter.name|default:name }}" />
+      {% if errors.name %}<div class="text-xs text-error">{{ errors.name }}</div>{% endif %}
+    </label>
+    <div id="filter_edit_root"
+         class="border border-primary rounded-lg pl-2 pr-4 pb-2 my-2">
+      {% include "./_filter_item.html" with is_top=True is_bottom=True %}
+    </div>
+    {% csrf_token %}
+  </form>
+  <div class="htmx-indicator loading loading-spinner loading-lg text-primary"></div>
+</div>

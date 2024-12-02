@@ -7,14 +7,15 @@ from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from geant_argus.geant_argus.filters.views import render_edit_filter, save_filter_from_request
-from geant_argus.geant_argus.models import Blacklist
+from geant_argus.blacklist.models import Blacklist
 from geant_argus.geant_argus.view_helpers import redirect
 
 
 class CreateBlacklistForm(ModelForm):
     class Meta:
         model = Blacklist
-        fields = ["name", "filter", "level", "message"]
+        fields = ["name", "filter", "level", "message", "enabled", "priority", "review_date"]
+        widgets = {"review_date": forms.DateInput(attrs={"type": "date"})}
 
 
 class EditFilterForBlacklistForm(forms.Form):
@@ -35,8 +36,24 @@ BLACKLISTS_TABLE = {
             "width": "w-24",
             "cell_template": "geant/blacklists/_blacklist_level.html",
         },
-        {"header": "Filter", "width": "w-1/6", "lookup_key": "filter"},
+        {
+            "header": "Filter",
+            "cell_template": "geant/blacklists/_blacklist_filter.html",
+            "width": "w-[12%]",
+        },
         {"header": "Message", "lookup_key": "message"},
+        {
+            "header": "Enabled",
+            "cell_template": "geant/blacklists/_blacklist_enabled.html",
+            "width": "w-[5%]",
+        },
+        {"header": "Priority", "lookup_key": "priority", "width": "w-[5%]"},
+        {
+            "header": "Review Date",
+            "cell_template": "geant/blacklists/_blacklist_review_date.html",
+            "width": "w-24",
+        },
+        {"header": "User", "lookup_key": "user"},
         {
             "header": "Actions",
             "width": "w-32",
@@ -80,7 +97,11 @@ def edit_blacklist(request, pk=None):
         return render(request, "geant/blacklists/blacklist_edit.html", context=context)
     elif request.method == "POST":
         form = CreateBlacklistForm(request.POST, instance=instance)
-        form.save()
+        blacklist = form.save(commit=False)
+        if not instance:
+            blacklist.user = request.user
+        blacklist.save()
+
     elif request.method == "DELETE" and instance is not None:
         instance.delete()
     return redirect(request, target="geant-blacklists:blacklist-list")

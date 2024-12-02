@@ -10,7 +10,7 @@ class GeantConfig(AppConfig):
         yield from pathlib.Path(__file__).parent.glob("tailwindcss/*.css")
 
     def ready(self) -> None:
-        from argus_htmx.incidents.views import INCIDENT_UPDATE_ACTIONS, DescriptionOptionalForm
+        from argus.htmx.incidents.views import INCIDENT_UPDATE_ACTIONS, DescriptionOptionalForm
         from .incidents.bulk_actions import (
             bulk_close_incidents,
             bulk_clear_incidents,

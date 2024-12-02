@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from argus.filter.filters import Filter
+from geant_argus.blacklist.models import Filter
 from argus.incident.models import User
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed

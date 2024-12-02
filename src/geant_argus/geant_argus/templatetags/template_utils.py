@@ -24,7 +24,7 @@ def get_item(obj, key: Union[str, Iterable]):
 
 @register.filter
 def dateparse(obj):
-    if isinstance(obj, datetime.datetime):
+    if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
         return obj
     if isinstance(obj, str):
         return parse_datetime(obj)
