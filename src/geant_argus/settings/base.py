@@ -1,23 +1,19 @@
 import os
 
+from argus.htmx.appconfig import APP_SETTINGS
+from argus.htmx.incidents.customization import IncidentTableColumn
 from argus.site.settings.base import *  # noqa: F401, F403
-from argus_htmx.incidents.customization import IncidentTableColumn
-from argus_htmx.settings import *  # noqa: F403
+
+update_settings(globals(), APP_SETTINGS)
 
 INSTALLED_APPS = [
     "geant_argus.geant_argus",
     "geant_argus.blacklist",
     "geant_argus.argus_site",
     *INSTALLED_APPS,  # noqa: F405
-    "django_htmx",
-    "argus_htmx",
-    "widget_tweaks",
 ]
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
-    "django_htmx.middleware.HtmxMiddleware",
-    "argus_htmx.middleware.LoginRequiredMiddleware",
-    "argus_htmx.middleware.HtmxMessageMiddleware",
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
 ]
 if "DATABASES" in globals():
@@ -37,8 +33,6 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "social_core.backends.open_id_connect.OpenIdConnectAuth",
 ]
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 # fmt: off
@@ -98,12 +92,6 @@ SOCIAL_AUTH_OIDC_SCOPE = ["entitlements"]
 ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
 ARGUS_OIDC_ENTITLEMENTS_PATTERN = get_str_env("ARGUS_OIDC_ENTITLEMENTS_PATTERN")
 ARGUS_OIDC_SUPERUSER_GROUP = "admin"
-
-PUBLIC_URLS = [
-    "/accounts/login/",
-    "/api/",
-    "/oidc/",
-]
 
 # Theming
 THEME_DEFAULT = "geant"
