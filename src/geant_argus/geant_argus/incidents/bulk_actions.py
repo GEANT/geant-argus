@@ -1,6 +1,6 @@
 import itertools
 from typing import Any, Dict
-from argus_htmx.utils import bulk_close_queryset
+from argus.htmx.utils import bulk_close_queryset
 from django import forms
 from django.http import HttpResponseServerError
 from geant_argus.geant_argus.dashboard_alarms import close_alarm, clear_alarm

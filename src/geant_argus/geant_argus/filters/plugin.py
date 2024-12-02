@@ -106,12 +106,12 @@ class IncidentFilterForm(forms.Form):
         if not self.is_valid():
             return queryset
 
+        queryset = self._annotate_acks(queryset)
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_status(queryset)
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._filter_by_description(queryset)
         queryset = self._filter_by_severity(queryset)
-        queryset = self._annotate_acks(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
 
@@ -183,7 +183,7 @@ class _FilterBlobExtension(OpenApiSerializerExtension):
             "type": "object",
             "properties": {
                 "type": {"type": "string", "enum": ["rule", "group"], "example": "rule"},
-                "operator": {"type": "string", "example": "equals"},
+                "operator": {"type": "string", "example": "contains"},
                 "field": {"type": "string", "example": "description"},
                 "value": {"type": "string", "example": "IP TRUNK"},
             },

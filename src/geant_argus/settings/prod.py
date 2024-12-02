@@ -5,6 +5,10 @@ STORAGES["staticfiles"][
     "BACKEND"
 ] = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
+# Django settings for ensuring that we correctly identify https being used
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 DEBUG = False
 ALLOWED_HOSTS = [".geant.org"]
 if FRONTEND_URL:
@@ -34,5 +38,5 @@ LOGGING = {
         "level": "INFO",
     },
 }
-DEFAULT_TW_CSS = "geant.min.css"
+STYLESHEET_PATH = "geant.min.css"
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 15  # 15MB

@@ -5,25 +5,29 @@
           hx-post="{{ edit_url|default:request.path }}?delete={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-          hx-target="#filter_edit_root">🗑</button>
+          hx-target="#filter_edit_root"
+          hx-indicator="#filter-form ~ .htmx-indicator">🗑</button>
   <button type="button"
           class="btn btn-sm btn-ghost disabled:bg-transparent disabled:opacity-50 font-black text-lg"
           hx-post="{{ edit_url|default:request.path }}?create_after={{ prefix|default:'root' }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-          hx-target="#filter_edit_root">+</button>
+          hx-target="#filter_edit_root"
+          hx-indicator="#filter-form ~ .htmx-indicator">+</button>
   <button type="button"
           {% if is_top %}disabled{% endif %}
           class="btn btn-sm btn-ghost disabled:bg-transparent disabled:opacity-50 font-black text-lg"
           hx-post="{{ edit_url|default:request.path }}?move_up={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-          hx-target="#filter_edit_root">↑</button>
+          hx-target="#filter_edit_root"
+          hx-indicator="#filter-form ~ .htmx-indicator">↑</button>
   <button type="button"
           {% if is_bottom %}disabled{% endif %}
           class="btn btn-sm btn-ghost disabled:bg-transparent disabled:opacity-50 font-black text-lg"
           hx-post="{{ edit_url|default:request.path }}?move_down={{ prefix }}"
           hx-include="#filter_edit_root"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-          hx-target="#filter_edit_root">↓</button>
+          hx-target="#filter_edit_root"
+          hx-indicator="#filter-form ~ .htmx-indicator">↓</button>
 </span>

@@ -1,4 +1,4 @@
-{% extends 'components/_form_with_buttons.html' %}
+{% extends "components/_form_with_buttons.html" %}
 {% block form %}
   <div class="mx-1 {% if read_only %}read-only{% else %}read-write{% endif %}">
     {% include "./_filter_edit_form.html" %}

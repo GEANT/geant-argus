@@ -18,6 +18,28 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data, update
             },
         ),
         (
+            {"field": "description", "op": "contains", "val:str": "some value", "invert": "on"},
+            {
+                "version": "v1",
+                "type": "rule",
+                "invert": True,
+                "field": "description",
+                "operator": "contains",
+                "value": "some value",
+            },
+        ),
+        (
+            {"field": "ack", "op": "exists", "val:bool": "true", "invert": "on"},
+            {
+                "version": "v1",
+                "type": "rule",
+                "field": "ack",
+                "operator": "exists",
+                "invert": True,
+                "value": True,
+            },
+        ),
+        (
             {
                 "op": "and",
                 "0_field": "description",
@@ -56,6 +78,7 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data, update
                 "0_0_val:str": "some value",
                 "1_field": "location",
                 "1_op": "contains",
+                "1_invert": "on",
                 "1_val:str": "other value",
             },
             {
@@ -80,6 +103,7 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data, update
                         "field": "location",
                         "operator": "contains",
                         "value": "other value",
+                        "invert": True,
                     },
                 ],
             },
@@ -101,6 +125,27 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data, update
                         "operator": "contains",
                         "value": "",
                     }
+                ],
+            },
+        ),
+        (
+            {
+                "op": "none",
+                "0_field": "location",
+                "0_op": "contains",
+                "0_val:str": "other value",
+            },
+            {
+                "version": "v1",
+                "type": "group",
+                "operator": "none",
+                "items": [
+                    {
+                        "type": "rule",
+                        "field": "location",
+                        "operator": "contains",
+                        "value": "other value",
+                    },
                 ],
             },
         ),

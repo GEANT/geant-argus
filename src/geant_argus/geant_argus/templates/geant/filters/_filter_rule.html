@@ -1,24 +1,32 @@
 {% load template_utils %}
 {% if rule.field in model.fields_by_name %}
   {% with field=model.fields_by_name|get_item:rule.field %}
-    <div class="rule-atom">
+    <div class="flex items-center gap-1 rule-atom">
       {% include "./_filter_selector.html" with key="field" selected=rule.field %}
-      <select name="{{ prefix }}op"
-              class="select select-bordered max-w-xs"
-              autocomplete="off"
-              hx-post="{{ edit_url|default:request.path }}"
-              hx-include="#filter_edit_root"
-              hx-trigger="change"
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-              hx-target="#filter_edit_root">
-        {% for op in field.operators %}
-          <option value="{{ op.name }}"
-                  {% if rule.operator == op.name %}selected{% endif %}>{{ op.display_name }}</option>
-        {% endfor %}
-      </select>
+      {% if field.invertable %}
+        {% include "./_filter_invert_checkbox.html" with invert=rule.invert %}
+      {% endif %}
       {% with operator=field.operators_by_name|get_item:rule.operator %}
-        {% include operator.template with prefix=prefix rule=rule operator=operator %}
-        {% include "./_filter_item_buttons.html" with is_root=is_root is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
+        {% if operator %}
+          <select name="{{ prefix }}op"
+                  class="select select-bordered max-w-xs"
+                  autocomplete="off"
+                  hx-post="{{ edit_url|default:request.path }}"
+                  hx-include="#filter_edit_root"
+                  hx-trigger="change"
+                  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                  hx-target="#filter_edit_root"
+                  hx-indicator="#filter-form ~ .htmx-indicator">
+            {% for op in field.operators %}
+              <option value="{{ op.name }}"
+                      {% if operator.name == op.name %}selected{% endif %}>{{ op.display_name }}</option>
+            {% endfor %}
+          </select>
+          {% include operator.template with prefix=prefix rule=rule operator=operator %}
+          {% include "./_filter_item_buttons.html" with is_root=is_root is_top=is_top is_bottom=is_bottom can_delete=can_delete prefix=prefix %}
+        {% else %}
+          <div>invalid data</div>
+        {% endif %}
       {% endwith %}
     </div>
   {% endwith %}
