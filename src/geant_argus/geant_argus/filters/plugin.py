@@ -73,20 +73,27 @@ class IncidentFilterForm(forms.Form):
         choices=[("active", "Active"), ("clear", "Clear"), ("closed", "Closed")],
         widget=DaisyCheckboxSelectMultiple,
     )
+
+    alarm_id = forms.CharField(
+        label="Alarm ID",
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "max-w-32"}),
+    )
+    min_severity = forms.ChoiceField(
+        required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
+    )
+    newest_first = forms.BooleanField(required=False)
+    short_lived = forms.BooleanField(required=False)
     description = forms.CharField(max_length=255, required=False)
     description.in_header = True
     location = forms.CharField(max_length=255, required=False)
     location.in_header = True
     equipment = forms.CharField(max_length=255, required=False)
     equipment.in_header = True
-    min_severity = forms.ChoiceField(
-        required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
-    )
-    newest_first = forms.BooleanField(required=False)
-    short_lived = forms.BooleanField(required=False)
-
     field_order = [
         "status",
+        "alarm_id",
         "filter_pk",
         "min_severity",
         "newest_first",
@@ -102,6 +109,7 @@ class IncidentFilterForm(forms.Form):
                 ("", "------"),
                 *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
             ],
+            widget=forms.Select(attrs={"class": "max-w-52"}),
         )
         self.order_fields(self.field_order)
 
@@ -116,6 +124,7 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_field(queryset, "location", "metadata__location__icontains")
         queryset = self._filter_by_field(queryset, "equipment", "metadata__equipment__icontains")
         queryset = self._filter_by_field(queryset, "min_severity", "level__lte")
+        queryset = self._filter_by_field(queryset, "alarm_id", "source_incident_id")
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
