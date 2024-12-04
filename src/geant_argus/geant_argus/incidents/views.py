@@ -16,13 +16,6 @@ class EmptyStringAllowedCharField(forms.CharField):
     empty_values = (None,)  # empty string '' should not be considered an empty value
 
 
-@require_POST
-def acknowledge_incident(request: HtmxHttpRequest, pk: int):
-    incident = get_object_or_404(Incident, id=pk)
-    incident.create_ack(request.user, description="Acknowledged using the UI")
-    return refresh(request, "htmx:incident-list")
-
-
 class UpdateIncidentForm(forms.Form):
     comment = EmptyStringAllowedCharField(max_length=255, empty_value=None, required=False)
     ticket_ref = EmptyStringAllowedCharField(max_length=75, empty_value=None, required=False)
