@@ -135,12 +135,14 @@ INCIDENT_TABLE_COLUMNS = [
         label="Location",
         cell_template="htmx/incidents/_incident_location_equipment.html",
         context={"field": "location"},
+        filter_field="location",
     ),
     IncidentTableColumn(
         "equipment",
         label="Equipment",
         cell_template="htmx/incidents/_incident_location_equipment.html",
         context={"field": "equipment"},
+        filter_field="equipment",
     ),
     IncidentTableColumn(
         "description",
