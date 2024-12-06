@@ -4,9 +4,10 @@ import json
 from argus.incident.models import Incident
 from django import template
 from django.conf import settings
+from django.http import HttpRequest
 from django.template.defaultfilters import stringfilter
 from django.utils import timezone
-
+from argus.auth.utils import get_preference
 from ..incidents.severity import IncidentSeverity
 from .template_utils import dateparse, get_item
 
@@ -150,3 +151,12 @@ def get_quick_glance_item(obj, item):
         return " - ".join(str(v) for v in value)
 
     return value
+
+
+@register.filter
+def get_aural_alert(request: HttpRequest):
+    if get_preference(request, "geant_argus", "aural_alert") == "off":
+        return None
+    if request.session.get("geant.new_pending_incidents"):
+        return "alert"
+    return None
