@@ -1,7 +1,9 @@
 {% load static %}
+{% load incident_extras %}
 {% comment %} audio may play twice on a htmx reload. So after initial load, we remove the audio
 to prevent replaying
 {% endcomment %}
 <audio autoplay _="on load wait 3s then remove me">
-  <source src="{% static 'alerts/{{ aural_alert }}.mp3' %}" type="audio/mpeg">
+  <source src="{% static aural_alert|aural_alert_staticfile %}"
+          type="audio/mpeg">
 </audio>

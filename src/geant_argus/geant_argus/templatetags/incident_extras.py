@@ -160,3 +160,8 @@ def get_aural_alert(request: HttpRequest):
     if request.session.get("geant.new_pending_incidents"):
         return "alert"
     return None
+
+
+@register.filter
+def aural_alert_staticfile(name: str):
+    return f"alerts/{name}.mp3"
