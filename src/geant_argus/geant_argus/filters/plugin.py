@@ -86,6 +86,11 @@ class IncidentFilterForm(forms.Form):
         widget=DaisyCheckboxSelectMultiple,
     )
     description = forms.CharField(max_length=255, required=False)
+    description.in_header = True
+    location = forms.CharField(max_length=255, required=False)
+    location.in_header = True
+    equipment = forms.CharField(max_length=255, required=False)
+    equipment.in_header = True
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
@@ -94,7 +99,6 @@ class IncidentFilterForm(forms.Form):
 
     field_order = [
         "status",
-        "description",
         "filter_pk",
         "min_severity",
         "newest_first",
@@ -120,9 +124,11 @@ class IncidentFilterForm(forms.Form):
         queryset = self._annotate_acks(queryset)
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_status(queryset)
+        queryset = self._filter_by_field(queryset, "description", "description__icontains")
+        queryset = self._filter_by_field(queryset, "location", "metadata__location__icontains")
+        queryset = self._filter_by_field(queryset, "equipment", "metadata__equipment__icontains")
+        queryset = self._filter_by_field(queryset, "min_severity", "level__lte")
         queryset = self._filter_by_short_lived(queryset)
-        queryset = self._filter_by_description(queryset)
-        queryset = self._filter_by_severity(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
 
@@ -144,20 +150,15 @@ class IncidentFilterForm(forms.Form):
             return queryset
         return queryset.filter(metadata__status__in=status)
 
+    def _filter_by_field(self, queryset, form_field, filter_kwarg):
+        if not (value := self.cleaned_data.get(form_field)):
+            return queryset
+        return queryset.filter(**{filter_kwarg: value})
+
     def _filter_by_short_lived(self, queryset):
         if self.cleaned_data.get("short_lived"):
             return queryset.filter(metadata__short_lived=True)
         return queryset
-
-    def _filter_by_description(self, queryset):
-        if not (description := self.cleaned_data.get("description")):
-            return queryset
-        return queryset.filter(description__icontains=description)
-
-    def _filter_by_severity(self, queryset):
-        if not (level := self.cleaned_data.get("min_severity")):
-            return queryset
-        return queryset.filter(level__lte=level)
 
     def _annotate_acks(self, queryset):
         return queryset.annotate(
