@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+from django.http import HttpRequest
 import jsonschema
 from argus.filter.default import (  # noqa: F401
     INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
@@ -16,7 +17,7 @@ from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
-
+from argus.incident.models import IncidentQuerySet
 from .filters import FILTER_MODEL
 from .schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
@@ -57,10 +58,21 @@ class GeantFilterBackend(BaseFilterBackend):
             request.GET
             or {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value},
         )
+        queryset = form.filter_queryset(queryset)
+        self._update_session(request, queryset)
         return form, form.filter_queryset(queryset)
 
     def filter_queryset(self, request, queryset, view=None):
         return IncidentFilterForm(request.GET or None).filter_queryset(queryset)
+
+    @staticmethod
+    def _update_session(request: HttpRequest, queryset: IncidentQuerySet):
+        pending = set(
+            incident.id for incident in queryset.open().filter(metadata__phase="PENDING").all()
+        )
+        old_pending = set(request.session.get("geant.pending_incidents", []))
+        request.session["geant.pending_incidents"] = list(pending)
+        request.session["geant.new_pending_incidents"] = list(pending - old_pending)
 
 
 class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
@@ -73,16 +85,33 @@ class IncidentFilterForm(forms.Form):
         choices=[("active", "Active"), ("clear", "Clear"), ("closed", "Closed")],
         widget=DaisyCheckboxSelectMultiple,
     )
+
+    alarm_id = forms.CharField(
+        label="Alarm ID",
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "max-w-32"}),
+    )
     description = forms.CharField(max_length=255, required=False)
+    description.in_header = True
+    location = forms.CharField(max_length=255, required=False)
+    location.in_header = True
+    equipment = forms.CharField(max_length=255, required=False)
+    equipment.in_header = True
     min_severity = forms.ChoiceField(
         required=False, choices=[(s.value, s.name) for s in IncidentSeverity]
     )
     newest_first = forms.BooleanField(required=False)
     short_lived = forms.BooleanField(required=False)
-
+    description = forms.CharField(max_length=255, required=False)
+    description.in_header = True
+    location = forms.CharField(max_length=255, required=False)
+    location.in_header = True
+    equipment = forms.CharField(max_length=255, required=False)
+    equipment.in_header = True
     field_order = [
         "status",
-        "description",
+        "alarm_id",
         "filter_pk",
         "min_severity",
         "newest_first",
@@ -98,6 +127,7 @@ class IncidentFilterForm(forms.Form):
                 ("", "------"),
                 *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
             ],
+            widget=forms.Select(attrs={"class": "max-w-52"}),
         )
         self.order_fields(self.field_order)
 
@@ -108,9 +138,12 @@ class IncidentFilterForm(forms.Form):
         queryset = self._annotate_acks(queryset)
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_status(queryset)
+        queryset = self._filter_by_field(queryset, "description", "description__icontains")
+        queryset = self._filter_by_field(queryset, "location", "metadata__location__icontains")
+        queryset = self._filter_by_field(queryset, "equipment", "metadata__equipment__icontains")
+        queryset = self._filter_by_field(queryset, "min_severity", "level__lte")
+        queryset = self._filter_by_field(queryset, "alarm_id", "source_incident_id")
         queryset = self._filter_by_short_lived(queryset)
-        queryset = self._filter_by_description(queryset)
-        queryset = self._filter_by_severity(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
 
@@ -132,20 +165,15 @@ class IncidentFilterForm(forms.Form):
             return queryset
         return queryset.filter(metadata__status__in=status)
 
+    def _filter_by_field(self, queryset, form_field, filter_kwarg):
+        if not (value := self.cleaned_data.get(form_field)):
+            return queryset
+        return queryset.filter(**{filter_kwarg: value})
+
     def _filter_by_short_lived(self, queryset):
         if self.cleaned_data.get("short_lived"):
             return queryset.filter(metadata__short_lived=True)
         return queryset
-
-    def _filter_by_description(self, queryset):
-        if not (description := self.cleaned_data.get("description")):
-            return queryset
-        return queryset.filter(description__icontains=description)
-
-    def _filter_by_severity(self, queryset):
-        if not (level := self.cleaned_data.get("min_severity")):
-            return queryset
-        return queryset.filter(level__lte=level)
 
     def _annotate_acks(self, queryset):
         return queryset.annotate(

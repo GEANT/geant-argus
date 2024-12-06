@@ -102,7 +102,7 @@ DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", 
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
     [
         "geant_argus.geant_argus.context_processors.geant_theme",
-        "argus.auth.context_processors.preferences",
+        "django.template.context_processors.request",
     ]
 )
 
@@ -135,17 +135,20 @@ INCIDENT_TABLE_COLUMNS = [
         label="Location",
         cell_template="htmx/incidents/_incident_location_equipment.html",
         context={"field": "location"},
+        filter_field="location",
     ),
     IncidentTableColumn(
         "equipment",
         label="Equipment",
         cell_template="htmx/incidents/_incident_location_equipment.html",
         context={"field": "equipment"},
+        filter_field="equipment",
     ),
     IncidentTableColumn(
         "description",
         label="Description",
         cell_template="htmx/incidents/_incident_description.html",
+        filter_field="description",
     ),
     IncidentTableColumn(
         "ticket_ref",

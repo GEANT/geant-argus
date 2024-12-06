@@ -1,0 +1,10 @@
+{% load incident_extras %}
+{% block table %}
+{% endblock table %}
+{% with aural_alert=request|get_aural_alert %}
+  <div hx-swap-oob="innerHTML:#aural-alert">
+    {% if aural_alert %}
+      {% include "./_aural_alert.html" %}
+    {% endif %}
+  </div>
+{% endwith %}
