@@ -1,0 +1,24 @@
+<details>
+  <summary>
+    Aural Alert
+    <span class="badge badge-primary">{{ preferences.geant_argus.aural_alert }}</span>
+  </summary>
+  <ul class="max-hs-64 overflow-y-scroll">
+    {% for item in aural_alerts %}
+      <li>
+        <input type="radio"
+               class="btn btn-sm btn-block btn-ghost justify-start"
+               value="{{ item }}"
+               aria-label="{{ item }}"
+               name="aural_alert"
+               hx-post="{% url 'geant_argus:change-aural-alert' %}"
+               hx-trigger="change"
+               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' />
+      </li>
+    {% empty %}
+      <li>
+        <p>No aural alerts supported</p>
+      </li>
+    {% endfor %}
+  </ul>
+</details>

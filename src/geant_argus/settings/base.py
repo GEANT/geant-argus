@@ -102,7 +102,7 @@ DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", 
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
     [
         "geant_argus.geant_argus.context_processors.geant_theme",
-        "argus.auth.context_processors.preferences",
+        "django.template.context_processors.request",
     ]
 )
 

@@ -2,6 +2,7 @@ from django.conf import settings
 import requests
 
 UPDATE_ALARM_URL = "/alarms/{}"
+ACK_ALARM_URL = "/alarms/{}/ack"
 CLOSE_ALARM_URL = "/alarms/{}/close"
 CLEAR_ALARM_URL = "/alarms/{}/clear"
 
@@ -15,6 +16,10 @@ def api_url():
 
 def update_alarm(alarm_id, payload):
     return _succeed_request("PATCH", api_url() + UPDATE_ALARM_URL.format(alarm_id), json=payload)
+
+
+def ack_alarm(alarm_id):
+    return _succeed_request("POST", api_url() + ACK_ALARM_URL.format(alarm_id))
 
 
 def close_alarm(alarm_id):
