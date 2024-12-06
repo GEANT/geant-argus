@@ -68,14 +68,11 @@ class GeantFilterBackend(BaseFilterBackend):
     @staticmethod
     def _update_session(request: HttpRequest, queryset: IncidentQuerySet):
         pending = set(
-            incident.id
-            for incident in queryset.all()
-            if incident.metadata.get("phase") == "PENDING"
+            incident.id for incident in queryset.open().filter(metadata__phase="PENDING").all()
         )
         old_pending = set(request.session.get("geant.pending_incidents", []))
         request.session["geant.pending_incidents"] = list(pending)
         request.session["geant.new_pending_incidents"] = list(pending - old_pending)
-        print(pending, old_pending, pending - old_pending)
 
 
 class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
