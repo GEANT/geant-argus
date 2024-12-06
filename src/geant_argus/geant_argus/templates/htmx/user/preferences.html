@@ -1,0 +1,5 @@
+{% extends "htmx/user/preferences.html" %}
+{% block preferences %}
+  {{ block.super }}
+  <li>{% include "./_aural_alert_dropdown.html" %}</li>
+{% endblock preferences %}

@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+from django.http import HttpRequest
 import jsonschema
 from argus.filter.default import (  # noqa: F401
     INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
@@ -16,7 +17,7 @@ from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
-
+from argus.incident.models import IncidentQuerySet
 from .filters import FILTER_MODEL
 from .schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
@@ -57,10 +58,24 @@ class GeantFilterBackend(BaseFilterBackend):
             request.GET
             or {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value},
         )
+        queryset = form.filter_queryset(queryset)
+        self._update_session(request, queryset)
         return form, form.filter_queryset(queryset)
 
     def filter_queryset(self, request, queryset, view=None):
         return IncidentFilterForm(request.GET or None).filter_queryset(queryset)
+
+    @staticmethod
+    def _update_session(request: HttpRequest, queryset: IncidentQuerySet):
+        pending = set(
+            incident.id
+            for incident in queryset.all()
+            if incident.metadata.get("phase") == "PENDING"
+        )
+        old_pending = set(request.session.get("geant.pending_incidents", []))
+        request.session["geant.pending_incidents"] = list(pending)
+        request.session["geant.new_pending_incidents"] = list(pending - old_pending)
+        print(pending, old_pending, pending - old_pending)
 
 
 class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):

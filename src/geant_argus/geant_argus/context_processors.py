@@ -21,7 +21,6 @@ INCIDENT_DETAILS_COMMON_COLUMNS = [
 def geant_theme(request):
     """Additional context variables specific to Geant"""
     return {
-        "path_to_stylesheet": getattr(settings, "STYLESHEET_PATH", "geant.css"),
         "logo": {
             "file": "logo_white.png",
             "alt": "geant-argus",
@@ -124,4 +123,5 @@ def geant_theme(request):
                 "cell_template": "htmx/incidents/_boolean_cell.html",
             },
         ],
+        "aural_alerts": ["on", "off"],
     }
