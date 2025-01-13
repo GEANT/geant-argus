@@ -3,7 +3,7 @@ import datetime
 import functools
 import itertools
 import operator
-from typing import Union
+from typing import Type, Union
 
 from django.db.models import JSONField, Q, QuerySet, Value
 
@@ -11,6 +11,7 @@ from django.db.models import JSONField, Q, QuerySet, Value
 @dataclasses.dataclass
 class DBField:
     name: str
+    type: Union[Type[str], Type[bool]] = str
     is_json: bool = False
 
     def __str__(self):
@@ -85,8 +86,10 @@ class ExistsOperator(Operator):
         if op != "exists":
             return None
         is_null = self.is_json_null(db_field)
-
-        return ~(is_null | Q(**{str(db_field): ""}))
+        if db_field.type == str:
+            return ~(is_null | Q(**{str(db_field): ""}))
+        else:
+            return ~(is_null | Q(**{str(db_field): False}))
 
 
 class DateTimeOperator(Operator):
@@ -330,7 +333,7 @@ FILTER_MODEL = ComplexFilter(
             operators=[
                 ExistsOperator("exists"),
             ],
-            db_fields=["ack"],
+            db_fields=[DBField("ack", type=bool)],
             invertable=True,
         ),
         FilterField(
