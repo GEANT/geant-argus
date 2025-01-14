@@ -6,7 +6,7 @@
     {% include "./_filter_item_buttons.html" with can_delete=can_delete is_top=is_top is_bottom=is_bottom prefix=prefix %}
   {% endif %}
 </div>
-<div class="rule-operands mb-1 mt-2">
+<div class="rule-operands pl-5 pb-2 border-l border-primary/50">
   {% for item in group.items %}
     {% include "./_filter_item.html" with filter_dict=item is_root=False is_top=forloop.first is_bottom=forloop.last prefix=prefix|concat_underscore:forloop.counter0 can_delete=group.items|is_multiple %}
   {% endfor %}
