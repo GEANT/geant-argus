@@ -52,10 +52,10 @@ def render_edit_filter(request, template, pk: Optional[int] = None, context=None
     context = context or {}
     if pk:
         filter = get_object_or_404(Filter, pk=pk)
-        filter_dict = filter.filter
+        filter_dict = FILTER_MODEL.upgrade_simple_filter(filter.filter)
     else:
         filter = None
-        filter_dict = FILTER_MODEL.default_rule()
+        filter_dict = FILTER_MODEL.default_group()
     context = {
         **default_context(),
         "filter_dict": filter_dict,

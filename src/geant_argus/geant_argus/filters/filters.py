@@ -287,6 +287,15 @@ class ComplexFilter:
             result = ~result
         return result
 
+    # --------- End Filter to Queryset Methods -------------
+
+    def upgrade_simple_filter(self, filter_dict: dict, operator="or"):
+        if filter_dict["type"] == "group":
+            return filter_dict
+        copy = filter_dict.copy()
+        copy.pop("version", None)
+        return self.default_group(operator=operator, items=[copy])
+
 
 FILTER_MODEL = ComplexFilter(
     fields=[
