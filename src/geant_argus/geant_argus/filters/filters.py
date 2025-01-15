@@ -228,9 +228,6 @@ class ComplexFilter:
         items = items or [self.default_rule()]
         return {"type": "group", "operator": operator, "items": items}
 
-    def with_version(self, filter_dict: dict):
-        return {"version": self.version, **filter_dict}
-
     def parse_form_data(self, form_data: dict) -> dict:
         return self.with_version(self._parse_formdata_helper(form_data, prefix=""))
 
@@ -295,6 +292,47 @@ class ComplexFilter:
         copy = filter_dict.copy()
         copy.pop("version", None)
         return self.default_group(operator=operator, items=[copy])
+
+    @classmethod
+    def with_version(cls, filter_dict: dict):
+        return {"version": cls.version, **filter_dict}
+
+
+def filter_to_text(filter_dict):
+    def _dispatch(filter_dict):
+        if filter_dict["type"] == "rule":
+            return _handle_rule(filter_dict)
+        if filter_dict["type"] == "group":
+            return _handle_group(filter_dict)
+        return ""
+
+    def _handle_rule(filter_dict):
+        field, op = filter_dict["field"].upper(), filter_dict["operator"]
+        match op:
+            case "exists":
+                return f"{field} {op}"
+            case "before_abs":
+                return f"{field} before {filter_dict['value']}"
+            case "after_abs":
+                return f"{field} after {filter_dict['value']}"
+            case "before_rel":
+                return f"{field} before {filter_dict['value']} {filter_dict['unit']} ago"
+            case "after_rel":
+                return f"{field} after {filter_dict['value']} {filter_dict['unit']} ago"
+            case _:
+                return f"{field} {op} '{filter_dict['value']}'"
+        return
+
+    def _handle_group(filter_dict):
+        op = filter_dict["operator"].upper()
+        item_texts = [_dispatch(item) for item in filter_dict["items"]]
+        if len(item_texts) == 0:
+            return ""
+        if len(item_texts) == 1:
+            return item_texts[0]
+        return f"({f' {op} '.join(item_texts)})"
+
+    return _dispatch(filter_dict)
 
 
 FILTER_MODEL = ComplexFilter(
