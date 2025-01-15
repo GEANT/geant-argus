@@ -8,10 +8,7 @@
              value="{{ filter.name|default:name }}" />
       {% if errors.name %}<div class="text-xs text-error">{{ errors.name }}</div>{% endif %}
     </label>
-    <div id="filter_edit_root"
-         class="border border-primary rounded-lg my-2 pb-2">
-      {% include "./_filter_item.html" with is_top=True is_bottom=True is_root=True %}
-    </div>
+    <div id="filter_edit_root">{% include "./_filter_root.html" %}</div>
     {% csrf_token %}
   </form>
   <div class="htmx-indicator loading loading-spinner loading-lg text-primary"></div>

@@ -18,6 +18,16 @@ from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
         (
             {
                 "type": "rule",
+                "field": "description",
+                "operator": "contains",
+                "value": "a",
+                "invert": True,
+            },
+            "DESCRIPTION NOT contains 'a'",
+        ),
+        (
+            {
+                "type": "rule",
                 "field": "start_time",
                 "operator": "before_abs",
                 "value": "2025-01-01",
@@ -75,6 +85,21 @@ from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
         (
             {
                 "type": "group",
+                "operator": "none",
+                "items": [
+                    {
+                        "type": "rule",
+                        "field": "description",
+                        "operator": "contains",
+                        "value": "something",
+                    }
+                ],
+            },
+            "NOT (DESCRIPTION contains 'something')",
+        ),
+        (
+            {
+                "type": "group",
                 "operator": "and",
                 "items": [
                     {
@@ -87,6 +112,22 @@ from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
                 ],
             },
             "(DESCRIPTION contains 'something' AND ACK exists)",
+        ),
+        (
+            {
+                "type": "group",
+                "operator": "none",
+                "items": [
+                    {
+                        "type": "rule",
+                        "field": "description",
+                        "operator": "contains",
+                        "value": "something",
+                    },
+                    {"type": "rule", "field": "ack", "operator": "exists", "value": True},
+                ],
+            },
+            "NOT (DESCRIPTION contains 'something' OR ACK exists)",
         ),
         (
             {

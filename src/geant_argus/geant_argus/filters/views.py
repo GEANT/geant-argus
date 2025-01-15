@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAll
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-from .filters import FILTER_MODEL
+from .filters import FILTER_MODEL, filter_to_text
 
 PER_PAGE = 20
 
@@ -66,6 +66,13 @@ def render_edit_filter(request, template, pk: Optional[int] = None, context=None
     return render(request, template, context=context)
 
 
+@require_POST
+def get_filter_text(request):
+    filter_dict = parse_filter_form_data(request.POST)
+    filter_text = filter_to_text(filter_dict)
+    return HttpResponse(filter_text)
+
+
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
 def edit_filter(request, pk: Optional[int] = None):
     if request.method == "GET":
@@ -86,7 +93,7 @@ def edit_filter(request, pk: Optional[int] = None):
             "filter_dict": filter_dict,
             "is_root": True,
         }
-        return render(request, "geant/filters/_filter_item.html", context=context)
+        return render(request, "geant/filters/_filter_root.html", context=context)
 
     if request.method == "DELETE":
         if not pk:
