@@ -8,6 +8,14 @@
   }
   .filter-row:not(.filter-row-selected) {
     @apply hover;
+  }
+}
 
+@layer utilities {
+  .condensed .condensed\:hidden {
+    @apply hidden;
+  }
+  .condensed {
+    @apply lg:w-1/2;
   }
 }
