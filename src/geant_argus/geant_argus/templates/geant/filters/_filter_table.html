@@ -1,7 +1,9 @@
+{% load filter_extras %}
 <table class="table border border-separate border-primary border-spacing-0">
   <thead>
     <tr class="border-b border-primary">
       <th class="border-b border-primary">Name</th>
+      <th class="border-b border-primary hidden lg:block condensed:hidden">Description</th>
       <th class="border-b border-primary">User</th>
       <th class="border-b border-primary w-20">Actions</th>
     </tr>
@@ -11,14 +13,30 @@
       {% for object in page.object_list %}
         {% block object %}
           <tr id="obj-{{ object.pk }}-row"
-              class="filter-row cursor-pointer"
-              hx-get="{% url 'geant-filters:edit-filter' object.pk %}"
-              hx-target="#filter-edit"
-              _="on click remove  .filter-row-selected from <#table-body > tr/> add .filter-row-selected to me">
+            class="filter-row cursor-pointer"
+            hx-trigger="click[!currentTarget.classList.contains('filter-row-selected')]"
+            hx-get="{% url 'geant-filters:edit-filter' object.pk %}"
+            hx-target="#filter-edit"
+            {# djlint:off #}
+            _="on click
+                 if I match .filter-row-selected then
+                   remove .filter-row-selected from me
+                   remove <#filter-edit > */>
+                 else
+                   remove .filter-row-selected from <#table-body > tr/>
+                   add .filter-row-selected to me
+                 end">
+            {# djlint:on #}
             <td>{{ object.name }}</td>
+            <td class="hidden lg:block condensed:hidden">{{ object.filter|filter_to_text }}</td>
             <td>{{ object.user.username }}</td>
             <td>
               <div class="flex w-full justify-center">
+                <button type="button"
+                        class="btn btn-xs btn-primary btn-outline"
+                        hx-post="{% url 'geant-filters:run-filter' object.pk %}"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                        _="on click halt">Run</button>
                 <button type="button"
                         class="btn btn-xs btn-error btn-outline"
                         hx-delete="{% url 'geant-filters:edit-filter' object.pk %}"
@@ -31,14 +49,14 @@
         {% endblock object %}
       {% empty %}
         <tr>
-          <td colspan="2">No items on this page.</td>
+          <td colspan="4">No items on this page.</td>
         </tr>
       {% endfor %}
     {% endblock incident_rows %}
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="{{ column_count }}" class="border-t border-primary">
+      <td colspan="4" class="border-t border-primary">
         <div class="flex justify-between items-center">
           <div class="join h-13">
             <dl class="join-item stats stats-horizontal shadow leading-none overflow-x-auto font-medium bg-neutral text-neutral-content">

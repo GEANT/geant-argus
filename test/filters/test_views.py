@@ -149,6 +149,20 @@ from geant_argus.geant_argus.filters.views import parse_filter_form_data, update
                 ],
             },
         ),
+        (
+            {
+                "op": "is",
+                "field": "short_lived",
+                "val:bool": "true",
+            },
+            {
+                "version": "v1",
+                "type": "rule",
+                "operator": "is",
+                "value": True,
+                "field": "short_lived",
+            },
+        ),
     ],
 )
 def test_parse_filter_form_data(form_data, expected):

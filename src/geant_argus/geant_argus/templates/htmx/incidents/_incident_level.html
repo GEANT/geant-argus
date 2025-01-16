@@ -1,12 +1,18 @@
 {% load incident_extras %}
 {% with blacklist=incident.metadata.blacklist %}
-  <div class="w-20 flex flex-row gap-x-1 items-center">
-    <span class="badge {{ incident|incidentlevelbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
-      {{ incident.level|to_severity }}
-    </span>
+  <div class="w-20">
     {% if blacklist.applied %}
-      <span class="text-lg cursor-default font-bold text-primary"
-            title="Original severity: {{ blacklist.original_severity }}&#010;Reason: {{ blacklist.message }}">{{ incident |blacklist_symbol }}</span>
+      <div class="w-20 flex flex-row items-center -ml-[6px]">
+        <div class="border-2 border-incident-{{ incident.metadata.blacklist.original_severity|lower }} rounded-2xl flex flex-row items-center px-1 gap-x-1"
+             title="Original severity: {{ blacklist.original_severity }}&#010;Reason: {{ blacklist.message }}">
+        {% endif %}
+        <div class="badge {{ incident|incidentlevelbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
+          {{ incident.level|to_severity }}
+        </div>
+        {% if blacklist.applied %}
+          <div class="text-lg cursor-default font-bold text-primary">{{ incident | blacklist_symbol }}</div>
+        </div>
+      </div>
     {% endif %}
   </div>
 {% endwith %}

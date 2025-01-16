@@ -8,6 +8,15 @@
   }
   .filter-row:not(.filter-row-selected) {
     @apply hover;
+  }
+}
 
+@layer utilities {
+  .condensing:has(+ * > *) .condensed\:hidden {
+    @apply hidden;
+  }
+  .condensing:has(+ * > *) {
+    @apply lg:w-1/2;
+    @apply shrink-0;
   }
 }

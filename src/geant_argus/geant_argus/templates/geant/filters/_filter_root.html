@@ -1,0 +1,8 @@
+{% load filter_extras %}
+<div hx-trigger="change from:#filter_edit_root, input from:#filter_edit_root delay:300ms"
+     hx-post="{% url 'geant-filters:filter-text' %}"
+     hx-include="#filter_edit_root"
+     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>{{ filter_dict|filter_to_text }}</div>
+<div class="border border-primary rounded-lg my-2 pb-2">
+  {% include "./_filter_item.html" with is_top=True is_bottom=True is_root=True %}
+</div>
