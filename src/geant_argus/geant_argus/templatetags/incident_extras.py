@@ -49,14 +49,6 @@ def level_to_badge(level: int, is_open=True):
     return " ".join(classes)
 
 
-@register.filter(name="incidentblacklistcolor")
-def incident_blacklist_color(incident: Incident):
-    severity = incident.metadata.get("blacklist", {}).get("original_severity", "").lower()
-    if severity in {"critical", "major", "minor"}:
-        return severity
-    return "default"
-
-
 def _incident_status(incident: Incident):
     if incident.open:
         return upperfirst(incident.metadata.get("status", "Active"))
