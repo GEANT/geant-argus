@@ -1,13 +1,16 @@
 import re
 from typing import Optional
 
-from geant_argus.blacklist.models import Filter
 from argus.incident.models import User
 from django.core.paginator import Paginator
+from django.db.models import Exists, OuterRef
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
+
+from geant_argus.blacklist.models import Blacklist, Filter
+
 from .filters import FILTER_MODEL, filter_to_text
 
 PER_PAGE = 20
@@ -20,8 +23,11 @@ def get_all_filters():
 @require_GET
 def list_filters(request):
     # Load incidents
-    qs = get_all_filters().order_by("name")
-
+    qs = (
+        get_all_filters()
+        .filter(~Exists(Blacklist.objects.filter(filter=OuterRef("pk"))))
+        .order_by("name")
+    )
     # Standard Django pagination
     page_num = request.GET.get("page", "1")
     page = Paginator(object_list=qs, per_page=PER_PAGE).get_page(page_num)
