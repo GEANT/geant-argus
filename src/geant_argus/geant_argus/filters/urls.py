@@ -10,4 +10,5 @@ urlpatterns = [
     path("new/save/", views.save_filter, name="save-new-filter"),
     path("<int:pk>/", views.edit_filter, name="edit-filter"),
     path("<int:pk>/save/", views.save_filter, name="save-filter"),
+    path("filter-text/", views.get_filter_text, name="filter-text"),
 ]
