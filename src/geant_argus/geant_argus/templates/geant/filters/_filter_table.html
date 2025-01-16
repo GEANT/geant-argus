@@ -33,6 +33,11 @@
             <td>
               <div class="flex w-full justify-center">
                 <button type="button"
+                        class="btn btn-xs btn-primary btn-outline"
+                        hx-post="{% url 'geant-filters:run-filter' object.pk %}"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                        _="on click halt">Run</button>
+                <button type="button"
                         class="btn btn-xs btn-error btn-outline"
                         hx-delete="{% url 'geant-filters:edit-filter' object.pk %}"
                         hx-confirm="Are you sure you want to delete filter {{ object.name }}? This will also delete any blacklists based on this filter."

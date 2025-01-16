@@ -53,10 +53,13 @@ class GeantFilterBackend(BaseFilterBackend):
 
         return IncidentFilter
 
+    @staticmethod
+    def default_filter_params():
+        return {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value}
+
     def incident_list_filter(self, request, queryset):
         form = IncidentFilterForm(
-            request.GET
-            or {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value},
+            request.GET or self.default_filter_params(),
         )
         queryset = form.filter_queryset(queryset, request)
         self._update_session(request, queryset)

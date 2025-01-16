@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 from geant_argus.blacklist.models import Blacklist, Filter
+from geant_argus.geant_argus.filters.plugin import GeantFilterBackend
 from geant_argus.geant_argus.view_helpers import redirect
 
 from .filters import FILTER_MODEL, filter_to_text
@@ -119,7 +120,17 @@ def save_filter(request, pk: Optional[int] = None):
 
 
 @require_POST
-def store_temporary_filter(request):
+def run_filter(request, pk=None):
+    if pk is not None:
+        return redirect(
+            request,
+            "htmx:incident-list",
+            params={
+                **GeantFilterBackend.default_filter_params(),
+                "filter_pk": pk,
+            },
+        )
+
     result = parse_filter_form_data(request.POST)
     if result:
         request.session["temporary_filter"] = result
