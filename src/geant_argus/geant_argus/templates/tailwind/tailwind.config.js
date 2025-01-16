@@ -52,7 +52,7 @@ module.exports = {
                 'incident-major': 'rgba(var(--color-incident-major), <alpha-value>)',
                 'incident-minor': 'rgba(var(--color-incident-minor), <alpha-value>)',
                 'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
-                'incident-warning': 'oklch(var(--b1)/<alpha-value>)', // same as base-100
+                'incident-warning': 'var(--fallback-n,oklch(var(--n)))', // neutral
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
             },
             height: {
