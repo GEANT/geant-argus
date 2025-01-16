@@ -13,5 +13,7 @@
   <a class="btn btn-primary join-item h-full"
      href="{{ edit_url|default:request.path }}">Expand</a>
   <button class="btn btn-primary join-item h-full"
-          _="on click remove <#filter-edit > */>">Cancel</button>
+          _="on click remove <#filter-edit > */> remove .filter-row-selected from <.filter-row-selected/>">
+    Cancel
+  </button>
 {% endblock buttons %}

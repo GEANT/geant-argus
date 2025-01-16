@@ -22,11 +22,9 @@
                  if I match .filter-row-selected then
                    remove .filter-row-selected from me
                    remove <#filter-edit > */>
-                   remove .condensed from the closest <section/>
                  else
                    remove .filter-row-selected from <#table-body > tr/>
                    add .filter-row-selected to me
-                   add .condensed to the closest <section/>
                  end">
             {# djlint:on #}
             <td>{{ object.name }}</td>

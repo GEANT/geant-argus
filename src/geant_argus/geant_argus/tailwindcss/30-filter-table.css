@@ -12,10 +12,10 @@
 }
 
 @layer utilities {
-  .condensed .condensed\:hidden {
+  .condensing:has(+ * > *) .condensed\:hidden {
     @apply hidden;
   }
-  .condensed {
+  .condensing:has(+ * > *) {
     @apply lg:w-1/2;
     @apply shrink-0;
   }
