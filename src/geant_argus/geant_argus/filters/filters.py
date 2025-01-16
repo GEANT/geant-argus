@@ -3,7 +3,7 @@ import datetime
 import functools
 import itertools
 import operator
-from typing import Type, Union
+from typing import Optional, Type, Union
 
 from django.db.models import JSONField, Q, QuerySet, Value
 
@@ -231,10 +231,13 @@ class ComplexFilter:
         items = items or [self.default_rule()]
         return {"type": "group", "operator": operator, "items": items}
 
-    def parse_form_data(self, form_data: dict) -> dict:
-        return self.with_version(self._parse_formdata_helper(form_data, prefix=""))
+    def parse_form_data(self, form_data: dict) -> Optional[dict]:
+        result = self._parse_formdata_helper(form_data, prefix="")
+        if not result:
+            return None
+        return self.with_version(result)
 
-    def _parse_formdata_helper(self, form_data: dict, prefix: str) -> dict:
+    def _parse_formdata_helper(self, form_data: dict, prefix: str) -> Optional[dict]:
         if try_field := form_data.get(prefix + "field"):
             if try_field in self.VALID_GROUP_OPERATORS:
                 return self.default_group(operator=try_field)

@@ -8,8 +8,8 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAll
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-
 from geant_argus.blacklist.models import Blacklist, Filter
+from geant_argus.geant_argus.view_helpers import redirect
 
 from .filters import FILTER_MODEL, filter_to_text
 
@@ -116,6 +116,20 @@ def save_filter(request, pk: Optional[int] = None):
         # result may be an error response
         return result
     return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
+
+
+@require_POST
+def store_temporary_filter(request):
+    result = parse_filter_form_data(request.POST)
+    if result:
+        request.session["temporary_filter"] = result
+    return redirect(request, "htmx:incident-list")
+
+
+@require_POST
+def clear_temporary_filter(request):
+    request.session.pop("temporary_filter")
+    return redirect(request, "htmx:incident-list")
 
 
 def save_filter_from_request(request, pk: Optional[int] = None):
