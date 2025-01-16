@@ -16,4 +16,7 @@
           _="on click remove <#filter-edit > */> remove .filter-row-selected from <.filter-row-selected/>">
     Cancel
   </button>
+  <button class="btn btn-secondary join-item h-full"
+          hx-post="{% url 'geant-filters:run-filter' %}"
+          hx-include="#filter-form">Run</button>
 {% endblock buttons %}
