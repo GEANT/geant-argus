@@ -17,5 +17,6 @@
   }
   .condensed {
     @apply lg:w-1/2;
+    @apply shrink-0;
   }
 }
