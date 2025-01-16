@@ -116,6 +116,11 @@ TIME_ZONE = "UTC"
 INCIDENT_TABLE_COLUMNS = [
     "row_select",
     IncidentTableColumn(
+        "level",
+        label="Severity",
+        cell_template="htmx/incidents/_incident_level.html",
+    ),
+    IncidentTableColumn(
         "timestamp",
         label="Start Time (UTC)",
         cell_template="htmx/incidents/_incident_start_time.html",
@@ -124,11 +129,6 @@ INCIDENT_TABLE_COLUMNS = [
         "status",
         label="Status",
         cell_template="htmx/incidents/_incident_status.html",
-    ),
-    IncidentTableColumn(
-        "level",
-        label="Severity",
-        cell_template="htmx/incidents/_incident_level.html",
     ),
     IncidentTableColumn(
         "location",
