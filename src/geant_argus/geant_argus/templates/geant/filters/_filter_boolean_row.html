@@ -1,0 +1,12 @@
+{% extends './_filter_rule_row.html' %}
+{% block operator %}
+  <div class="filter-on-off-button h-12">
+    <input class="opacity-0 cursor-pointer"
+           type="checkbox"
+           name="{{ prefix }}val:bool"
+           value="true"
+           {% if rule.value %}checked{% endif %} />
+    <div class="btn bg-transparent border-1 border-primary text-primary off-opacity-60 btn-sm h-full true-false"></div>
+  </div>
+  <input type="hidden" name="{{ prefix }}op" value="is">
+{% endblock operator %}

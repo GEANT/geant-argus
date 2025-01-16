@@ -64,13 +64,15 @@ class BooleanOperator(Operator):
         return {"value": True}
 
     def parse_formdata(self, form_data: dict, prefix: str):
-        raw = form_data.get(prefix + "val:bool", "true")
+        raw = form_data.get(prefix + "val:bool", "false")
         return {"value": raw == "true"}
 
     def to_sql(self, db_field: DBField, op: str, rule: dict):
+        not_null = ~self.is_json_null(db_field)
+
         if op != "is":
             return None
-        return Q(**{str(db_field): rule["value"]})
+        return not_null & Q(**{str(db_field): rule["value"]})
 
 
 class ExistsOperator(Operator):
@@ -159,6 +161,7 @@ class FilterField:
     operators: list[Operator]
     db_fields: list[Union[str, DBField]]
     invertable: bool = False
+    row_template: str = "geant/filters/_filter_rule_row.html"
 
     def __post_init__(self):
         assert self.db_fields, "db_fields must have at least one item"
@@ -321,6 +324,8 @@ def filter_to_text(filter_dict):
                 return f"{field} {invert}before {filter_dict['value']} {filter_dict['unit']} ago"
             case "after_rel":
                 return f"{field} {invert}after {filter_dict['value']} {filter_dict['unit']} ago"
+            case "is":
+                return f"{field} {invert}{op} {str(filter_dict['value']).upper()}"
             case _:
                 return f"{field} {invert}{op} '{filter_dict['value']}'"
         return
@@ -390,6 +395,15 @@ FILTER_MODEL = ComplexFilter(
             ],
             db_fields=[DBField("ack", type=bool)],
             invertable=True,
+        ),
+        FilterField(
+            "short_lived",
+            "Short Lived",
+            operators=[
+                BooleanOperator("is"),
+            ],
+            db_fields=[DBField("metadata__short_lived", type=bool, is_json=True)],
+            row_template="geant/filters/_filter_boolean_row.html",
         ),
         FilterField(
             "start_time",
