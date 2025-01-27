@@ -53,17 +53,20 @@ class GeantFilterBackend(BaseFilterBackend):
 
         return IncidentFilter
 
+    @staticmethod
+    def default_filter_params():
+        return {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value}
+
     def incident_list_filter(self, request, queryset):
         form = IncidentFilterForm(
-            request.GET
-            or {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value},
+            request.GET or self.default_filter_params(),
         )
-        queryset = form.filter_queryset(queryset)
+        queryset = form.filter_queryset(queryset, request)
         self._update_session(request, queryset)
-        return form, form.filter_queryset(queryset)
+        return form, queryset
 
     def filter_queryset(self, request, queryset, view=None):
-        return IncidentFilterForm(request.GET or None).filter_queryset(queryset)
+        return IncidentFilterForm(request.GET or None).filter_queryset(queryset, request)
 
     @staticmethod
     def _update_session(request: HttpRequest, queryset: IncidentQuerySet):
@@ -131,11 +134,14 @@ class IncidentFilterForm(forms.Form):
         )
         self.order_fields(self.field_order)
 
-    def filter_queryset(self, queryset):
+    def filter_queryset(self, queryset, request):
+        self.request = request
+
         if not self.is_valid():
             return queryset
 
         queryset = self._annotate_acks(queryset)
+        queryset = self._filter_by_session_filter(queryset)
         queryset = self._filter_by_pk(queryset)
         queryset = self._filter_by_status(queryset)
         queryset = self._filter_by_field(queryset, "description", "description__icontains")
@@ -145,6 +151,11 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_field(queryset, "alarm_id", "source_incident_id")
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._order_by_newest_first(queryset)
+        return queryset
+
+    def _filter_by_session_filter(self, queryset):
+        if temp_filter := self.request.session.get("temporary_filter"):
+            return FILTER_MODEL.filter_queryset(queryset, temp_filter)
         return queryset
 
     def _filter_by_pk(self, queryset):

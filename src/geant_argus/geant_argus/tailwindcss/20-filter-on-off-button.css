@@ -1,0 +1,29 @@
+@layer components {
+  .filter-on-off-button {
+    display: grid;
+    grid-template-rows: auto 0fr;
+  }
+  .filter-on-off-button > input[type="checkbox"],
+  .filter-on-off-button > input[type="checkbox"] ~ * {
+    cursor: pointer;
+    grid-column-start: 1;
+    grid-row-start: 1;
+  }
+  .filter-on-off-button > :not(input[type="checkbox"]) {
+    opacity: 20%;
+    pointer-events: none;
+  }
+  .filter-on-off-button > input[type="checkbox"]:not(:checked) ~ .off-opacity-60 {
+    opacity: 60%;
+  }
+  .filter-on-off-button > input[type="checkbox"]:checked ~ * {
+    opacity: 100%;
+    font-weight: bold;
+  }
+  .filter-on-off-button > input[type="checkbox"]:not(:checked) ~ .true-false::after {
+    content: "FALSE";
+  }
+  .filter-on-off-button > input[type="checkbox"]:checked ~ .true-false::after {
+    content: "TRUE";
+  }
+}

@@ -1,4 +1,4 @@
-<div class="mt-2 pt-2 pb-1 pl-2 border-l border-primary border-t border-t-primary/30 rounded-tl-lg">
+<div class="pt-2 pl-2 pr-2">
   {% if filter_dict.type == "rule" and filter_dict.field in model.fields_by_name %}
     {% include "./_filter_rule.html" with prefix=prefix rule=filter_dict is_top=is_top is_bottom=is_bottom is_root=is_root can_delete=can_delete %}
   {% elif filter_dict.type == "group" and filter_dict.operator in model.VALID_GROUP_OPERATORS %}

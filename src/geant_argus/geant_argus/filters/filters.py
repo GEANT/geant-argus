@@ -3,7 +3,7 @@ import datetime
 import functools
 import itertools
 import operator
-from typing import Union
+from typing import Optional, Type, Union
 
 from django.db.models import JSONField, Q, QuerySet, Value
 
@@ -11,6 +11,7 @@ from django.db.models import JSONField, Q, QuerySet, Value
 @dataclasses.dataclass
 class DBField:
     name: str
+    type: Union[Type[str], Type[bool]] = str
     is_json: bool = False
 
     def __str__(self):
@@ -63,13 +64,15 @@ class BooleanOperator(Operator):
         return {"value": True}
 
     def parse_formdata(self, form_data: dict, prefix: str):
-        raw = form_data.get(prefix + "val:bool", "true")
+        raw = form_data.get(prefix + "val:bool", "false")
         return {"value": raw == "true"}
 
     def to_sql(self, db_field: DBField, op: str, rule: dict):
+        not_null = ~self.is_json_null(db_field)
+
         if op != "is":
             return None
-        return Q(**{str(db_field): rule["value"]})
+        return not_null & Q(**{str(db_field): rule["value"]})
 
 
 class ExistsOperator(Operator):
@@ -85,8 +88,10 @@ class ExistsOperator(Operator):
         if op != "exists":
             return None
         is_null = self.is_json_null(db_field)
-
-        return ~(is_null | Q(**{str(db_field): ""}))
+        if db_field.type == str:
+            return ~(is_null | Q(**{str(db_field): ""}))
+        else:
+            return ~(is_null | Q(**{str(db_field): False}))
 
 
 class DateTimeOperator(Operator):
@@ -156,6 +161,7 @@ class FilterField:
     operators: list[Operator]
     db_fields: list[Union[str, DBField]]
     invertable: bool = False
+    row_template: str = "geant/filters/_filter_rule_row.html"
 
     def __post_init__(self):
         assert self.db_fields, "db_fields must have at least one item"
@@ -225,13 +231,13 @@ class ComplexFilter:
         items = items or [self.default_rule()]
         return {"type": "group", "operator": operator, "items": items}
 
-    def with_version(self, filter_dict: dict):
-        return {"version": self.version, **filter_dict}
+    def parse_form_data(self, form_data: dict) -> Optional[dict]:
+        result = self._parse_formdata_helper(form_data, prefix="")
+        if not result:
+            return None
+        return self.with_version(result)
 
-    def parse_form_data(self, form_data: dict) -> dict:
-        return self.with_version(self._parse_formdata_helper(form_data, prefix=""))
-
-    def _parse_formdata_helper(self, form_data: dict, prefix: str) -> dict:
+    def _parse_formdata_helper(self, form_data: dict, prefix: str) -> Optional[dict]:
         if try_field := form_data.get(prefix + "field"):
             if try_field in self.VALID_GROUP_OPERATORS:
                 return self.default_group(operator=try_field)
@@ -284,6 +290,66 @@ class ComplexFilter:
             result = ~result
         return result
 
+    # --------- End Filter to Queryset Methods -------------
+
+    def upgrade_simple_filter(self, filter_dict: dict, operator="or"):
+        if filter_dict["type"] == "group":
+            return filter_dict
+        copy = filter_dict.copy()
+        copy.pop("version", None)
+        return self.default_group(operator=operator, items=[copy])
+
+    @classmethod
+    def with_version(cls, filter_dict: dict):
+        return {"version": cls.version, **filter_dict}
+
+
+def filter_to_text(filter_dict):
+    def _dispatch(filter_dict):
+        if filter_dict["type"] == "rule":
+            return _handle_rule(filter_dict)
+        if filter_dict["type"] == "group":
+            return _handle_group(filter_dict)
+        return ""
+
+    def _handle_rule(filter_dict):
+        field, op = filter_dict["field"].upper(), filter_dict["operator"]
+        invert = "NOT " if filter_dict.get("invert") else ""
+
+        match op:
+            case "exists":
+                return f"{field} {invert}{op}"
+            case "before_abs":
+                return f"{field} {invert}before {filter_dict['value']}"
+            case "after_abs":
+                return f"{field} {invert}after {filter_dict['value']}"
+            case "before_rel":
+                return f"{field} {invert}before {filter_dict['value']} {filter_dict['unit']} ago"
+            case "after_rel":
+                return f"{field} {invert}after {filter_dict['value']} {filter_dict['unit']} ago"
+            case "is":
+                return f"{field} {invert}{op} {str(filter_dict['value']).upper()}"
+            case _:
+                return f"{field} {invert}{op} '{filter_dict['value']}'"
+        return
+
+    def _handle_group(filter_dict):
+        op = filter_dict["operator"].upper()
+        item_texts = [_dispatch(item) for item in filter_dict["items"]]
+
+        invert = ""
+        if op == "NONE":
+            op = "OR"
+            invert = "NOT "
+
+        if len(item_texts) == 0:
+            return ""
+        if not invert and len(item_texts) == 1:
+            return item_texts[0]
+        return f"{invert}({f' {op} '.join(item_texts)})"
+
+    return _dispatch(filter_dict)
+
 
 FILTER_MODEL = ComplexFilter(
     fields=[
@@ -330,8 +396,17 @@ FILTER_MODEL = ComplexFilter(
             operators=[
                 ExistsOperator("exists"),
             ],
-            db_fields=["ack"],
+            db_fields=[DBField("ack", type=bool)],
             invertable=True,
+        ),
+        FilterField(
+            "short_lived",
+            "Short Lived",
+            operators=[
+                BooleanOperator("is"),
+            ],
+            db_fields=[DBField("metadata__short_lived", type=bool, is_json=True)],
+            row_template="geant/filters/_filter_boolean_row.html",
         ),
         FilterField(
             "start_time",

@@ -30,7 +30,7 @@ def get_all_blacklists():
 BLACKLISTS_TABLE = {
     "object_id": "blacklist",
     "columns": [
-        {"header": "Name", "lookup_key": "name", "width": "w-1/6"},
+        {"header": "Name", "lookup_key": "name", "width": "w-[10%]"},
         {
             "header": "Severity",
             "width": "w-24",
@@ -39,7 +39,7 @@ BLACKLISTS_TABLE = {
         {
             "header": "Filter",
             "cell_template": "geant/blacklists/_blacklist_filter.html",
-            "width": "w-[12%]",
+            "width": "w-[20%]",
         },
         {"header": "Message", "lookup_key": "message"},
         {

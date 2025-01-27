@@ -10,7 +10,7 @@ FILTER_SCHEMA_V1 = {
                 "invert": {"type": "boolean"},
                 "operator": {"type": "string"},
                 "value": {"type": ["string", "boolean", "number"]},
-                "unit": {"type": "string"},
+                "unit": {"type": "string", "enum": ["minutes", "hours", "days", "weeks"]},
             },
             "required": ["type", "field", "operator", "value"],
         },

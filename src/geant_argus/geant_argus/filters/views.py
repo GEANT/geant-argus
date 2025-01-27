@@ -1,14 +1,18 @@
 import re
 from typing import Optional
 
-from geant_argus.blacklist.models import Filter
 from argus.incident.models import User
 from django.core.paginator import Paginator
+from django.db.models import Exists, OuterRef
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-from .filters import FILTER_MODEL
+from geant_argus.blacklist.models import Blacklist, Filter
+from geant_argus.geant_argus.filters.plugin import GeantFilterBackend
+from geant_argus.geant_argus.view_helpers import redirect
+
+from .filters import FILTER_MODEL, filter_to_text
 
 PER_PAGE = 20
 
@@ -20,8 +24,11 @@ def get_all_filters():
 @require_GET
 def list_filters(request):
     # Load incidents
-    qs = get_all_filters().order_by("name")
-
+    qs = (
+        get_all_filters()
+        .filter(~Exists(Blacklist.objects.filter(filter=OuterRef("pk"))))
+        .order_by("name")
+    )
     # Standard Django pagination
     page_num = request.GET.get("page", "1")
     page = Paginator(object_list=qs, per_page=PER_PAGE).get_page(page_num)
@@ -52,10 +59,10 @@ def render_edit_filter(request, template, pk: Optional[int] = None, context=None
     context = context or {}
     if pk:
         filter = get_object_or_404(Filter, pk=pk)
-        filter_dict = filter.filter
+        filter_dict = FILTER_MODEL.upgrade_simple_filter(filter.filter)
     else:
         filter = None
-        filter_dict = FILTER_MODEL.default_rule()
+        filter_dict = FILTER_MODEL.default_group()
     context = {
         **default_context(),
         "filter_dict": filter_dict,
@@ -64,6 +71,13 @@ def render_edit_filter(request, template, pk: Optional[int] = None, context=None
         **context,
     }
     return render(request, template, context=context)
+
+
+@require_POST
+def get_filter_text(request):
+    filter_dict = parse_filter_form_data(request.POST)
+    filter_text = filter_to_text(filter_dict)
+    return HttpResponse(filter_text)
 
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
@@ -86,7 +100,7 @@ def edit_filter(request, pk: Optional[int] = None):
             "filter_dict": filter_dict,
             "is_root": True,
         }
-        return render(request, "geant/filters/_filter_item.html", context=context)
+        return render(request, "geant/filters/_filter_root.html", context=context)
 
     if request.method == "DELETE":
         if not pk:
@@ -103,6 +117,30 @@ def save_filter(request, pk: Optional[int] = None):
         # result may be an error response
         return result
     return HttpResponse(headers={"HX-Redirect": reverse("geant-filters:filter-list")})
+
+
+@require_POST
+def run_filter(request, pk=None):
+    if pk is not None:
+        return redirect(
+            request,
+            "htmx:incident-list",
+            params={
+                **GeantFilterBackend.default_filter_params(),
+                "filter_pk": pk,
+            },
+        )
+
+    result = parse_filter_form_data(request.POST)
+    if result:
+        request.session["temporary_filter"] = result
+    return redirect(request, "htmx:incident-list")
+
+
+@require_POST
+def clear_temporary_filter(request):
+    request.session.pop("temporary_filter")
+    return redirect(request, "htmx:incident-list")
 
 
 def save_filter_from_request(request, pk: Optional[int] = None):
