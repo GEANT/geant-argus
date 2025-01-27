@@ -1,6 +1,6 @@
 from django import forms
 
-from argus.auth.models import preferences
+from argus.auth.models import preferences, PreferenceField
 
 
 class AuralAlertForm(forms.Form):
@@ -8,10 +8,5 @@ class AuralAlertForm(forms.Form):
 
 
 @preferences(namespace="geant_argus")
-class ArgusHtmxPreferences:
-    FORMS = {
-        "aural_alert": AuralAlertForm,
-    }
-    _FIELD_DEFAULTS = {
-        "aural_alert": "off",
-    }
+class GeantArgusPreferences:
+    FIELDS = {"aural_alert": PreferenceField(form=AuralAlertForm, default="off")}

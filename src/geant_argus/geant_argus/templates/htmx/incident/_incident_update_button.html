@@ -1,5 +1,5 @@
 <form id="{{ dialog_id }}-form"
-      hx-post="{% url endpoint|default:'htmx:incidents-update' action=action %}"
+      hx-post="{% url endpoint|default:'htmx:incident-update' action=action %}"
       hx-include="[name='incident_ids']"
       hx-indicator="#incident-list .htmx-indicator">
   {% csrf_token %}

@@ -1,7 +1,7 @@
 import os
 
 from argus.htmx.appconfig import APP_SETTINGS
-from argus.htmx.incidents.customization import IncidentTableColumn
+from argus.htmx.incident.customization import IncidentTableColumn
 from argus.site.settings.base import *  # noqa: F401, F403
 
 update_settings(globals(), APP_SETTINGS)
@@ -118,63 +118,63 @@ INCIDENT_TABLE_COLUMNS = [
     IncidentTableColumn(
         "level",
         label="Severity",
-        cell_template="htmx/incidents/_incident_level.html",
+        cell_template="htmx/incident/cells/_incident_level.html",
     ),
     IncidentTableColumn(
         "timestamp",
         label="Start Time (UTC)",
-        cell_template="htmx/incidents/_incident_start_time.html",
+        cell_template="htmx/incident/cells/_incident_start_time.html",
     ),
     IncidentTableColumn(
         "status",
         label="Status",
-        cell_template="htmx/incidents/_incident_status.html",
+        cell_template="htmx/incident/cells/_incident_status.html",
     ),
     IncidentTableColumn(
         "location",
         label="Location",
-        cell_template="htmx/incidents/_incident_location_equipment.html",
+        cell_template="htmx/incident/cells/_incident_location_equipment.html",
         context={"field": "location"},
         filter_field="location",
     ),
     IncidentTableColumn(
         "equipment",
         label="Equipment",
-        cell_template="htmx/incidents/_incident_location_equipment.html",
+        cell_template="htmx/incident/cells/_incident_location_equipment.html",
         context={"field": "equipment"},
         filter_field="equipment",
     ),
     IncidentTableColumn(
         "description",
         label="Description",
-        cell_template="htmx/incidents/_incident_description.html",
+        cell_template="htmx/incident/cells/_incident_description.html",
         filter_field="description",
     ),
     IncidentTableColumn(
         "ticket_ref",
         label="TT",
-        cell_template="htmx/incidents/_incident_ticket_ref.html",
+        cell_template="htmx/incident/cells/_incident_ticket_ref.html",
     ),
     IncidentTableColumn(
         "ack",
         label="Ack",
-        cell_template="htmx/incidents/_incident_ack.html",
+        cell_template="htmx/incident/cells/_incident_ack.html",
     ),
     IncidentTableColumn(
         "comment",
         label="Comment",
-        cell_template="htmx/incidents/_incident_comment.html",
+        cell_template="htmx/incident/cells/_incident_comment.html",
     ),
     IncidentTableColumn(
         "endpoint_count",
         label="#",
-        header_template="htmx/incidents/_incident_endpoint_count_header.html",
-        cell_template="htmx/incidents/_incident_endpoint_count.html",
+        header_template="htmx/incident/cells/_incident_endpoint_count_header.html",
+        cell_template="htmx/incident/cells/_incident_endpoint_count.html",
     ),
     IncidentTableColumn(
         "details",
         label="Details",
-        cell_template="htmx/incidents/_incident_details_button.html",
+        cell_template="htmx/incident/cells/_incident_details_button.html",
     ),
 ]
 
