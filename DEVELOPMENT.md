@@ -41,7 +41,7 @@ Like many web frameworks, Django uses templates for rendering (html) pages. Temp
 identified by a their relative path in valid `templates/` directories. Because every App can have
 their own `templates/` directory, it is possible to override an existing template by creating a
 new file with the same name in another App `templates/` directory. We use this for example for
-implementation of the incidents details page `htmx/incidents/incident_detail.html` which overrides
+implementation of the incidents details page `htmx/incident/incident_detail.html` which overrides
 a template from the `argus.htmx` App.
 
 _note_ Argus has a default setting `TEMPLATES[0]["DIRS"]` that disables Django's behaviour of

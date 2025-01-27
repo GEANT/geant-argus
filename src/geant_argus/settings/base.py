@@ -128,12 +128,7 @@ INCIDENT_TABLE_COLUMNS = [
     IncidentTableColumn(
         "status",
         label="Status",
-        cell_template="htmx/incidents/_incident_status.html",
-    ),
-    IncidentTableColumn(
-        "level",
-        label="Severity",
-        cell_template="htmx/incident/cells/_incident_level.html",
+        cell_template="htmx/incident/cells/_incident_status.html",
     ),
     IncidentTableColumn(
         "location",
