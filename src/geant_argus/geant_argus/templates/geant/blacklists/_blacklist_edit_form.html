@@ -31,7 +31,9 @@
         {{ form.message|add_class:"input input-accent input-bordered border w-full" }}
       </label>
       <label class="label">
-        <span class="label-text">Priority (1 → High, 1000 → Low):</span>
+        <span class="label-text">Priority (1 → High, 1000 → Low)
+          {% include "./_blacklist_priority_info.html" %}
+        :</span>
         {{ form.priority|add_class:"input input-accent input-bordered border w-40" }}
       </label>
       <label class="label">

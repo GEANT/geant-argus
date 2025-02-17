@@ -47,7 +47,12 @@ BLACKLISTS_TABLE = {
             "cell_template": "geant/blacklists/_blacklist_enabled.html",
             "width": "w-[5%]",
         },
-        {"header": "Priority", "lookup_key": "priority", "width": "w-[5%]"},
+        {
+            "header": "Priority",
+            "lookup_key": "priority",
+            "width": "w-[5%]",
+            "header_template": "geant/blacklists/_blacklist_priority_header.html",
+        },
         {
             "header": "Review Date",
             "cell_template": "geant/blacklists/_blacklist_review_date.html",
