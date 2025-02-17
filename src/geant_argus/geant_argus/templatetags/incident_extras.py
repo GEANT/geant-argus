@@ -155,8 +155,17 @@ def get_quick_glance_item(obj, item):
 
 @register.filter
 def get_aural_alert(request: HttpRequest):
-    if get_preference(request, "geant_argus", "aural_alert") == "off":
+    if not request.session.get("geant.new_pending_incidents"):
         return None
-    if request.session.get("geant.new_pending_incidents"):
-        return "alert"
-    return None
+
+    alert = get_preference(request, "geant_argus", "aural_alert")
+
+    if alert not in settings.NEW_INCIDENT_AURAL_ALERTS:
+        alert = settings.NEW_INCIDENT_AURAL_ALERT_DEFAULT
+    if alert == "on":
+        alert = "alert"
+
+    if alert == "off":
+        return None
+
+    return alert

@@ -42,7 +42,7 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
     incidents = list(qs)
     for incident in incidents:
         if not clear_alarm(incident.source_incident_id, {"clear_time": clear_time}):
-            raise HttpResponseServerError("Error while clearing incident")
+            return HttpResponseServerError("Error while clearing incident")
         clear_incident_in_metadata(incident.metadata, clear_time=clear_time)
         incident.save()
 
