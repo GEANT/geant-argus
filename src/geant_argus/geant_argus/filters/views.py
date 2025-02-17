@@ -88,7 +88,10 @@ def edit_filter(request, pk: Optional[int] = None):
             if request.htmx
             else "geant/filters/filter_edit.html"
         )
-        return render_edit_filter(request, template, pk)
+        context = {}
+        if "temporary_filter" in request.session:
+            context["filter_dict"] = request.session["temporary_filter"]
+        return render_edit_filter(request, template, pk, context)
 
     if request.method == "POST":
         if not request.htmx:
