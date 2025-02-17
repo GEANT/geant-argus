@@ -198,5 +198,5 @@ DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
 # TTS
 TICKET_URL_BASE = os.getenv("ARGUS_TICKET_URL_BASE")
 
-NEW_INCIDENT_AURAL_ALERTS = ["off", "alert", "beep", "notification", "fantasy"]
+NEW_INCIDENT_AURAL_ALERTS = ["off", "alert", "beep", "notification"]
 NEW_INCIDENT_AURAL_ALERT_DEFAULT = "off"

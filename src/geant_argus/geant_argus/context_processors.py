@@ -123,5 +123,4 @@ def geant_theme(request):
                 "cell_template": "htmx/incident/cells/_boolean_cell.html",
             },
         ],
-        "aural_alerts": ["on", "off"],
     }

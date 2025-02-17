@@ -160,8 +160,12 @@ def get_aural_alert(request: HttpRequest):
 
     alert = get_preference(request, "geant_argus", "aural_alert")
 
-    if alert == "off":
-        return None
+    if alert not in settings.NEW_INCIDENT_AURAL_ALERTS:
+        alert = settings.NEW_INCIDENT_AURAL_ALERT_DEFAULT
     if alert == "on":
         alert = "alert"
-    return "alert"
+
+    if alert == "off":
+        return None
+
+    return alert
