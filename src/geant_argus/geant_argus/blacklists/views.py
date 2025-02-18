@@ -157,6 +157,10 @@ def save_filter(request):
         context={
             "edit_url": reverse("geant-filters:edit-filter", args=(result.pk,)),
             "read_only": True,
-            "form": CreateBlacklistForm({"filter": result.pk}),
+            # Upon save we need to update the blacklist filter <select> element because the filter
+            # name may be changed. We do this through an htmx oob swap of that element (see also
+            # `templates/geant/blacklists/_blacklist_edit_filter.html`). We use a BlacklistForm
+            # to render the <select> exactly the same as the original <select>
+            "blacklist_form": CreateBlacklistForm({"filter": result.pk}),
         },
     )
