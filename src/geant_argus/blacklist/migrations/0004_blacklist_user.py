@@ -10,7 +10,12 @@ def set_default_user(apps, schema_editor):
     User = get_user_model()
 
     Blacklist = apps.get_model("blacklist", "Blacklist")
-    Blacklist.objects.update(user=User.objects.get(username="argus"))
+    if not Blacklist.objects.count():
+        return
+
+    if not (user := User.objects.filter(username="argus").first()):
+        user = User.objects.create_user(username="argus")
+    Blacklist.objects.update(user=user)
 
 
 def revert_set_default_user(apps, schema_editor):
