@@ -11,3 +11,5 @@ djlint
 pytest
 pytest-django
 pytest-env
+pytest-docker
+PyYAML

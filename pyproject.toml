@@ -20,5 +20,4 @@ indent_size = 2
 [tool.pytest.ini_options]
 env = [
     "DJANGO_SETTINGS_MODULE = test.settings",
-    "DATABASE_URL = postgresql://argus:argus@localhost:5432/argus",
 ]
