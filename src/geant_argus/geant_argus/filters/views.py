@@ -88,7 +88,10 @@ def edit_filter(request, pk: Optional[int] = None):
             if request.htmx
             else "geant/filters/filter_edit.html"
         )
-        return render_edit_filter(request, template, pk)
+        context = {}
+        if "temporary_filter" in request.session:
+            context["filter_dict"] = request.session["temporary_filter"]
+        return render_edit_filter(request, template, pk, context)
 
     if request.method == "POST":
         if not request.htmx:
@@ -155,7 +158,7 @@ def save_filter_from_request(request, pk: Optional[int] = None):
             "edit_url": reverse("geant-filters:edit-filter", args=(pk,) if pk else ()),
         }
         response = render(request, "geant/filters/_filter_edit_form.html", context=context)
-        response.headers["HX-Retarget"] = "#filter-form"
+        response.headers["HX-Retarget"] = "#filter-form-container"
         response.headers["HX-Reswap"] = "outerHTML"
         return response
     user = request.user
