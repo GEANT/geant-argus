@@ -158,7 +158,7 @@ def save_filter_from_request(request, pk: Optional[int] = None):
             "edit_url": reverse("geant-filters:edit-filter", args=(pk,) if pk else ()),
         }
         response = render(request, "geant/filters/_filter_edit_form.html", context=context)
-        response.headers["HX-Retarget"] = "#filter-form"
+        response.headers["HX-Retarget"] = "#filter-form-container"
         response.headers["HX-Reswap"] = "outerHTML"
         return response
     user = request.user
