@@ -59,7 +59,6 @@ def docker_compose_file(tmp_path_factory, postgres_compose_config):
     file.write_text(
         yaml.safe_dump(
             {
-                "version": "3.8",
                 "services": {
                     "postgres": postgres_compose_config,
                 },
