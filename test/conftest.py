@@ -13,7 +13,7 @@ from pytest_docker.plugin import DockerComposeExecutor, execute
 @pytest.fixture(scope="session")
 def postgres_params():
     return {
-        "database": "argus",
+        "database": "argus",  # no dashes!!
         "username": "bogus-user",
         "password": "bogus-password",
         "hostname": None,  # will be set later by postgres_service fixture
@@ -23,17 +23,18 @@ def postgres_params():
 
 @pytest.fixture(scope="session")
 def postgres_compose_config(postgres_params):
+    params = postgres_params
     return {
         "image": "postgres:16",
         "container_name": "postgres",
         "ports": ["5432"],
         "environment": {
-            "POSTGRES_USER": postgres_params["username"],
-            "POSTGRES_PASSWORD": postgres_params["password"],
-            "POSTGRES_DB": postgres_params["database"],  # no dashes!!
+            "POSTGRES_DB": params["database"],
+            "POSTGRES_USER": params["username"],
+            "POSTGRES_PASSWORD": params["password"],
         },
         "healthcheck": {
-            "test": ["CMD-SHELL", "pg_isready -U argus -d argus"],
+            "test": ["CMD-SHELL", f"pg_isready -U {params['username']} -d {params['password']}"],
             "interval": "2s",
             "timeout": "2s",
             "retries": 20,
@@ -78,8 +79,8 @@ def execute_docker_compose(
         docker_compose_command, docker_compose_file, docker_compose_project_name
     )
 
-    def _run_command(command):
-        result = executor.execute(command)
+    def _run_command(command, **kwargs):
+        result = executor.execute(command, **kwargs)
         return result.decode()
 
     return _run_command
@@ -103,7 +104,7 @@ def postgres_service(docker_services, execute_docker_compose, postgres_params, d
     postgres_params["hostname"] = docker_ip
 
     # wait until healthy
-    container = execute_docker_compose(f"ps -q {service_name}")
+    container = execute_docker_compose(f"ps -q {service_name}", ignore_stderr=True)
     docker_services.wait_until_responsive(
         timeout=30.0, pause=0.5, check=lambda: is_healthy(container)
     )
@@ -112,16 +113,18 @@ def postgres_service(docker_services, execute_docker_compose, postgres_params, d
 
 @pytest.fixture(scope="session")
 def django_db_modify_db_settings(uses_db_session, request):
-    """This fixture is used by pytest-django (cf.
-    https://pytest-django.readthedocs.io/en/latest/database.html#django-db-modify-db-settings)
+    """if DATABASE_URL is not set as an environment variable, we assume that the tester wants to
+    spin up a postgres container and use that.
 
-    It is documented to be able to support changes to the django DATABASES setting, however, django
-    caches the original state and connection, so we need to override some django internal state
-
-    if DATABASE_URL is not set as an environment variable, we assume that the tester wants to
-    spin up a postgres container and use that
+    This fixture is used by pytest-django (cf.
+    https://pytest-django.readthedocs.io/en/latest/database.html#django-db-modify-db-settings) and
+    should allow for updating the DATABASES setting, before initializing the database. However,
+    by the time python-django reads from this fixture, django will have already cached the
+    DATABASES setting and initialized a connection to the database. So here we also need to update
+    some internal django state.
     """
     if not uses_db_session:
+        # no database setup if none of our test functions require one
         yield
         return
 
@@ -160,7 +163,8 @@ def django_db_modify_db_settings(uses_db_session, request):
 
     yield
 
-    # This step is optional since it's a session scope fixture, but it's good to be complete
+    # Reverting the DATABASES optional since it's a session scope fixture, but it's good to be
+    # complete
     settings.DATABASES = prev_db_setting
 
 
@@ -183,6 +187,7 @@ def uses_db(request):
 
 @pytest.fixture(autouse=True)
 def setup_django(uses_db, request):
+    """Allow for populating the database with default entries"""
     if not uses_db:
         return
 
