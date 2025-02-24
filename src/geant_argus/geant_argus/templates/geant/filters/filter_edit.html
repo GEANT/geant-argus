@@ -23,6 +23,9 @@
             Delete
           </button>
         {% endif %}
+        <button class="btn btn-secondary join-item h-full"
+                hx-post="{% url 'geant-filters:run-filter' %}"
+                hx-include="#filter-form">Run</button>
       </div>
     </div>
   </div>

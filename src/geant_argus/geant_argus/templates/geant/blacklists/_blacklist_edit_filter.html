@@ -16,9 +16,13 @@
   {% endif %}
 {% endblock buttons %}
 {% block oob %}
-  {% if form %}
+  {% comment %} Here we add a bit of oob swapping to update the filter's name in the blacklist
+    edit form (see also `./_blacklist_edit_form.html`) in case the filter's name has changed when
+    editing the filter.
+  {% endcomment %}
+  {% if blacklist_form %}
     <div id="blacklist-filter-select" hx-swap-oob="true">
-      {{ form.filter|add_class:"select select-accent border w-60" }}
+      {{ blacklist_form.filter|add_class:"select select-accent border w-60" }}
     </div>
   {% endif %}
 {% endblock oob %}

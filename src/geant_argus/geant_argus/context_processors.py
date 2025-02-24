@@ -102,12 +102,12 @@ def geant_theme(request):
             {
                 "name": "Start Time (UTC)",
                 "cell_lookup_key": "start_time",
-                "cell_template": "htmx/incidents/_date_cell.html",
+                "cell_template": "htmx/incident/cells/_date_cell.html",
             },
             {
                 "name": "Clear Time (UTC)",
                 "cell_lookup_key": "metadata.clear_time",
-                "cell_template": "htmx/incidents/_date_cell.html",
+                "cell_template": "htmx/incident/cells/_date_cell.html",
             },
             {"name": "Alarm ID", "cell_lookup_key": "source_incident_id"},
             {"name": "Status", "cell_lookup_key": "metadata.status"},
@@ -120,8 +120,7 @@ def geant_theme(request):
             {
                 "name": "Short lived?",
                 "cell_lookup_key": "metadata.short_lived",
-                "cell_template": "htmx/incidents/_boolean_cell.html",
+                "cell_template": "htmx/incident/cells/_boolean_cell.html",
             },
         ],
-        "aural_alerts": ["on", "off"],
     }

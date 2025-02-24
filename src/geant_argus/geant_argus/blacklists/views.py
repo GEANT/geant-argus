@@ -1,6 +1,6 @@
 from django import forms
 from django.core.paginator import Paginator
-from django.forms import ModelForm
+from django.forms import ModelForm, modelform_factory
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -8,7 +8,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 
 from geant_argus.geant_argus.filters.views import render_edit_filter, save_filter_from_request
 from geant_argus.blacklist.models import Blacklist
-from geant_argus.geant_argus.view_helpers import redirect
+from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, redirect
 
 
 class CreateBlacklistForm(ModelForm):
@@ -47,7 +47,12 @@ BLACKLISTS_TABLE = {
             "cell_template": "geant/blacklists/_blacklist_enabled.html",
             "width": "w-[5%]",
         },
-        {"header": "Priority", "lookup_key": "priority", "width": "w-[5%]"},
+        {
+            "header": "Priority",
+            "lookup_key": "priority",
+            "width": "w-[5%]",
+            "header_template": "geant/blacklists/_blacklist_priority_header.html",
+        },
         {
             "header": "Review Date",
             "cell_template": "geant/blacklists/_blacklist_review_date.html",
@@ -90,13 +95,18 @@ def list_blacklists(request):
 
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
-def edit_blacklist(request, pk=None):
+def edit_blacklist(request: HtmxHttpRequest, pk=None):
     instance = None if pk is None else get_object_or_404(Blacklist, pk=pk)
     if request.method == "GET":
         context = {"form": CreateBlacklistForm(instance=instance)}
         return render(request, "geant/blacklists/blacklist_edit.html", context=context)
     elif request.method == "POST":
-        form = CreateBlacklistForm(request.POST, instance=instance)
+        Form = CreateBlacklistForm
+        if only_fields := request.POST.getlist("_only"):
+            # simple validation to limit updating fields
+            assert set(only_fields).issubset(set(Form.Meta.fields))
+            Form = modelform_factory(Blacklist, form=Form, fields=only_fields)
+        form = Form(request.POST, instance=instance)
         blacklist = form.save(commit=False)
         if not instance:
             blacklist.user = request.user
@@ -147,6 +157,10 @@ def save_filter(request):
         context={
             "edit_url": reverse("geant-filters:edit-filter", args=(result.pk,)),
             "read_only": True,
-            "form": CreateBlacklistForm({"filter": result.pk}),
+            # Upon save we need to update the blacklist filter <select> element because the filter
+            # name may be changed. We do this through an htmx oob swap of that element (see also
+            # `templates/geant/blacklists/_blacklist_edit_filter.html`). We use a BlacklistForm
+            # to render the <select> exactly the same as the original <select>
+            "blacklist_form": CreateBlacklistForm({"filter": result.pk}),
         },
     )

@@ -1,0 +1,16 @@
+{% extends "registration/login.html" %}
+{% block main %}
+  {{ block.super }}
+  <div class="flex flex-col items-center gap-2">
+    <div class="w-full sm:w-96">
+      <div class="text-center">
+        By logging in you accept the GÉANT <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+    href="https://geant.org/privacy-notice/"
+    target="_blank">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+{% endblock main %}
+{% comment %} disable default toast messages {% endcomment %}
+{% block messages %}
+{% endblock messages %}

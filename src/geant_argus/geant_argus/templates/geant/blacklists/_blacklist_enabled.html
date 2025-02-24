@@ -1,2 +1,13 @@
-<div class="inline-block w-4 h-4 mr-2 {% if object.enabled %} bg-success {% else %} bg-error {% endif %} rounded-full">
-</div>
+<form class="htmx-indicator-hidden"
+      hx-post="{% url 'geant-blacklists:edit-blacklist' object.pk %}"
+      hx-trigger="change"
+      hx-indicator="closest form">
+  <input type="checkbox"
+         autocomplete="off"
+         class="checkbox checkbox-sm {% if object.enabled %}checkbox-success text-white{% else %}checkbox-error bg-error/60{% endif %} border htmx-loading-hidden"
+         name="enabled"
+         {% if object.enabled %}checked{% endif %}>
+  <input type="hidden" name="_only" value="enabled">
+  {% csrf_token %}
+  <span class="htmx-indicator loading loading-spinner loading-sm text-primary"></span>
+</form>

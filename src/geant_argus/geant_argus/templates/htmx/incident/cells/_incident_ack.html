@@ -6,7 +6,7 @@
          autocomplete="off"
          class="checkbox checkbox-sm checkbox-primary border htmx-loading-hidden disabled:cursor-default {% if incident|must_ack %}checkbox-error disabled:bg-error/60{% endif %}"
          {% if incident.ack %}checked disabled{% elif not incident|can_ack %}disabled{% endif %}
-         hx-post="{% url endpoint|default:'htmx:incidents-update' action='ack' %}"
+         hx-post="{% url endpoint|default:'htmx:incident-update' action='ack' %}"
          hx-indicator="#incident-{{ incident.pk }}-ack"
          hx-vals='{ "incident_ids": {{ incident.pk }} }'>
   {% csrf_token %}

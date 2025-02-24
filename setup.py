@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.23",
+    version="0.24",
     author="GEANT",
     author_email="swd@geant.org",
     description="Dashboard V3 framework",
@@ -23,12 +23,14 @@ setup(
         "dev": [
             "black",
             "coverage",
-            "python-dotenv",
             "django-extensions",
+            "djlint",
             "flake8",
             "pytest",
             "pytest-django",
-            "djlint",
+            "pytest-docker",
+            "python-dotenv",
+            "PyYAML",
         ],
     },
     include_package_data=True,
