@@ -6,6 +6,7 @@ from argus.site.settings.base import *  # noqa: F401, F403
 
 update_settings(globals(), APP_SETTINGS)
 
+INSTALLED_APPS.remove("channels")
 INSTALLED_APPS = [
     "geant_argus.geant_argus",
     "geant_argus.blacklist",
