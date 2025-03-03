@@ -1,7 +1,7 @@
 import django_filters as df
 from django import forms
 from django.core.paginator import Paginator
-from django.forms import ModelForm, ValidationError, modelform_factory
+from django.forms import ModelForm, modelform_factory
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -33,7 +33,7 @@ class BlacklistFilter(df.FilterSet):
         label="Filter text",
     )
     enabled = df.BooleanFilter("enabled")
-    review_date = df.BooleanFilter("review_date")
+    review_date = df.DateFilter("review_date")
     order_by = df.OrderingFilter(
         # tuple-mapping retains order
         fields=(
@@ -135,7 +135,7 @@ def blacklist_table(form: forms.Form):
 def list_blacklists(request):
     f = BlacklistFilter(request.GET, queryset=get_all_blacklists().order_by("name"))
     if not f.is_valid():
-        raise ValidationError(f.errors)
+        return HttpResponseBadRequest("Bad request")
 
     page_num = request.GET.get("page", "1")
     page = Paginator(object_list=f.qs, per_page=10).get_page(page_num)
