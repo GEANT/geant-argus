@@ -1,5 +1,5 @@
 import datetime
-from typing import Iterable, Union
+from typing import Iterable, Literal, Optional, Union
 from django import template
 from django.utils.dateparse import parse_datetime
 
@@ -67,3 +67,35 @@ def utc_time_header(value: str):
     if value.endswith("time"):
         return value + " (UTC)"
     return value
+
+
+@register.filter
+def fieldvalue(form, fieldname):
+    if not (val := form[fieldname].value()):
+        return ""
+    if isinstance(val, list):
+        val = val[0]
+    return val
+
+
+@register.filter
+def concat(first, second):
+    return f"{first}{second}"
+
+
+@register.filter
+def concat_underscore(first, second):
+    first = first or ""
+    return f"{first}{second}_"
+
+
+@register.filter
+def is_multiple(arr: Optional[list]):
+    if not arr:
+        return False
+    return len(arr) > 1
+
+
+@register.filter
+def ordering_is_active(field_value, direction: Literal["ascending", "descending"]):
+    return

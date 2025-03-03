@@ -1,13 +1,14 @@
+import django_filters as df
 from django import forms
 from django.core.paginator import Paginator
-from django.forms import ModelForm, modelform_factory
+from django.forms import ModelForm, ValidationError, modelform_factory
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views.decorators.http import require_GET, require_POST, require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-from geant_argus.geant_argus.filters.views import render_edit_filter, save_filter_from_request
 from geant_argus.blacklist.models import Blacklist
+from geant_argus.geant_argus.filters.views import render_edit_filter, save_filter_from_request
 from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, redirect
 
 
@@ -23,61 +24,121 @@ class EditFilterForBlacklistForm(forms.Form):
     read_only = forms.BooleanField(required=False)
 
 
+class BlacklistFilter(df.FilterSet):
+    name = df.CharFilter("name", lookup_expr="icontains")
+    message = df.CharFilter("message", lookup_expr="icontains")
+    filtertext = df.CharFilter(
+        field_name="filtertext",
+        method="filter_filtertext",
+        label="Filter text",
+    )
+    enabled = df.BooleanFilter("enabled")
+    review_date = df.BooleanFilter("review_date")
+    order_by = df.OrderingFilter(
+        # tuple-mapping retains order
+        fields=(
+            ("name", "name"),
+            ("enabled", "enabled"),
+            ("review_date", "review_date"),
+        ),
+    )
+
+    class Meta:
+        model = Blacklist
+        fields = ["name", "message", "review_date", "filtertext"]
+
+    def filter_filtertext(self, queryset, name, value):
+        if not value:
+            return queryset
+        objects_ids = [obj.pk for obj in queryset.all() if value.lower() in obj.filtertext.lower()]
+        if objects_ids:
+            queryset = queryset.filter(pk__in=objects_ids)
+        else:
+            queryset = queryset.none()
+        return queryset
+
+
 def get_all_blacklists():
     return Blacklist.objects.select_related("filter")
 
 
-BLACKLISTS_TABLE = {
-    "object_id": "blacklist",
-    "columns": [
-        {"header": "Name", "lookup_key": "name", "width": "w-[10%]"},
-        {
-            "header": "Severity",
-            "width": "w-24",
-            "cell_template": "geant/blacklists/_blacklist_level.html",
+def blacklist_table(form: forms.Form):
+    return {
+        "object_id": "blacklist",
+        "list": {"url": "geant-blacklists:list-blacklists"},
+        "filter_form": form,
+        "ordering_field": "order_by",
+        "columns": [
+            {
+                "header": "Name",
+                "lookup_key": "name",
+                "width": "w-[10%]",
+                "filter_field": "name",
+                "filter_by": True,
+                "order_by": True,
+            },
+            {
+                "header": "Severity",
+                "width": "w-24",
+                "cell_template": "geant/blacklists/_blacklist_level.html",
+            },
+            {
+                "header": "Filter",
+                "cell_template": "geant/blacklists/_blacklist_filter.html",
+                "width": "w-[20%]",
+                "filter_field": "filtertext",
+                "filter_by": True,
+            },
+            {
+                "header": "Message",
+                "lookup_key": "message",
+                "filter_field": "message",
+                "filter_by": True,
+            },
+            {
+                "header": "Enabled",
+                "cell_template": "geant/blacklists/_blacklist_enabled.html",
+                "width": "w-[5%]",
+                "filter_field": "enabled",
+                "order_by": True,
+            },
+            {
+                "header": "Priority",
+                "lookup_key": "priority",
+                "width": "w-[5%]",
+                "header_template": "geant/blacklists/_blacklist_priority_header.html",
+                "filter_field": "priority",
+                "order_by": True,
+            },
+            {
+                "header": "Review Date",
+                "cell_template": "geant/blacklists/_blacklist_review_date.html",
+                "width": "w-24",
+                "filter_field": "review_date",
+                "order_by": True,
+            },
+            {"header": "User", "lookup_key": "user"},
+            {
+                "header": "Actions",
+                "width": "w-32",
+                "cell_template": "geant/blacklists/_blacklist_actions.html",
+            },
+        ],
+        "add_button": {
+            "url": "geant-blacklists:edit-blacklist",
+            "text": "Create new blacklist",
         },
-        {
-            "header": "Filter",
-            "cell_template": "geant/blacklists/_blacklist_filter.html",
-            "width": "w-[20%]",
-        },
-        {"header": "Message", "lookup_key": "message"},
-        {
-            "header": "Enabled",
-            "cell_template": "geant/blacklists/_blacklist_enabled.html",
-            "width": "w-[5%]",
-        },
-        {
-            "header": "Priority",
-            "lookup_key": "priority",
-            "width": "w-[5%]",
-            "header_template": "geant/blacklists/_blacklist_priority_header.html",
-        },
-        {
-            "header": "Review Date",
-            "cell_template": "geant/blacklists/_blacklist_review_date.html",
-            "width": "w-24",
-        },
-        {"header": "User", "lookup_key": "user"},
-        {
-            "header": "Actions",
-            "width": "w-32",
-            "cell_template": "geant/blacklists/_blacklist_actions.html",
-        },
-    ],
-    "add_button": {
-        "url": "geant-blacklists:edit-blacklist",
-        "text": "Create new blacklist",
-    },
-}
+    }
 
 
 @require_GET
 def list_blacklists(request):
-    qs = get_all_blacklists().order_by("name")
+    f = BlacklistFilter(request.GET, queryset=get_all_blacklists().order_by("name"))
+    if not f.is_valid():
+        raise ValidationError(f.errors)
 
     page_num = request.GET.get("page", "1")
-    page = Paginator(object_list=qs, per_page=10).get_page(page_num)
+    page = Paginator(object_list=f.qs, per_page=10).get_page(page_num)
 
     if request.htmx:
         base_template = "components/_table.html"
@@ -85,10 +146,11 @@ def list_blacklists(request):
         base_template = "geant/blacklists/blacklist_list.html"
 
     context = {
-        "table": BLACKLISTS_TABLE,
-        "count": qs.count(),
+        "table": blacklist_table(f.form),
+        "count": f.qs.count(),
         "page_title": "Blacklists",
         "page": page,
+        "filter": f,
     }
 
     return render(request, base_template, context=context)
@@ -114,7 +176,7 @@ def edit_blacklist(request: HtmxHttpRequest, pk=None):
 
     elif request.method == "DELETE" and instance is not None:
         instance.delete()
-    return redirect(request, target="geant-blacklists:blacklist-list")
+    return redirect(request, target="geant-blacklists:list-blacklists")
 
 
 @require_GET
