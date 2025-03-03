@@ -3,6 +3,7 @@ from argus.notificationprofile.models import Filter as ArgusFilter
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from geant_argus.filters import filter_to_text
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
 User = get_user_model()
@@ -11,6 +12,10 @@ User = get_user_model()
 class Filter(ArgusFilter):
     class Meta:
         proxy = True
+
+    @property
+    def text(self):
+        return filter_to_text(self.filter)
 
     def __str__(self):
         return self.name
@@ -38,3 +43,7 @@ class Blacklist(models.Model):
     @property
     def severity(self):
         return IncidentSeverity(self.level).name
+
+    @property
+    def filtertext(self):
+        return self.filter.text

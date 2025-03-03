@@ -12,7 +12,7 @@ from geant_argus.blacklist.models import Blacklist, Filter
 from geant_argus.geant_argus.filters.plugin import GeantFilterBackend
 from geant_argus.geant_argus.view_helpers import redirect
 
-from .filters import FILTER_MODEL, filter_to_text
+from geant_argus.filters import FILTER_MODEL, filter_to_text
 
 PER_PAGE = 20
 
