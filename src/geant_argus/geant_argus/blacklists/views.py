@@ -40,6 +40,7 @@ class BlacklistFilter(df.FilterSet):
             ("name", "name"),
             ("enabled", "enabled"),
             ("review_date", "review_date"),
+            ("level", "severity"),
         ),
     )
 
@@ -81,6 +82,8 @@ def blacklist_table(form: forms.Form):
                 "header": "Severity",
                 "width": "w-24",
                 "cell_template": "geant/blacklists/_blacklist_level.html",
+                "filter_field": "severity",
+                "order_by": True,
             },
             {
                 "header": "Filter",

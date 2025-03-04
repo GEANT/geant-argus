@@ -1,8 +1,9 @@
 {% load template_utils %}
-<div class="flex flex-col relative"
+<div class="relative"
      hx-include="#{{ table_id }} .column-filter"
      hx-target="#{{ table_id }}"
      hx-swap="outerHTML"
+     hx-indicator="#{{ table_id }} .htmx-indicator"
      hx-push-url="true">
   <div class="flex gap-1">
     <div>{{ column.header }}</div>
@@ -30,16 +31,18 @@
         </div>
       {% endwith %}
     {% endif %}
-    {% with filter_value=table.filter_form|fieldvalue:column.filter_field %}
-      {% if column.filter_by %}
+    {% if column.filter_by %}
+      {% with filter_value=table.filter_form|fieldvalue:column.filter_field %}
         <div>
           <button type="button"
                   class="btn btn-xs {% if filter_value %} btn-primary {% else %} btn-ghost {% endif %} min-h-4 h-4"
                   _="on click toggle .hidden on next .column-filter">🔍</button>
         </div>
-      {% endif %}
-    </div>
-    {% if column.filter_by %}
+      {% endwith %}
+    {% endif %}
+  </div>
+  {% if column.filter_by %}
+    {% with filter_value=table.filter_form|fieldvalue:column.filter_field %}
       <div class="absolute flex gap-2 column-filter hidden bg-base-100 border-primary border p-2 rounded-lg w-72 top-5 z-10"
            _="on keyup[key is 'Escape'] from body add .hidden to me">
         <label class="input input-xs flex grow input-accent">
@@ -50,31 +53,21 @@
                  value="{{ filter_value }}">
           {# djlint:off #}
           <span _="on click
-                    if value of the previous <input />
+                    if (the value of the previous <input />) is not empty
                       set the value of the previous <input /> to ''
                       send doRequest to me
                     end
                     add .hidden to closest .column-filter"
                 hx-get="{% url table.list.url %}"
-                hx-trigger="doRequest"
-                hx-include="#{{ table_id }} .column-filter"
-                hx-target="#{{ table_id }}"
-                hx-swap="outerHTML"
-                hx-push-url="true"
-                hx-indicator="#{{ table_id }} .htmx-indicator">✕</span>
+                hx-trigger="doRequest">✕</span>
           {# djlint:on #}
         </label>
         <button type="button"
                 class="btn btn-xs btn-primary"
                 _="on click add .hidden to closest .column-filter"
                 hx-get="{% url table.list.url %}"
-                hx-trigger="click"
-                hx-include="#{{ table_id }} .column-filter"
-                hx-target="#{{ table_id }}"
-                hx-swap="outerHTML"
-                hx-push-url="true"
-                hx-indicator="#{{ table_id }} .htmx-indicator">Filter</button>
+                hx-trigger="click">Filter</button>
       </div>
-    {% endif %}
-  {% endwith %}
+    {% endwith %}
+  {% endif %}
 </div>
