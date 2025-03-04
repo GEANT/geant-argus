@@ -31,7 +31,7 @@
             <td class="hidden lg:block condensed:hidden">{{ object.filter|filter_to_text }}</td>
             <td>{{ object.user.username }}</td>
             <td>
-              <div class="flex w-full justify-center">
+              <div class="flex w-full justify-center gap-2">
                 <button type="button"
                         class="btn btn-xs btn-primary btn-outline"
                         hx-post="{% url 'geant-filters:run-filter' object.pk %}"

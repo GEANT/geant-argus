@@ -18,7 +18,7 @@ from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
 from rest_framework.filters import BaseFilterBackend
 from argus.incident.models import IncidentQuerySet
-from .filters import FILTER_MODEL
+from geant_argus.filters import FILTER_MODEL
 from .schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 

@@ -7,7 +7,7 @@
     <a href="{% url 'geant-filters:filter-list' %}">Filters</a>
   </li>
   <li>
-    <a href="{% url 'geant-blacklists:blacklist-list' %}">Blacklists</a>
+    <a href="{% url 'geant-blacklists:list-blacklists' %}">Blacklists</a>
   </li>
   {% if request.user.is_staff %}
     <li>

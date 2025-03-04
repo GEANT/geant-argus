@@ -1,3 +1,5 @@
+"""Contains views for the Argus api, for htmx views, see `geant_argus/geant_argus/blacklists`"""
+
 from drf_rw_serializers import viewsets as rw_viewsets
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import permissions, viewsets
