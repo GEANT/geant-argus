@@ -10,11 +10,7 @@ class GeantConfig(AppConfig):
         yield from pathlib.Path(__file__).parent.glob("tailwindcss/*.css")
 
     def ready(self) -> None:
-        from argus.htmx.incident.views import (
-            INCIDENT_UPDATE_ACTIONS,
-            DescriptionOptionalForm,
-            AckForm,
-        )
+        from argus.htmx.incident import views
         from .incidents.bulk_actions import (
             bulk_close_incidents,
             bulk_clear_incidents,
@@ -22,8 +18,8 @@ class GeantConfig(AppConfig):
             ClearAlarmForm,
         )
 
-        del INCIDENT_UPDATE_ACTIONS["reopen"]
-        del INCIDENT_UPDATE_ACTIONS["update-ticket"]
-        INCIDENT_UPDATE_ACTIONS["ack"] = (AckForm, bulk_ack_incidents)
-        INCIDENT_UPDATE_ACTIONS["close"] = (DescriptionOptionalForm, bulk_close_incidents)
-        INCIDENT_UPDATE_ACTIONS["clear"] = (ClearAlarmForm, bulk_clear_incidents)
+        views.INCIDENT_UPDATE_ACTIONS = {
+            "ack": (views.AckForm, bulk_ack_incidents),
+            "close": (views.DescriptionOptionalForm, bulk_close_incidents),
+            "clear": (ClearAlarmForm, bulk_clear_incidents),
+        }
