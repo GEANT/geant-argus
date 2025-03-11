@@ -154,6 +154,7 @@ INCIDENT_TABLE_COLUMNS = [
         "ticket_ref",
         label="TT",
         cell_template="htmx/incident/cells/_incident_ticket_ref.html",
+        filter_field="ticket_ref",
     ),
     IncidentTableColumn(
         "ack",

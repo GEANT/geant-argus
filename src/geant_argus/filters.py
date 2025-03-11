@@ -391,6 +391,15 @@ FILTER_MODEL = ComplexFilter(
             invertable=True,
         ),
         FilterField(
+            "ticket_ref",
+            "Ticket Ref",
+            operators=[
+                TextOperator("contains"),
+            ],
+            db_fields=[DBField("metadata__ticket_ref", is_json=True)],
+            invertable=True,
+        ),
+        FilterField(
             "ack",
             "Ack",
             operators=[
