@@ -6,7 +6,6 @@ from argus.site.settings.base import *  # noqa: F401, F403
 
 update_settings(globals(), APP_SETTINGS)
 
-INSTALLED_APPS.remove("channels")
 INSTALLED_APPS = [
     "geant_argus.geant_argus",
     "geant_argus.blacklist",
@@ -155,6 +154,7 @@ INCIDENT_TABLE_COLUMNS = [
         "ticket_ref",
         label="TT",
         cell_template="htmx/incident/cells/_incident_ticket_ref.html",
+        filter_field="ticket_ref",
     ),
     IncidentTableColumn(
         "ack",

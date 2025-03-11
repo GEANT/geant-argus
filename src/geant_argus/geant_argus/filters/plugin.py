@@ -95,6 +95,11 @@ class IncidentFilterForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={"class": "max-w-32"}),
     )
+    filter_pk = forms.ChoiceField(
+        required=False,
+        label="Filter",
+        widget=forms.Select(attrs={"class": "max-w-52"}),
+    )
     description = forms.CharField(max_length=255, required=False)
     description.in_header = True
     location = forms.CharField(max_length=255, required=False)
@@ -112,27 +117,16 @@ class IncidentFilterForm(forms.Form):
     location.in_header = True
     equipment = forms.CharField(max_length=255, required=False)
     equipment.in_header = True
-    field_order = [
-        "status",
-        "alarm_id",
-        "filter_pk",
-        "min_severity",
-        "newest_first",
-        "short_lived",
-    ]
+
+    ticket_ref = forms.CharField(max_length=255, required=False)
+    ticket_ref.in_header = True
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["filter_pk"] = forms.ChoiceField(
-            required=False,
-            label="Filter",
-            choices=[
-                ("", "------"),
-                *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
-            ],
-            widget=forms.Select(attrs={"class": "max-w-52"}),
-        )
-        self.order_fields(self.field_order)
+        self.fields["filter_pk"].choices = [
+            ("", "------"),
+            *((f.pk, f.name) for f in Filter.objects.filter(filter__version="v1").all()),
+        ]
 
     def filter_queryset(self, queryset, request):
         self.request = request
@@ -149,6 +143,7 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_field(queryset, "equipment", "metadata__equipment__icontains")
         queryset = self._filter_by_field(queryset, "min_severity", "level__lte")
         queryset = self._filter_by_field(queryset, "alarm_id", "source_incident_id")
+        queryset = self._filter_by_field(queryset, "ticket_ref", "metadata__ticket_ref__icontains")
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
