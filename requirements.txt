@@ -1,6 +1,5 @@
 Django>=5,<5.1
-argus-server
-argus-htmx-frontend
+argus-server[htmx]
 django-widget-tweaks
 black
 coverage
