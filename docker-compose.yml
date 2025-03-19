@@ -34,7 +34,7 @@ services:
       - PGUSER=argus
       - PGPASSWORD=argus
       - PGDATABASE=argus
-      - FORCE_INITIALIZE=1 # Can set this to 1 to force reinitialization
+      - FORCE_INITIALIZE=0 # Can set this to 1 to force reinitialization
     volumes:
       - ./demo/incidents:/argus/incidents
 
