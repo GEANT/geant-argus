@@ -3,13 +3,16 @@
 # This script runs the manage.py Django management commands with the environment variables set below.
 # This script is intended to be run inside a virtualenv.
 #
-# For a full overview of environment variables, see the section "Site-specific settings" of the documentation.
+# For a full overview of environment variables, see the section "Site-specific settings" of the
+# Argus documentation.
+# cf. https://argus-server.readthedocs.io/en/latest/reference/site-specific-settings.html
 #
 # Run the script without arguments to get a list of all available commands.
 
 export DEBUG=1
 export EMAIL_HOST=localhost
 export EMAIL_PORT=25
+
 # Run `python manage.py gen_secret_key` to create a SECRET_KEY
 export SECRET_KEY=
 
@@ -17,5 +20,22 @@ export SECRET_KEY=
 export DJANGO_SETTINGS_MODULE='geant_argus.settings.dev'
 # Syntax: postgresql://argus:<LOCAL DB PASSWORD>@localhost:5432/argus
 export DATABASE_URL=postgresql://argus:argus@localhost:5433/argus
+
+export ARGUS_DISABLE_REDIS=1
+export ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS=365
+
+# If connected to a local database, you should disable back-synchronization. Unset this variable
+# or set to 0 to enable back-synchronization to the noc-alarms database
+export ARGUS_DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION=1
+export ARGUS_DASHBOARD_ALARMS_API_URL='http://test-noc-alarms-ui01.geant.org:8080'
+
+# Get the OIDC/SSO values from Lastpass
+export ARGUS_OIDC_URL=
+export ARGUS_OIDC_CLIENT_ID=
+export ARGUS_OIDC_SECRET=
+export ARGUS_OIDC_ENTITLEMENTS_PATTERN=
+
+export ARGUS_TICKET_URL_BASE='https://tts.geant.net/otrs/index.pl?Action=AgentTicketZoom;TicketNumber='
+
 
 python manage.py "$@"
