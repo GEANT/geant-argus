@@ -29,10 +29,13 @@ INDELIBLE_INCIDENTS = False
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
 #  Authentication
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "social_core.backends.open_id_connect.OpenIdConnectAuth",
-]
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
+if not get_bool_env("ARGUS_OIDC_DISABLE", default=False):
+    AUTHENTICATION_BACKENDS.append("social_core.backends.open_id_connect.OpenIdConnectAuth")
+
+ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
+ARGUS_OIDC_ENTITLEMENTS_PATTERN = get_str_env("ARGUS_OIDC_ENTITLEMENTS_PATTERN")
+ARGUS_OIDC_SUPERUSER_GROUP = "admin"
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 # fmt: off
@@ -89,9 +92,6 @@ SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
 SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
 SOCIAL_AUTH_OIDC_SCOPE = ["entitlements"]
 
-ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
-ARGUS_OIDC_ENTITLEMENTS_PATTERN = get_str_env("ARGUS_OIDC_ENTITLEMENTS_PATTERN")
-ARGUS_OIDC_SUPERUSER_GROUP = "admin"
 
 # Theming
 THEME_DEFAULT = "geant"

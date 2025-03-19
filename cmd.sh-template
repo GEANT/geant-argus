@@ -14,7 +14,7 @@ export EMAIL_HOST=localhost
 export EMAIL_PORT=25
 
 # Run `python manage.py gen_secret_key` to create a SECRET_KEY
-export SECRET_KEY=
+export SECRET_KEY=super-secret
 
 # Use argus.site.settings.dev for defaults, or a local settings.py file (see docs)
 export DJANGO_SETTINGS_MODULE='geant_argus.settings.dev'
@@ -30,6 +30,7 @@ export ARGUS_DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION=1
 export ARGUS_DASHBOARD_ALARMS_API_URL='http://test-noc-alarms-ui01.geant.org:8080'
 
 # Get the OIDC/SSO values from Lastpass
+export ARGUS_OIDC_DISABLE=1
 export ARGUS_OIDC_URL=
 export ARGUS_OIDC_CLIENT_ID=
 export ARGUS_OIDC_SECRET=
