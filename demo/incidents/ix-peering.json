@@ -78,5 +78,6 @@
   "endpoint_count": 3,
   "blacklist": {
     "applied": false
-  }
+  },
+  "comment": "This alarm has a comment"
 }

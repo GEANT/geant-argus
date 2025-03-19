@@ -56,5 +56,6 @@
   "endpoint_count": 2,
   "blacklist": {
     "applied": false
-  }
+  },
+  "comment":null
 }

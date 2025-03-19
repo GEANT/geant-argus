@@ -72,5 +72,6 @@
   "ticket_ref": "",
   "description": "BGP peering (193.177.129.61) Incident",
   "short_lived": false,
-  "endpoint_count": 2
+  "endpoint_count": 2,
+  "comment":null
 }

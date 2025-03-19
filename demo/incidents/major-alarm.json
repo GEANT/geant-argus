@@ -108,5 +108,6 @@
     "applied": true,
     "original_severity": "MAJOR",
     "message": "There is probably a good reason for this"
-  }
+  },
+  "comment":null
 }
