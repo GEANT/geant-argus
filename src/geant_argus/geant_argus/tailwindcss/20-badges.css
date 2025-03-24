@@ -1,31 +1,32 @@
 @layer components {
   .badge.incident-critical {
     background-color: rgba(var(--color-incident-critical));
-    border: none;
+    @apply border-base-content;
   }
   .badge.incident-critical.incident-closed {
     background-color: rgba(var(--color-incident-critical), 0.5);
-    border: none;
+    @apply border-base-content/50;
   }
   .badge.incident-major {
     background-color: rgba(var(--color-incident-major));
-    border: none;
+    @apply border-base-content;
   }
   .badge.incident-major.incident-closed {
     background-color: rgba(var(--color-incident-major), 0.5);
-    border: none;
+    @apply border-base-content/50;
   }
   .badge.incident-minor {
     background-color: rgba(var(--color-incident-minor));
-    border: none;
+    @apply border-base-content;
+
   }
   .badge.incident-minor.incident-closed {
     background-color: rgba(var(--color-incident-minor), 0.5);
-    border: none;
+    @apply border-base-content/50;
   }
   .badge.incident-default {
     @apply bg-base-100;
-    @apply border-neutral-content/80;
+    @apply border-base-content;
   }
   .badge.incident-clear {
     background-color: rgba(var(--color-incident-clear));
