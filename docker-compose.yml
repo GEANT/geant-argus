@@ -16,6 +16,7 @@ services:
       - POSTGRES_USER=argus
       - POSTGRES_PASSWORD=argus
       - POSTGRES_DB=argus
+      - ARGUS_OIDC_DISABLE=1
     volumes:
       - ./demo/incidents:/argus/incidents
     restart: unless-stopped
