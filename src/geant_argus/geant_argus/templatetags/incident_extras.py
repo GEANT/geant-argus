@@ -98,10 +98,14 @@ MUST_ACK_TIMEDELTA = datetime.timedelta(minutes=10)
 
 
 @register.filter
-def must_ack(incident: Incident):
+def must_ack(incident: Incident, ack_reminder):
     must_ack_timedelta = None
-    if (must_ack_within_minutes := getattr(settings, "MUST_ACK_WITHIN_MINUTES", None)) is not None:
-        must_ack_timedelta = datetime.timedelta(minutes=must_ack_within_minutes)
+    try:
+        ack_reminder = int(ack_reminder)
+    except (TypeError, ValueError):
+        pass
+    if isinstance(ack_reminder, int):
+        must_ack_timedelta = datetime.timedelta(minutes=ack_reminder)
     return (
         not getattr(incident, "ack", True)
         and can_ack(incident)

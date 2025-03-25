@@ -189,10 +189,6 @@ STATUS_CHECKER_ENABLED = True
 STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
 STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
 
-# Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
-# on the incident listing
-MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=None)
-
 # Dashboard Alarms API
 DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
 DASBHOARD_ALARMS_DISABLE_SYNCHRONIZATION = get_bool_env("DASBHOARD_ALARMS_DISABLE_SYNCHRONIZATION")
@@ -200,5 +196,12 @@ DASBHOARD_ALARMS_DISABLE_SYNCHRONIZATION = get_bool_env("DASBHOARD_ALARMS_DISABL
 # TTS
 TICKET_URL_BASE = os.getenv("ARGUS_TICKET_URL_BASE")
 
+# ######### User Preferences options ###########
+
 NEW_INCIDENT_AURAL_ALERTS = ["off", "alert", "beep", "notification"]
 NEW_INCIDENT_AURAL_ALERT_DEFAULT = "off"
+
+# Incidents that have not been acked a user's ACK_REMINDER_MINUTES minutes will flash
+# on the incident listing
+ACK_REMINDER_MINUTES = [0, 5, 10, 15, 30, 60, "never"]
+ACK_REMINDER_MINUTES_DEFAULT = 10

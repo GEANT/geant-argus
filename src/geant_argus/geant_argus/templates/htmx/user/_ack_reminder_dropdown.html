@@ -1,23 +1,23 @@
 <details>
   <summary>
-    Aural Alert
-    <span class="badge badge-primary">{{ preferences.geant_argus.aural_alert }}</span>
+    Ack reminder: blink unacked incidents after (minutes)
+    <span class="badge badge-primary">{{ preferences.geant_argus.ack_reminder }}</span>
   </summary>
   <ul class="max-hs-64 overflow-y-scroll">
-    {% for item in preferences_choices.geant_argus.aural_alert %}
+    {% for item in preferences_choices.geant_argus.ack_reminder %}
       <li>
         <input type="radio"
                class="btn btn-sm btn-block btn-ghost justify-start"
                value="{{ item }}"
                aria-label="{{ item }}"
-               name="aural_alert"
+               name="ack_reminder"
                hx-post="{% url 'htmx:update-preferences' namespace='geant_argus' %}"
                hx-trigger="change"
                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' />
       </li>
     {% empty %}
       <li>
-        <p>No aural alerts supported</p>
+        <p>No ack reminders supported</p>
       </li>
     {% endfor %}
   </ul>
