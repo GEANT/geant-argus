@@ -27,13 +27,7 @@
             </tr>
             <tr class="border-primary">
               <td class="py-0 font-bold">Status</td>
-              <td class="py-0">
-                {% if incident.open %}
-                  {{ incident.metadata.status|default:"Active"|upperfirst }}
-                {% else %}
-                  Closed
-                {% endif %}
-              </td>
+              <td class="py-0">{{ incident.metadata.status|default:"Active"|upperfirst }}</td>
             </tr>
             <tr class="border-primary">
               <td class="py-0 font-bold">Severity</td>

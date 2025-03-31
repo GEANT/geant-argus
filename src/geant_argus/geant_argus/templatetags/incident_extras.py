@@ -28,7 +28,9 @@ def level_to_severity(value):
 
 @register.filter(name="incidentlevelbadge")
 def incident_level_to_badge(incident: Incident):
-    return level_to_badge(incident.level, incident.open)
+    return level_to_badge(
+        incident.level, incident.metadata.get("status", "active").lower() != "closed"
+    )
 
 
 @register.filter(name="levelbadge")
@@ -50,9 +52,7 @@ def level_to_badge(level: int, is_open=True):
 
 
 def _incident_status(incident: Incident):
-    if incident.open:
-        return upperfirst(incident.metadata.get("status", "Active"))
-    return "Closed"
+    return upperfirst(incident.metadata.get("status", "Active"))
 
 
 @register.filter(name="incidentstatus")
