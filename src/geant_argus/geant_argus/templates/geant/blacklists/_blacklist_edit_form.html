@@ -5,7 +5,7 @@
     <fieldset>
       <label class="label">
         <span class="label-text w-40">Name:</span>
-        {{ form.name|add_class:"input input-accent input-bordered border w-60" }}
+        {{ form.name|add_class:"input input-primary input-bordered border w-60" }}
       </label>
       <label class="label"
              hx-get="{% url 'geant-blacklists:edit-filter' %}?read_only=1"
@@ -19,22 +19,22 @@
                   hx-get="{% url 'geant-blacklists:edit-filter' %}"
                   hx-params="none"
                   hx-target="#filter-edit">New filter</button>
-          <div id="blacklist-filter-select">{{ form.filter|add_class:"select select-accent border w-60" }}</div>
+          <div id="blacklist-filter-select">{{ form.filter|add_class:"select select-primary border w-60" }}</div>
         </div>
       </label>
       <label class="label">
         <span class="label-text w-40">Blacklist Severity:</span>
-        {{ form.level|add_class:"select select-accent border w-60" }}
+        {{ form.level|add_class:"select select-primary border w-60" }}
       </label>
       <label class="label">
         <span class="label-text w-40">Message:</span>
-        {{ form.message|add_class:"input input-accent input-bordered border w-full" }}
+        {{ form.message|add_class:"input input-primary input-bordered border w-full" }}
       </label>
       <label class="label">
         <span class="label-text">Priority (1 → High, 1000 → Low)
           {% include "./_blacklist_priority_info.html" %}
         :</span>
-        {{ form.priority|add_class:"input input-accent input-bordered border w-40" }}
+        {{ form.priority|add_class:"input input-primary input-bordered border w-40" }}
       </label>
       <label class="label">
         <span class="label-text w-40">Enabled:</span>
@@ -42,7 +42,7 @@
       </label>
       <label class="label">
         <span class="label-text w-40">Review date:</span>
-        <div class="input input-accent input-bordered border flex item-center w-40">
+        <div class="input input-primary input-bordered border flex item-center w-40">
           {{ form.review_date|add_class:"appearance-none grow border-none" }}
         </div>
       </label>

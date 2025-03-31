@@ -21,7 +21,7 @@
         {% csrf_token %}
         <input name="ticket_ref"
                autocomplete="off"
-               class="input input-xs w-64 input-accent"
+               class="input input-xs w-64 input-primary"
                value="{{ incident.metadata.ticket_ref|default:'' }}">
         <button type=submit class="btn btn-xs btn-primary htmx-loading-hidden">Update</button>
         <div class="htmx-indicator loading loading-spinner loading-xs text-primary"></div>
