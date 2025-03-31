@@ -1,8 +1,9 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.28] - Pending release
 
-## [0.27] - Pending release
+## [0.27] - 2025-03-31
 - Simplify initial setup for new checkouts
 - Make Severity badges more obvious
 - Ack Reminder as a user preference
