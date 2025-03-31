@@ -260,6 +260,8 @@ class ComplexFilter:
             return result
         return None
 
+    # --------- Begin Filter to Queryset Methods -------------
+
     def filter_queryset(self, qs: QuerySet, filter_dict: dict) -> QuerySet:
         if filter_dict["version"] != "v1":
             raise ValueError("unsupported filter version")

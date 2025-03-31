@@ -384,7 +384,7 @@ METADATA_V0A5_SCHEMA = {
         "short_lived",
         "blacklist",
         "endpoint_count",
-        "comment",
+        "comment",  # comment is required for filtering to work properly
     ],
 }
 

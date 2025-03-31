@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.26",
+    version="0.27",
     author="GEANT",
     author_email="swd@geant.org",
     description="Dashboard V3 framework",
@@ -11,8 +11,7 @@ setup(
     packages=find_packages(where="src", exclude=("tests",)),
     install_requires=[
         "Django>=4.2.11,<5.1",
-        "argus-server",
-        "argus-htmx-frontend",
+        "argus-server[htmx]",
         "django-widget-tweaks",
     ],
     extras_require={

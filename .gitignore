@@ -69,6 +69,7 @@ staticfiles/
 # Tailwind config is dynamically generated
 tailwindcss/tailwind.config.js
 tailwindcss/geant.base.css
+tailwindcss/tailwindcss
 
 # ignore the development version of geant.css
 /src/geant_argus/geant_argus/static/geant.css

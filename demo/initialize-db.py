@@ -89,7 +89,10 @@ def create_fake_incident(metadata=None):
 
 
 def main(argv):
-    force = "--force" in argv
+    force_by_args = "--force" in argv
+    force_by_env = os.environ.get("FORCE_INITIALIZE", "").lower() not in {"", "0", "false"}
+    force = force_by_args or force_by_env
+
     django.setup()
     if not force and is_initialized():
         print("keeping initialized data")

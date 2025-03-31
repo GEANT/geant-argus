@@ -29,10 +29,13 @@ INDELIBLE_INCIDENTS = False
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
 
 #  Authentication
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "social_core.backends.open_id_connect.OpenIdConnectAuth",
-]
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
+if not get_bool_env("ARGUS_OIDC_DISABLE", default=False):
+    AUTHENTICATION_BACKENDS.append("social_core.backends.open_id_connect.OpenIdConnectAuth")
+
+ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
+ARGUS_OIDC_ENTITLEMENTS_PATTERN = get_str_env("ARGUS_OIDC_ENTITLEMENTS_PATTERN")
+ARGUS_OIDC_SUPERUSER_GROUP = "admin"
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 # fmt: off
@@ -89,9 +92,6 @@ SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
 SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
 SOCIAL_AUTH_OIDC_SCOPE = ["entitlements"]
 
-ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
-ARGUS_OIDC_ENTITLEMENTS_PATTERN = get_str_env("ARGUS_OIDC_ENTITLEMENTS_PATTERN")
-ARGUS_OIDC_SUPERUSER_GROUP = "admin"
 
 # Theming
 THEME_DEFAULT = "geant"
@@ -189,15 +189,19 @@ STATUS_CHECKER_ENABLED = True
 STATUS_CHECKER_HEALTH_URL = os.getenv("ARGUS_STATUS_CHECKER_HEALTH_URL")
 STATUS_CHECKER_INPROV_URL = os.getenv("ARGUS_STATUS_CHECKER_INPROV_URL")
 
-# Incidents that have not been acked within MUST_ACK_WITHIN_MINUTES minutes will flash
-# on the incident listing
-MUST_ACK_WITHIN_MINUTES = get_int_env("ARGUS_MUST_ACK_WITHIN_MINUTES", default=None)
-
 # Dashboard Alarms API
 DASHBOARD_ALARMS_API_URL = os.getenv("ARGUS_DASHBOARD_ALARMS_API_URL")
+DASBHOARD_ALARMS_DISABLE_SYNCHRONIZATION = get_bool_env("DASBHOARD_ALARMS_DISABLE_SYNCHRONIZATION")
 
 # TTS
 TICKET_URL_BASE = os.getenv("ARGUS_TICKET_URL_BASE")
 
+# ######### User Preferences options ###########
+
 NEW_INCIDENT_AURAL_ALERTS = ["off", "alert", "beep", "notification"]
 NEW_INCIDENT_AURAL_ALERT_DEFAULT = "off"
+
+# Incidents that have not been acked a user's ACK_REMINDER_MINUTES minutes will flash
+# on the incident listing
+ACK_REMINDER_MINUTES = [0, 5, 10, 15, 30, 60, "never"]
+ACK_REMINDER_MINUTES_DEFAULT = 10

@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: "postgres:12"
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=argus
+      - POSTGRES_PASSWORD=argus
+      - POSTGRES_DB=argus
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U argus -d argus"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s

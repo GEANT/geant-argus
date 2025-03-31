@@ -28,7 +28,9 @@ def level_to_severity(value):
 
 @register.filter(name="incidentlevelbadge")
 def incident_level_to_badge(incident: Incident):
-    return level_to_badge(incident.level, incident.open)
+    return level_to_badge(
+        incident.level, incident.metadata.get("status", "active").lower() != "closed"
+    )
 
 
 @register.filter(name="levelbadge")
@@ -50,9 +52,7 @@ def level_to_badge(level: int, is_open=True):
 
 
 def _incident_status(incident: Incident):
-    if incident.open:
-        return upperfirst(incident.metadata.get("status", "Active"))
-    return "Closed"
+    return upperfirst(incident.metadata.get("status", "Active"))
 
 
 @register.filter(name="incidentstatus")
@@ -98,10 +98,14 @@ MUST_ACK_TIMEDELTA = datetime.timedelta(minutes=10)
 
 
 @register.filter
-def must_ack(incident: Incident):
+def must_ack(incident: Incident, ack_reminder):
     must_ack_timedelta = None
-    if (must_ack_within_minutes := getattr(settings, "MUST_ACK_WITHIN_MINUTES", None)) is not None:
-        must_ack_timedelta = datetime.timedelta(minutes=must_ack_within_minutes)
+    try:
+        ack_reminder = int(ack_reminder)
+    except (TypeError, ValueError):
+        pass
+    if isinstance(ack_reminder, int):
+        must_ack_timedelta = datetime.timedelta(minutes=ack_reminder)
     return (
         not getattr(incident, "ack", True)
         and can_ack(incident)

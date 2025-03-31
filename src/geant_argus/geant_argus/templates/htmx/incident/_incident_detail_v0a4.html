@@ -1,4 +1,4 @@
-<section id="endpoints" class="rounded-box border border-accent p-2">
+<section id="endpoints" class="rounded-box border border-primary p-2">
   <h1 class="font-bold text-2xl  ml-2">Endpoints</h1>
   {% for endpoint_type, endpoints in incident.metadata.endpoints.items %}
     {% if endpoints %}
@@ -37,7 +37,7 @@
                           <td>{{ event.clear_time|default:"-" }}</td>
                           <td>
                             <button type="button"
-                                    class="bg-accent hover:bg-neutral text-accent-content py-1 px-2 rounded"
+                                    class="bg-primary hover:bg-neutral text-primary-content py-1 px-2 rounded"
                                     onclick="modal_{{ endpoint_type }}_{{ endpoint_counter }}_{{ forloop.counter }}.showModal()">
                               See more
                             </button>

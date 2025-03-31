@@ -1,3 +1,6 @@
-<div _="on click js modal_{{ incident.source_incident_id }}.showModal()"
-     class="cursor-pointer">{{ incident.description }}</div>
+<div class="grid">
+  <div _="on click js modal_{{ incident.source_incident_id }}.showModal()"
+       class="cursor-pointer min-w-[200px] truncate"
+       title="{{ incident.description }}">{{ incident.description }}</div>
+</div>
 {% include "htmx/incident/_incident_quick_glance_modal.html" %}

@@ -197,5 +197,6 @@
     "applied": true,
     "original_severity": "MINOR",
     "message": "This is a very major incident"
-  }
+  },
+  "comment":null
 }

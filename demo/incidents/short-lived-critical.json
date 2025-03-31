@@ -163,5 +163,6 @@
   "endpoint_count": 6,
   "blacklist": {
     "applied": false
-  }
+  },
+  "comment":null
 }
