@@ -1,4 +1,4 @@
-Django>=5,<5.1
+Django~=5.1
 argus-server[htmx]
 django-widget-tweaks
 black
