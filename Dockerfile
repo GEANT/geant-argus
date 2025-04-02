@@ -1,5 +1,5 @@
 # This Dockerfile is designed to run a Geant Argus for demo purposes. Together with the
-# accompanying docker-compose.yaml it contains all that's needed to showcase Geant Argus.
+# accompanying docker-compose.yml it contains all that's needed to showcase Geant Argus.
 # For additional instructions, see the README
 
 FROM python:3.10-slim
