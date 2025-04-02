@@ -15,7 +15,8 @@ def get_version_or_none(package):
 def version(request: HttpRequest):
     return JsonResponse(
         {
-            "dashboard-v3-python": get_version_or_none("dashboard-v3-python"),
+            "argus": get_version_or_none("argus-server"),
+            "dashboard-v3-python": get_version_or_none("dashboard"),
             "django": get_version_or_none("django"),
             "geant-argus": get_version_or_none("geant-argus"),
         }
