@@ -1,7 +1,11 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-## [0.28] - Pending release
+## [0.29] - Pending release
+
+## [0.28] - 2025-04-02
+- Update Django to 5.1
+- DBOARD3-1176: Add version api endpoint
 
 ## [0.27] - 2025-03-31
 - Simplify initial setup for new checkouts
