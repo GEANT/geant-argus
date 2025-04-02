@@ -6,4 +6,11 @@ geant_argus
    :caption: Contents:
 
    introduction
+   demo
    development
+   architecture
+   django
+   configuration
+   single_sign_on
+   collaboration
+   dependencies
