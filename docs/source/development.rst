@@ -7,12 +7,15 @@ Initial setup
 After checking out the repository, a number of steps need to be taken to prepare your checkout for
 development.
 
+
 Install the package
 ####################
 
-You will probably first want to create a virtual environment using your favorite venv tool::
+You will probably first want to create a virtual environment using your favorite venv tool. On
+MacOS you may need to escape the brackets using `\`::
 
   pip install -e .[dev]
+
 
 Setup pre-commit
 #################
@@ -25,20 +28,15 @@ Setup pre-commit
 Every time you want to commit, certain scripts are run to check your commit. The hooks that are run
 can be found in ``.pre-commit-config.yaml``.
 
-Setup tailwind
-##############
-
-See :ref:`tailwindcss` and `Argus documentation: Install and build Tailwind CSS and daisyUI
-<https://argus-server.readthedocs.io/en/latest/reference/htmx-frontend.html#install-and-build-tailwind-css-and-daisyui>`_
-for installing TailwindCSS. In short: download the tailwind-extra version 1.7.27 from 
-`https://github.com/dobicinaitis/tailwind-cli-extra/releases/tag/v1.7.27<https://github.com/dobicinaitis/tailwind-cli-extra/releases/tag/v1.7.27>`_,
-rename it to ``tailwindcss`` and place it in your ``$PATH``
-
 
 Initialize local repository files
 #################################
 Now there are some local files to create. You need a :ref:`custom cmd.sh file <custom-cmd-sh-files>`
-and the tailwind css files. These can be created for you by running::
+and the tailwind css files. To build the tailwind css files, you also need the ``tailwindcss`` cli
+tool, see :ref:`tailwindcss` and `Argus documentation: Install and build Tailwind CSS and daisyUI
+<https://argus-server.readthedocs.io/en/latest/reference/htmx-frontend.html#install-and-build-tailwind-css-and-daisyui>`_
+
+These can all be downloaded and/or created for you by running::
 
   make initialize-repo
 
@@ -60,6 +58,7 @@ is easy to do using the provided docker compose file, which will create a postgr
 running a database that Argus can connect to::
 
   docker compose -f postgres-compose.yml up -d
+
 
 Setting up thte database
 ########################
@@ -85,14 +84,20 @@ Finally, run the Django development server::
 You can log in using the credentials generated in the previous step when running ``initial_setup``
 
 
-
-
-
-
-
-
 Important commands
 ------------------
+
+When developing, it is recommended to have ``tailwindcss`` watch your source directory and
+recompile the (development) css file whenever changes are detected. The command for this is in the
+Makefile::
+
+  make watch-tailwind
+
+However, this command cannot detect changes to the ``tailwind.config.js`` template in
+``src/geant_argus/geant_argus/templates/tailwind/`` or any newly created snippets in
+``src/geant_argus/geant_argus/tailwindcss/``. If you make any changes to these, it may be necessary
+to restart the ``watch-tailwind`` command.
+
 
 Testing
 -------
