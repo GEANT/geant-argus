@@ -2,7 +2,7 @@
 
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null
 
-TAILWIND_EXTRA_VERSION=v1.7.27
+TAILWIND_EXTRA_VERSION=$(cat VERSION)
 TAILWIND_EXTRA_BASE_URL=https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/${TAILWIND_EXTRA_VERSION}/tailwindcss-extra
 
 case $(uname -a | tr '[:upper:]' '[:lower:]') in
