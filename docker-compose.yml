@@ -40,7 +40,7 @@ services:
       - ./demo/incidents:/argus/incidents
 
   postgres:
-    image: "postgres:12"
+    image: "postgres:16"
     ports:
       - "5433:5432"
     restart: unless-stopped
