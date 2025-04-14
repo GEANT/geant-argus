@@ -32,6 +32,7 @@ setup(
             "PyYAML",
             "sphinx",
             "sphinx-rtd-theme",
+            "sphinxcontrib-drawio",
         ],
     },
     include_package_data=True,
