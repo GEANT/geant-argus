@@ -11,7 +11,9 @@
   {% endif %}
   {% if incident.metadata.phase != "PENDING" %}
     <div class="text-primary -mt-[3px] text-xs/6 cursor-pointer"
-         _="on click toggle .hidden on next .incident-ticketref-edit">🖉</div>
+         _="on click toggle .hidden on next .incident-ticketref-edit">
+      <i class="fa-solid fa-pencil"></i>
+    </div>
     <div class="absolute incident-ticketref-edit hidden bg-base-100 border-primary border p-2 rounded-lg top-6 -left-64 z-10"
          _="on keyup[key is 'Escape'] from body add .hidden to me">
       <form method="post"
