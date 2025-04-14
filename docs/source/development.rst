@@ -33,7 +33,7 @@ Initialize local repository files
 #################################
 Now there are some local files to create. You need a :ref:`custom cmd.sh file <custom-cmd-sh-files>`
 and the tailwind css files. To build the tailwind css files, you also need the ``tailwindcss`` cli
-tool, see :ref:`tailwindcss` and `Argus documentation: Install and build Tailwind CSS and daisyUI
+tool, see :ref:`dependencies-tailwindcss` and `Argus documentation: Install and build Tailwind CSS and daisyUI
 <https://argus-server.readthedocs.io/en/latest/reference/htmx-frontend.html#install-and-build-tailwind-css-and-daisyui>`_
 
 These can all be downloaded and/or created for you by running::
@@ -101,4 +101,7 @@ to restart the ``watch-tailwind`` command.
 
 Testing
 -------
-Testing requires PostgreSQL which runs in Docker
+
+Testing requires PostgreSQL which runs in Docker. When running the tests, either through ``tox``
+or by invoking ``pytest`` directly, a PostgreSQL container is started using Docker compose. If you
+don't have docker installed, the tests will fail.
