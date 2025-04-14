@@ -12,7 +12,7 @@ Install the package
 ####################
 
 You will probably first want to create a virtual environment using your favorite venv tool. On
-MacOS you may need to escape the brackets using `\`::
+MacOS you may need to escape the brackets using ``\``::
 
   pip install -e .[dev]
 
