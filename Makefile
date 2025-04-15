@@ -1,4 +1,4 @@
-.PHONY: css watch-tailwind initialize-repo get-tailwind tailwind_config
+.PHONY: css watch-tailwind initialize-repo get-tailwind tailwind_config docs
 
 css: tailwind_config
 	tailwindcss/tailwindcss -c tailwindcss/tailwind.config.js -i tailwindcss/geant.base.css -o src/geant_argus/geant_argus/static/geant.min.css -m
@@ -20,3 +20,7 @@ src/geant_argus/geant_argus/static/geant.css:
 
 cmd.sh:
 	cp cmd.sh-template cmd.sh && chmod +x cmd.sh
+
+docs:
+	rm -rf docs/build
+	./build-docs.sh

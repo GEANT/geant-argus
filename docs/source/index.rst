@@ -15,3 +15,4 @@ geant_argus
    single_sign_on
    collaboration
    dependencies
+   other

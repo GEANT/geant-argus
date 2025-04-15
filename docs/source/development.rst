@@ -16,6 +16,14 @@ MacOS you may need to escape the brackets using ``\``::
 
   pip install -e .[dev]
 
+.. note::
+  While not required, it is recommended to clone `Argus`_ and install it as an editable package
+  in your venv. This makes it easier to develop Argus alongside Geant Argus and to find the base
+  implementations of templates and other functionality that Geant Argus overrides. When developing
+  Geant Argus, it is also recommended to checkout the version of Argus that is deployed on the
+  test environment unless you are preparing to update the deploy version of Argus, see
+  :ref:`geant-argus-version-api`. eg: ``git checkout v1.34.1``
+
 
 Setup pre-commit
 #################
@@ -105,3 +113,5 @@ Testing
 Testing requires PostgreSQL which runs in Docker. When running the tests, either through ``tox``
 or by invoking ``pytest`` directly, a PostgreSQL container is started using Docker compose. If you
 don't have docker installed, the tests will fail.
+
+.. _Argus: https://github.com/Uninett/Argus/

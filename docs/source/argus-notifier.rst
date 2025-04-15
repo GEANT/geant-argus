@@ -1,3 +1,5 @@
+.. _argus-notifier:
+
 Argus Notifier
 ==============
 
@@ -6,3 +8,7 @@ Argus Notifier
 
    .. drawio-image:: diagrams/argus-notifier-flow.drawio
       :page-name: argus-notifier-flow
+
+
+Incident Metadata
+-----------------
