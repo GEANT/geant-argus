@@ -1,4 +1,5 @@
 import jsonschema
+import pytest
 from geant_argus.geant_argus.metadata.schema import METADATA_SCHEMAS
 
 
@@ -7,16 +8,23 @@ def validate(payload):
     jsonschema.validate(payload["metadata"], schema)
 
 
-def test_link_alarm_none_fields():
+@pytest.mark.parametrize("version", ["v0a5", "v1"])
+def test_link_alarm_none_fields(version):
     metadata = {
-        "version": "v0a4",
+        "version": version,
         "phase": "FINALIZED",
         "severity": "MAJOR",
+        "status": "ACTIVE",
+        "comment": "",
+        "short_lived": False,
+        "endpoint_count": 1,
         "endpoints": {
             "bgp": [],
             "link": [
                 {
                     "name": "endpoint",
+                    "hostname": "some host",
+                    "interface": "ifc",
                     "events": [
                         {
                             "init_time": "start",
