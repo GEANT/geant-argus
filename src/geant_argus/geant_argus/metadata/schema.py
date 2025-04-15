@@ -30,6 +30,8 @@ METADATA_V1_SCHEMA = {
             "properties": {
                 "hostname": {"type": "string"},
                 "remote_peer": {"type": "string"},
+                "has_more_events": {"type": ["boolean", "null"]},
+                "event_count": {"type": "number"},
                 "events": v1_endpoint_event(
                     {
                         "id": {"type": "integer"},
@@ -51,6 +53,8 @@ METADATA_V1_SCHEMA = {
             "properties": {
                 "hostname": {"type": "string"},
                 "interface": {"type": "string"},
+                "has_more_events": {"type": ["boolean", "null"]},
+                "event_count": {"type": "number"},
                 "events": v1_endpoint_event(
                     {
                         "id": {"type": "integer"},
@@ -83,6 +87,8 @@ METADATA_V1_SCHEMA = {
             "properties": {
                 "ne_name": {"type": "string"},
                 "port": {"type": "string"},
+                "has_more_events": {"type": ["boolean", "null"]},
+                "event_count": {"type": "number"},
                 "events": v1_endpoint_event(
                     {
                         "id": {"type": "integer"},
@@ -101,6 +107,8 @@ METADATA_V1_SCHEMA = {
             "properties": {
                 "ne_name": {"type": "string"},
                 "port": {"type": "string"},
+                "has_more_events": {"type": ["boolean", "null"]},
+                "event_count": {"type": "number"},
                 "events": v1_endpoint_event(
                     {
                         "id": {"type": "integer"},
@@ -120,6 +128,8 @@ METADATA_V1_SCHEMA = {
             "properties": {
                 "ne_a": {"type": "string"},
                 "ne_b": {"type": "string"},
+                "has_more_events": {"type": ["boolean", "null"]},
+                "event_count": {"type": "number"},
                 "events": v1_endpoint_event(
                     {
                         "id": {"type": "integer"},
