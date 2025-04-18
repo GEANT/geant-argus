@@ -15,9 +15,9 @@ STATIC_URL = get_str_env("STATIC_URL", "/static/")  # noqa: F405
 STATIC_ROOT = get_str_env("STATIC_ROOT", "staticfiles/")  # noqa: F405
 STATUS_CHECKER_HEALTH_URL = get_str_env(
     "ARGUS_STATUS_CHECKER_HEALTH_URL",
-    "https://uat-dashboardv3-monitoring.geant.org:4443/api/health",
+    "https://test-dashboardv3-monitoring.geant.org:4443/api/health",
 )
 STATUS_CHECKER_INPROV_URL = get_str_env(
-    "ARGUS_STATUS_CHECKER_INPROV_URL", "https://uat-inprov01.geant.org"
+    "ARGUS_STATUS_CHECKER_INPROV_URL", "https://test-inprov01.geant.org"
 )
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False

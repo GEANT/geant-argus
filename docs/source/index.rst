@@ -9,8 +9,10 @@ geant_argus
    demo
    development
    architecture
+   argus-notifier
    django
    configuration
    single_sign_on
    collaboration
    dependencies
+   other

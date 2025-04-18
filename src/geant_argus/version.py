@@ -1,13 +1,13 @@
-import pkg_resources
 from django.http import HttpRequest, JsonResponse
 from django.urls import path
 from django.views.decorators.http import require_GET
+import importlib.metadata
 
 
 def get_version_or_none(package):
     try:
-        return pkg_resources.get_distribution(package).version
-    except pkg_resources.DistributionNotFound:
+        return importlib.metadata.version(package)
+    except importlib.metadata.PackageNotFoundError:
         return None
 
 
