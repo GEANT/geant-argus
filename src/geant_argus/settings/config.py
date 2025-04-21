@@ -6,8 +6,13 @@ import jsonschema
 CONFIG_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
-    "properties": {},
-    "required": [],
+    "properties": {
+        "DEFAULT_FROM_EMAIL": {"type": "string"},
+        "SEND_EXPIRED_BLACKLISTS_EMAILS_TO": {"type": "array", "items": {"type": "string"}},
+    },
+    "required": [
+        "SEND_EXPIRED_BLACKLISTS_EMAILS_TO",
+    ],
 }
 
 

@@ -190,7 +190,10 @@ def uses_db(request):
 @pytest.fixture
 def config_file(tmp_path):
     file = tmp_path / "config.json"
-    file.write_text(json.dumps({}))
+    config = {
+        "SEND_EXPIRED_BLACKLISTS_EMAILS_TO": ["bogus-user@geant.org"],
+    }
+    file.write_text(json.dumps(config))
     return file
 
 
