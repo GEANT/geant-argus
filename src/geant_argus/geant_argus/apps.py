@@ -1,5 +1,9 @@
+import os
 import pathlib
 from django.apps import AppConfig
+from django.conf import settings
+
+from geant_argus.settings.config import load_config
 
 
 class GeantConfig(AppConfig):
@@ -23,3 +27,9 @@ class GeantConfig(AppConfig):
             "close": (views.DescriptionOptionalForm, bulk_close_incidents),
             "clear": (ClearAlarmForm, bulk_clear_incidents),
         }
+
+        # We read the config file here so that we can override settings that are set
+        # in the settings file
+        config_filename = os.getenv("CONFIG_FILENAME")
+        if config_filename:
+            load_config(config_filename, settings)

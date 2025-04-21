@@ -61,6 +61,8 @@ ENV/
 env.bak/
 venv.bak/
 
+# config.json
+config.json
 
 # Argus / repo stuff
 cmd.sh

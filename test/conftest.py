@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from django.db import connections
 from pytest_docker.plugin import DockerComposeExecutor, execute
 
+from geant_argus.settings import config
+
 
 @pytest.fixture(scope="session")
 def postgres_params():
@@ -185,9 +187,18 @@ def uses_db(request):
     return any(m.name == "django_db" for m in request.node.own_markers)
 
 
+@pytest.fixture
+def config_file(tmp_path):
+    file = tmp_path / "config.json"
+    file.write_text(json.dumps({}))
+    return file
+
+
 @pytest.fixture(autouse=True)
-def setup_django(uses_db, request):
-    """Allow for populating the database with default entries"""
+def setup_django(uses_db, request, config_file):
+    """Loads config and allows for populating the database with default entries"""
+    config.load_config(config_file, settings)
+
     if not uses_db:
         return
 
