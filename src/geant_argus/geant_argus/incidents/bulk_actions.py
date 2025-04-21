@@ -1,28 +1,14 @@
 import itertools
 from typing import Any, Dict
-from argus.htmx.utils import bulk_close_queryset, bulk_ack_queryset
+from argus.htmx.utils import bulk_close_queryset
 from django import forms
 from django.http import HttpResponseServerError
-from geant_argus.geant_argus.dashboard_alarms import ack_alarm, close_alarm, clear_alarm
+from geant_argus.geant_argus.dashboard_alarms import close_alarm, clear_alarm
 from django.utils import timezone
-from django.contrib import messages
 
 
 class ClearAlarmForm(forms.Form):
     timestamp = forms.DateTimeField(required=False)
-
-
-def bulk_ack_incidents(actor, qs, data: Dict[str, Any]):
-    incidents = bulk_ack_queryset(actor, qs, data)
-    errors = [
-        incident.source_incident_id
-        for incident in incidents
-        if not ack_alarm(incident.source_incident_id)
-    ]
-    if errors:
-        messages.error(f'Error while acknowledging incidents {" ".join(errors)}')
-
-    return incidents
 
 
 def bulk_close_incidents(actor, qs, data: Dict[str, Any]):

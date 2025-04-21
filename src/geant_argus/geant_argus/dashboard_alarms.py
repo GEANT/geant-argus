@@ -19,10 +19,6 @@ def update_alarm(alarm_id, payload):
     return _succeed_request("PATCH", api_url() + UPDATE_ALARM_URL.format(alarm_id), json=payload)
 
 
-def ack_alarm(alarm_id):
-    return _succeed_request("POST", api_url() + ACK_ALARM_URL.format(alarm_id))
-
-
 def close_alarm(alarm_id):
     return _succeed_request("POST", api_url() + CLOSE_ALARM_URL.format(alarm_id))
 
