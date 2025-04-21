@@ -12,6 +12,7 @@ geant_argus
    argus-notifier
    django
    configuration
+   user_preferences
    single_sign_on
    collaboration
    dependencies

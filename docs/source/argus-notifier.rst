@@ -26,15 +26,15 @@ The message handling flow is given below:
       :page-name: argus-notifier-flow
 
 When a notification message is received, Argus Notifier first checks whether a full
-:ref:`argus-notifier-synchronization` is due and performs this synchronization if necessary. It
-then continues to processing the message:
+:ref:`synchronization <argus-notifier-synchronization>` is due and performs this synchronization if
+necessary. It then continues to processing the message:
 
 * Does the alarm exist in the database? If not it is a devoured alarm, we remove the incident in
   Argus
 * Load all endpoints and other information concerning the alarm from the AlarmsDB.
-* Compile the incident data and `argus-incident-metadata`_ from the alarm data. Some
-  information is not available in the AlarmsDB and in some cases the AlarmsDB is not yet updated.
-  For these parts we use information in the notifcation message. This concerns:
+* Compile the incident data and :ref:`incident metadata <argus-incident-metadata>` from the alarm
+  data. Some information is not available in the AlarmsDB and in some cases the AlarmsDB is not yet
+  updated. For these parts we use information in the notifcation message. This concerns:
 
    * When an alarm clears/closes:
 
