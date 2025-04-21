@@ -205,3 +205,6 @@ NEW_INCIDENT_AURAL_ALERT_DEFAULT = "off"
 # on the incident listing
 ACK_REMINDER_MINUTES = [0, 5, 10, 15, 30, 60, "never"]
 ACK_REMINDER_MINUTES_DEFAULT = 10
+
+DEFALT_FROM_EMAIL = "noreply@geant.org"
+EMAIL_USE_TLS = False
