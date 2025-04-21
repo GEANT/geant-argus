@@ -1,81 +1,83 @@
+"""
+Filter plugin used by Geant Argus, set using the ``ARGUS_FILTER_BACKEND`` and
+``ARGUS_HTMX_FILTER_FUNCTION`` settings. Geant Argus overrides or provides custom implementations
+for a number of the classes/functions that are used by Argus. These are
+
+
+* FilterBlobSerializer
+* incident_list_filter
+
+Furthermore, this module passes through a number of required global attributes without
+modification. These are:
+
+* INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS
+* SOURCE_LOCKED_INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS
+* ComplexFallbackFilterWrapper
+* IncidentFilter
+* QuerySetFilter
+* SourceLockedIncidentFilter
+"""
+
 from typing import Any, Dict
 
-from django.http import HttpRequest
 import jsonschema
-from argus.filter.default import (  # noqa: F401
+from argus.filter.default import (
     INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
     SOURCE_LOCKED_INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS,
     ComplexFallbackFilterWrapper,
+    IncidentFilter,
+    QuerySetFilter,
+    SourceLockedIncidentFilter,
 )
-from argus.filter.default import IncidentFilter as DefaultIncidentFilter
-from argus.filter.default import QuerySetFilter, SourceLockedIncidentFilter  # noqa: F401
 from argus.filter.filters import Filter
-from argus.incident.models import Event
+from argus.incident.models import Event, IncidentQuerySet
 from django import forms
-from django.db.models import OuterRef, Exists, Case, When, Value, Subquery
+from django.db.models import Case, Exists, OuterRef, Subquery, Value, When
+from django.http import HttpRequest
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
 from rest_framework import fields, serializers
-from rest_framework.filters import BaseFilterBackend
-from argus.incident.models import IncidentQuerySet
-from geant_argus.filters import FILTER_MODEL
-from .schema import FILTER_SCHEMA_V1
+
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
+
+from .model import FILTER_MODEL
+from .schema import FILTER_SCHEMA_V1
+
+__all__ = (
+    "INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS",
+    "SOURCE_LOCKED_INCIDENT_OPENAPI_PARAMETER_DESCRIPTIONS",
+    "ComplexFallbackFilterWrapper",
+    "IncidentFilter",
+    "QuerySetFilter",
+    "SourceLockedIncidentFilter",
+    "FilterBlobSerializer",
+    "default_filter_params",
+    "incident_list_filter",
+)
 
 SUPPORTED_FILTER_VERSIONS = ["v1"]
 
 
-class _FilterBlobSerializer(serializers.Serializer):
-    def to_internal_value(self, data):
-        data = fields.JSONField(required=self.required).to_internal_value(data)
-        try:
-            jsonschema.validate(data, schema=FILTER_SCHEMA_V1)
-        except jsonschema.ValidationError as e:
-            raise serializers.ValidationError({e.json_path.replace("$", "filter", 1): e.message})
-        return data
-
-    def to_representation(self, instance):
-        # dump data transparently
-        return instance
+def incident_list_filter(request, queryset):
+    form = IncidentFilterForm(
+        request.GET or default_filter_params(),
+    )
+    queryset = form.filter_queryset(queryset, request)
+    _update_session(request, queryset)
+    return form, queryset
 
 
-class GeantFilterBackend(BaseFilterBackend):
-    template = "geant/filters/_select_filter_by_name.html"
+def default_filter_params():
+    return {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value}
 
-    @classmethod
-    def get_filter_blob_serializer(cls):
-        return _FilterBlobSerializer
 
-    @classmethod
-    def get_incident_filter(cls):
-        class IncidentFilter(DefaultIncidentFilter):
-            pass
-
-        return IncidentFilter
-
-    @staticmethod
-    def default_filter_params():
-        return {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value}
-
-    def incident_list_filter(self, request, queryset):
-        form = IncidentFilterForm(
-            request.GET or self.default_filter_params(),
-        )
-        queryset = form.filter_queryset(queryset, request)
-        self._update_session(request, queryset)
-        return form, queryset
-
-    def filter_queryset(self, request, queryset, view=None):
-        return IncidentFilterForm(request.GET or None).filter_queryset(queryset, request)
-
-    @staticmethod
-    def _update_session(request: HttpRequest, queryset: IncidentQuerySet):
-        pending = set(
-            incident.id for incident in queryset.open().filter(metadata__phase="PENDING").all()
-        )
-        old_pending = set(request.session.get("geant.pending_incidents", []))
-        request.session["geant.pending_incidents"] = list(pending)
-        request.session["geant.new_pending_incidents"] = list(pending - old_pending)
+def _update_session(request: HttpRequest, queryset: IncidentQuerySet):
+    pending = set(
+        incident.id for incident in queryset.open().filter(metadata__phase="PENDING").all()
+    )
+    old_pending = set(request.session.get("geant.pending_incidents", []))
+    request.session["geant.pending_incidents"] = list(pending)
+    request.session["geant.new_pending_incidents"] = list(pending - old_pending)
 
 
 class DaisyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
@@ -203,10 +205,24 @@ class IncidentFilterForm(forms.Form):
         return queryset.order_by("ack_or_closed", "metadata__status", "level", "-start_time")
 
 
+class FilterBlobSerializer(serializers.Serializer):
+    def to_internal_value(self, data):
+        data = fields.JSONField(required=self.required).to_internal_value(data)
+        try:
+            jsonschema.validate(data, schema=FILTER_SCHEMA_V1)
+        except jsonschema.ValidationError as e:
+            raise serializers.ValidationError({e.json_path.replace("$", "filter", 1): e.message})
+        return data
+
+    def to_representation(self, instance):
+        # dump data transparently
+        return instance
+
+
 class _FilterBlobExtension(OpenApiSerializerExtension):
     """OpenAPI docs generator extension for the FilterBlob data type"""
 
-    target_class = GeantFilterBackend.get_filter_blob_serializer()
+    target_class = FilterBlobSerializer
 
     def get_name(self, auto_schema: AutoSchema, direction) -> str | None:
         return "FilterBlob"
@@ -221,10 +237,3 @@ class _FilterBlobExtension(OpenApiSerializerExtension):
                 "value": {"type": "string", "example": "IP TRUNK"},
             },
         }
-
-
-_backend = GeantFilterBackend()
-FilterBlobSerializer = _backend.get_filter_blob_serializer()
-IncidentFilter = _backend.get_incident_filter()
-
-incident_list_filter = _backend.incident_list_filter

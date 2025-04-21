@@ -107,7 +107,7 @@ TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
 )
 
 AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS", 14))
-ARGUS_FILTER_BACKEND = "geant_argus.geant_argus.filters.plugin"
+ARGUS_FILTER_BACKEND = "geant_argus.filter.plugin"
 ARGUS_HTMX_FILTER_FUNCTION = ARGUS_FILTER_BACKEND
 
 ARGUS_FRONTEND_DATETIME_FORMAT = "ISO"
