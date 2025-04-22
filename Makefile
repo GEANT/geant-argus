@@ -22,7 +22,7 @@ cmd.sh:
 	cp cmd.sh-template cmd.sh && chmod +x cmd.sh
 
 config.json:
-	cp config.json-template config.json
+	cp config-example.json config.json
 
 docs:
 	rm -rf docs/build
