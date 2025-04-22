@@ -8,11 +8,11 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAll
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-from geant_argus.blacklist.models import Blacklist, Filter
-from geant_argus.geant_argus.filters.plugin import GeantFilterBackend
-from geant_argus.geant_argus.view_helpers import redirect
 
-from geant_argus.filters import FILTER_MODEL, filter_to_text
+from geant_argus.blacklist.models import Blacklist, Filter
+from geant_argus.filter.model import FILTER_MODEL, filter_to_text
+from geant_argus.filter.plugin import default_filter_params
+from geant_argus.geant_argus.view_helpers import redirect
 
 PER_PAGE = 20
 
@@ -129,7 +129,7 @@ def run_filter(request, pk=None):
             request,
             "htmx:incident-list",
             params={
-                **GeantFilterBackend.default_filter_params(),
+                **default_filter_params(),
                 "filter_pk": pk,
             },
         )

@@ -1,7 +1,7 @@
 import jsonschema
 import pytest
-from geant_argus.filters import ComplexFilter, filter_to_text
-from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
+from geant_argus.filter.model import ComplexFilter, filter_to_text
+from geant_argus.filter.schema import FILTER_SCHEMA_V1
 
 
 @pytest.mark.parametrize(

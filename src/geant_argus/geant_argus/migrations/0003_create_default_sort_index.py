@@ -5,7 +5,7 @@ ARGUS_APP = "argus_incident"
 
 class Migration(migrations.Migration):
     """Add an index for the default sorting order(see also
-    `geant_argus.geant_argus.filters.plugin`). Also includes the default filter (only open
+    `geant_argus.filter.plugin`). Also includes the default filter (only open
     incidents, which is fully determined by the value of end time) in the in
     """
 
