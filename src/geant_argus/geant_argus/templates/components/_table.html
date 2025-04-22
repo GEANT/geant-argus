@@ -50,10 +50,10 @@
               <td colspan="{{ table.columns|length }}" class="border-t border-primary">
                 <div class="flex justify-between items-center">
                   <div class="join">
-                    <dl class="join-item stats stats-horizontal shadow leading-none overflow-x-auto font-medium bg-neutral text-neutral-content">
+                    <dl class="join-item stats stats-horizontal leading-none overflow-x-auto font-medium bg-base-100">
                       <div class="stat py-1">
-                        <dt class="stat-title text-neutral-content/80">Total</dt>
-                        <dd class="stat-value text-2xl text-base">
+                        <dt class="stat-title text-inherit/80">Total</dt>
+                        <dd class="stat-value text-2xl text-base font-medium">
                           {{ count }}
                         </dd>
                       </div>
@@ -61,61 +61,7 @@
                     <a class="btn btn-primary join-item h-full rounded-box"
                        href="{% url table.add_button.url %}">{{ table.add_button.text }}</a>
                   </div>
-                  <!--
-                The htmx attributes set on the nav here are inherited by the child links.
-                hx-target tells where htmx to swap the fetched content in, and hx-swap
-                tells it how to swap it - by replacing the 'outerHTML' attribute of the
-                target, i.e. replacing the target's actual DOM node. hx-push-url tells
-                htmx to push the fetched URL into the browser history, so we can use
-                the backwards/forwards buttons to navigate these subpages.
-                -->
-                  <ul class="join round-xl"
-                      hx-include="#{{ table_id }} .column-filter"
-                      hx-target="#{{ table.object_id|default:'obj' }}-table"
-                      hx-swap="outerHTML"
-                      hx-push-url="true">
-                    {% if page.number != 1 %}
-                      <li>
-                        <!--
-                              For each link we use hx-get to tell htmx to fetch that URL and
-                              swap it in. We also repeat the URL in the href attribute so the
-                              page works without JavaScript, and to ensure the link is
-                              displayed as clickable.
-                            -->
-                        <a hx-get="?page=1" href="?page=1" class="join-item btn btn-neutral">&laquo; First</a>
-                      </li>
-                    {% endif %}
-                    {% if page.has_previous %}
-                      <li>
-                        <a hx-get="?page={{ page.previous_page_number }}"
-                           href="?page={{ page.previous_page_number }}"
-                           class="join-item btn btn-neutral">{{ page.previous_page_number }}</a>
-                      </li>
-                    {% endif %}
-                    {% if page.paginator.num_pages > 1 %}
-                      <li>
-                        <button class="join-item btn btn-active btn-neutral">{{ page.number }}</button>
-                      </li>
-                    {% else %}
-                      <li>
-                        <button class="btn btn-active btn-neutral">{{ page.number }}</button>
-                      </li>
-                    {% endif %}
-                    {% if page.has_next %}
-                      <li>
-                        <a hx-get="?page={{ page.next_page_number }}"
-                           href="?page={{ page.next_page_number }}"
-                           class="join-item btn btn-neutral">{{ page.next_page_number }}</a>
-                      </li>
-                    {% endif %}
-                    {% if page.number != page.paginator.num_pages %}
-                      <li>
-                        <a hx-get="?page={{ page.paginator.num_pages }}"
-                           href="?page={{ page.paginator.num_pages }}"
-                           class="join-item btn btn-neutral">&raquo; Last</a>
-                      </li>
-                    {% endif %}
-                  </ul>
+                  {% include "components/_table_paginator.html" %}
                 </div>
               </td>
             </tr>

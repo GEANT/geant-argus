@@ -8,7 +8,7 @@
     @apply border-spacing-0;
   }
 
-  .htmx-loading-pulse.htmx-request {
-    @apply animate-pulse;
+  .htmx-loading-spin.htmx-request {
+    @apply animate-spin;
   }
 }
