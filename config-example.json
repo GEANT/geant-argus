@@ -1,0 +1,4 @@
+{
+  "SEND_EXPIRED_BLACKLISTS_EMAILS_TO": [],
+  "DEFAULT_FROM_EMAIL": "noreply@geant.org"
+}

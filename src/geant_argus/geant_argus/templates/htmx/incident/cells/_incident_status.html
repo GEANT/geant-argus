@@ -1,4 +1,3 @@
 {% load incident_extras %}
-<div class="badge {{ incident|statusbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}">
-  {{ incident|incidentstatus }}
-</div>
+<div class="badge {{ incident|statusbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}"
+     title="{{ incident|statustitletext }}">{{ incident|incidentstatus }}</div>

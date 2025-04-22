@@ -50,4 +50,4 @@ External links to Documentation
      - `https://docs.djangoproject.com/en/5.1/intro/tutorial01/ <https://docs.djangoproject.com/en/5.1/intro/tutorial01/>`_
 
 .. _Argus: https://github.com/Uninett/Argus/
-.. _Django: https://github.com/Uninett/Argus/
+.. _Django: https://docs.djangoproject.com/

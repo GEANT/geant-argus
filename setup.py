@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.29",
+    version="0.30",
     author="GEANT",
     author_email="swd@geant.org",
     description="Geant Argus NOC Dashboard UI",
@@ -32,6 +32,7 @@ setup(
             "PyYAML",
             "sphinx",
             "sphinx-rtd-theme",
+            "sphinxcontrib-drawio",
         ],
     },
     include_package_data=True,

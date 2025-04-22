@@ -49,6 +49,7 @@ db.sqlite3-journal
 
 # Sphinx documentation
 docs/_build/
+docs/build/
 
 
 # Environments
@@ -60,6 +61,8 @@ ENV/
 env.bak/
 venv.bak/
 
+# config.json
+config.json
 
 # Argus / repo stuff
 cmd.sh

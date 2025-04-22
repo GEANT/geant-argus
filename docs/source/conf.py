@@ -94,3 +94,9 @@ html_static_path = ["_static"]
 # are concatenated and inserted.
 autoclass_content = "both"
 autodoc_typehints = "none"
+
+# the tags variable is injected by sphinx into conf.py
+# (toggle this by running ``sphinx-build -t drawio``)
+if tags.tags.get("drawio", False):  # noqa F821
+    extensions.append("sphinxcontrib.drawio")
+    drawio_disable_verbose_electron = True

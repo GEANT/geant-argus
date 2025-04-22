@@ -1,6 +1,6 @@
 from django import template
 
-from geant_argus.filters import filter_to_text
+from geant_argus.filter.model import filter_to_text
 from .template_utils import concat, concat_underscore, is_multiple
 
 register = template.Library()

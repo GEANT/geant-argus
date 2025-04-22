@@ -38,5 +38,6 @@ export ARGUS_OIDC_ENTITLEMENTS_PATTERN=
 
 export ARGUS_TICKET_URL_BASE='https://tts.geant.net/otrs/index.pl?Action=AgentTicketZoom;TicketNumber='
 
+export CONFIG_FILENAME="config.json"
 
 python manage.py "$@"
