@@ -9,6 +9,7 @@ CONFIG_SCHEMA = {
     "properties": {
         "DEFAULT_FROM_EMAIL": {"type": "string"},
         "SEND_EXPIRED_BLACKLISTS_EMAILS_TO": {"type": "array", "items": {"type": "string"}},
+        "SHORT_LIVED_ALARMS_UI_URL": {"type": ["string", "null"]},
     },
     "required": [
         "SEND_EXPIRED_BLACKLISTS_EMAILS_TO",

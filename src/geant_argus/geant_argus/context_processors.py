@@ -30,6 +30,7 @@ def geant_theme(request):
             if getattr(settings, "STATUS_CHECKER_ENABLED")
             else None
         ),
+        "short_alarms_ui_url": getattr(settings, "SHORT_LIVED_ALARMS_UI_URL", None),
         "incident_details_tables": {
             "bgp": [
                 {
