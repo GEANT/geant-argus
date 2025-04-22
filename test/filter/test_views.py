@@ -1,6 +1,6 @@
 import jsonschema
 import pytest
-from geant_argus.geant_argus.filters.schema import FILTER_SCHEMA_V1
+from geant_argus.filter.schema import FILTER_SCHEMA_V1
 from geant_argus.geant_argus.filters.views import parse_filter_form_data, update_filter
 
 

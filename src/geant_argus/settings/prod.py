@@ -38,3 +38,5 @@ LOGGING = {
 }
 STYLESHEET_PATH = "geant.min.css"
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 15  # 15MB
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

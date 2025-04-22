@@ -107,7 +107,7 @@ TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
 )
 
 AUTH_TOKEN_EXPIRES_AFTER_DAYS = int(os.getenv("ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS", 14))
-ARGUS_FILTER_BACKEND = "geant_argus.geant_argus.filters.plugin"
+ARGUS_FILTER_BACKEND = "geant_argus.filter.plugin"
 ARGUS_HTMX_FILTER_FUNCTION = ARGUS_FILTER_BACKEND
 
 ARGUS_FRONTEND_DATETIME_FORMAT = "ISO"
@@ -119,6 +119,7 @@ INCIDENT_TABLE_COLUMNS = [
         "level",
         label="Severity",
         cell_template="htmx/incident/cells/_incident_level.html",
+        column_classes="min-w-28",
     ),
     IncidentTableColumn(
         "timestamp",
@@ -205,3 +206,5 @@ NEW_INCIDENT_AURAL_ALERT_DEFAULT = "off"
 # on the incident listing
 ACK_REMINDER_MINUTES = [0, 5, 10, 15, 30, 60, "never"]
 ACK_REMINDER_MINUTES_DEFAULT = 10
+
+DEFALT_FROM_EMAIL = "noreply@geant.org"

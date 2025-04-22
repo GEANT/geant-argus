@@ -3,7 +3,7 @@ from argus.notificationprofile.models import Filter as ArgusFilter
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from geant_argus.filters import filter_to_text
+from geant_argus.filter.model import filter_to_text
 from geant_argus.geant_argus.incidents.severity import IncidentSeverity
 
 User = get_user_model()

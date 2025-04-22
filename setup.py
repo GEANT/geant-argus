@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.29",
+    version="0.30",
     author="GEANT",
     author_email="swd@geant.org",
     description="Geant Argus NOC Dashboard UI",
@@ -11,7 +11,7 @@ setup(
     packages=find_packages(where="src", exclude=("tests",)),
     install_requires=[
         "Django~=5.1",
-        "argus-server[htmx]",
+        "argus-server[htmx]>=1.36.0",
         "django-widget-tweaks",
     ],
     extras_require={

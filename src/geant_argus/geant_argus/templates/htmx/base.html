@@ -9,6 +9,11 @@
   <li>
     <a href="{% url 'geant-blacklists:list-blacklists' %}">Blacklists</a>
   </li>
+  {% if short_alarms_ui_url %}
+    <li>
+      <a href="{{ short_alarms_ui_url }}" target="_blank">Short-lived Alarms</a>
+    </li>
+  {% endif %}
   {% if request.user.is_staff %}
     <li>
       <a href="{% url 'admin:index' %}">Admin</a>

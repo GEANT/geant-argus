@@ -1,5 +1,10 @@
+import os
 import pathlib
 from django.apps import AppConfig
+from django.conf import settings
+from django.utils.autoreload import autoreload_started
+
+from geant_argus.settings.config import load_config
 
 
 class GeantConfig(AppConfig):
@@ -14,12 +19,21 @@ class GeantConfig(AppConfig):
         from .incidents.bulk_actions import (
             bulk_close_incidents,
             bulk_clear_incidents,
-            bulk_ack_incidents,
             ClearAlarmForm,
         )
 
         views.INCIDENT_UPDATE_ACTIONS = {
-            "ack": (views.AckForm, bulk_ack_incidents),
+            "ack": views.INCIDENT_UPDATE_ACTIONS["ack"],
             "close": (views.DescriptionOptionalForm, bulk_close_incidents),
             "clear": (ClearAlarmForm, bulk_clear_incidents),
         }
+
+        # We read the config file here so that we can override settings that are set
+        # in the settings file
+        config_filename = os.getenv("CONFIG_FILENAME")
+        if config_filename:
+            load_config(config_filename, settings)
+            # hook up the config.json to django's runserver autoreloader
+            autoreload_started.connect(
+                lambda sender, **_: sender.extra_files.add(pathlib.Path(config_filename))
+            )

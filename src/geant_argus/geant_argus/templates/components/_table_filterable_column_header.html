@@ -9,24 +9,24 @@
     <div>{{ column.header }}</div>
     {% if column.order_by %}
       {% with ordering_value=table.filter_form|fieldvalue:table.ordering_field %}
-        <div class="flex">
+        <div class="flex gap-1">
           {# djlint:off #}
-          <a class="cursor-pointer {% if ordering_value == column.filter_field %}text-sm/4{% endif %}"
+          <a class="cursor-pointer {% if ordering_value == column.filter_field %}text-sm/4 {% else %} opacity-60 {% endif %}"
              hx-get="{% url table.list.url %}"
              href="?{{ table.ordering_field }}=-{{ column.filter_field }}"
              {% if ordering_value == column.filter_field %}
              hx-params="not {{ table.ordering_field }}"
              {% else %}
              hx-vals='{"{{ table.ordering_field }}": "{{ column.filter_field }}"}'
-             {% endif %}>▲</a>
-          <a class="cursor-pointer {% if ordering_value == '-'|concat:column.filter_field %}text-sm/4{% endif %}"
+             {% endif %}><i class="fa-solid fa-square-caret-up"></i></a>
+          <a class="cursor-pointer {% if ordering_value == '-'|concat:column.filter_field %}text-sm/4 {% else %} opacity-60 {% endif %}"
              hx-get="{% url table.list.url %}"
              href="?{{ table.ordering_field }}=-{{ column.filter_field }}"
              {% if ordering_value == '-'|concat:column.filter_field %}
              hx-params="not {{ table.ordering_field }}"
              {% else %}
              hx-vals='{"{{ table.ordering_field }}": "-{{ column.filter_field }}"}'
-             {% endif %}>▼</a>
+             {% endif %}><i class="fa-solid fa-square-caret-down"></i></a>
           {# djlint:on #}
         </div>
       {% endwith %}
@@ -35,8 +35,10 @@
       {% with filter_value=table.filter_form|fieldvalue:column.filter_field %}
         <div>
           <button type="button"
-                  class="btn btn-xs {% if filter_value %} btn-primary {% else %} btn-ghost {% endif %} min-h-4 h-4"
-                  _="on click toggle .hidden on next .column-filter">🔍</button>
+                  class="btn btn-xs {% if filter_value %} btn-primary {% else %} btn-ghost text-primary {% endif %} min-h-4 h-4"
+                  _="on click toggle .hidden on next .column-filter">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
         </div>
       {% endwith %}
     {% endif %}

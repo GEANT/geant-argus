@@ -21,3 +21,5 @@ STATUS_CHECKER_INPROV_URL = get_str_env(
     "ARGUS_STATUS_CHECKER_INPROV_URL", "https://test-inprov01.geant.org"
 )
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

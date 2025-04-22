@@ -1,0 +1,5 @@
+{
+  "SEND_EXPIRED_BLACKLISTS_EMAILS_TO": [],
+  "DEFAULT_FROM_EMAIL": "noreply@geant.org",
+  "SHORT_LIVED_ALARMS_UI_URL": "https://test-short-lived-alarms01.geant.org/"
+}
