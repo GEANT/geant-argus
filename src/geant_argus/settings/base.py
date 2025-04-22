@@ -119,6 +119,7 @@ INCIDENT_TABLE_COLUMNS = [
         "level",
         label="Severity",
         cell_template="htmx/incident/cells/_incident_level.html",
+        column_classes="min-w-28",
     ),
     IncidentTableColumn(
         "timestamp",
