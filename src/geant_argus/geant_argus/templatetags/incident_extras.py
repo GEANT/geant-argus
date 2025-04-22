@@ -12,6 +12,7 @@ from ..incidents.severity import IncidentSeverity
 from .template_utils import dateparse, get_item
 
 register = template.Library()
+MAX_CLEARING_TIME_BEFORE_STUCK = datetime.timedelta(minutes=1)
 
 
 def _level_to_severity(value):
@@ -46,28 +47,38 @@ def level_to_badge(level: int, is_open=True):
             classes = ["incident-minor"]
         case _:
             classes = ["incident-default"]
+    if is_open:
+        classes.append("border-base-content")
     if not is_open:
-        classes.append("incident-closed")
+        classes.extend(["incident-closed", "border-base-content/50"])
     return " ".join(classes)
 
 
-def _incident_status(incident: Incident):
-    return upperfirst(incident.metadata.get("status", "Active"))
-
-
 @register.filter(name="incidentstatus")
-def incident_status_text(incident: Incident):
-    return _incident_status(incident)
+def incident_status(incident: Incident):
+    clearing_since = dateparse(incident.metadata.get("clearing_since"))
+    limit = datetime.datetime.now() - MAX_CLEARING_TIME_BEFORE_STUCK
+    status = upperfirst(incident.metadata.get("status", "Active"))
+    if (
+        incident.metadata["phase"].upper() == "FINALIZED"
+        and status == "Active"
+        and clearing_since is not None
+        and clearing_since < limit
+    ):
+        status = "Stuck"
+    return status
 
 
 @register.filter(name="statusbadge")
 def incident_status_badge(incident: Incident):
-    status = _incident_status(incident)
+    status = incident_status(incident)
     match status:
         case "Active":
             return "badge-primary"
         case "Clear":
             return "incident-clear"
+        case "Stuck":
+            return "incident-major"
         case "Closed":
             return "incident-default"
 
