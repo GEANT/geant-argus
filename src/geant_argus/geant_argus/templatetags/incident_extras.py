@@ -59,8 +59,9 @@ def incident_status(incident: Incident):
     clearing_since = dateparse(incident.metadata.get("clearing_since"))
     limit = datetime.datetime.now() - MAX_CLEARING_TIME_BEFORE_STUCK
     status = upperfirst(incident.metadata.get("status", "Active"))
+    phase = incident.metadata.get("phase", "FINALIZED").upper()
     if (
-        incident.metadata["phase"].upper() == "FINALIZED"
+        phase == "FINALIZED"
         and status == "Active"
         and clearing_since is not None
         and clearing_since < limit
@@ -81,6 +82,23 @@ def incident_status_badge(incident: Incident):
             return "incident-major"
         case "Closed":
             return "incident-default"
+
+
+@register.filter(name="statustitletext")
+def incident_status_title_text(incident: Incident):
+    status = incident_status(incident)
+    match status:
+        case "Active":
+            return "This alarm is actively down"
+        case "Clear":
+            return "This alarm has fully cleared"
+        case "Stuck":
+            return (
+                "This alarm has sub alarms which are still down,"
+                " please review the details button and pass over to 2nd line IN HOURS"
+            )
+        case "Closed":
+            return "This alarm has fully cleared and has been acknowledged and closed"
 
 
 @register.filter
