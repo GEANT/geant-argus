@@ -11,7 +11,7 @@ setup(
     packages=find_packages(where="src", exclude=("tests",)),
     install_requires=[
         "Django~=5.1",
-        "argus-server[htmx]>=1.35.0",
+        "argus-server[htmx]>=1.36.0",
         "django-widget-tweaks",
     ],
     extras_require={
