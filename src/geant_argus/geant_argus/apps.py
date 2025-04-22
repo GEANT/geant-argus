@@ -2,6 +2,7 @@ import os
 import pathlib
 from django.apps import AppConfig
 from django.conf import settings
+from django.utils.autoreload import autoreload_started
 
 from geant_argus.settings.config import load_config
 
@@ -32,3 +33,7 @@ class GeantConfig(AppConfig):
         config_filename = os.getenv("CONFIG_FILENAME")
         if config_filename:
             load_config(config_filename, settings)
+            # hook up the config.json to django's runserver autoreloader
+            autoreload_started.connect(
+                lambda sender, **_: sender.extra_files.add(pathlib.Path(config_filename))
+            )
