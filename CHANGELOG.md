@@ -2,7 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.30] - 2025-04-18
+## [0.31] - 2025-04-23
+- set default grace period to 5 minutes and make configurable
+- add title text to stuck alarm warning triangle
+- revert incident list to normal size
+
+## [0.30] - 2025-04-22
 - DBOARD3-1174: add management command for sending expired blacklists email
 - DBOARD3-1197: Stop backpropagating acks through alarms api
 - DBOARD3-1203: show incident as Stuck when still Active 1 minute after it started clearing
