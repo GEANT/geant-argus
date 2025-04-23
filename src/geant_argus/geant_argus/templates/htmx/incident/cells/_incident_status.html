@@ -1,8 +1,11 @@
 {% load incident_extras %}
-{% with status=incident|incidentstatus %}
+{% with status=incident|incidentstatus title_text=incident|statustitletext %}
   <div class="flex flex-row items-center gap-1">
     <div class="badge {{ incident|statusbadge }} {% if incident.metadata and incident.metadata.phase == 'PENDING' %}animate-blink{% endif %}"
-         title="{{ incident|statustitletext }}">{{ status }}</div>
-    {% if status == "Stuck" %}<i class="fa-solid fa-triangle-exclamation text-xl text-incident-critical"></i>{% endif %}
+         title="{{ title_text }}">{{ status }}</div>
+    {% if status == "Stuck" %}
+      <i class="fa-solid fa-triangle-exclamation text-xl text-incident-critical"
+         title="{{ title_text }}"></i>
+    {% endif %}
   </div>
 {% endwith %}
