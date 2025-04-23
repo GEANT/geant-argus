@@ -8,6 +8,14 @@
     @apply border-spacing-0;
   }
 
+  /* The incident table is now table-xs. However, the font size is too small for the big screen
+  in the NOC. We reset the font size, but keep some of the compact behaviour of table-xs */
+  .table-xs td {
+    @apply text-sm;
+    @apply pt-2;
+    @apply pb-2;
+  }
+
   .htmx-loading-spin.htmx-request {
     @apply animate-spin;
   }
