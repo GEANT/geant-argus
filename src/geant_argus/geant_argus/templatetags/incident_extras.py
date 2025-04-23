@@ -1,18 +1,28 @@
 import datetime
+import functools
 import json
 
+from argus.auth.utils import get_preference
 from argus.incident.models import Incident
 from django import template
 from django.conf import settings
+from django.core.signals import setting_changed
 from django.http import HttpRequest
 from django.template.defaultfilters import stringfilter
 from django.utils import timezone
-from argus.auth.utils import get_preference
+
 from ..incidents.severity import IncidentSeverity
 from .template_utils import dateparse, get_item
 
 register = template.Library()
-MAX_CLEARING_TIME_BEFORE_STUCK = datetime.timedelta(minutes=1)
+
+
+@functools.cache
+def stuck_alarms_grace_period():
+    return datetime.timedelta(minutes=settings.STUCK_ALARM_GRACE_PERIOD_MINUTES)
+
+
+setting_changed.connect(lambda **_: stuck_alarms_grace_period.cache_clear())
 
 
 def _level_to_severity(value):
@@ -57,7 +67,7 @@ def level_to_badge(level: int, is_open=True):
 @register.filter(name="incidentstatus")
 def incident_status(incident: Incident):
     clearing_since = dateparse(incident.metadata.get("clearing_since"))
-    limit = datetime.datetime.now() - MAX_CLEARING_TIME_BEFORE_STUCK
+    limit = datetime.datetime.now() - stuck_alarms_grace_period()
     status = upperfirst(incident.metadata.get("status", "Active"))
     phase = incident.metadata.get("phase", "FINALIZED").upper()
     if (

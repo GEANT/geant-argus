@@ -53,26 +53,36 @@ def test_blacklist_symbol(original_severity, final_severity, symbol):
     assert blacklist_symbol(incident) == symbol
 
 
-NOW = datetime.datetime.now()
-JUST_YET = NOW - datetime.timedelta(seconds=10)
-A_WHILE_AGO = NOW - datetime.timedelta(minutes=2)
-
-
 @pytest.mark.parametrize(
     "incident, expected_status",
     [
         (FakeIncident(metadata={"phase": "FINALIZED"}), "Active"),
         (FakeIncident(metadata={"phase": "FINALIZED", "clearing_since": None}), "Active"),
-        (FakeIncident(metadata={"phase": "FINALIZED", "clearing_since": JUST_YET}), "Active"),
-        (FakeIncident(metadata={"phase": "FINALIZED", "clearing_since": A_WHILE_AGO}), "Stuck"),
-        (FakeIncident(metadata={"phase": "PENDING", "clearing_since": A_WHILE_AGO}), "Active"),
+        (FakeIncident(metadata={"phase": "FINALIZED", "clearing_since": "JUST_YET"}), "Active"),
+        (FakeIncident(metadata={"phase": "FINALIZED", "clearing_since": "A_WHILE_AGO"}), "Stuck"),
+        (FakeIncident(metadata={"phase": "PENDING", "clearing_since": "A_WHILE_AGO"}), "Active"),
         (
             FakeIncident(
-                metadata={"phase": "FINALIZED", "status": "CLEAR", "clearing_since": A_WHILE_AGO}
+                metadata={"phase": "FINALIZED", "status": "CLEAR", "clearing_since": "A_WHILE_AGO"}
             ),
             "Clear",
         ),
     ],
 )
-def test_stuck_incident(incident, expected_status):
+def test_stuck_incident(incident, expected_status, settings):
+    settings.STUCK_ALARM_GRACE_PERIOD_MINUTES = 3
+    now = datetime.datetime.now()
+    match incident.metadata.get("clearing_since"):
+        case "JUST_YET":
+            incident.metadata["clearing_since"] = (
+                now - datetime.timedelta(minutes=3) + datetime.timedelta(seconds=1)
+            )
+
+        case "A_WHILE_AGO":
+            incident.metadata["clearing_since"] = (
+                now - datetime.timedelta(minutes=3) - datetime.timedelta(seconds=1)
+            )
+
+        case _:
+            pass
     assert incident_status(incident) == expected_status
