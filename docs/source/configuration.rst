@@ -38,11 +38,11 @@ set up multiple ``cmd.sh`` files that can for example point to different databas
 database and the one running in the test environment. A ``cmd.sh-template`` file exists in the
 repository root to provide default values.
 
-See also `Argus documentation: Applying settings and switching between them
-<https://argus-server.readthedocs.io/en/latest/development/notes.html#applying-settings-and-switching-between-them>`_.
+See also :argus:`Argus documentation: Applying settings and switching between them 
+<development/notes.html#applying-settings-and-switching-between-them>`.
 
 
-.. _config-json::
+.. _config-json:
 
 Config JSON file
 ----------------
@@ -76,7 +76,6 @@ Below are some of the important settings explained
 * ``ACK_REMINDER_MINUTES`` and ``ACK_REMINDER_MINUTES_DEFAULT``: The time delay settings for
   the :ref:`preferences-ack-reminder` preference.
 
-See also `Argus documentation: Site-specific settings
-<https://argus-server.readthedocs.io/en/latest/reference/site-specific-settings.html>`_ for more
-Argus settings
+See also :argus:`Argus documentation: Site-specific settings <reference/site-specific-settings.html>`
+for more Argus settings
 

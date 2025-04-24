@@ -9,11 +9,9 @@ from django.views.decorators.http import require_POST
 from geant_argus.geant_argus.dashboard_alarms import update_alarm
 from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, refresh
 
+from .common import EmptyStringAllowedCharField
+
 TICKET_URL_BASE = getattr(settings, "TICKET_URL_BASE", "")
-
-
-class EmptyStringAllowedCharField(forms.CharField):
-    empty_values = (None,)  # empty string '' should not be considered an empty value
 
 
 class UpdateIncidentForm(forms.Form):

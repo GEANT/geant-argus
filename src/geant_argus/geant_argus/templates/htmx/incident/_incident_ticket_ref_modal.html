@@ -1,0 +1,10 @@
+{% extends "htmx/incident/_base_incident_update_modal.html" %}
+{% block dialogform %}
+  <label class="input input-bordered flex items-center gap-2 w-full">
+    <input name="ticket_ref"
+           autocomplete="off"
+           type="text"
+           placeholder="Ticket ref"
+           class="grow border-none" />
+  </label>
+{% endblock dialogform %}

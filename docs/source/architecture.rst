@@ -22,8 +22,7 @@ The primary connector between the Correlator's AlarmsDB and Geant Argus is the
 RabbitMQ exchange for updates to alarms. It then fetches the alarm's data from the AlarmsDB and
 transforms the alarm into an incident. It creates a new incident or updates an existing incident
 for the alarm in Geant Argus. Periodically it performs a full synchronization to ensure consistency
-between the two databases. It uses the
-`Argus API <https://argus-server.readthedocs.io/en/latest/reference/api.html>`_ to update
+between the two databases. It uses the :argus:`Argus API <reference/api.html>` to update
 incidents. It only updates incidents on the Argus side, AlarmsDB is considered the source
 of truth for alarms.
 
@@ -49,11 +48,10 @@ updates an alarms with one of the following:
 * Add or update a ticket number
 * Clear an alarm with an optional clear time
 * Close an alarm
-* Acknowledge an alarm (Deprecated)
 
 .. note::
-  While acknowledgements themselves are not deprecated, there is no longer a reason keep a record
-  of the acknowledgements in AlarmsDB. This is an exception to the rule that the AlarmsDB is the
+  Alarm acknowledgements used to be stored in AlarmsDB. However, there is no longer a reason keep
+  a record of them in AlarmsDB. This is an exception to the rule that the AlarmsDB is the
   single source of truth for alarms.
 
 When a user performs one of these actions, the Alarms API is called which updates the AlarmDB. Only

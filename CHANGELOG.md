@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.32] - 2025-04-24
+- DBOARD3-1209: Add bulk action for updating ticket ref
+- Add --full flag to templatediff to show diffs and add documentation
+
 ## [0.31] - 2025-04-23
 - set default grace period to 5 minutes and make configurable
 - add title text to stuck alarm warning triangle

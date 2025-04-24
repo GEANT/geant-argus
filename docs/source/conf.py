@@ -67,7 +67,12 @@ release = "0.27"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx_rtd_theme", "sphinx.ext.autodoc", "sphinx.ext.coverage"]
+extensions = [
+    "sphinx_rtd_theme",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.coverage",
+    "sphinx.ext.extlinks",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -100,3 +105,9 @@ autodoc_typehints = "none"
 if tags.tags.get("drawio", False):  # noqa F821
     extensions.append("sphinxcontrib.drawio")
     drawio_disable_verbose_electron = True
+
+
+extlinks = {
+    "argus": ("https://argus-server.readthedocs.io/en/latest/%s", None),
+    "django": ("https://docs.djangoproject.com/en/5.1s/%s", None),
+}

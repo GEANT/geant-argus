@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pathlib
 import subprocess
-from typing import Generator, Optional, Sequence, Union
+from typing import Generator, Sequence, Union
 
 import click
 
@@ -17,9 +17,11 @@ def get_template_names(path: pathlib.Path):
     return set(str(t.relative_to(path)) for t in all_templates)
 
 
-def execute(command: Sequence[str], cwd: Union[str, pathlib.PurePath]) -> str:
+def execute(command: Sequence[str], cwd: Union[str, pathlib.PurePath], capture_output=True) -> str:
     try:
-        result = subprocess.run(command, check=True, capture_output=True, cwd=str(cwd), text=True)
+        result = subprocess.run(
+            command, check=True, capture_output=capture_output, cwd=str(cwd), text=True
+        )
         return result.stdout
 
     except subprocess.CalledProcessError as error:
@@ -29,9 +31,7 @@ def execute(command: Sequence[str], cwd: Union[str, pathlib.PurePath]) -> str:
         ) from error
 
 
-def get_changed_files(
-    argus_path: pathlib.Path, diff_spec: Optional[str] = ""
-) -> Generator[pathlib.Path, None, None]:
+def get_changed_files(argus_path: pathlib.Path, diff_spec) -> Generator[pathlib.Path, None, None]:
     command = ["git", "diff", "--name-only"]
     if diff_spec:
         command.append(diff_spec)
@@ -39,10 +39,21 @@ def get_changed_files(
     return (pathlib.Path(p) for p in result.split("\n") if p)
 
 
+def show_diff(template_path: pathlib.Path, diff_spec, file: pathlib.Path):
+    command = ["git", "--no-pager", "diff"]
+    if diff_spec:
+        command.append(diff_spec)
+    command.extend(["--", str(file)])
+    execute(command, cwd=template_path, capture_output=False)
+
+
 @click.command
 @click.argument("argus_path", type=click.Path(file_okay=False, exists=True, dir_okay=True))
 @click.argument("diff_spec", default="")
-def cli(argus_path: pathlib.Path, diff_spec: str):
+@click.option(
+    "--full", is_flag=True, default=False, help="Show a full diff for every changed template"
+)
+def cli(argus_path: pathlib.Path, diff_spec: str, full: bool):
     """Helper tool for identifying Argus templates that have been changed upstream (in Argus
     server). Point this tool to a local Argus git checkout located in ARGUS_PATH and supply a
     `git diff` specifier DIFF_SPEC, such as "HEAD^" or "v1.31.0..v1.32.0". This tool will determine
@@ -69,6 +80,11 @@ def cli(argus_path: pathlib.Path, diff_spec: str):
         err=True,
     )
     click.echo("\n".join(sorted(changed_overridden_templates)))
+
+    if full:
+        click.echo("\nShowing full diff of these templates")
+        for template in changed_overridden_templates:
+            show_diff(argus_path / ARGUS_TEMPLATES, diff_spec, template)
 
 
 if __name__ == "__main__":

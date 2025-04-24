@@ -37,7 +37,7 @@ Adding a new preference
 -----------------------
 
 Instructions for how to add a new preferences can be found in
-`Argus Documentation: How to add more preferences <https://argus-server.readthedocs.io/en/latest/development/howtos/add-more-preferences.html>`.
+:argus:`Argus Documentation: How to add more preferences <development/howtos/add-more-preferences.html>`.
 The Geant Argus specific preferences can be found in the ``geant_argus.geant_argus.models`` module.
 
 
