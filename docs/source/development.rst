@@ -41,8 +41,8 @@ Initialize local repository files
 #################################
 Now there are some local files to create. You need a :ref:`custom cmd.sh file <custom-cmd-sh-files>`
 and the tailwind css files. To build the tailwind css files, you also need the ``tailwindcss`` cli
-tool, see :ref:`dependencies-tailwindcss` and `Argus documentation: Install and build Tailwind CSS and daisyUI
-<https://argus-server.readthedocs.io/en/latest/reference/htmx-frontend.html#install-and-build-tailwind-css-and-daisyui>`_
+tool, see :ref:`dependencies-tailwindcss` and :argus:`Argus documentation: Install and build Tailwind CSS and daisyUI
+<reference/htmx-frontend.html#install-and-build-tailwind-css-and-daisyui>`
 
 These can all be downloaded and/or created for you by running::
 
@@ -54,8 +54,8 @@ Update ``cmd.sh``
 
 After creation, you may want to update the following environment variables in ``cmd.sh``
 
-* ``DATABASE_URL`` to point to a different database, eg the test database. See `Argus documentation:
-  Database settings <https://argus-server.readthedocs.io/en/latest/reference/site-specific-settings.html#database-settings>`_
+* ``DATABASE_URL`` to point to a different database, eg the test database. See :argus:`Argus documentation:
+  Database settings </reference/site-specific-settings.html#database-settings>`
 * ``ARGUS_DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION=0`` in case you connect to the test database.
   See :ref:`back-synchronization`
 * Any variable that begins with ``ARGUS_OIDC_`` to setup :ref:`single-sign-on`

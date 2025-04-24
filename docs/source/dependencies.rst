@@ -143,8 +143,8 @@ Installation
   make get-tailwind
 
 This is also done as part of the ``make initialize-repo`` command. Alternatively, you can follow
-the installation instructions in  `Argus documentation: Install and build Tailwind CSS and daisyUI
-<https://argus-server.readthedocs.io/en/latest/reference/htmx-frontend.html#install-and-build-tailwind-css-and-daisyui>`_.
+the installation instructions in  :argus:`Argus documentation: Install and build Tailwind CSS and daisyUI
+<reference/htmx-frontend.html#install-and-build-tailwind-css-and-daisyui>`.
 It is important to download the correct version (as specified in the ``tailwindcss/VERSION`` file).
 
 
@@ -156,8 +156,8 @@ Compiling Tailwind config and base CSS
 As described above, TailwindCSS can generate the css file from a base css file and a
 ``tailwind.config.js``. However, in the case of (Geant) Argus, there is no static base css file
 or ``tailwind.config.js``. This is due to the fact that the sources of the two Argus projects need
-to be combined. The solution to this can be found in the ``tailwind_config`` `Django management
-command <https://argus-server.readthedocs.io/en/latest/customization/htmx-frontend.html#themes-and-styling>`_
+to be combined. The solution to this can be found in the ``tailwind_config`` :argus:`Django management
+command <customization/htmx-frontend.html#themes-and-styling>`
 supplied by Argus. This command generates the base css file and the tailwind config. For generating
 the base css file, the command looks in the ``AppConfig`` of every app listed in the
 ``INSTALLED_APPS`` setting for a ``tailwind_css_files()`` method and creates includes in the
@@ -168,7 +168,7 @@ others. See also `custom-css-snippets`_.
 
 The ``tailwind.config.js`` file is generated from a template. The Django template engine is used
 for this. The template location is ``tailwind/tailwind.config.js`` and the ``geant_argus`` app
-has this :ref:`template overridden <overriding-templates>`. Aside from the static content in this
+has this :ref:`template overridden <templates>`. Aside from the static content in this
 template, there is an important interpolated variable ``{{ projectpaths }}``. This variable is
 injected with the template directory of every app in the ``INSTALLED_APPS`` setting. This way
 all templates are evaluated by ``tailwindcss`` to look for tailwind classes, be they from
@@ -208,5 +208,5 @@ the contents of a tailwind class to a css snippet::
 Upgrading dependencies
 ----------------------
 See
-`Argus Documentation: Upgrading Dependencies <https://argus-server.readthedocs.io/en/latest/development/howtos/htmx-frontend/dependencies.html>`_
+:argus:`Argus Documentation: Upgrading Dependencies <development/howtos/htmx-frontend/dependencies.html>`
 

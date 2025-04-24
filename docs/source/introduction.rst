@@ -47,7 +47,7 @@ External links to Documentation
    * - Django
      - `https://docs.djangoproject.com/ <https://docs.djangoproject.com/>`_
    * - Django Tutorial
-     - `https://docs.djangoproject.com/en/5.1/intro/tutorial01/ <https://docs.djangoproject.com/en/5.1/intro/tutorial01/>`_
+     - :django:`intro/tutorial01/`
 
 .. _Argus: https://github.com/Uninett/Argus/
 .. _Django: https://docs.djangoproject.com/

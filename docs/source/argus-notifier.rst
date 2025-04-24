@@ -87,3 +87,9 @@ is given in the ``version`` field at the root of the ``metadata`` dictionary. As
 latest metadata version is ``v1``. The schema can be found in the
 ``src/geant_argus/geant_argus/metadata/schema.py`` file.
 
+By design, Argus Server does not validate incoming metadata when incidents are created or updated
+through the api. As far as Argus is concerned, metadata can be anything as long as it's valid json.
+However, Argus also does not provide a hook to validate incoming metadata. Instead, Geant Argus
+uses :ref:`middleware` to validate incoming metadata to the schema. This is not the prettiest
+solution however, and it would be better if Argus supported a hook for validating metadata.
+
