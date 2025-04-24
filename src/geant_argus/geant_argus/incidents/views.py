@@ -2,28 +2,28 @@ from argus.incident.models import Incident
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponseBadRequest, HttpResponseServerError
+from django.http import HttpResponseServerError
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-
 from geant_argus.geant_argus.dashboard_alarms import update_alarm
-from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, refresh
+from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, HttpResponseNoSwap, refresh
 
-from .common import EmptyStringAllowedCharField
+from .common import EmptyStringAllowedCharField, TicketRefField
 
 TICKET_URL_BASE = getattr(settings, "TICKET_URL_BASE", "")
 
 
 class UpdateIncidentForm(forms.Form):
     comment = EmptyStringAllowedCharField(max_length=255, empty_value=None, required=False)
-    ticket_ref = EmptyStringAllowedCharField(max_length=75, empty_value=None, required=False)
+    ticket_ref = TicketRefField()
 
 
 @require_POST
 def update_incident(request: HtmxHttpRequest, pk: int):
     form = UpdateIncidentForm(request.POST)
     if not form.is_valid():
-        return HttpResponseBadRequest()
+        messages.error(request, form.errors)
+        return HttpResponseNoSwap()
 
     incident = get_object_or_404(Incident, id=pk)
     payload = {k: v for k, v in form.cleaned_data.items() if v is not None}

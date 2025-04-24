@@ -9,11 +9,11 @@ from django.utils import timezone
 
 from geant_argus.geant_argus.dashboard_alarms import clear_alarm, close_alarm, update_alarm
 
-from .common import EmptyStringAllowedCharField
+from .common import TicketRefField
 
 
 class TicketRefForm(forms.Form):
-    ticket_ref = EmptyStringAllowedCharField(max_length=64, empty_value=None)
+    ticket_ref = TicketRefField()
 
 
 class ClearAlarmForm(forms.Form):
