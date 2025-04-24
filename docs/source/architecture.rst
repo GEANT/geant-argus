@@ -49,11 +49,10 @@ updates an alarms with one of the following:
 * Add or update a ticket number
 * Clear an alarm with an optional clear time
 * Close an alarm
-* Acknowledge an alarm (Deprecated)
 
 .. note::
-  While acknowledgements themselves are not deprecated, there is no longer a reason keep a record
-  of the acknowledgements in AlarmsDB. This is an exception to the rule that the AlarmsDB is the
+  Alarm acknowledgements used to be stored in AlarmsDB. However, there is no longer a reason keep
+  a record of them in AlarmsDB. This is an exception to the rule that the AlarmsDB is the
   single source of truth for alarms.
 
 When a user performs one of these actions, the Alarms API is called which updates the AlarmDB. Only
