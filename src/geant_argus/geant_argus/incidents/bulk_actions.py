@@ -1,10 +1,19 @@
 import itertools
 from typing import Any, Dict
+
 from argus.htmx.utils import bulk_close_queryset
 from django import forms
+from django.conf import settings
 from django.http import HttpResponseServerError
-from geant_argus.geant_argus.dashboard_alarms import close_alarm, clear_alarm
 from django.utils import timezone
+
+from geant_argus.geant_argus.dashboard_alarms import clear_alarm, close_alarm, update_alarm
+
+from .common import EmptyStringAllowedCharField
+
+
+class TicketRefForm(forms.Form):
+    ticket_ref = EmptyStringAllowedCharField(max_length=64, empty_value=None)
 
 
 class ClearAlarmForm(forms.Form):
@@ -32,6 +41,21 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
         clear_incident_in_metadata(incident.metadata, clear_time=clear_time)
         incident.save()
 
+    return incidents
+
+
+def bulk_update_ticket_ref(actor, qs, data: Dict[str, Any]):
+    ticket_url_base = getattr(settings, "TICKET_URL_BASE", "")
+    ticket_ref = data["ticket_ref"]
+    payload = {"ticket_ref": ticket_ref}
+    incidents = list(qs)
+    for incident in incidents:
+        if not update_alarm(incident.source_incident_id, payload):
+            return HttpResponseServerError("Error while updating ticket_ref")
+
+        incident.metadata.update(payload)
+        incident.ticket_url = ticket_url_base + ticket_ref if ticket_ref else ""
+        incident.save()
     return incidents
 
 

@@ -4,5 +4,6 @@
     {% include "htmx/incident/_incident_update_button_acknowlegde.html" with action="ack" button_title="Acknowledge" dialog_id="create-acknowledgment-dialog" %}
     {% include "htmx/incident/_incident_clear_modal.html" with action="clear" dialog_id="clear-incident-dialog" button_class="btn-primary" button_title="Set clear time" header="Clear incident" explanation="Set clear time (optional)" cancel_text="Cancel" submit_text="Submit" %}
     {% include "htmx/incident/_incident_update_button.html" with action="close" button_title="Close" dialog_id="close-incident-dialog" %}
+    {% include "htmx/incident/_incident_ticket_ref_modal.html" with action="ticket_ref" dialog_id="update-incident-ticket-ref-dialog" button_class="btn-primary" button_title="Set ticket ref" header="Set ticket ref" explanation="Set ticket ref or empty" cancel_text="Cancel" submit_text="Submit" %}
   {% endwith %}
 {% endblock update_menu_content %}

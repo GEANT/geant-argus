@@ -19,13 +19,16 @@ class GeantConfig(AppConfig):
         from .incidents.bulk_actions import (
             bulk_close_incidents,
             bulk_clear_incidents,
+            bulk_update_ticket_ref,
             ClearAlarmForm,
+            TicketRefForm,
         )
 
         views.INCIDENT_UPDATE_ACTIONS = {
             "ack": views.INCIDENT_UPDATE_ACTIONS["ack"],
             "close": (views.DescriptionOptionalForm, bulk_close_incidents),
             "clear": (ClearAlarmForm, bulk_clear_incidents),
+            "ticket_ref": (TicketRefForm, bulk_update_ticket_ref),
         }
 
         # We read the config file here so that we can override settings that are set
