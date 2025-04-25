@@ -5,8 +5,9 @@ from django.contrib import messages
 from django.http import HttpResponseServerError
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
+from geant_argus.auth import require_write
 from geant_argus.geant_argus.dashboard_alarms import update_alarm
-from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, HttpResponseNoSwap, refresh
+from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, error_response, refresh
 
 from .common import EmptyStringAllowedCharField, TicketRefField
 
@@ -19,11 +20,12 @@ class UpdateIncidentForm(forms.Form):
 
 
 @require_POST
+@require_write("htmx:incident-list")
 def update_incident(request: HtmxHttpRequest, pk: int):
     form = UpdateIncidentForm(request.POST)
     if not form.is_valid():
         messages.error(request, form.errors)
-        return HttpResponseNoSwap()
+        return error_response(request, "htmx:incident-list")
 
     incident = get_object_or_404(Incident, id=pk)
     payload = {k: v for k, v in form.cleaned_data.items() if v is not None}
@@ -38,5 +40,4 @@ def update_incident(request: HtmxHttpRequest, pk: int):
     if (ticket_ref := form.cleaned_data["ticket_ref"]) is not None:
         incident.ticket_url = TICKET_URL_BASE + ticket_ref if ticket_ref else ""
     incident.save()
-
     return refresh(request, "htmx:incident-list")

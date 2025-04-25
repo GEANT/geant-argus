@@ -32,3 +32,9 @@ def redirect(request: HtmxHttpRequest, target, params=None):
     if request.htmx:
         return HttpResponseClientRedirect(redirect_to)
     return shortcuts.redirect(redirect_to)
+
+
+def error_response(request: HtmxHttpRequest, target="home"):
+    if request.htmx:
+        return HttpResponseNoSwap()
+    return refresh(request, target)

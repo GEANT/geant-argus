@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from geant_argus.auth import require_write
 from geant_argus.blacklist.models import Blacklist, Filter
 from geant_argus.filter.model import FILTER_MODEL, filter_to_text
 from geant_argus.filter.plugin import default_filter_params
@@ -114,6 +115,7 @@ def edit_filter(request, pk: Optional[int] = None):
 
 
 @require_POST
+@require_write(refresh_target="geant-filters:filter-list")
 def save_filter(request, pk: Optional[int] = None):
     result = save_filter_from_request(request, pk)
     if isinstance(result, HttpResponse):

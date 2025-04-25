@@ -1,0 +1,40 @@
+@layer utilities {
+  .read-only-user .require-write {
+    cursor: default;
+  }
+  .read-only-user .require-write-hidden {
+    display: none;
+  }
+
+  .read-only input,
+  .read-only select,
+  .read-only button {
+    pointer-events: none;
+    @apply bg-gray-100;
+  }
+
+  .read-only-user .require-write label,
+  .read-only-user label.require-write {
+    pointer-events: none;
+  }
+
+  .read-only-user .require-write.input,
+  .read-only-user .require-write .input,
+  .read-only-user .require-write input:not([type="submit"]),
+  .read-only-user input:not([type="submit"]).require-write,
+  .read-only-user .require-write select,
+  .read-only-user select.require-write {
+    pointer-events: none;
+    @apply bg-gray-100;
+  }
+
+  .read-only-user .require-write input[type="submit"],
+  .read-only-user input[type="submit"].require-write,
+  .read-only-user .require-write button,
+  .read-only-user .require-write.btn,
+  .read-only-user button.require-write,
+  .read-only-user .require-write .btn {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+}
