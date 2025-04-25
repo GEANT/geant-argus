@@ -1,0 +1,3 @@
+{% include "htmx/incident/cells/_incident_checkbox.html" %}
+<input id="select-incident-{{ incident.pk }}"
+       {% if incident.metadata and incident.metadata.phase|lower == 'pending' %}disabled{% endif %}>
