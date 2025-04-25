@@ -1,3 +1,10 @@
-{% include "htmx/incident/cells/_incident_checkbox.html" %}
+{% load incident_extras %}
 <input id="select-incident-{{ incident.pk }}"
+       hx-preserve
+       type="checkbox"
+       autocomplete="off"
+       class="row-select checkbox checkbox-sm checkbox-primary border"
+       hx-on:change="event.target.checked ? htmx.find('.tab-select').checked = event.target.checked : null;"
+       name="incident_ids"
+       value="{{ incident.pk }}"
        {% if incident.metadata and incident.metadata.phase|lower == 'pending' %}disabled{% endif %}>
