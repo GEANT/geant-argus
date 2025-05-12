@@ -105,7 +105,7 @@ def incident_status_title_text(incident: Incident):
         case "Stuck":
             return (
                 "This alarm has sub alarms which are still down,"
-                " please review the details button and pass over to 2nd line IN HOURS"
+                " please review the details button and pass over to 2nd line OUTSIDE RED HOURS"
             )
         case "Closed":
             return "This alarm has fully cleared and has been acknowledged and closed"
