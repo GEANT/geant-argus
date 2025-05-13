@@ -1,16 +1,22 @@
+/*
+  if a user is readonly, the ``read-only-user`` class is added to the <body> tag. From there on
+  certain buttons and other (input) elements can be disabled or hidden by setting the 
+  ``require-write`` or ``require-write-hidden`` class respectively. If a user has write
+  permissions, the ``read-only-user`` class is not applied, and the ``require-write`` classes are
+  ignored. This css behaviour is only for UX purposes to show the user what they can and cannot do,
+  actual authorization checks are done in the backend. 
+
+  This css snippet also defines a ``read-only`` class, which is in use by the blacklist edit page to
+  set the filter view to readonly (which can be toggled using the "edit filter" button in the
+  blacklist edit page.
+ */
+
 @layer utilities {
   .read-only-user .require-write {
     cursor: default;
   }
   .read-only-user .require-write-hidden {
     display: none;
-  }
-
-  .read-only input,
-  .read-only select,
-  .read-only button {
-    pointer-events: none;
-    @apply bg-gray-100;
   }
 
   .read-only-user .require-write label,
@@ -36,5 +42,12 @@
   .read-only-user .require-write .btn {
     pointer-events: none;
     opacity: 0.4;
+  }
+
+  .read-only input,
+  .read-only select,
+  .read-only button {
+    pointer-events: none;
+    @apply bg-gray-100;
   }
 }

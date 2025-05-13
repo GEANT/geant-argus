@@ -1,4 +1,5 @@
 import pytest
+
 from geant_argus.auth import get_groups_from_entitlements
 
 
