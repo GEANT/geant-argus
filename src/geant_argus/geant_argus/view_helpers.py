@@ -1,7 +1,8 @@
+from typing import Any
 from urllib.parse import urlencode
 
 from django import shortcuts
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.urls import reverse
 from django_htmx.http import HttpResponseClientRedirect, HttpResponseClientRefresh
 from django_htmx.middleware import HtmxDetails
@@ -9,6 +10,12 @@ from django_htmx.middleware import HtmxDetails
 
 class HtmxHttpRequest(HttpRequest):
     htmx: HtmxDetails
+
+
+class HttpResponseNoSwap(HttpResponse):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self["HX-Reswap"] = "none"
 
 
 def refresh(request: HtmxHttpRequest, target):
