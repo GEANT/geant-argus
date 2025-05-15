@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.33] - 2025-05-15
+- DBOARD3-1211: Validate ticket ref updates to be a positive integer
+- DBOARD3-1167: Prevent selecting pending incidents for (bulk) update
+- DBOARD3-1228: update stuck alarms title text message
+
 ## [0.32] - 2025-04-24
 - DBOARD3-1209: Add bulk action for updating ticket ref
 - Add --full flag to templatediff to show diffs and add documentation
