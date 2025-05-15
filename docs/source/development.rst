@@ -56,7 +56,7 @@ After creation, you may want to update the following environment variables in ``
 
 * ``DATABASE_URL`` to point to a different database, eg the test database. See :argus:`Argus documentation:
   Database settings </reference/site-specific-settings.html#database-settings>`
-* ``ARGUS_DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION=0`` in case you connect to the test database.
+* ``DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION=0`` in case you connect to the test database.
   See :ref:`back-synchronization`
 * Any variable that begins with ``ARGUS_OIDC_`` to setup :ref:`single-sign-on`
 
