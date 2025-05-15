@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from geant_argus.auth import require_write
 from geant_argus.blacklist.models import Blacklist
 from geant_argus.geant_argus.filters.views import render_edit_filter, save_filter_from_request
 from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, redirect
@@ -160,6 +161,7 @@ def list_blacklists(request):
 
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
+@require_write("geant-blacklists:list-blacklists", methods=["POST", "DELETE"])
 def edit_blacklist(request: HtmxHttpRequest, pk=None):
     instance = None if pk is None else get_object_or_404(Blacklist, pk=pk)
     if request.method == "GET":
@@ -204,6 +206,7 @@ def edit_filter(request):
 
 
 @require_POST
+@require_write(refresh_target="geant-blacklists:list-blacklists")
 def save_filter(request):
     form = EditFilterForBlacklistForm(request.GET)
     if not form.is_valid():

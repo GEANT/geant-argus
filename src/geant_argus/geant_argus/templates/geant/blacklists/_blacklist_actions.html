@@ -2,7 +2,7 @@
   <a href="{% url 'geant-blacklists:edit-blacklist' object.pk %}">
     <button class="btn btn-outline btn-primary btn-xs">Edit</button>
   </a>
-  <button class="btn btn-outline btn-error btn-xs"
+  <button class="btn btn-outline btn-error btn-xs require-write-hidden"
           hx-delete="{% url 'geant-blacklists:edit-blacklist' object.pk %}"
           hx-confirm="Are you sure you wish to delete blacklist {{ object.name }}"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Delete</button>

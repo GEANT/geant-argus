@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block buttons %}
   {% if read_only %}
-    <button class="btn btn-primary h-full"
+    <button class="btn btn-primary h-full require-write"
             hx-get="{% url 'geant-blacklists:edit-filter' %}?filter={{ pk }}"
             hx-target="#filter-edit">Enable editing</button>
   {% else %}

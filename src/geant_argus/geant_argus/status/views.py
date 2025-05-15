@@ -7,6 +7,8 @@ from django.shortcuts import render
 from argus.util.datetime_utils import make_aware
 import requests
 
+from geant_argus.auth import require_write
+
 CORRELATOR_REL_TIME = [
     [300, ">5 min"],
     [120, ">2 min"],
@@ -24,6 +26,7 @@ def service_status(request: HttpRequest):
 
 
 @require_POST
+@require_write()
 def update_inventory(request: HttpRequest):
     send_update_inprov()
     return render(

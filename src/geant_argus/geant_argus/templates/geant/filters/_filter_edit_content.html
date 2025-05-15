@@ -5,7 +5,7 @@
   </div>
 {% endblock form %}
 {% block buttons %}
-  <button class="btn btn-primary join-item h-full"
+  <button class="btn btn-primary join-item h-full require-write"
           hx-post="{% if pk is None %}{% url 'geant-filters:save-new-filter' %} {% else %} {% url 'geant-filters:save-filter' pk %} {% endif %}"
           hx-target="#filter-form"
           hx-include="#filter-form"

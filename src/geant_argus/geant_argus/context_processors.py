@@ -1,4 +1,5 @@
 from django.conf import settings
+from geant_argus.auth import has_write_permission
 
 INCIDENT_DETAILS_COMMON_COLUMNS = [
     {"name": "Alarm ID", "cell_template": "htmx/incident_details/event_id.html"},
@@ -125,3 +126,7 @@ def geant_theme(request):
             },
         ],
     }
+
+
+def is_readonly(request):
+    return {"readonly": not has_write_permission(request.user)}

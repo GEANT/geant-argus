@@ -1,0 +1,6 @@
+{% extends "htmx_base.html" %}
+{% block body_overrides %}
+  class="override bg-base-100
+  {% if readonly %}read-only-user{% endif %}
+  "
+{% endblock body_overrides %}
