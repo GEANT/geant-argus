@@ -24,7 +24,7 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
     incidents = bulk_close_queryset(actor, qs, data)
     for incident in incidents:
         if not close_alarm(incident.source_incident_id):
-            raise HttpResponseServerError("Error while closing incident")
+            return HttpResponseServerError("Error while closing incident")
         incident.metadata["status"] = "CLOSED"
         incident.metadata["clear_time"] = data["timestamp"].isoformat()
         incident.save()
