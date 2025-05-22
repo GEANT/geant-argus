@@ -38,7 +38,7 @@
                         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
                         _="on click halt">Run</button>
                 <button type="button"
-                        class="btn btn-xs btn-error btn-outline"
+                        class="btn btn-xs btn-error btn-outline require-write-hidden"
                         hx-delete="{% url 'geant-filters:edit-filter' object.pk %}"
                         hx-confirm="Are you sure you want to delete filter {{ object.name }}? This will also delete any blacklists based on this filter."
                         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
@@ -67,7 +67,7 @@
                 </dd>
               </div>
             </dl>
-            <a class="join-item btn btn-primary rounded-box h-full"
+            <a class="join-item btn btn-primary rounded-box h-full require-write"
                href="{% url 'geant-filters:edit-filter' %}"
                hx-get="{% url 'geant-filters:edit-filter' %}"
                hx-target="#filter-edit">Create new filter</a>

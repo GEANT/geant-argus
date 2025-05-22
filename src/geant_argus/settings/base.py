@@ -15,6 +15,16 @@ INSTALLED_APPS = [
 ROOT_URLCONF = "geant_argus.urls"
 MIDDLEWARE += [  # noqa: F405
     "geant_argus.geant_argus.metadata.validation.MetadataValidationMiddleware",
+    # Unfortunately, due to a bug in CoreAAI, a user's entitlements are cached
+    # for an access_token and a refresh_token in the CoreAAI backend, so that rechecking
+    # a user's entitlements does not yield updated results even if they have changed. The only
+    # thing that works is to force the user to log in again. For this we use the
+    # geant_argus.auth.SocialAuthLimitSessionLifetimeMiddleware below. Once the bug has been
+    # solved, we can activate (and properly test) the SocialAuthRefreshMiddleware
+    #
+    # Uncomment the next line to activate SocialAuthRefreshMiddleware
+    # "geant_argus.auth.SocialAuthRefreshMiddleware",
+    "geant_argus.auth.SocialAuthLimitSessionAgeMiddleware",  # temporary solution
 ]
 if "DATABASES" in globals():
     DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa: F405
@@ -35,7 +45,6 @@ if not get_bool_env("ARGUS_OIDC_DISABLE", default=False):
 
 ARGUS_OIDC_METHOD_NAME = "Geant Federated Login"
 ARGUS_OIDC_ENTITLEMENTS_PATTERN = get_str_env("ARGUS_OIDC_ENTITLEMENTS_PATTERN")
-ARGUS_OIDC_SUPERUSER_GROUP = "admin"
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 # fmt: off
@@ -90,8 +99,12 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = get_str_env("ARGUS_OIDC_URL")
 SOCIAL_AUTH_OIDC_KEY = get_str_env("ARGUS_OIDC_CLIENT_ID")
 SOCIAL_AUTH_OIDC_SECRET = get_str_env("ARGUS_OIDC_SECRET")
-SOCIAL_AUTH_OIDC_SCOPE = ["entitlements"]
 
+# entitlements are for authorization/groups, offline_access is for refresh_tokens
+SOCIAL_AUTH_OIDC_SCOPE = ["entitlements", "offline_access"]
+
+# prompt=consent is a required parameter when requesting the offline_access scope
+SOCIAL_AUTH_OIDC_AUTH_EXTRA_ARGUMENTS = {"prompt": "consent"}
 
 # Theming
 THEME_DEFAULT = "geant"
@@ -102,6 +115,7 @@ DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", 
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
     [
         "geant_argus.geant_argus.context_processors.geant_theme",
+        "geant_argus.geant_argus.context_processors.is_readonly",
         "django.template.context_processors.request",
     ]
 )

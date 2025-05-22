@@ -50,6 +50,7 @@ class RenderAsJSON(Directive):
 
 def setup(app):
     app.add_directive("asjson", RenderAsJSON)
+    app.add_css_file("css/custom.css")
 
 
 # -- Project information -----------------------------------------------------

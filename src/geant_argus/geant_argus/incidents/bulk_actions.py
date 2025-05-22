@@ -1,3 +1,4 @@
+import functools
 import itertools
 from typing import Any, Dict
 
@@ -6,7 +7,8 @@ from django import forms
 from django.conf import settings
 from django.http import HttpResponseServerError
 from django.utils import timezone
-
+from django.contrib import messages
+from geant_argus.auth import has_write_permission
 from geant_argus.geant_argus.dashboard_alarms import clear_alarm, close_alarm, update_alarm
 
 from .common import TicketRefField
@@ -20,6 +22,18 @@ class ClearAlarmForm(forms.Form):
     timestamp = forms.DateTimeField(required=False)
 
 
+def bulk_action_require_write(func):
+    @functools.wraps(func)
+    def wrapper(actor, *args, **kwargs):
+        if not has_write_permission(actor):
+            messages.error("Insufficient permissions")
+            return []
+        return func(actor, *args, **kwargs)
+
+    return wrapper
+
+
+@bulk_action_require_write
 def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
     incidents = bulk_close_queryset(actor, qs, data)
     for incident in incidents:
@@ -32,6 +46,7 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
     return incidents
 
 
+@bulk_action_require_write
 def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
     clear_time = (data["timestamp"] or timezone.now()).isoformat()
     incidents = list(qs)
@@ -44,6 +59,7 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
     return incidents
 
 
+@bulk_action_require_write
 def bulk_update_ticket_ref(actor, qs, data: Dict[str, Any]):
     ticket_url_base = getattr(settings, "TICKET_URL_BASE", "")
     ticket_ref = data["ticket_ref"]

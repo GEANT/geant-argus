@@ -1,7 +1,7 @@
 {% extends "components/_form_with_buttons.html" %}
 {% load widget_tweaks %}
 {% block form %}
-  <form id="blacklist-edit" method="post">
+  <form id="blacklist-edit" method="post" class="require-write">
     <fieldset>
       <label class="label">
         <span class="label-text w-40">Name:</span>
@@ -54,7 +54,7 @@
   <div class="join">
     <input type="submit"
            form="blacklist-edit"
-           class="btn btn-primary h-full join-item"
+           class="btn btn-primary h-full join-item require-write"
            value="Save">
     <a class="btn btn-primary h-full join-item"
        href="{% url 'geant-blacklists:list-blacklists' %}">Cancel</a>
