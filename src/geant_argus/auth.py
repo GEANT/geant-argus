@@ -36,8 +36,7 @@ def update_user_from_entitlements(user: User, entitlements: list[str]):
     new_group_names = get_groups_from_entitlements(entitlements, rules=authorization_rules)
     user.groups.set(g for g in Group.objects.all() if g.name in new_group_names)
 
-    is_superuser = DJANGO_SUPERUSER_GROUP in new_group_names if DJANGO_SUPERUSER_GROUP else False
-    user.is_superuser = user.is_staff = is_superuser
+    user.is_superuser = user.is_staff = DJANGO_SUPERUSER_GROUP in new_group_names
     user.save()
 
 

@@ -87,22 +87,22 @@ class TestSocialAuthRefreshMiddleware:
         return auth.SocialAuthRefreshMiddleware(lambda x: x)
 
     def test_new_session_is_not_expired(self, middleware, http_request):
-        assert not middleware.auth_expired(http_request)
+        assert not middleware.auth_needs_recheck(http_request)
 
     def test_refreshes_auth_when_expired(self, middleware, http_request, social_auth_user):
         assert social_auth_user.social_auth.first().extra_data["auth_token"] == "old-token"
-        middleware.update_auth_expiry(http_request, expire_after=datetime.timedelta(seconds=-1))
+        middleware.update_auth_recheck(http_request, expire_after=datetime.timedelta(seconds=-1))
         middleware(http_request)
         assert social_auth_user.social_auth.first().extra_data["auth_token"] == "auth-token"
 
     def test_no_longer_expired_after_refresh(self, middleware, http_request, social_auth_user):
-        middleware.update_auth_expiry(http_request, expire_after=datetime.timedelta(seconds=-1))
-        assert middleware.auth_expired(http_request)
+        middleware.update_auth_recheck(http_request, expire_after=datetime.timedelta(seconds=-1))
+        assert middleware.auth_needs_recheck(http_request)
         middleware(http_request)
-        assert not middleware.auth_expired(http_request)
+        assert not middleware.auth_needs_recheck(http_request)
 
     def test_updates_groups(self, middleware, http_request, social_auth_user):
-        middleware.update_auth_expiry(http_request, expire_after=datetime.timedelta(seconds=-1))
+        middleware.update_auth_recheck(http_request, expire_after=datetime.timedelta(seconds=-1))
         with patch.object(auth, "update_user_from_entitlements") as obj:
             middleware(http_request)
 

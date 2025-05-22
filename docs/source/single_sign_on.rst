@@ -32,6 +32,7 @@ During development, by default OIDC integration is disabled. To start developing
 OIDC integration, set ``ARGUS_OIDC_DISABLE`` environment variable to 0 (or unset it completely) in
 your ``cmd.sh``. You then also need to set the other ``ARGUS_OIDC_*`` environment variables in your
 ``cmd.sh``. The values for these variables can be found in LastPass under the Argus OIDC settings.
+Choose the "Local" settings.
 
 For development, Geant Argus is registered as a different application with a different
 ``client_id`` than for production. The reason for this is that the development client_id supports
