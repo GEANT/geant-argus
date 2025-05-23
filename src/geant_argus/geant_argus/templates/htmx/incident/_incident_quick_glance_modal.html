@@ -1,15 +1,16 @@
 {% load incident_extras %}
 <dialog id="modal_{{ incident.source_incident_id }}" class="modal" onclick="event.target === this && this.close()">
     <div class="modal-box bg-base-200">
-        <div class="modal-action">
-            <form method="dialog" class="absolute right-2 top-2">
-                <button class="text-xl font-bold text-neutral hover:text-red-500" aria-label="Close">
-                  <i class="fa-solid fa-xmark text-lg"></i>
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold">Quick Glance</h3>
+            <form method="dialog">
+                <button class="btn btn-ghost text-xl font-bold text-neutral">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </form>
         </div>
 
-        <h3 class="text-lg font-bold">Quick Glance</h3>
+
         <table class="table table-sm">
             <tbody>
             {% for item in incident_description_glance_table %}
