@@ -30,7 +30,7 @@ def update_groups(response, user: User, *args, **kwargs):
 def update_user_from_entitlements(user: User, entitlements: list[str]):
     authorization_rules = getattr(settings, "OIDC_AUTHORIZATION_RULES", None)
 
-    if not authorization_rules:
+    if authorization_rules is None:
         return
 
     new_group_names = get_groups_from_entitlements(entitlements, rules=authorization_rules)
@@ -125,8 +125,10 @@ class SocialAuthRefreshMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         if self.auth_needs_recheck(request):
-            self.refresh_auth(request)
+            response = self.refresh_auth(request)
             self.update_auth_recheck(request)
+            if response:
+                return response
 
     def auth_needs_recheck(self, request):
         try:
@@ -177,8 +179,12 @@ class SocialAuthRefreshMiddleware(MiddlewareMixin):
             logger.exception("An error occured when validating the user's auth status")
             return
 
-        if entitlements := user_data.get("entitlements"):
-            update_user_from_entitlements(request.user, entitlements)
+        update_user_from_entitlements(user, user_data.get("entitlements") or [])
+
+        # OIDC users must have at least one group or they're not considered valid authorized users
+        if not user.groups.count():
+            logout(request)
+            return redirect(request, "home")
 
 
 class SocialAuthLimitSessionAgeMiddleware(MiddlewareMixin):

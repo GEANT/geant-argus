@@ -2,6 +2,8 @@ from social_core.backends.open_id_connect import OpenIdConnectAuth
 
 
 class FakeOpenIDConnectAuth(OpenIdConnectAuth):
+    entitlements = ()
+
     def oidc_config(self):
         return {
             "token_endpoint_auth_methods_supported": True,
@@ -19,7 +21,7 @@ class FakeOpenIDConnectAuth(OpenIdConnectAuth):
         return {**response, "extra": "data"}
 
     def user_data(self, access_token, *args, **kwargs):
-        return {"entitlements": ["some-entitlement"]}
+        return {"entitlements": list(self.entitlements)}
 
     def request(self, url, method="GET", *args, **kwargs):
         raise RuntimeError(

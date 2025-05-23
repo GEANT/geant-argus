@@ -13,6 +13,7 @@ from social_django.storage import DjangoUserMixin
 from social_django.utils import load_backend, load_strategy
 
 from geant_argus import auth
+from geant_argus.testing.social_auth import FakeOpenIDConnectAuth
 
 
 @pytest.mark.parametrize(
@@ -64,14 +65,15 @@ class TestRequireWrite:
 
 
 @pytest.fixture(autouse=True)
-def use_dummy_oidc_backend(settings):
+def update_settings(settings):
     settings.SOCIAL_AUTH_AUTHENTICATION_BACKENDS = [
         "geant_argus.testing.social_auth.FakeOpenIDConnectAuth"
     ]
+    settings.OIDC_AUTHORIZATION_RULES = []
 
 
 @pytest.fixture
-def social_auth_user(use_dummy_oidc_backend, default_user):
+def social_auth_user(update_settings, default_user):
     strategy = load_strategy()
     backend = load_backend(strategy, "oidc", redirect_uri="")
     social: DjangoUserMixin = associate_user(backend, "1234", default_user)["social"]
@@ -81,6 +83,16 @@ def social_auth_user(use_dummy_oidc_backend, default_user):
 
 @pytest.mark.django_db
 class TestSocialAuthRefreshMiddleware:
+
+    @pytest.fixture
+    def set_entitlements(self):
+        current_entitlements = FakeOpenIDConnectAuth.entitlements
+
+        def _set_entitlements(entitlements):
+            FakeOpenIDConnectAuth.entitlements = tuple(entitlements)
+
+        yield _set_entitlements
+        FakeOpenIDConnectAuth.entitlements = current_entitlements
 
     @pytest.fixture
     def middleware(self):
@@ -101,13 +113,23 @@ class TestSocialAuthRefreshMiddleware:
         middleware(http_request)
         assert not middleware.auth_needs_recheck(http_request)
 
-    def test_updates_groups(self, middleware, http_request, social_auth_user):
+    def test_updates_groups(self, middleware, http_request, social_auth_user, set_entitlements):
+        set_entitlements(["some-entitlement"])
         middleware.update_auth_recheck(http_request, expire_after=datetime.timedelta(seconds=-1))
         with patch.object(auth, "update_user_from_entitlements") as obj:
             middleware(http_request)
 
         # see geant_argus.testing.social_auth.FakeOpenIDConnectAuth for the entitlements values
         assert obj.call_args == call(http_request.user, ["some-entitlement"])
+
+    def test_logs_out_user_without_groups(
+        self, middleware, http_request, social_auth_user, set_entitlements
+    ):
+        set_entitlements([])
+        middleware.update_auth_recheck(http_request, expire_after=datetime.timedelta(seconds=-1))
+        response = middleware(http_request)
+        assert response.status_code == 302
+        assert response.url == "/"
 
 
 @pytest.mark.django_db
