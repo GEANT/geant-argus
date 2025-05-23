@@ -34,6 +34,12 @@ MEDIA_PLUGINS = [
 ]
 INDELIBLE_INCIDENTS = False
 
+REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = (
+    "rest_framework.permissions.IsAuthenticated",
+    "geant_argus.auth.IsSourceSystem",
+)
+
+
 # Remove default template dirs to allow overriding argus.site templates. See also
 # geant_argus/argus_site/apps.py
 TEMPLATES[0]["DIRS"] = []  # noqa: F405
@@ -117,6 +123,7 @@ TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
         "geant_argus.geant_argus.context_processors.geant_theme",
         "geant_argus.geant_argus.context_processors.is_readonly",
         "django.template.context_processors.request",
+        "django.contrib.auth.context_processors.auth",
     ]
 )
 

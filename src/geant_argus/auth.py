@@ -2,6 +2,8 @@ import datetime
 import functools
 import logging
 import re
+from rest_framework.permissions import BasePermission
+from django.core.exceptions import ObjectDoesNotExist
 
 import requests
 from argus.auth.models import User
@@ -203,3 +205,13 @@ class SocialAuthLimitSessionAgeMiddleware(MiddlewareMixin):
         expiry = session.get_expiry_date()
         session["_session_expiry"] = min(expiry, max_expiry).isoformat()
         return response
+
+
+class IsSourceSystem(BasePermission):
+    def has_permission(self, request, view):
+        try:
+            request.user.source_system
+        except (AttributeError, ObjectDoesNotExist):
+            return False
+        else:
+            return True
