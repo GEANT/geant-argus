@@ -26,7 +26,7 @@ export ARGUS_AUTH_TOKEN_EXPIRES_AFTER_DAYS=365
 
 # If connected to a local database, you should disable back-synchronization. Unset this variable
 # or set to 0 to enable back-synchronization to the noc-alarms database
-export ARGUS_DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION=1
+export DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION=1
 export ARGUS_DASHBOARD_ALARMS_API_URL='http://test-noc-alarms-ui01.geant.org:8080'
 
 # Get the OIDC/SSO values from Lastpass
