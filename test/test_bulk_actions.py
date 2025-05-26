@@ -2,6 +2,7 @@ from django.utils import timezone
 import pytest
 
 from geant_argus.geant_argus.incidents.bulk_actions import clear_incident_in_metadata
+from datetime import datetime
 
 
 @pytest.fixture
@@ -203,8 +204,16 @@ def metadata():
     }
 
 
+
+def is_naive_isoformat(s):
+    try:
+        dt = datetime.fromisoformat(s)
+        return dt.tzinfo is None
+    except ValueError:
+        return False
+
 def test_clear_incident_in_metadata(metadata):
-    clear_time = timezone.now().isoformat()
+    clear_time = timezone.now().replace(tzinfo=None).isoformat()
     clear_incident_in_metadata(metadata, clear_time=clear_time)
     assert metadata["status"] == "CLEAR"
     assert metadata["clear_time"] == clear_time
@@ -219,6 +228,7 @@ def test_clear_incident_in_metadata(metadata):
     assert endpoints["link"][0]["events"][0]["clear_time"] == clear_time
     assert endpoints["link"][0]["events"][0]["properties"]["oper_up_time"] == clear_time
     assert endpoints["link"][0]["events"][0]["properties"]["oper_up_time"] == clear_time
+    assert is_naive_isoformat(endpoints["link"][0]["events"][0]["clear_time"])
 
     assert endpoints["link"][0]["events"][1]["clear_time"] != clear_time
     assert endpoints["link"][0]["events"][1]["properties"]["oper_up_time"] != clear_time
