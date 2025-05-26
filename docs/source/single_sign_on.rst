@@ -77,11 +77,30 @@ in such a way to prevent accidental matches.
 The actual entitlements that users have are URNs and are generally more complex in nature, but the
 concept remains the same.
 
-After a user has been assigned groups, these groups are used to determine the permissions a user.
-There are currently two groups: ``editors`` and ``admin``. Members of the ``editors`` group have
-read-write access, while members of the ``admin`` group also have access to the *admin*
-backend.
+.. _single-sign-on-group-permissions:
 
+Group permissions
+#################
+
+After a user has been assigned groups, these groups are used to determine the permissions a user.
+There are two ways that permissions are granted to a user/group. The first is by direct membership.
+``geant_argus.auth`` has two constant variables: ``DJANGO_WRITE_PERMSSION_GROUP`` and
+``DJANGO_SUPERUSER_GROUP``. If a user is part of the group defined in
+``DJANGO_WRITE_PERMSSION_GROUP`` (ie: ``editors``), they will get full write access to Geant Argus.
+If a user is part of the ``DJANGO_SUPERUSER_GROUP`` (ie: ``admin``), they will get access to the
+administrative area of Geant Argus (the Djano Admin backend)
+
+The second way that authorization is granted, is by making use of the existing django permission
+system. Permisions can be granted to groups and users in the Admin area. Edit a user or group and
+add or remove Permissions. There are currently two of these permissions used:
+
+  * blacklist | Can view blacklist (``blacklist.view_blacklist``)
+  * blacklist | Can change blacklist (``blacklist.change_blacklist``)
+
+These blacklist permissions are used to allow only the NOC to view and edit blacklists.
+
+Views can be guarded using the ``django.contrib.auth.decorators.permission_required`` decorator
+(see also :django:`topics/auth/default/#permissions-and-authorization`)
 
 Middleware
 ----------
