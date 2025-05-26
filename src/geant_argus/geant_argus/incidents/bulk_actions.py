@@ -48,7 +48,7 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
 
 @bulk_action_require_write
 def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
-    clear_time = (data["timestamp"] or timezone.now()).isoformat()
+    clear_time = (data["timestamp"] or timezone.now()).replace(tzinfo=None).isoformat()
     incidents = list(qs)
     for incident in incidents:
         if not clear_alarm(incident.source_incident_id, {"clear_time": clear_time}):
