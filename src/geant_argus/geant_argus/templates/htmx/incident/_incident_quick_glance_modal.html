@@ -1,33 +1,33 @@
 {% load incident_extras %}
-<dialog id="modal_{{ incident.source_incident_id }}" class="modal" onclick="event.target === this && this.close()">
-    <div class="modal-box bg-base-200">
-        <div class="flex justify-between items-center">
-            <h3 class="text-lg font-bold">Quick Glance</h3>
-            <form method="dialog">
-                <button class="btn btn-xs  btn-ghost font-bold text-neutral">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </form>
-        </div>
-
-
-        <table class="table table-sm">
-            <tbody>
-            {% for item in incident_description_glance_table %}
-                <tr>
-                    <th>{{ item.name }}</th>
-                    {% with value=incident|get_quick_glance_item:item %}
-                        <td>
-                            {% if item.cell_template %}
-                                {% include item.cell_template %}
-                            {% else %}
-                                {{ value|default:"-" }}
-                            {% endif %}
-                        </td>
-                    {% endwith %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+<dialog id="modal_{{ incident.source_incident_id }}"
+        class="modal"
+        onclick="event.target === this && this.close()">
+  <div class="modal-box bg-base-200">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg font-bold">Quick Glance</h3>
+      <form method="dialog">
+        <button class="btn btn-xs  btn-ghost font-bold text-neutral">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </form>
     </div>
+    <table class="table table-sm">
+      <tbody>
+        {% for item in incident_description_glance_table %}
+          <tr>
+            <th>{{ item.name }}</th>
+            {% with value=incident|get_quick_glance_item:item %}
+              <td>
+                {% if item.cell_template %}
+                  {% include item.cell_template %}
+                {% else %}
+                  {{ value|default:"-" }}
+                {% endif %}
+              </td>
+            {% endwith %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </dialog>
