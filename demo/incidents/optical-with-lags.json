@@ -1,7 +1,7 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a5",
+  "version": "v1",
   "severity": "MAJOR",
   "init_time": "2024-08-29T21:00:00",
   "endpoints": {
