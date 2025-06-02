@@ -24,18 +24,18 @@ class ClearAlarmForm(forms.Form):
 
 def bulk_action_require_write(func):
     @functools.wraps(func)
-    def wrapper(actor, *args, **kwargs):
-        if not has_write_permission(actor):
-            messages.error("Insufficient permissions")
+    def wrapper(request, *args, **kwargs):
+        if not has_write_permission(request.user):
+            messages.error(request, "Insufficient permissions")
             return []
-        return func(actor, *args, **kwargs)
+        return func(request, *args, **kwargs)
 
     return wrapper
 
 
 @bulk_action_require_write
-def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
-    incidents = bulk_close_queryset(actor, qs, data)
+def bulk_close_incidents(request, qs, data: Dict[str, Any]):
+    incidents = bulk_close_queryset(request, qs, data)
     for incident in incidents:
         if not close_alarm(incident.source_incident_id):
             return HttpResponseServerError("Error while closing incident")
@@ -47,7 +47,7 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
 
 
 @bulk_action_require_write
-def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
+def bulk_clear_incidents(request, qs, data: Dict[str, Any]):
     clear_time = (data["timestamp"] or timezone.now()).isoformat()
     incidents = list(qs)
     for incident in incidents:
@@ -60,7 +60,7 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
 
 
 @bulk_action_require_write
-def bulk_update_ticket_ref(actor, qs, data: Dict[str, Any]):
+def bulk_update_ticket_ref(request, qs, data: Dict[str, Any]):
     ticket_url_base = getattr(settings, "TICKET_URL_BASE", "")
     ticket_ref = data["ticket_ref"]
     payload = {"ticket_ref": ticket_ref}
