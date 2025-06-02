@@ -1,17 +1,19 @@
 import functools
 import itertools
+import logging
 from typing import Any, Dict
 
 from argus.htmx.utils import bulk_close_queryset
 from django import forms
 from django.conf import settings
-from django.http import HttpResponseServerError
 from django.utils import timezone
 from django.contrib import messages
 from geant_argus.auth import has_write_permission
 from geant_argus.geant_argus.dashboard_alarms import clear_alarm, close_alarm, update_alarm
 
 from .common import TicketRefField
+
+logger = logging.getLogger(__name__)
 
 
 class TicketRefForm(forms.Form):
@@ -36,27 +38,39 @@ def bulk_action_require_write(func):
 @bulk_action_require_write
 def bulk_close_incidents(request, qs, data: Dict[str, Any]):
     incidents = bulk_close_queryset(request, qs, data)
+    processed_incidents = []
     for incident in incidents:
-        if not close_alarm(incident.source_incident_id):
-            return HttpResponseServerError("Error while closing incident")
+        error = close_alarm(incident.source_incident_id)
+        if error is not None:
+            message = f"Error while closing incident: {error}"
+            logger.exception(message)
+            messages.error(request, message)
+            break
         incident.metadata["status"] = "CLOSED"
         incident.metadata["clear_time"] = data["timestamp"].isoformat()
         incident.save()
+        processed_incidents.append(incident)
 
-    return incidents
+    return processed_incidents
 
 
 @bulk_action_require_write
 def bulk_clear_incidents(request, qs, data: Dict[str, Any]):
     clear_time = (data["timestamp"] or timezone.now()).isoformat()
     incidents = list(qs)
+    processed_incidents = []
     for incident in incidents:
-        if not clear_alarm(incident.source_incident_id, {"clear_time": clear_time}):
-            return HttpResponseServerError("Error while clearing incident")
+        error = clear_alarm(incident.source_incident_id, {"clear_time": clear_time})
+        if error is not None:
+            message = f"Error while clearing incident: {error}"
+            logger.exception(message)
+            messages.error(request, message)
+            break
         clear_incident_in_metadata(incident.metadata, clear_time=clear_time)
         incident.save()
+        processed_incidents.append(incident)
 
-    return incidents
+    return processed_incidents
 
 
 @bulk_action_require_write
@@ -65,14 +79,19 @@ def bulk_update_ticket_ref(request, qs, data: Dict[str, Any]):
     ticket_ref = data["ticket_ref"]
     payload = {"ticket_ref": ticket_ref}
     incidents = list(qs)
+    processed_incidents = []
     for incident in incidents:
-        if not update_alarm(incident.source_incident_id, payload):
-            return HttpResponseServerError("Error while updating ticket_ref")
-
+        error = update_alarm(incident.source_incident_id, payload)
+        if error is not None:
+            message = f"Error while updating ticket_ref: {error}"
+            logger.exception(message)
+            messages.error(request, message)
+            break
         incident.metadata.update(payload)
         incident.ticket_url = ticket_url_base + ticket_ref if ticket_ref else ""
         incident.save()
-    return incidents
+        processed_incidents.append(incident)
+    return processed_incidents
 
 
 def clear_incident_in_metadata(metadata: dict, clear_time: str):

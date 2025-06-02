@@ -27,10 +27,13 @@ def clear_alarm(alarm_id, payload):
     return _succeed_request("POST", api_url() + CLEAR_ALARM_URL.format(alarm_id), json=payload)
 
 
-def _succeed_request(*args, timeout=5, **kwargs) -> bool:
+def _succeed_request(*args, timeout=5, **kwargs) -> str | None:
     disable_synchronization = getattr(settings, "DASBHOARD_ALARMS_DISABLE_SYNCHRONIZATION", False)
     if disable_synchronization:
-        return True
-    response = requests.request(*args, timeout=timeout, **kwargs)
-    assert response.status_code == 200
-    return True
+        return None
+    try:
+        response = requests.request(*args, timeout=timeout, **kwargs)
+    except requests.Timeout:
+        return "Timed Out"
+    if response.status_code != 200:
+        return str(response.status_code)
