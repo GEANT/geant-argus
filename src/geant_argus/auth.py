@@ -81,7 +81,7 @@ def get_groups_from_entitlements(entitlements, rules):
 
 
 def has_write_permission(user):
-    return DJANGO_WRITE_PERMSSION_GROUP in {g.name for g in user.groups.all()}
+    return user.is_superuser or DJANGO_WRITE_PERMSSION_GROUP in {g.name for g in user.groups.all()}
 
 
 def require_write(refresh_target="home", methods=None):
