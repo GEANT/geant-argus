@@ -3,6 +3,8 @@ import pytest
 
 from geant_argus.geant_argus.incidents.bulk_actions import clear_incident_in_metadata
 from datetime import datetime
+from unittest.mock import patch, MagicMock
+from src.geant_argus.geant_argus.incidents.bulk_actions import bulk_clear_incidents
 
 
 @pytest.fixture
@@ -204,13 +206,13 @@ def metadata():
     }
 
 
-
 def is_naive_isoformat(s):
     try:
         dt = datetime.fromisoformat(s)
         return dt.tzinfo is None
     except ValueError:
         return False
+
 
 def test_clear_incident_in_metadata(metadata):
     clear_time = timezone.now().replace(tzinfo=None).isoformat()
@@ -247,3 +249,26 @@ def test_clear_incident_in_metadata(metadata):
     assert endpoints["fiberlink"][0]["events"][0]["is_up"] is True
     assert endpoints["fiberlink"][0]["events"][0]["clear_time"] == clear_time
     assert endpoints["fiberlink"][0]["events"][0]["properties"]["status"] == "Clear"
+
+
+@pytest.mark.django_db
+@patch("src.geant_argus.geant_argus.incidents.bulk_actions.clear_alarm")
+def test_bulk_clear_incidents(mock_clear_alarm, default_user):
+    # Mock data
+    actor = default_user
+    qs = [MagicMock(metadata={"status": "ACTIVE", "endpoints": {}})]
+    data = {"timestamp": timezone.now()}
+    clear_time = data["timestamp"].replace(tzinfo=None).isoformat()
+
+    # Mock clear_alarm to return True
+    mock_clear_alarm.return_value = True
+
+    # Call the function
+    incidents = bulk_clear_incidents(actor, qs, data)
+
+    # Assertions
+    assert len(incidents) == 1
+    assert incidents[0].metadata["status"] == "CLEAR"
+    assert incidents[0].metadata["clear_time"] == clear_time
+    mock_clear_alarm.assert_called_once_with(qs[0].source_incident_id, {"clear_time": clear_time})
+    qs[0].save.assert_called_once()
