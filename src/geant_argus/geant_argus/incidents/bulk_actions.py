@@ -42,8 +42,11 @@ def bulk_close_incidents(request, qs, data: Dict[str, Any]):
     for incident in incidents:
         error = close_alarm(incident.source_incident_id)
         if error is not None:
-            message = f"Error while closing incident: {error}"
-            logger.exception(message)
+            message = (
+                f"API error while closing incident with ID "
+                f"{incident.source_incident_id}: {error}"
+            )
+            logger.error(message)
             messages.error(request, message)
             break
         incident.metadata["status"] = "CLOSED"
@@ -62,8 +65,11 @@ def bulk_clear_incidents(request, qs, data: Dict[str, Any]):
     for incident in incidents:
         error = clear_alarm(incident.source_incident_id, {"clear_time": clear_time})
         if error is not None:
-            message = f"Error while clearing incident: {error}"
-            logger.exception(message)
+            message = (
+                f"API error while clearing incident with ID "
+                f"{incident.source_incident_id}: {error}"
+            )
+            logger.error(message)
             messages.error(request, message)
             break
         clear_incident_in_metadata(incident.metadata, clear_time=clear_time)
@@ -83,8 +89,12 @@ def bulk_update_ticket_ref(request, qs, data: Dict[str, Any]):
     for incident in incidents:
         error = update_alarm(incident.source_incident_id, payload)
         if error is not None:
-            message = f"Error while updating ticket_ref: {error}"
-            logger.exception(message)
+            message = (
+                f"API error while updating ticket_ref for incident with ID "
+                f"{incident.source_incident_id}: {error}"
+            )
+
+            logger.error(message)
             messages.error(request, message)
             break
         incident.metadata.update(payload)

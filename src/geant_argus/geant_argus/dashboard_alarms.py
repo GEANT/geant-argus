@@ -1,10 +1,13 @@
 from django.conf import settings
+from http import HTTPStatus
 import requests
 
 UPDATE_ALARM_URL = "/alarms/{}"
 ACK_ALARM_URL = "/alarms/{}/ack"
 CLOSE_ALARM_URL = "/alarms/{}/close"
 CLEAR_ALARM_URL = "/alarms/{}/clear"
+
+ERROR_MESSAGES = {404: "Alarm not found", 400: "Bad request, alarm may be pending"}
 
 
 def api_url():
@@ -34,6 +37,9 @@ def _succeed_request(*args, timeout=5, **kwargs) -> str | None:
     try:
         response = requests.request(*args, timeout=timeout, **kwargs)
     except requests.Timeout:
-        return "Timed Out"
+        return "Request timed out while updating alarm"
     if response.status_code != 200:
-        return str(response.status_code)
+        error_description = ERROR_MESSAGES.get(
+            response.status_code, HTTPStatus(response.status_code).description
+        )
+        return f"{error_description} (HTTP {response.status_code})"
