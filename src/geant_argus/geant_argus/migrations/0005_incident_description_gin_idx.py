@@ -4,7 +4,8 @@ ARGUS_APP = "argus_incident"
 
 
 class Migration(migrations.Migration):
-    """Change description search to incident.description instead of incident.metadata.description"""
+    """Change description search to incident.description instead of incident.metadata.description
+    """
 
     dependencies = [
         ("geant_argus", "0004_update_incident_metadata_description_gin_idx"),
