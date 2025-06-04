@@ -19,7 +19,7 @@ from geant_argus.geant_argus.view_helpers import error_response, redirect
 
 logger = logging.getLogger(__name__)
 
-DJANGO_WRITE_PERMSSION_GROUP = "editors"
+DJANGO_WRITE_PERMSSION_GROUPS = ["admin", "servicedesk", "noc"]
 DJANGO_SUPERUSER_GROUP = "admin"
 
 
@@ -81,7 +81,7 @@ def get_groups_from_entitlements(entitlements, rules):
 
 
 def has_write_permission(user):
-    return user.is_superuser or DJANGO_WRITE_PERMSSION_GROUP in {g.name for g in user.groups.all()}
+    return set(DJANGO_WRITE_PERMSSION_GROUPS) & {g.name for g in user.groups.all()}
 
 
 def require_write(refresh_target="home", methods=None):
