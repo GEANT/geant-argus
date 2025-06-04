@@ -2,7 +2,7 @@
 
 from drf_rw_serializers import viewsets as rw_viewsets
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
 
 from geant_argus.blacklist.models import Blacklist
 from geant_argus.blacklist.serializer import BlacklistSerializer, CreateBlacklistSerializer
@@ -30,7 +30,6 @@ class BlacklistViewSet(rw_viewsets.ModelViewSet):
 
     queryset = Blacklist.objects.all().order_by("id")
     serializer_class = BlacklistSerializer
-    permission_classes = [permissions.IsAuthenticated]
     read_serializer_class = BlacklistSerializer
     write_serializer_class = CreateBlacklistSerializer
 
@@ -43,7 +42,6 @@ class BlacklistViewSet(rw_viewsets.ModelViewSet):
 )
 class MyBlacklistViewset(viewsets.ReadOnlyModelViewSet):
     serializer_class = BlacklistSerializer
-    permission_classes = [permissions.IsAuthenticated]
     queryset = Blacklist.objects.none()
 
     def get_queryset(self):

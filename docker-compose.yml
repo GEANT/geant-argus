@@ -20,6 +20,21 @@ services:
     volumes:
       - ./demo/incidents:/argus/incidents
     restart: unless-stopped
+  vanilla:
+    build: .
+    ports:
+      - "8001:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      init:
+        condition: service_completed_successfully
+    environment:
+      - TIME_ZONE=Europe/Amsterdam
+      - DJANGO_SETTINGS_MODULE=argus.site.settings.dockerdev
+      - DATABASE_URL=postgresql://argus:argus@postgres/argus
+      - ARGUS_REDIS_SERVER=redis
+    restart: always
 
   init:
     build: .

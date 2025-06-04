@@ -6,6 +6,7 @@ import pytest
 import yaml
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.db import connections
 from pytest_docker.plugin import DockerComposeExecutor, execute
 
@@ -210,6 +211,14 @@ def setup_django(uses_db, request, config_file):
 
 
 @pytest.fixture
-def default_user():
+def default_groups():
+    return [Group.objects.create(name="noc")]
+
+
+@pytest.fixture
+def default_user(default_groups):
     User = get_user_model()
-    return User.objects.create_user("argus", password="password")
+    user = User.objects.create_user("argus", password="password")
+    user.groups.set(default_groups)
+    user.save()
+    return user

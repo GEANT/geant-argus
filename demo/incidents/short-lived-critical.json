@@ -1,7 +1,7 @@
 {
   "phase": "FINALIZED",
   "status": "CLOSED",
-  "version": "v0a5",
+  "version": "v1",
   "severity": "CRITICAL",
   "endpoints": {
     "bgp": [],

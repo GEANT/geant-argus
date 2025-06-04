@@ -1,7 +1,7 @@
 {
   "phase": "FINALIZED",
   "status": "CLEAR",
-  "version": "v0a5",
+  "version": "v1",
   "location": [
     "kie",
     "kie"

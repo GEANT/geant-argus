@@ -23,6 +23,7 @@ CHANNEL_LAYERS = {
     },
 }
 
+SILENCED_SYSTEM_CHECKS += ["urls.W005"]  # Hide system checks for namespace collision
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

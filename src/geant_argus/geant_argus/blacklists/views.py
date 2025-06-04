@@ -7,9 +7,12 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+from geant_argus.auth import require_write
 from geant_argus.blacklist.models import Blacklist
 from geant_argus.geant_argus.filters.views import render_edit_filter, save_filter_from_request
 from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, redirect
+
+from django.contrib.auth.decorators import permission_required
 
 
 class CreateBlacklistForm(ModelForm):
@@ -135,6 +138,7 @@ def blacklist_table(form: forms.Form):
 
 
 @require_GET
+@permission_required("blacklist.view_blacklist")
 def list_blacklists(request):
     f = BlacklistFilter(request.GET, queryset=get_all_blacklists().order_by("name"))
     if not f.is_valid():
@@ -160,6 +164,8 @@ def list_blacklists(request):
 
 
 @require_http_methods(["HEAD", "GET", "POST", "DELETE"])
+@require_write("geant-blacklists:list-blacklists", methods=["POST", "DELETE"])
+@permission_required("blacklist.change_blacklist")
 def edit_blacklist(request: HtmxHttpRequest, pk=None):
     instance = None if pk is None else get_object_or_404(Blacklist, pk=pk)
     if request.method == "GET":
@@ -183,6 +189,7 @@ def edit_blacklist(request: HtmxHttpRequest, pk=None):
 
 
 @require_GET
+@permission_required("blacklist.view_blacklist")
 def edit_filter(request):
     form = EditFilterForBlacklistForm(request.GET)
     if not form.is_valid():
@@ -204,6 +211,8 @@ def edit_filter(request):
 
 
 @require_POST
+@require_write(refresh_target="geant-blacklists:list-blacklists")
+@permission_required("blacklist.change_blacklist")
 def save_filter(request):
     form = EditFilterForBlacklistForm(request.GET)
     if not form.is_valid():

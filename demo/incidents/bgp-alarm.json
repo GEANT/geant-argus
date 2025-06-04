@@ -1,7 +1,7 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a5",
+  "version": "v1",
   "severity": "WARNING",
   "init_time": "2024-08-31T23:35:55",
   "endpoints": {
