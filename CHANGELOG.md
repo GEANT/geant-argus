@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.34] - 2025-06-04
+- DBOARD3-1150: Add close alarm button along bottom bar of incident table
+- DBOARD3-1113: Support differentiating users with and users without write permission
+- DBOARD3-1239: Limit access to blacklists to those with permissions and source systems
+- DBOARD3-1223: Move quick glance close button to top of modal
+
 ## [0.33] - 2025-05-15
 - DBOARD3-1211: Validate ticket ref updates to be a positive integer
 - DBOARD3-1167: Prevent selecting pending incidents for (bulk) update
