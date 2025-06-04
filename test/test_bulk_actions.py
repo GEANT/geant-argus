@@ -258,4 +258,3 @@ def test_bulk_clear_incidents(mock_clear_alarm, default_user):
     assert mock_clear_alarm.call_args == ((qs[0].source_incident_id, {"clear_time": clear_time}),)
     assert mock_clear_alarm.call_count == 1
     assert qs[0].save.call_count == 1
-
