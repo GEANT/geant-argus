@@ -2,6 +2,8 @@ from django.utils import timezone
 import pytest
 
 from geant_argus.geant_argus.incidents.bulk_actions import clear_incident_in_metadata
+from unittest.mock import patch, MagicMock
+from geant_argus.geant_argus.incidents.bulk_actions import bulk_clear_incidents
 
 
 @pytest.fixture
@@ -237,3 +239,23 @@ def test_clear_incident_in_metadata(metadata):
     assert endpoints["fiberlink"][0]["events"][0]["is_up"] is True
     assert endpoints["fiberlink"][0]["events"][0]["clear_time"] == clear_time
     assert endpoints["fiberlink"][0]["events"][0]["properties"]["status"] == "Clear"
+
+
+@pytest.mark.django_db
+@patch("geant_argus.geant_argus.incidents.bulk_actions.clear_alarm")
+def test_bulk_clear_incidents(mock_clear_alarm, default_user):
+    actor = default_user
+    qs = [MagicMock(metadata={"status": "ACTIVE", "endpoints": {}})]
+    data = {"timestamp": timezone.now()}
+    clear_time = data["timestamp"].replace(tzinfo=None).isoformat()
+    mock_clear_alarm.return_value = True
+
+    incidents = bulk_clear_incidents(actor, qs, data)
+
+    assert len(incidents) == 1
+    assert incidents[0].metadata["status"] == "CLEAR"
+    assert incidents[0].metadata["clear_time"] == clear_time
+    assert mock_clear_alarm.call_args == ((qs[0].source_incident_id, {"clear_time": clear_time}),)
+    assert mock_clear_alarm.call_count == 1
+    assert qs[0].save.call_count == 1
+
