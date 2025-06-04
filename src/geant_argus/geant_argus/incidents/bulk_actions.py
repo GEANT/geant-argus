@@ -59,7 +59,7 @@ def bulk_close_incidents(request, qs, data: Dict[str, Any]):
 
 @bulk_action_require_write
 def bulk_clear_incidents(request, qs, data: Dict[str, Any]):
-    clear_time = (data["timestamp"] or timezone.now()).isoformat()
+    clear_time = (data["timestamp"] or timezone.now()).replace(tzinfo=None).isoformat()
     incidents = list(qs)
     processed_incidents = []
     for incident in incidents:
