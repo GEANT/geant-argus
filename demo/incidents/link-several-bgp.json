@@ -1,9 +1,10 @@
 {
   "phase": "FINALIZED",
   "status": "ACTIVE",
-  "version": "v0a5",
+  "version": "v1",
   "severity": "CRITICAL",
   "init_time": "2024-08-29T21:22:08",
+  "clearing_since": "2024-08-29T22:22:08",
   "endpoints": {
     "bgp": [
       {
@@ -163,14 +164,14 @@
       {
         "events": [
           {
-            "is_up": false,
+            "is_up": true,
             "init_time": "2024-08-29T21:22:08",
-            "clear_time": null,
+            "clear_time": "2024-08-29T22:22:08",
             "properties": {
               "id": 15463184,
-              "oper_status": "down",
+              "oper_status": "up",
               "admin_status": "up",
-              "oper_up_time": null,
+              "oper_up_time": "2024-08-29T22:22:08",
               "admin_up_time": "2024-08-29T21:22:08",
               "snmp_trap_oid": "IF-MIB::linkDown",
               "equipment_name": "rt1.mil2.it.geant.net",

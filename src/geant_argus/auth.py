@@ -19,7 +19,7 @@ from geant_argus.geant_argus.view_helpers import error_response, redirect
 
 logger = logging.getLogger(__name__)
 
-DJANGO_WRITE_PERMSSION_GROUP = "editors"
+DJANGO_WRITE_PERMSSION_GROUPS = ["admin", "servicedesk", "noc"]
 DJANGO_SUPERUSER_GROUP = "admin"
 
 
@@ -81,7 +81,7 @@ def get_groups_from_entitlements(entitlements, rules):
 
 
 def has_write_permission(user):
-    return DJANGO_WRITE_PERMSSION_GROUP in {g.name for g in user.groups.all()}
+    return set(DJANGO_WRITE_PERMSSION_GROUPS) & {g.name for g in user.groups.all()}
 
 
 def require_write(refresh_target="home", methods=None):
@@ -110,6 +110,8 @@ def require_write(refresh_target="home", methods=None):
     return _decorator
 
 
+# This middleware is currently unusable due to a bug in CoreAAI. See also the MIDDLEWARE setting
+# in geant_argus.settings.base
 class SocialAuthRefreshMiddleware(MiddlewareMixin):
     """After a user has succesfully logged in using social auth (ie. oidc), by default there
     are no further checks whether a user has additional authorizations granted or revoked. That is
@@ -149,6 +151,8 @@ class SocialAuthRefreshMiddleware(MiddlewareMixin):
 
     def refresh_auth(self, request):
         user = request.user
+
+        # Local users are not subject to refresh
         if not hasattr(user, "social_auth"):
             return
 
@@ -168,8 +172,9 @@ class SocialAuthRefreshMiddleware(MiddlewareMixin):
         except requests.HTTPError as e:
             if e.response.status_code == 400:
                 messages.error(
+                    request,
                     "You have been logged out, "
-                    "your OIDC provided account may have been deactivated"
+                    "your OIDC provided account may have been deactivated",
                 )
                 logout(request)
                 return redirect(request, "home")
@@ -183,7 +188,9 @@ class SocialAuthRefreshMiddleware(MiddlewareMixin):
 
         update_user_from_entitlements(user, user_data.get("entitlements") or [])
 
-        # OIDC users must have at least one group or they're not considered valid authorized users
+        # OIDC users must have at least one group or they're not considered valid authorized users.
+        # If a user is no longer in a group, that means their entitlements do not contain a valid
+        # argus group anymore.
         if not user.groups.count():
             logout(request)
             return redirect(request, "home")

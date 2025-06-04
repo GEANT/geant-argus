@@ -212,7 +212,7 @@ def setup_django(uses_db, request, config_file):
 
 @pytest.fixture
 def default_groups():
-    return [Group.objects.create(name="editors")]
+    return [Group.objects.create(name="noc")]
 
 
 @pytest.fixture

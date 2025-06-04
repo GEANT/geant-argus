@@ -24,8 +24,8 @@ class SessionAdmin(ModelAdmin):
     readonly_fields = ["_session_data"]
 
     def user(self, obj):
-        user_id = int(obj.get_decoded().get("_auth_user_id"))
-        return self.all_users.get(user_id)
+        user_id = obj.get_decoded().get("_auth_user_id")
+        return self.all_users.get(int(user_id)) if user_id is not None else None
 
     def get_queryset(self, request):
         self.all_users = {u.id: u for u in User.objects.all()}
