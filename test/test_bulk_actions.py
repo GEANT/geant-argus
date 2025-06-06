@@ -4,6 +4,7 @@ import pytest
 from geant_argus.geant_argus.incidents.bulk_actions import clear_incident_in_metadata
 from unittest.mock import patch, MagicMock
 from geant_argus.geant_argus.incidents.bulk_actions import bulk_clear_incidents
+from django.test.client import RequestFactory
 
 
 @pytest.fixture
@@ -244,13 +245,14 @@ def test_clear_incident_in_metadata(metadata):
 @pytest.mark.django_db
 @patch("geant_argus.geant_argus.incidents.bulk_actions.clear_alarm")
 def test_bulk_clear_incidents(mock_clear_alarm, default_user):
-    actor = default_user
+    request = RequestFactory().get("/foo")
+    request.user = default_user
     qs = [MagicMock(metadata={"status": "ACTIVE", "endpoints": {}})]
     data = {"timestamp": timezone.now()}
     clear_time = data["timestamp"].replace(tzinfo=None).isoformat()
-    mock_clear_alarm.return_value = True
+    mock_clear_alarm.return_value = None
 
-    incidents = bulk_clear_incidents(actor, qs, data)
+    incidents = bulk_clear_incidents(request, qs, data)
 
     assert len(incidents) == 1
     assert incidents[0].metadata["status"] == "CLEAR"
