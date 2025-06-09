@@ -3,8 +3,15 @@ import pytest
 
 from geant_argus.geant_argus.incidents.bulk_actions import clear_incident_in_metadata
 from unittest.mock import patch, MagicMock
-from geant_argus.geant_argus.incidents.bulk_actions import bulk_clear_incidents
+from geant_argus.geant_argus.incidents.bulk_actions import (
+    bulk_clear_incidents,
+    bulk_close_incidents,
+    bulk_update_ticket_ref,
+)
 from django.test.client import RequestFactory
+from django.contrib.messages import get_messages
+from django.contrib.messages.middleware import MessageMiddleware
+from django.contrib.sessions.middleware import SessionMiddleware
 
 
 @pytest.fixture
@@ -260,3 +267,78 @@ def test_bulk_clear_incidents(mock_clear_alarm, default_user):
     assert mock_clear_alarm.call_args == ((qs[0].source_incident_id, {"clear_time": clear_time}),)
     assert mock_clear_alarm.call_count == 1
     assert qs[0].save.call_count == 1
+
+
+def bulk_close_incidents_mock_qs():
+    mock_incidents = MagicMock(
+        metadata={"status": "ACTIVE", "endpoints": {}}, source_incident_id=12345
+    )
+    mock_events = MagicMock()
+    mock_events.incident = mock_incidents
+    mock_qs = MagicMock()
+    mock_qs.close.return_value = [mock_events]
+    return mock_qs
+
+
+@pytest.mark.parametrize(
+    "status_code, expected_message_template",
+    [
+        (
+            # Custom message
+            400,
+            "API error while {message} with ID 12345: "
+            "Bad request, alarm may be pending (HTTP 400)",
+        ),
+        (
+            # No custom message
+            418,
+            "API error while {message} with ID 12345: "
+            "Server refuses to brew coffee because it is a teapot. (HTTP 418)",
+        ),
+    ],
+)
+@pytest.mark.parametrize(
+    "mock_qs, bulk_func, custom_message",
+    [
+        (bulk_close_incidents_mock_qs(), bulk_close_incidents, "closing incident"),
+        (
+            [MagicMock(metadata={"status": "ACTIVE", "endpoints": {}}, source_incident_id=12345)],
+            bulk_clear_incidents,
+            "clearing incident",
+        ),
+        (
+            [MagicMock(metadata={"status": "ACTIVE", "endpoints": {}}, source_incident_id=12345)],
+            bulk_update_ticket_ref,
+            "updating ticket_ref for incident",
+        ),
+    ],
+)
+@pytest.mark.django_db
+@patch("requests.request")
+def test_bulk_action_messages(
+    mock_request,
+    default_user,
+    settings,
+    mock_qs,
+    bulk_func,
+    custom_message,
+    status_code,
+    expected_message_template,
+):
+    settings.DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION = 0
+    settings.DASHBOARD_ALARMS_API_URL = "doesnt matter"
+    request = RequestFactory().get("/foo")
+    SessionMiddleware(lambda x: x).process_request(request)
+    MessageMiddleware(lambda x: x).process_request(request)
+    request.user = default_user
+
+    data = {"timestamp": timezone.now(), "ticket_ref": "1234"}
+    mock_request.return_value = MagicMock()
+    mock_request.return_value.status_code = status_code
+
+    incidents = bulk_func(request, mock_qs, data)
+
+    messages = list(get_messages(request))
+    assert len(messages) == 1
+    assert messages[0].message == expected_message_template.format(message=custom_message)
+    assert len(incidents) == 0
