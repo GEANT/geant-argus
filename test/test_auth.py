@@ -2,6 +2,7 @@ import datetime
 from unittest.mock import call, patch
 
 import pytest
+from django.contrib.messages import get_messages
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpResponse
@@ -62,6 +63,7 @@ class TestRequireWrite:
         http_request.user.save()
         protected_view(http_request)
         assert not protected_view.called
+        assert len(list(get_messages(http_request))) == 1
 
 
 @pytest.fixture(autouse=True)
