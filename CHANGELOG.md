@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.36] - 2025-06-16
+- Supporting argus version 2.0.0
+  
 ## [0.34] - 2025-06-04
 - DBOARD3-1150: Add close alarm button along bottom bar of incident table
 - DBOARD3-1113: Support differentiating users with and users without write permission
