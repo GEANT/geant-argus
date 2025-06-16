@@ -222,3 +222,13 @@ class IsSourceSystem(BasePermission):
             return False
         else:
             return True
+
+
+class IsSuperUserOrSourceSystem(BasePermission):
+    def has_permission(self, request, view):
+        try:
+            request.user.source_system
+        except (AttributeError, ObjectDoesNotExist):
+            return request.user.is_superuser
+        else:
+            return True

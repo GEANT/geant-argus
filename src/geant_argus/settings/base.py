@@ -36,7 +36,7 @@ INDELIBLE_INCIDENTS = False
 
 REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = (
     "rest_framework.permissions.IsAuthenticated",
-    "geant_argus.auth.IsSourceSystem",
+    "geant_argus.auth.IsSuperUserOrSourceSystem",
 )
 
 
