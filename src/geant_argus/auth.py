@@ -214,11 +214,11 @@ class SocialAuthLimitSessionAgeMiddleware(MiddlewareMixin):
         return response
 
 
-class IsSourceSystem(BasePermission):
+class IsSuperUserOrSourceSystem(BasePermission):
     def has_permission(self, request, view):
         try:
             request.user.source_system
         except (AttributeError, ObjectDoesNotExist):
-            return False
+            return request.user.is_superuser
         else:
             return True
