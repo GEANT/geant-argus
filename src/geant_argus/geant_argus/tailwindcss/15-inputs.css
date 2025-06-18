@@ -1,19 +1,21 @@
 @layer components {
-  .input,
-  .checkbox,
-  .select,
-  .radio {
-    background-color: white;
+  :root:not([data-theme="dark"]) .input,
+  :root:not([data-theme="dark"]) .checkbox,
+  :root:not([data-theme="dark"]) .select,
+  :root:not([data-theme="dark"]) .radio {
+      background-color: white;
   }
+
 
   /* Hide default +/- buttons on numberinputs with .hide-buttons class*/
   /* Chrome, Safari, Edge, Opera */
   input.hide-buttons::-webkit-outer-spin-button,
   input.hide-buttons::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 1em;
+      -webkit-appearance: none;
+      margin: 1em;
   }
+
   input[type="number"].hide-buttons {
-    -moz-appearance: textfield;
+      -moz-appearance: textfield;
   }
 }
