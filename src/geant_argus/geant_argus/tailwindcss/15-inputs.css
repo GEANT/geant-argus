@@ -6,6 +6,15 @@
     background-color: white;
   }
 
+  [data-theme="dark"] .input,
+  [data-theme="dark"] .checkbox,
+  [data-theme="dark"] .select,
+  [data-theme="dark"] .radio{
+    background-color: #1a1a1a !important;
+    color: white;
+  }
+
+
   /* Hide default +/- buttons on numberinputs with .hide-buttons class*/
   /* Chrome, Safari, Edge, Opera */
   input.hide-buttons::-webkit-outer-spin-button,
