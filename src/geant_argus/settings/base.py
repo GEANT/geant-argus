@@ -115,7 +115,22 @@ SOCIAL_AUTH_OIDC_AUTH_EXTRA_ARGUMENTS = {"prompt": "consent"}
 # Theming
 THEME_DEFAULT = "geant"
 STYLESHEET_PATH = "geant.css"
-DAISYUI_THEMES = ["light", "dark", "argus", "geant", "geant-test", "geant-uat", "geant-prod"]
+
+DAISYUI_THEMES = [
+    "light",
+    "dark",
+    "argus",
+    "geant",
+    "geant-test",
+    "geant-uat",
+    "geant-prod",
+    "silk",
+    "winter",
+    "oceanic-lab",
+    "rose-garden",
+    "midnight-sky",
+]
+
 
 # context processors customization
 TEMPLATES[0]["OPTIONS"]["context_processors"].extend(
