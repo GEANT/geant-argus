@@ -158,6 +158,7 @@ METADATA_V1_SCHEMA = {
         "dirty": {"type": "boolean"},
         "init_time": {"type": ["string", "null"]},
         "clear_time": {"type": ["string", "null"]},
+        "earliest_source_init_time": {"type": ["string", "null"]},
         "blacklist": {"$ref": "#/definitions/blacklist_info"},
         "phase": {"type": "string"},
         "status": {"type": "string", "enum": ["ACTIVE", "CLEAR", "CLOSED"]},

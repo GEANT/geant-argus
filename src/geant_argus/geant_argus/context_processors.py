@@ -102,9 +102,16 @@ def geant_theme(request):
         "incident_description_glance_table": [
             {"name": "Description", "cell_lookup_key": "description"},
             {
-                "name": "Start Time (UTC)",
+                "name": "Initial Start Time (UTC)",
+                "cell_lookup_key": "metadata.earliest_source_init_time",
+                "cell_template": "htmx/incident/cells/_date_cell.html",
+                "info_text": "When the alarm very first started.",
+            },
+            {
+                "name": "Recent Alarm Outage Time (UTC)",
                 "cell_lookup_key": "start_time",
                 "cell_template": "htmx/incident/cells/_date_cell.html",
+                "info_text": "The start time of the most recent alarm.",
             },
             {
                 "name": "Clear Time (UTC)",

@@ -15,7 +15,13 @@
       <tbody>
         {% for item in incident_description_glance_table %}
           <tr>
-            <th>{{ item.name }}</th>
+            <th>
+              {{ item.name }}
+              {% if item.info_text %}
+                <i class="fa fa-circle-info text-primary ms-1"
+                   title="{{ item.info_text }}"></i>
+              {% endif %}
+            </th>
             {% with value=incident|get_quick_glance_item:item %}
               <td>
                 {% if item.cell_template %}
