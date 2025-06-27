@@ -8,7 +8,11 @@
         <table class="table text-lg">
           <tbody>
             <tr class="border-primary">
-              <td class="py-0 font-bold">Timestamp</td>
+              <td class="py-0 font-bold">Initial Start Time (UTC)</td>
+              <td class="py-0">{{ incident.metadata.earliest_source_init_time }}</td>
+            </tr>
+            <tr class="border-primary">
+              <td class="py-0 font-bold">Recent Alarm Outage Time (UTC)</td>
               <td class="py-0">{{ incident.start_time|date:preferences.argus_htmx.datetime_format }}</td>
             </tr>
             <tr class="border-primary">

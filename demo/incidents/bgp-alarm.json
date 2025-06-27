@@ -3,7 +3,8 @@
   "status": "ACTIVE",
   "version": "v1",
   "severity": "WARNING",
-  "init_time": "2024-08-31T23:35:55",
+  "init_time": "2024-08-31T23:35:50",
+  "earliest_source_init_time": "2024-08-31T23:37:37",
   "endpoints": {
     "bgp": [
       {
@@ -49,7 +50,7 @@
     "coriant": [],
     "infinera": []
   },
-  "description": "BGP peering (159.226.10.14) Incident",
+  "description": "BGP test peering (159.226.10.14) Incident",
   "location": ["mar"],
 	"equipment": ["rt1.mar.fr"],
   "short_lived": false,
