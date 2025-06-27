@@ -1,6 +1,6 @@
 {% load incident_extras %}
 <dialog id="modal_{{ incident.source_incident_id }}"
-        class="modal"
+        class="modal w-[600px]"
         onclick="event.target === this && this.close()">
   <div class="modal-box bg-base-200">
     <div class="flex justify-between items-center">
@@ -11,11 +11,11 @@
         </button>
       </form>
     </div>
-    <table class="table table-sm">
+    <table class="table table-sm w-full">
       <tbody>
         {% for item in incident_description_glance_table %}
           <tr>
-            <th>
+            <th class="text-left font-bold text-sm whitespace-nowrap w-[250px]">
               {{ item.name }}
               {% if item.info_text %}
                 <i class="fa fa-circle-info text-primary ms-1"
@@ -23,7 +23,7 @@
               {% endif %}
             </th>
             {% with value=incident|get_quick_glance_item:item %}
-              <td>
+              <td class="text-left">
                 {% if item.cell_template %}
                   {% include item.cell_template %}
                 {% else %}
