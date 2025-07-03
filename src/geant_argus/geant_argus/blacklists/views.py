@@ -18,7 +18,16 @@ from django.contrib.auth.decorators import permission_required
 class CreateBlacklistForm(ModelForm):
     class Meta:
         model = Blacklist
-        fields = ["name", "filter", "level", "message", "enabled", "priority", "review_date"]
+        fields = [
+            "name",
+            "filter",
+            "level",
+            "message",
+            "enabled",
+            "priority",
+            "review_date",
+            "hidden",
+        ]
         widgets = {"review_date": forms.DateInput(attrs={"type": "date"})}
 
 

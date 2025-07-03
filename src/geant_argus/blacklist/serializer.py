@@ -18,6 +18,7 @@ class BlacklistSerializer(serializers.ModelSerializer):
             "priority",
             "enabled",
             "review_date",
+            "hidden",
         )
 
 
