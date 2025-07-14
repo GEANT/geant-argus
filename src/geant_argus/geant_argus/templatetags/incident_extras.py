@@ -91,7 +91,7 @@ def incident_status_badge(incident: Incident):
         case "Clear":
             return "incident-clear"
         case "Stuck":
-            return "incident-major"
+            return "incident-high"
         case "Closed":
             return "incident-default"
 

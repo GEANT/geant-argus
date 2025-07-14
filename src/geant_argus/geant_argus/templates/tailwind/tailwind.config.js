@@ -50,10 +50,10 @@ module.exports = {
         },
         extend: {
             colors: {
-                'incident-major': 'rgba(var(--color-incident-major), <alpha-value>)',
-                'incident-minor': 'rgba(var(--color-incident-minor), <alpha-value>)',
+                'incident-high': 'rgba(var(--color-incident-high), <alpha-value>)',
+                'incident-medium': 'rgba(var(--color-incident-medium), <alpha-value>)',
                 'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
-                'incident-warning': 'var(--fallback-n,oklch(var(--n)))', // neutral
+                'incident-low': 'var(--fallback-n,oklch(var(--n)))', // neutral
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
             },
             height: {
@@ -76,7 +76,7 @@ module.exports = {
     safelist: [
         // these classes are dynamically generated so not seen by tailwind
         {
-            pattern: /(bg|border)-incident-(clear|warning|minor|major|critical)/,
+            pattern: /(bg|border)-incident-(clear|low|medium|high|critical)/,
         },
         {
             pattern: /bg-(success|warning|error|slate-300)/,
@@ -93,8 +93,8 @@ module.exports = {
                 ...require("daisyui/src/theming/themes")["dark"],
                 ...incidentColors,
                 '--color-incident-critical': '182, 35, 35',
-                '--color-incident-major': '195, 101, 1',
-                '--color-incident-minor': '146, 137, 0',
+                '--color-incident-high': '195, 101, 1',
+                '--color-incident-medium': '146, 137, 0',
                 '--color-incident-clear': '18, 103, 0',
             },
             'argus': {
