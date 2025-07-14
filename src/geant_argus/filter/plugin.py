@@ -68,7 +68,7 @@ def incident_list_filter(request, queryset):
 
 
 def default_filter_params():
-    return {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value}
+    return {"status": ["active", "clear"], "min_severity": IncidentSeverity.INFO.value}
 
 
 def _update_session(request: HttpRequest, queryset: IncidentQuerySet):

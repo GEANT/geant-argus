@@ -25,8 +25,9 @@ const baseArgusColors = {
 }
 const incidentColors = {
     '--color-incident-clear': '80, 200, 120', // #50c878, same as success
-    '--color-incident-minor': '255, 255, 0', // #ffff00
-    '--color-incident-major': '255, 166, 0', // #ffa600
+    '--color-incident-low': '255, 255, 0', // #ffff00
+    '--color-incident-medium': '255, 166, 0', // #ffa600
+    '--color-incident-high': '240, 67, 67', // #f04343, same as critical
     '--color-incident-critical': '240, 67, 67', // #f04343, same as critical
 }
 

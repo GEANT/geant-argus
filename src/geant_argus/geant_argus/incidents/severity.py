@@ -12,7 +12,7 @@ class IncidentSeverity(enum.IntEnum, metaclass=StrComparableEnumMeta):
     """Reverse from dashboard.correlation.enums.AlarmSeverity"""
 
     CRITICAL = 1
-    MAJOR = 2
-    MINOR = 3
-    WARNING = 4
-    HIDE = 5
+    HIGH = 2
+    MEDIUM = 3
+    LOW = 4
+    INFO = 5
