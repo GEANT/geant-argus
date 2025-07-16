@@ -53,7 +53,8 @@ module.exports = {
                 'incident-high': 'rgba(var(--color-incident-high), <alpha-value>)',
                 'incident-medium': 'rgba(var(--color-incident-medium), <alpha-value>)',
                 'incident-critical': 'rgba(var(--color-incident-critical), <alpha-value>)',
-                'incident-low': 'var(--fallback-n,oklch(var(--n)))', // neutral
+                'incident-low': 'rgba(var(--color-incident-low), <alpha-value>)',
+                'incident-info': 'var(--fallback-n,oklch(var(--n)))', // neutral
                 'incident-clear': 'rgba(var(--color-incident-clear), <alpha-value>)',
             },
             height: {
@@ -93,8 +94,9 @@ module.exports = {
                 ...require("daisyui/src/theming/themes")["dark"],
                 ...incidentColors,
                 '--color-incident-critical': '182, 35, 35',
-                '--color-incident-high': '195, 101, 1',
-                '--color-incident-medium': '146, 137, 0',
+                '--color-incident-high': '182, 35, 35',
+                '--color-incident-medium': '195, 101, 1',
+                '--color-incident-low': '146, 137, 0',
                 '--color-incident-clear': '18, 103, 0',
             },
             'argus': {
