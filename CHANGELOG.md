@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.38] - 2025-06-30
+- DBOARD3-1264: Add Earliest start time
+  
 ## [0.36] - 2025-06-16
 - Supporting argus version 2.0.0
   
