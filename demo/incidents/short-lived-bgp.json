@@ -2,7 +2,7 @@
   "phase": "FINALIZED",
   "status": "CLOSED",
   "version": "v1",
-  "severity": "WARNING",
+  "severity": "INFO",
   "endpoints": {
     "bgp": [
       {
