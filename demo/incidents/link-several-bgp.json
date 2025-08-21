@@ -2,7 +2,7 @@
   "phase": "FINALIZED",
   "status": "ACTIVE",
   "version": "v1",
-  "severity": "CRITICAL",
+  "severity": "HIGH",
   "init_time": "2024-08-29T21:22:08",
   "clearing_since": "2024-08-29T22:22:08",
   "endpoints": {

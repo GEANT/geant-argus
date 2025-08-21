@@ -37,6 +37,7 @@ class Blacklist(models.Model):
     priority = models.IntegerField(db_default=10, default=10)
     enabled = models.BooleanField(db_default=True, default=True)
     review_date = models.DateField(blank=True, null=True)
+    hidden = models.BooleanField(db_default=False, default=False)
 
     objects = BlacklistManager()
 

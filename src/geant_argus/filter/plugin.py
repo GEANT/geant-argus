@@ -32,7 +32,7 @@ from argus.filter.default import (
 from argus.filter.filters import Filter
 from argus.incident.models import Event, IncidentQuerySet
 from django import forms
-from django.db.models import Case, Exists, OuterRef, Subquery, Value, When
+from django.db.models import Case, Exists, OuterRef, Subquery, Value, When, Q
 from django.http import HttpRequest
 from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.openapi import AutoSchema
@@ -68,7 +68,7 @@ def incident_list_filter(request, queryset):
 
 
 def default_filter_params():
-    return {"status": ["active", "clear"], "min_severity": IncidentSeverity.WARNING.value}
+    return {"status": ["active", "clear"], "min_severity": IncidentSeverity.INFO.value}
 
 
 def _update_session(request: HttpRequest, queryset: IncidentQuerySet):
@@ -113,6 +113,7 @@ class IncidentFilterForm(forms.Form):
     )
     newest_first = forms.BooleanField(required=False)
     short_lived = forms.BooleanField(required=False)
+    show_hidden = forms.BooleanField(required=False)
     description = forms.CharField(max_length=255, required=False)
     description.in_header = True
     location = forms.CharField(max_length=255, required=False)
@@ -146,6 +147,7 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_field(queryset, "min_severity", "level__lte")
         queryset = self._filter_by_field(queryset, "alarm_id", "source_incident_id")
         queryset = self._filter_by_field(queryset, "ticket_ref", "metadata__ticket_ref__icontains")
+        queryset = self._filter_by_hidden(queryset)
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._order_by_newest_first(queryset)
         return queryset
@@ -182,6 +184,11 @@ class IncidentFilterForm(forms.Form):
         if self.cleaned_data.get("short_lived"):
             return queryset.filter(metadata__short_lived=True)
         return queryset
+
+    def _filter_by_hidden(self, queryset):
+        if self.cleaned_data.get("show_hidden"):
+            return queryset
+        return queryset.filter(Q(metadata__hidden__isnull=True) | Q(metadata__hidden=False))
 
     def _annotate_acks(self, queryset):
         return queryset.annotate(

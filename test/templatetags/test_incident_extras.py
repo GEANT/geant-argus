@@ -26,9 +26,9 @@ class FakeIncident:
             FakeIncident(level=1, metadata={"status": "CLOSED"}),
             "incident-critical incident-closed border-base-content/50",
         ),
-        (FakeIncident(level=2), "incident-major border-base-content"),
-        (FakeIncident(level=3), "incident-minor border-base-content"),
-        (FakeIncident(level=4), "incident-default border-base-content"),
+        (FakeIncident(level=2), "incident-high border-base-content"),
+        (FakeIncident(level=3), "incident-medium border-base-content"),
+        (FakeIncident(level=4), "incident-low border-base-content"),
         (FakeIncident(level=5), "incident-default border-base-content"),
     ],
 )
@@ -39,10 +39,10 @@ def test_level_to_badge(incident, expected_classes):
 @pytest.mark.parametrize(
     "original_severity, final_severity, symbol",
     [
-        ("CRITICAL", "MINOR", "▼"),
-        ("MAJOR", "MAJOR", "="),
-        ("MAJOR", "CRITICAL", "▲"),
-        (None, "MINOR", "?"),
+        ("CRITICAL", "HIGH", "▼"),
+        ("HIGH", "HIGH", "="),
+        ("HIGH", "CRITICAL", "▲"),
+        (None, "MEDIUM", "?"),
     ],
 )
 def test_blacklist_symbol(original_severity, final_severity, symbol):

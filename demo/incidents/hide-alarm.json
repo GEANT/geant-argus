@@ -6,11 +6,11 @@
     "kie",
     "kie"
   ],
-  "severity": "HIDE",
+  "severity": "INFO",
   "blacklist": {
     "applied": true,
     "message": "TO hide alarms from NE monitoring tools",
-    "original_severity": "WARNING"
+    "original_severity": "INFO"
   },
   "endpoints": {
     "bgp": [
@@ -73,5 +73,6 @@
   "description": "BGP peering (193.177.129.61) Incident",
   "short_lived": false,
   "endpoint_count": 2,
-  "comment":null
+  "comment":null,
+  "hidden": true
 }

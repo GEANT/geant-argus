@@ -2,7 +2,7 @@
   "phase": "FINALIZED",
   "status": "CLOSED",
   "version": "v1",
-  "severity": "CRITICAL",
+  "severity": "HIGH",
   "endpoints": {
     "bgp": [],
     "link": [

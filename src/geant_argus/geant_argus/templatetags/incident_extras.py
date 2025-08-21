@@ -50,11 +50,13 @@ def level_to_badge(level: int, is_open=True):
     match severity:
         case IncidentSeverity.CRITICAL:
             classes = ["incident-critical"]
-        case IncidentSeverity.MAJOR:
-            classes = ["incident-major"]
+        case IncidentSeverity.HIGH:
+            classes = ["incident-high"]
+        case IncidentSeverity.MEDIUM:
+            classes = ["incident-medium"]
 
-        case IncidentSeverity.MINOR:
-            classes = ["incident-minor"]
+        case IncidentSeverity.LOW:
+            classes = ["incident-low"]
         case _:
             classes = ["incident-default"]
     if is_open:
@@ -89,7 +91,7 @@ def incident_status_badge(incident: Incident):
         case "Clear":
             return "incident-clear"
         case "Stuck":
-            return "incident-major"
+            return "incident-high"
         case "Closed":
             return "incident-default"
 
@@ -164,6 +166,8 @@ def can_ack(incident: Incident):
 @register.filter
 def blacklist_symbol(incident: Incident):
     match incident.metadata:
+        case {"hidden": True}:
+            return "H"
         case {"blacklist": {"original_severity": str(severity)}} if severity in IncidentSeverity:
             if IncidentSeverity[severity] > incident.level:
                 return "▲"

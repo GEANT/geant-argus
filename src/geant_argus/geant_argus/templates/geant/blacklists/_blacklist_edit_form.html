@@ -27,6 +27,10 @@
         {{ form.level|add_class:"select select-primary border w-60" }}
       </label>
       <label class="label">
+        <span class="label-text w-40">Hide incident:</span>
+        {{ form.hidden|add_class:"checkbox checkbox-primary" }}
+      </label>
+      <label class="label">
         <span class="label-text w-40">Message:</span>
         {{ form.message|add_class:"input input-primary input-bordered border w-full" }}
       </label>

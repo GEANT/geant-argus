@@ -13,7 +13,7 @@ def test_link_alarm_none_fields(version):
     metadata = {
         "version": version,
         "phase": "FINALIZED",
-        "severity": "MAJOR",
+        "severity": "MEDIUM",
         "status": "ACTIVE",
         "comment": "",
         "short_lived": False,
