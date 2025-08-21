@@ -3,6 +3,7 @@
 from django.db import migrations
 from django.db.models import Case, When, Value
 
+
 def increment_level(apps, schema_editor):
     Blacklist = apps.get_model("blacklist", "Blacklist")
     Blacklist.objects.all().update(level=Case(
