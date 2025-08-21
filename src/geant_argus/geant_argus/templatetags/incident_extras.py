@@ -165,8 +165,6 @@ def can_ack(incident: Incident):
 
 @register.filter
 def blacklist_symbol(incident: Incident):
-    # TODO: this should fix itself when you rename the alarm severities in AlarmsDB
-    #  (argus api.py line 88)
     match incident.metadata:
         case {"hidden": True}:
             return "H"
