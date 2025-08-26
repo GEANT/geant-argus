@@ -2,7 +2,7 @@ import django_filters as df
 from django import forms
 from django.core.paginator import Paginator
 from django.forms import ModelForm, modelform_factory
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, QueryDict
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
@@ -18,8 +18,48 @@ from django.contrib.auth.decorators import permission_required
 class CreateBlacklistForm(ModelForm):
     class Meta:
         model = Blacklist
-        fields = ["name", "filter", "level", "message", "enabled", "priority", "review_date"]
-        widgets = {"review_date": forms.DateInput(attrs={"type": "date"})}
+        fields = [
+            "name",
+            "filter",
+            "level",
+            "message",
+            "enabled",
+            "priority",
+            "review_date",
+            "hidden",
+        ]
+        widgets = {
+            "review_date": forms.DateInput(attrs={"type": "date"}),
+            # If hidden checkbox is selected disable the level selector
+            "hidden": forms.CheckboxInput(
+                attrs={
+                    "onclick": """
+                element = document.querySelector('.disable_on_hidden')
+                if (this.checked) {
+                    element.setAttribute('disabled','')
+                } else {
+                    element.removeAttribute('disabled')
+                }
+                """
+                }
+            ),
+            "level": forms.Select(attrs={"class": "disable_on_hidden"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        # If level selector is disabled then that form element does not send data
+        # This will add a default level value to the args if it is not provided
+        if args and isinstance(args[0], QueryDict):
+            qd = args[0].copy()
+            if "level" not in qd:
+                qd["level"] = 5
+            new_args = (qd,) + args[1:]
+            super().__init__(*new_args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
+        # Enable/disable level selector based on initial form data
+        if self.initial.get("hidden", False):
+            self.fields["level"].widget.attrs["disabled"] = ""
 
 
 class EditFilterForBlacklistForm(forms.Form):

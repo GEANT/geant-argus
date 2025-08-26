@@ -2,7 +2,7 @@
   "phase": "FINALIZED",
   "status": "ACTIVE",
   "version": "v1",
-  "severity": "MAJOR",
+  "severity": "MEDIUM",
   "init_time": "2024-09-01T10:37:36",
   "endpoints": {
     "bgp": [
@@ -106,7 +106,7 @@
   "endpoint_count": 4,
   "blacklist": {
     "applied": true,
-    "original_severity": "MAJOR",
+    "original_severity": "MEDIUM",
     "message": "There is probably a good reason for this"
   },
   "comment":null

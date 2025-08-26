@@ -2,7 +2,7 @@
   "phase": "FINALIZED",
   "status": "ACTIVE",
   "version": "v1",
-  "severity": "CRITICAL",
+  "severity": "HIGH",
   "init_time": "2024-08-30T15:53:30",
   "endpoints": {
     "bgp": [],

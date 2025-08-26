@@ -2,7 +2,7 @@
   "phase": "FINALIZED",
   "status": "ACTIVE",
   "version": "v1",
-  "severity": "MINOR",
+  "severity": "LOW",
   "init_time": "2024-08-31T01:01:09",
   "endpoints": {
     "bgp": [

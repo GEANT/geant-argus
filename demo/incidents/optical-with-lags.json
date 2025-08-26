@@ -2,7 +2,7 @@
   "phase": "FINALIZED",
   "status": "ACTIVE",
   "version": "v1",
-  "severity": "MAJOR",
+  "severity": "MEDIUM",
   "init_time": "2024-08-29T21:00:00",
   "endpoints": {
     "bgp": [],
@@ -195,7 +195,7 @@
   "endpoint_count": 8,
   "blacklist": {
     "applied": true,
-    "original_severity": "MINOR",
+    "original_severity": "LOW",
     "message": "This is a very major incident"
   },
   "comment":null
