@@ -11,6 +11,7 @@ pytest
 pytest-django
 pytest-env
 pytest-docker
+responses
 PyYAML
 sphinx
 sphinx-rtd-theme
