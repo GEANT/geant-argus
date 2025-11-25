@@ -79,11 +79,15 @@ def update_incident(request: HtmxHttpRequest, pk: int):
 
     ticket_ref = form.cleaned_data["ticket_ref"]
     if ticket_ref is not None:
-        new_ticket_url = lookup_neurons_ticket_url(ticket_ref)
-        if new_ticket_url is None:
-            new_ticket_url = TICKET_URL_BASE + ticket_ref if ticket_ref else ""
-        payload["ticket_link"] = new_ticket_url
-        incident.ticket_url = new_ticket_url
+        neurons_ticket_url = lookup_neurons_ticket_url(ticket_ref)
+        if neurons_ticket_url is None:
+            otobo_ticket_url = TICKET_URL_BASE + ticket_ref if ticket_ref else ""
+            incident.ticket_url = otobo_ticket_url
+        else:
+            # Dashboard currently only uses ticket_link for neurons
+            # Otobo links just get constructed from the ticket ref in argus notifier
+            payload["ticket_link"] = neurons_ticket_url
+            incident.ticket_url = neurons_ticket_url
 
     if not update_alarm(incident.source_incident_id, payload=payload):
         messages.error(request, f"Error while updating alarm {incident.source_incident_id}")
