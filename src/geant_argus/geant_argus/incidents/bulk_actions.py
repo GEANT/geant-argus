@@ -4,12 +4,12 @@ from typing import Any, Dict
 
 from argus.htmx.utils import bulk_close_queryset
 from django import forms
-from django.conf import settings
 from django.http import HttpResponseServerError
 from django.utils import timezone
 from django.contrib import messages
 from geant_argus.auth import has_write_permission
 from geant_argus.geant_argus.dashboard_alarms import clear_alarm, close_alarm, update_alarm
+from geant_argus.geant_argus.incidents.common import create_ticket_url_and_ticket_link
 
 from .common import TicketRefField
 
@@ -61,16 +61,25 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
 
 @bulk_action_require_write
 def bulk_update_ticket_ref(actor, qs, data: Dict[str, Any]):
-    ticket_url_base = getattr(settings, "TICKET_URL_BASE", "")
     ticket_ref = data["ticket_ref"]
     payload = {"ticket_ref": ticket_ref}
     incidents = list(qs)
+
+    ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link(ticket_ref)
+    # No good way to indicate API errors to the user. Cant send messages.
+    # Trigger a 500 to prevent silent failure and unexpected links
+    if maybe_neurons_error:
+        raise Exception(maybe_neurons_error)
+
+    if ticket_link is not None:
+        payload["ticket_link"] = ticket_link
+
     for incident in incidents:
         if not update_alarm(incident.source_incident_id, payload):
             return HttpResponseServerError("Error while updating ticket_ref")
 
         incident.metadata.update(payload)
-        incident.ticket_url = ticket_url_base + ticket_ref if ticket_ref else ""
+        incident.ticket_url = ticket_url
         incident.save()
     return incidents
 
