@@ -3,7 +3,6 @@ from django import forms
 from argus.auth.models import preferences, PreferenceField
 from django.conf import settings
 
-
 AURAL_ALERT_LIST = settings.NEW_INCIDENT_AURAL_ALERTS
 AURAL_ALERT_DEFAULT = settings.NEW_INCIDENT_AURAL_ALERT_DEFAULT
 AURAL_ALERT_CHOICES = tuple((ps, ps) for ps in AURAL_ALERT_LIST)

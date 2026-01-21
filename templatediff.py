@@ -5,7 +5,6 @@ from typing import Generator, Sequence, Union
 
 import click
 
-
 THIS_DIR = pathlib.Path(__file__).parent
 
 ARGUS_TEMPLATES = pathlib.Path("src/argus/htmx/templates")

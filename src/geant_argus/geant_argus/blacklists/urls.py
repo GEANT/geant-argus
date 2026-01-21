@@ -2,7 +2,6 @@ from django.urls import path
 
 from . import views
 
-
 app_name = "geant-blacklists"
 urlpatterns = [
     path("", views.list_blacklists, name="list-blacklists"),
