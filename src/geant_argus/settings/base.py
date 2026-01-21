@@ -218,6 +218,10 @@ DASHBOARD_ALARMS_DISABLE_SYNCHRONIZATION = get_bool_env("DASHBOARD_ALARMS_DISABL
 # TTS
 TICKET_URL_BASE = os.getenv("ARGUS_TICKET_URL_BASE")
 
+# Ivanti Neurons
+NEURONS_URL_BASE = os.getenv("ARGUS_NEURONS_URL_BASE")
+NEURONS_API_KEY = os.getenv("ARGUS_NEURONS_API_KEY")
+
 # ######### User Preferences options ###########
 
 NEW_INCIDENT_AURAL_ALERTS = ["off", "alert", "beep", "notification"]
