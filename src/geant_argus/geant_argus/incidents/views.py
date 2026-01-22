@@ -36,13 +36,14 @@ def update_incident(request: HtmxHttpRequest, pk: int):
 
     ticket_ref = form.cleaned_data["ticket_ref"]
     if ticket_ref is not None:
-        incident.ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link(
+        ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link(
             ticket_ref
         )
+        incident.ticket_url = ticket_url
+        payload["ticket_link"] = ticket_link
+
         if maybe_neurons_error:
             messages.error(request, maybe_neurons_error)
-        if ticket_link is not None:
-            payload["ticket_link"] = ticket_link
 
     if not update_alarm(incident.source_incident_id, payload=payload):
         messages.error(request, f"Error while updating alarm {incident.source_incident_id}")

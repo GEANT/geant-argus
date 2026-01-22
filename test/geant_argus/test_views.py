@@ -79,5 +79,5 @@ def test_create_ticket_url_and_ticket_link_otobo():
         "https://tts.geant.net/otrs/index.pl?Action\\=AgentTicketZoom\\;TicketNumber\\=11111"
     )
     assert ticket_url == expected_url
-    assert ticket_link is None
+    assert ticket_link == ""
     assert maybe_neurons_error is None

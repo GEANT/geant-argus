@@ -81,23 +81,24 @@ def lookup_neurons_ticket_url(ticket_number) -> tuple[str | None, str | None]:
     return None, None
 
 
-def create_ticket_url_and_ticket_link(ticket_number: str) -> tuple[str, str | None, str | None]:
+def create_ticket_url_and_ticket_link(ticket_number: str) -> tuple[str, str, str | None]:
     """
     Given a ticket number return the ticket URL.
     If a ticket number is found in Neurons a URL for that will be provided otherwise a link
     for Otobo will be created no matter what the ticket number is.
-    If we generated a non-otobo link we also want that stored in AlarmsDB, this is done by
-    returning the URL we want stored in AlarmsDB as the 2nd value in the tuple.
+    If we generated a non-otobo link we also want that stored in AlarmsDB in the ticket_link field
 
     :param ticket_number: ticket number
     :type ticket_number: str
-    :return: A tuple of the ticket URL to be displayed in Argus, an optional ticket link to be
+    :return: A tuple of the ticket URL to be displayed in Argus, the ticket link to be
         stored in AlarmsDB, and finally any errors/warnings that should be propagated to the user.
-    :rtype: tuple[str, str | None, str | None]
+    :rtype: tuple[str, str, str | None]
     """
+    if not ticket_number:
+        return "", "", None
     neurons_url, maybe_neurons_error = lookup_neurons_ticket_url(ticket_number)
     if neurons_url is None:
-        otobo_ticket_url = TICKET_URL_BASE + ticket_number if ticket_number else ""
-        return otobo_ticket_url, None, maybe_neurons_error
+        otobo_ticket_url = TICKET_URL_BASE + ticket_number
+        return otobo_ticket_url, "", maybe_neurons_error
     else:
         return neurons_url, neurons_url, maybe_neurons_error

@@ -66,13 +66,11 @@ def bulk_update_ticket_ref(actor, qs, data: Dict[str, Any]):
     incidents = list(qs)
 
     ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link(ticket_ref)
+    payload["ticket_link"] = ticket_link
     # No good way to indicate API errors to the user. Cant send messages.
     # Trigger a 500 to prevent silent failure and unexpected links
     if maybe_neurons_error:
         raise Exception(maybe_neurons_error)
-
-    if ticket_link is not None:
-        payload["ticket_link"] = ticket_link
 
     for incident in incidents:
         if not update_alarm(incident.source_incident_id, payload):
