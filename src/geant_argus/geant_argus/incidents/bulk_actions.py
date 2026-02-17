@@ -39,8 +39,10 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
     for incident in incidents:
         if not close_alarm(incident.source_incident_id):
             raise HttpResponseServerError("Error while closing incident")
+        if incident.metadata["status"] not in ["CLEAR", "CLOSED"]:
+            incident.metadata["clear_time"] = data["timestamp"].isoformat()
         incident.metadata["status"] = "CLOSED"
-        incident.metadata["clear_time"] = data["timestamp"].isoformat()
+
         incident.save()
 
     return incidents
