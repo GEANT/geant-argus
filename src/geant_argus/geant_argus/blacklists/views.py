@@ -31,18 +31,14 @@ class CreateBlacklistForm(ModelForm):
         widgets = {
             "review_date": forms.DateInput(attrs={"type": "date"}),
             # If hidden checkbox is selected disable the level selector
-            "hidden": forms.CheckboxInput(
-                attrs={
-                    "onclick": """
+            "hidden": forms.CheckboxInput(attrs={"onclick": """
                 element = document.querySelector('.disable_on_hidden')
                 if (this.checked) {
                     element.setAttribute('disabled','')
                 } else {
                     element.removeAttribute('disabled')
                 }
-                """
-                }
-            ),
+                """}),
             "level": forms.Select(attrs={"class": "disable_on_hidden"}),
         }
 

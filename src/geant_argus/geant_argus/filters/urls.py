@@ -2,7 +2,6 @@ from django.urls import path
 
 from . import views
 
-
 app_name = "geant-filters"
 urlpatterns = [
     path("", views.list_filters, name="filter-list"),

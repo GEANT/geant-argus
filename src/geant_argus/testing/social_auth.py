@@ -17,7 +17,11 @@ class FakeOpenIDConnectAuth(OpenIdConnectAuth):
     def refresh_token(self, token, *args, **kwargs):
         return {"auth_token": "auth-token", "refresh_token": "refresh-token"}
 
-    def extra_data(self, user, uid, response, extra_data):
+    # No idea how this stuff works but this signature needed fixing due to a breaking change.
+    # Seems like it shouldnt cause any trouble after doing some investigation.
+    # Breaking change at line 52:
+    # https://github.com/python-social-auth/social-core/commit/bb7ba282f5784f0eef79473253f46f1e8cf33433
+    def extra_data(self, user, uid, response, *args):
         return {**response, "extra": "data"}
 
     def user_data(self, access_token, *args, **kwargs):

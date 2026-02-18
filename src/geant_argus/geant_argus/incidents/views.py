@@ -1,6 +1,7 @@
+import logging
+
 from argus.incident.models import Incident
 from django import forms
-from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseServerError
 from django.shortcuts import get_object_or_404
@@ -8,10 +9,11 @@ from django.views.decorators.http import require_POST
 from geant_argus.auth import require_write
 from geant_argus.geant_argus.dashboard_alarms import update_alarm
 from geant_argus.geant_argus.view_helpers import HtmxHttpRequest, error_response, refresh
+from geant_argus.geant_argus.incidents.common import create_ticket_url_and_ticket_link
 
 from .common import EmptyStringAllowedCharField, TicketRefField
 
-TICKET_URL_BASE = getattr(settings, "TICKET_URL_BASE", "")
+logger = logging.getLogger(__name__)
 
 
 class UpdateIncidentForm(forms.Form):
@@ -32,12 +34,21 @@ def update_incident(request: HtmxHttpRequest, pk: int):
     if not payload:
         return refresh(request, "htmx:incident-list")
 
+    ticket_ref = form.cleaned_data["ticket_ref"]
+    if ticket_ref is not None:
+        ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link(
+            ticket_ref
+        )
+        incident.ticket_url = ticket_url
+        payload["ticket_link"] = ticket_link
+
+        if maybe_neurons_error:
+            messages.error(request, maybe_neurons_error)
+
     if not update_alarm(incident.source_incident_id, payload=payload):
         messages.error(request, f"Error while updating alarm {incident.source_incident_id}")
         return HttpResponseServerError("Error while updating incident")
 
     incident.metadata.update(payload)
-    if (ticket_ref := form.cleaned_data["ticket_ref"]) is not None:
-        incident.ticket_url = TICKET_URL_BASE + ticket_ref if ticket_ref else ""
     incident.save()
     return refresh(request, "htmx:incident-list")

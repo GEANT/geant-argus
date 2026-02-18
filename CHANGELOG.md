@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.40] - 2026-02-18
+- DBOARD3-1369: Dont change clear time when closing clear or closed alarm
+- DBOARD3-1305: When editing ticket ref get ticket link from Neurons API if found
+
 ## [0.39] - 2025-08-26
 - DBOARD3-1256: Change alarm severity names
 

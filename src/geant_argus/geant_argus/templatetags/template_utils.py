@@ -3,7 +3,6 @@ from typing import Iterable, Literal, Optional, Union
 from django import template
 from django.utils.dateparse import parse_datetime
 
-
 register = template.Library()
 
 
