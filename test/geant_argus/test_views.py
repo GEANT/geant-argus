@@ -16,8 +16,8 @@ def test_lookup_neurons_ticket_url_incident():
     responses.get(settings.NEURONS_URL_BASE + "/api/odata/businessobject/Changes", status=204)
     result, _ = lookup_neurons_ticket_url("11111")
     parsed = urlparse(result)
-    assert parsed.scheme is not None
-    assert parsed.netloc is not None
+    assert parsed.scheme != ""
+    assert parsed.netloc != ""
     assert result == (
         "https://geant-ism-amc-uat.ivanticloud.com/login.aspx"
         "?Scope=ObjectWorkspace&CommandId=Search&ObjectType=Incident%23"
