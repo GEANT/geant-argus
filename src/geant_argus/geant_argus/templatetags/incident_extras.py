@@ -87,7 +87,9 @@ def incident_status_badge(incident: Incident):
     status = incident_status(incident)
     match status:
         case "Active":
-            return "badge-primary"
+            return level_to_badge(
+                incident.level, incident.metadata.get("status", "active").lower() != "closed"
+            )
         case "Clear":
             return "incident-clear"
         case "Stuck":
