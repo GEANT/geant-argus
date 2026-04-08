@@ -45,11 +45,11 @@ def lookup_neurons_ticket_url(ticket_number) -> tuple[str | None, str | None]:
         return None, None
     search_url_incident = (
         NEURONS_URL_BASE
-        + f"/api/odata/businessobject/Incidents?$filter=IncidentNumber eq {ticket_number}"
+        + f"/api/odata/businessobject/OCIncidents?$filter=OCIncidentNumber eq {ticket_number}"
     )
     search_url_maintenance = (
         NEURONS_URL_BASE
-        + f"/api/odata/businessobject/Changes?$filter=ChangeNumber eq {ticket_number}"
+        + f"/api/odata/businessobject/Maintenances?$filter=MaintenanceNumber eq {ticket_number}"
     )
     headers = {"Authorization": f"rest_api_key={NEURONS_API_KEY}"}
 
