@@ -10,10 +10,10 @@ from urllib.parse import urlparse
 @responses.activate
 def test_lookup_neurons_ticket_url_incident():
     responses.get(
-        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Incidents",
+        settings.NEURONS_URL_BASE + "/api/odata/businessobject/OCIncidents",
         json={"value": [{"RecId": "9999999"}]},
     )
-    responses.get(settings.NEURONS_URL_BASE + "/api/odata/businessobject/Changes", status=204)
+    responses.get(settings.NEURONS_URL_BASE + "/api/odata/businessobject/Maintenances", status=204)
     result, _ = lookup_neurons_ticket_url("11111")
     parsed = urlparse(result)
     assert parsed.scheme != ""
@@ -27,9 +27,9 @@ def test_lookup_neurons_ticket_url_incident():
 
 @responses.activate
 def test_lookup_neurons_ticket_url_maintenance():
-    responses.get(settings.NEURONS_URL_BASE + "/api/odata/businessobject/Incidents", status=204)
+    responses.get(settings.NEURONS_URL_BASE + "/api/odata/businessobject/OCIncidents", status=204)
     responses.get(
-        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Changes",
+        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Maintenances",
         json={"value": [{"RecId": "9999999"}]},
     )
     result, _ = lookup_neurons_ticket_url("11111")
@@ -46,11 +46,11 @@ def test_lookup_neurons_ticket_url_maintenance():
 @responses.activate
 def test_create_ticket_url_and_ticket_link_neurons():
     responses.get(
-        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Incidents",
+        settings.NEURONS_URL_BASE + "/api/odata/businessobject/OCIncidents",
         json={"value": [{"RecId": "9999999"}]},
     )
     responses.get(
-        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Changes",
+        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Maintenances",
         status=204,
     )
     ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link("11111")
@@ -67,11 +67,11 @@ def test_create_ticket_url_and_ticket_link_neurons():
 @responses.activate
 def test_create_ticket_url_and_ticket_link_otobo():
     responses.get(
-        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Incidents",
+        settings.NEURONS_URL_BASE + "/api/odata/businessobject/OCIncidents",
         status=204,
     )
     responses.get(
-        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Changes",
+        settings.NEURONS_URL_BASE + "/api/odata/businessobject/Maintenances",
         status=204,
     )
     ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link("11111")
