@@ -12,6 +12,9 @@ NEURONS_API_KEY = getattr(settings, "NEURONS_API_KEY", "")
 NEURONS_TICKET_URL = (
     f"{NEURONS_URL_BASE}/login.aspx?Scope=ObjectWorkspace&CommandId=Search&ObjectType="
 )
+# Business object names:
+INCIDENT_BO = "OCIncident"
+MAINTENANCE_BO = "Maintenance"
 
 logger = logging.getLogger(__name__)
 
@@ -44,12 +47,13 @@ def lookup_neurons_ticket_url(ticket_number) -> tuple[str | None, str | None]:
     if NEURONS_URL_BASE is None:
         return None, None
     search_url_incident = (
-        NEURONS_URL_BASE
-        + f"/api/odata/businessobject/OCIncidents?$filter=OCIncidentNumber eq {ticket_number}"
+        NEURONS_URL_BASE + f"/api/odata/businessobject/{INCIDENT_BO}s"
+        f"?$filter=OCIncidentNumber eq {ticket_number}"
     )
     search_url_maintenance = (
         NEURONS_URL_BASE
-        + f"/api/odata/businessobject/Maintenances?$filter=MaintenanceNumber eq {ticket_number}"
+        + f"/api/odata/businessobject/{MAINTENANCE_BO}s"
+        + f"?$filter=MaintenanceNumber eq {ticket_number}"
     )
     headers = {"Authorization": f"rest_api_key={NEURONS_API_KEY}"}
 
@@ -60,7 +64,7 @@ def lookup_neurons_ticket_url(ticket_number) -> tuple[str | None, str | None]:
         rec_id = maintenance_data[0]["RecId"]
         return (
             NEURONS_TICKET_URL
-            + f"Change%23&CommandData=RecId%2C%3D%2C0%2C{rec_id}%2Cstring%2CAND%2C%7C"
+            + f"{MAINTENANCE_BO}%23&CommandData=RecId%2C%3D%2C0%2C{rec_id}%2Cstring%2CAND%2C%7C"
         ), None
     elif response_maintenance.status_code != 204:  # API returns 204 if no ticket is found
         error_message = f"Neurons maintenance query API error: {response_maintenance.status_code}"
@@ -72,7 +76,9 @@ def lookup_neurons_ticket_url(ticket_number) -> tuple[str | None, str | None]:
     if response_incident.status_code == 200:
         incident_data = response_incident.json()["value"]
         rec_id = incident_data[0]["RecId"]
-        return (f"{NEURONS_TICKET_URL}Incident%23&CommandData=RecId%2C%3D%2C0%2C{rec_id}"), None
+        return (
+            f"{NEURONS_TICKET_URL}{INCIDENT_BO}%23&CommandData=RecId%2C%3D%2C0%2C{rec_id}"
+        ), None
     elif response_incident.status_code != 204:  # API returns 204 if no ticket is found
         error_message = f"Neurons incident query API error: {response_incident.status_code}"
         logger.error(error_message)

@@ -20,7 +20,7 @@ def test_lookup_neurons_ticket_url_incident():
     assert parsed.netloc != ""
     assert result == (
         "https://geant-ism-amc-uat.ivanticloud.com/login.aspx"
-        "?Scope=ObjectWorkspace&CommandId=Search&ObjectType=Incident%23"
+        "?Scope=ObjectWorkspace&CommandId=Search&ObjectType=OCIncident%23"
         "&CommandData=RecId%2C%3D%2C0%2C9999999"
     )
 
@@ -38,7 +38,7 @@ def test_lookup_neurons_ticket_url_maintenance():
     assert parsed.netloc is not None
     assert result == (
         "https://geant-ism-amc-uat.ivanticloud.com/login.aspx"
-        "?Scope=ObjectWorkspace&CommandId=Search&ObjectType=Change%23"
+        "?Scope=ObjectWorkspace&CommandId=Search&ObjectType=Maintenance%23"
         "&CommandData=RecId%2C%3D%2C0%2C9999999%2Cstring%2CAND%2C%7C"
     )
 
@@ -56,7 +56,7 @@ def test_create_ticket_url_and_ticket_link_neurons():
     ticket_url, ticket_link, maybe_neurons_error = create_ticket_url_and_ticket_link("11111")
     expected_url = (
         "https://geant-ism-amc-uat.ivanticloud.com/login.aspx"
-        "?Scope=ObjectWorkspace&CommandId=Search&ObjectType=Incident%23"
+        "?Scope=ObjectWorkspace&CommandId=Search&ObjectType=OCIncident%23"
         "&CommandData=RecId%2C%3D%2C0%2C9999999"
     )
     assert ticket_url == expected_url
