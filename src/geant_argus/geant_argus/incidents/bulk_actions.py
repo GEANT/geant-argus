@@ -42,6 +42,7 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
         if incident.metadata["status"] not in ["CLEAR", "CLOSED"]:
             incident.metadata["clear_time"] = data["timestamp"].isoformat()
         incident.metadata["status"] = "CLOSED"
+        incident.metadata["close_time"] = data["timestamp"].isoformat()
 
         incident.save()
 
