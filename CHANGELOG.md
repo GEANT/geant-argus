@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.41] - 2026-05-22
+- DBOARD3-1402: Update query URLs for Neurons ticket lookup in Argus
+
 ## [0.40] - 2026-02-18
 - DBOARD3-1369: Dont change clear time when closing clear or closed alarm
 - DBOARD3-1305: When editing ticket ref get ticket link from Neurons API if found
