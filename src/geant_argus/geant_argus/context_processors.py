@@ -118,6 +118,7 @@ def geant_theme(request):
                 "cell_lookup_key": "metadata.clear_time",
                 "cell_template": "htmx/incident/cells/_date_cell.html",
             },
+            {"name": "Cleared by", "cell_lookup_key": "metadata.cleared_by"},
             {
                 "name": "Close Time (UTC)",
                 "cell_lookup_key": "metadata.close_time",
