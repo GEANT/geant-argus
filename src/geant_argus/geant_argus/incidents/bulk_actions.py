@@ -44,6 +44,7 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
             incident.metadata["cleared_by"] = actor.username
         incident.metadata["status"] = "CLOSED"
         incident.metadata["close_time"] = data["timestamp"].isoformat()
+        incident.metadata["closed_by"] = actor.username
 
         incident.save()
 
