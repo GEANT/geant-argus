@@ -41,7 +41,10 @@ def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
             raise HttpResponseServerError("Error while closing incident")
         if incident.metadata["status"] not in ["CLEAR", "CLOSED"]:
             incident.metadata["clear_time"] = data["timestamp"].isoformat()
+            incident.metadata["cleared_by"] = actor.username
         incident.metadata["status"] = "CLOSED"
+        incident.metadata["close_time"] = data["timestamp"].isoformat()
+        incident.metadata["closed_by"] = actor.username
 
         incident.save()
 
@@ -56,6 +59,7 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
         if not clear_alarm(incident.source_incident_id, {"clear_time": clear_time}):
             return HttpResponseServerError("Error while clearing incident")
         clear_incident_in_metadata(incident.metadata, clear_time=clear_time)
+        incident.metadata["cleared_by"] = actor.username
         incident.save()
 
     return incidents
