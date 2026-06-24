@@ -37,7 +37,7 @@ def bulk_action_require_write(func):
 def bulk_close_incidents(actor, qs, data: Dict[str, Any]):
     incidents = bulk_close_queryset(actor, qs, data)
     for incident in incidents:
-        if not close_alarm(incident.source_incident_id):
+        if not close_alarm(incident.source_incident_id, {"username": actor.username}):
             raise HttpResponseServerError("Error while closing incident")
         if incident.metadata["status"] not in ["CLEAR", "CLOSED"]:
             incident.metadata["clear_time"] = data["timestamp"].isoformat()
@@ -56,7 +56,10 @@ def bulk_clear_incidents(actor, qs, data: Dict[str, Any]):
     clear_time = (data["timestamp"] or timezone.now()).replace(tzinfo=None).isoformat()
     incidents = list(qs)
     for incident in incidents:
-        if not clear_alarm(incident.source_incident_id, {"clear_time": clear_time}):
+        if not clear_alarm(
+            incident.source_incident_id,
+            {"clear_time": clear_time, "username": actor.username},
+        ):
             return HttpResponseServerError("Error while clearing incident")
         clear_incident_in_metadata(incident.metadata, clear_time=clear_time)
         incident.metadata["cleared_by"] = actor.username
