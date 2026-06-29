@@ -130,6 +130,11 @@ def geant_theme(request):
             {"name": "Severity", "cell_lookup_key": "metadata.severity"},
             {"name": "Location", "cell_lookup_key": "metadata.location"},
             {"name": "Equipment", "cell_lookup_key": "metadata.equipment"},
+            {
+                "name": "Is EuroHPC",
+                "cell_lookup_key": "metadata.is_euro_hpc",
+                "cell_template": "htmx/incident/cells/_boolean_cell.html",
+            },
             {"name": "Full Ticket Ref", "cell_lookup_key": "metadata.ticket_ref"},
             {"name": "Comment", "cell_lookup_key": "metadata.comment"},
             {"name": "Acked by", "cell_lookup_key": "ack_user"},

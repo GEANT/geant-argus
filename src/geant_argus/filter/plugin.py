@@ -114,6 +114,7 @@ class IncidentFilterForm(forms.Form):
     newest_first = forms.BooleanField(required=False)
     short_lived = forms.BooleanField(required=False)
     show_hidden = forms.BooleanField(required=False)
+    show_only_euro_hpc = forms.BooleanField(required=False, label="Show only EuroHPC")
     description = forms.CharField(max_length=255, required=False)
     description.in_header = True
     location = forms.CharField(max_length=255, required=False)
@@ -147,6 +148,7 @@ class IncidentFilterForm(forms.Form):
         queryset = self._filter_by_field(queryset, "min_severity", "level__lte")
         queryset = self._filter_by_field(queryset, "alarm_id", "source_incident_id")
         queryset = self._filter_by_field(queryset, "ticket_ref", "metadata__ticket_ref__icontains")
+        queryset = self._filter_by_field(queryset, "show_only_euro_hpc", "metadata__is_euro_hpc")
         queryset = self._filter_by_hidden(queryset)
         queryset = self._filter_by_short_lived(queryset)
         queryset = self._order_by_newest_first(queryset)
