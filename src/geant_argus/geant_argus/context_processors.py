@@ -23,7 +23,7 @@ def geant_theme(request):
     """Additional context variables specific to Geant"""
     return {
         "logo": {
-            "file": "logo_white.png",
+            "file": "logo_white.svg",
             "alt": "geant-argus",
         },
         "incidents_extra_widget": (
