@@ -105,7 +105,9 @@ module.exports = {
             },
             'geant': {
                 ...baseArgusColors,
-                'accent': baseArgusColors['neutral'],
+                'primary': '#2e2d7d',
+                'neutral': '#2e2d7d',
+                'accent': '#2e2d7d',
                 'accent-content': baseArgusColors['neutral-content'],
                 'warning': '#eec200',
                 ...incidentColors

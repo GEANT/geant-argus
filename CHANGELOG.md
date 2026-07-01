@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.42] - 2026-07-01
+- DBOARD3-1433: Add close time, clear user, and close user to quick glance menu.
+- DBOARD3-1458: Add "Show only EuroHPC" filter checkbox
+- DBOARD3-1485: Update gui with new GEANT logo and update colors of GEANT theme
+
 ## [0.41] - 2026-05-22
 - DBOARD3-1402: Update query URLs for Neurons ticket lookup in Argus
 

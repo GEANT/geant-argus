@@ -23,7 +23,7 @@ def geant_theme(request):
     """Additional context variables specific to Geant"""
     return {
         "logo": {
-            "file": "logo_white.png",
+            "file": "logo_white.svg",
             "alt": "geant-argus",
         },
         "incidents_extra_widget": (
@@ -118,11 +118,23 @@ def geant_theme(request):
                 "cell_lookup_key": "metadata.clear_time",
                 "cell_template": "htmx/incident/cells/_date_cell.html",
             },
+            {
+                "name": "Close Time (UTC)",
+                "cell_lookup_key": "metadata.close_time",
+                "cell_template": "htmx/incident/cells/_date_cell.html",
+            },
+            {"name": "Cleared by", "cell_lookup_key": "metadata.cleared_by"},
+            {"name": "Closed by", "cell_lookup_key": "metadata.closed_by"},
             {"name": "Alarm ID", "cell_lookup_key": "source_incident_id"},
             {"name": "Status", "cell_lookup_key": "metadata.status"},
             {"name": "Severity", "cell_lookup_key": "metadata.severity"},
             {"name": "Location", "cell_lookup_key": "metadata.location"},
             {"name": "Equipment", "cell_lookup_key": "metadata.equipment"},
+            {
+                "name": "Is EuroHPC",
+                "cell_lookup_key": "metadata.is_euro_hpc",
+                "cell_template": "htmx/incident/cells/_boolean_cell.html",
+            },
             {"name": "Full Ticket Ref", "cell_lookup_key": "metadata.ticket_ref"},
             {"name": "Comment", "cell_lookup_key": "metadata.comment"},
             {"name": "Acked by", "cell_lookup_key": "ack_user"},
