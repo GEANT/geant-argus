@@ -9,8 +9,7 @@
     <div>{{ column.header }}</div>
     {% if column.order_by %}
       {% with ordering_value=table.filter_form|fieldvalue:table.ordering_field %}
-        <div class="flex gap-1">
-          {# djlint:off #}
+        <div class="flex gap-1">{# djlint:off #}
           <a class="cursor-pointer {% if ordering_value == column.filter_field %}text-sm/4 {% else %} opacity-60 {% endif %}"
              hx-get="{% url table.list.url %}"
              href="?{{ table.ordering_field }}=-{{ column.filter_field }}"
@@ -27,8 +26,7 @@
              {% else %}
              hx-vals='{"{{ table.ordering_field }}": "-{{ column.filter_field }}"}'
              {% endif %}><i class="fa-solid fa-square-caret-down"></i></a>
-          {# djlint:on #}
-        </div>
+          {# djlint:on #}</div>
       {% endwith %}
     {% endif %}
     {% if column.filter_by %}

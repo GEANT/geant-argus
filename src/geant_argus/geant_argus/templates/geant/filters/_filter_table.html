@@ -12,11 +12,7 @@
     {% block incident_rows %}
       {% for object in page.object_list %}
         {% block object %}
-          <tr id="obj-{{ object.pk }}-row"
-            class="filter-row cursor-pointer"
-            hx-trigger="click[!currentTarget.classList.contains('filter-row-selected')]"
-            hx-get="{% url 'geant-filters:edit-filter' object.pk %}"
-            hx-target="#filter-edit"
+          <tr id="obj-{{ object.pk }}-row" class="filter-row cursor-pointer" hx-trigger="click[!currentTarget.classList.contains('filter-row-selected')]" hx-get="{% url 'geant-filters:edit-filter' object.pk %}" hx-target="#filter-edit"
             {# djlint:off #}
             _="on click
                  if I match .filter-row-selected then
@@ -26,8 +22,7 @@
                    remove .filter-row-selected from <#table-body > tr/>
                    add .filter-row-selected to me
                  end">
-            {# djlint:on #}
-            <td>{{ object.name }}</td>
+            {# djlint:on #} <td>{{ object.name }}</td>
             <td class="hidden lg:block condensed:hidden">{{ object.filter|filter_to_text }}</td>
             <td>{{ object.user.username }}</td>
             <td>
