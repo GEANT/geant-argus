@@ -15,10 +15,10 @@
           {% if option.wrap_label %}
             <span class="ml-1">{{ option.label }}</span>
             </label>
-        {% endif %}
+          {% endif %}
         </div>
+      {% endfor %}
+      {% if group %}</div>{% endif %}
     {% endfor %}
-    {% if group %}</div>{% endif %}
-{% endfor %}
   </div>
 {% endwith %}
