@@ -1,6 +1,8 @@
 from datetime import datetime
 import time
 from django.conf import settings
+from django.core.cache import cache
+from django.core.mail import send_mail
 from django.views.decorators.http import require_GET, require_POST
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -95,6 +97,8 @@ def get_trap_last_correlated(timestamp: int):
 
 
 def get_inventory_update_status(latch):
+    latch = latch or {}
+    _maybe_notify_inventory_failure(latch)
     return {
         "last_update": (
             make_aware(datetime.fromtimestamp(int(timestamp)))
@@ -103,3 +107,32 @@ def get_inventory_update_status(latch):
         ),
         "pending": latch.get("pending"),
     }
+
+
+def _maybe_notify_inventory_failure(latch):
+    if not latch:
+        cache_key = "inprov-unreachable-notified"
+        if not cache.add(cache_key, True, timeout=12 * 3600):
+            return
+        send_mail(
+            subject="Inventory provider cannot be reached.",
+            message="Inventory provider cannot be reached (empty response).",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=settings.STATUS_CHECKER_ALERT_RECIPIENTS,
+            fail_silently=True,
+        )
+        return
+
+    if latch.get("pending") or not latch.get("failure"):
+        return
+    cache_key = f"inprov-failure-notified-{latch.get('timestamp')}"
+    if cache.get(cache_key):
+        return
+    cache.set(cache_key, True, timeout=12 * 3600)
+    send_mail(
+        subject="Inventory Provider update failed.",
+        message=f"Inventory update finished with errors. Latch: {latch}",
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=settings.INVENTORY_STATUS_CHECKER_ALERT_RECIPIENTS,
+        fail_silently=True,
+    )
