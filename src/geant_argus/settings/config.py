@@ -33,6 +33,10 @@ CONFIG_SCHEMA = {
         "SEND_EXPIRED_BLACKLISTS_EMAILS_TO": {"type": "array", "items": {"type": "string"}},
         "SHORT_LIVED_ALARMS_UI_URL": {"type": ["string", "null"]},
         "OIDC_AUTHORIZATION_RULES": {"$ref": "#/$defs/authorization_rules"},
+        "INVENTORY_STATUS_CHECKER_ALERT_RECIPIENTS": {
+            "type": "array",
+            "items": {"type": "string"},
+        },
     },
     "required": [
         "SEND_EXPIRED_BLACKLISTS_EMAILS_TO",
