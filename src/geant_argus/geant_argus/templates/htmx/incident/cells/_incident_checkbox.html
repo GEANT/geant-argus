@@ -1,5 +1,5 @@
 {% load incident_extras %}
-{% if incident.metadata and incident.metadata.phase|lower != 'pending' %}
+{% if incident.metadata and incident.metadata.phase|lower != "pending" %}
   <input id="select-incident-{{ incident.pk }}"
          hx-preserve
          type="checkbox"

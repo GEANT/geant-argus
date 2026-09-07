@@ -1,5 +1,5 @@
 {% load template_utils %}
-{% with table_id=table.object_id|default:'obj'|concat:'-table' %}
+{% with table_id=table.object_id|default:"obj"|concat:"-table" %}
   <div id="{{ table_id }}" class="loading-box overflow-x-auto">
     {% block table %}
       <table class="table border border-separate border-spacing-0 border-primary">
@@ -31,7 +31,7 @@
                       {% if column.cell_template %}
                         {% include column.cell_template %}
                       {% elif column.lookup_key %}
-                        {% with default=column.default|default:'-' %}{{ object|get_item:column.lookup_key|default:default }}{% endwith %}
+                        {% with default=column.default|default:"-" %}{{ object|get_item:column.lookup_key|default:default }}{% endwith %}
                       {% endif %}
                     </td>
                   {% endfor %}

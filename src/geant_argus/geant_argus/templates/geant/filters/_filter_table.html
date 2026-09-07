@@ -88,7 +88,7 @@
                               displayed as clickable.
                             -->
                 <a href="{% url 'geant-filters:filter-list' %}?page=1"
-                   class="join-item btn btn-neutral h-full rounded-box">&laquo; First</a>
+                   class="join-item btn btn-neutral h-full rounded-box">« First</a>
               </li>
             {% endif %}
             {% if page.has_previous %}
@@ -115,7 +115,7 @@
             {% if page.number != page.paginator.num_pages %}
               <li>
                 <a href="{% url 'geant-filters:filter-list' %}?page={{ page.paginator.num_pages }}"
-                   class="join-item btn btn-neutral h-full rounded-box">&raquo; Last</a>
+                   class="join-item btn btn-neutral h-full rounded-box">» Last</a>
               </li>
             {% endif %}
           </ul>
