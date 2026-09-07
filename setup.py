@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="geant_argus",
-    version="0.43",
+    version="0.44",
     author="GEANT",
     author_email="swd@geant.org",
     description="Geant Argus NOC Dashboard UI",
