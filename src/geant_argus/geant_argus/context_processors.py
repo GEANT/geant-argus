@@ -98,6 +98,32 @@ def geant_theme(request):
                 },
                 *INCIDENT_DETAILS_COMMON_COLUMNS,
             ],
+            "eurohpc bgp": [
+                {
+                    "name": "Hostname",
+                    "cell_template": "htmx/incident_details/hostname.html",
+                    "is_endpoint_column": True,
+                },
+                {
+                    "name": "Remote Peer",
+                    "cell_template": "htmx/incident_details/bgp_remote_peer.html",
+                    "is_endpoint_column": True,
+                },
+                *INCIDENT_DETAILS_COMMON_COLUMNS,
+            ],
+            "eurohpc link": [
+                {
+                    "name": "Hostname",
+                    "cell_template": "htmx/incident_details/hostname.html",
+                    "is_endpoint_column": True,
+                },
+                {
+                    "name": "Interface",
+                    "cell_template": "htmx/incident_details/link_interface.html",
+                    "is_endpoint_column": True,
+                },
+                *INCIDENT_DETAILS_COMMON_COLUMNS,
+            ],
         },
         "incident_description_glance_table": [
             {"name": "Description", "cell_lookup_key": "description"},

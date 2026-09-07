@@ -18,10 +18,10 @@
         <div class="flex gap-2">
           <a href="{% url 'geant-filters:edit-filter' %}"
              class="rounded-full h-10 w-10 flex justify-center items-center text-base-content/60 p-2 hover:bg-gray-100/10 ring-gray-500/50 ring-inset hover:ring-1 focus:outline-none focus:ring-2">
-            <i class=" fa-solid fa-pencil"></i>
+            <i class="fa-solid fa-pencil"></i>
           </a>
           <button type="button"
-                  class="rounded-full h-10 w-10 flex justify-center items-center  text-base-content/60 p-2 hover:bg-gray-100/10 ring-gray-500/50 ring-inset hover:ring-1 focus:outline-none focus:ring-2"
+                  class="rounded-full h-10 w-10 flex justify-center items-center text-base-content/60 p-2 hover:bg-gray-100/10 ring-gray-500/50 ring-inset hover:ring-1 focus:outline-none focus:ring-2"
                   hx-post="{% url 'geant-filters:clear-filter' %}"
                   hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
             <i class="text-xl fa-solid fa-xmark"></i>

@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.43] - 2026-09-07
+- DBOARD3-1552: Show EuroHPC BGP and Link endpoints in argus.
+
 ## [0.42] - 2026-07-01
 - DBOARD3-1433: Add close time, clear user, and close user to quick glance menu.
 - DBOARD3-1458: Add "Show only EuroHPC" filter checkbox
