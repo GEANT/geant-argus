@@ -15,7 +15,7 @@ COPY requirements.txt /argus
 RUN pip install -r requirements.txt
 
 COPY . /argus
-RUN pip install -e .
+RUN pip install -e '.[prod]'
 
 COPY ./demo /argus
 RUN mv /argus/settings.py /argus/src/geant_argus/settings/demo.py
